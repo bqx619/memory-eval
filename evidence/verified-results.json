@@ -1,0 +1,3582 @@
+{
+  "verified_on": "2026-11-27",
+  "source_snapshot": "977efec",
+  "selection_rule": "One named reference run per PMB configuration; all 17 records in the current BEAM viewer. This is a configuration comparison, not a best-score selection or product ranking.",
+  "pmb": [
+    {
+      "label": "BM25",
+      "group": "PMB retrieval",
+      "run_id": "80535dcd-8cea-46c9-bef8-89cadb68300d",
+      "run_label": "m1b-bm25",
+      "report_sha256": "8e9a8ad4eccaf73a86cb1fa3435717a750bf9cd487cdf5945de6849d64d1e303",
+      "suite_id": "pmb-retrieval",
+      "suite_sha256": "64bdace8103f89898262d659e3a69fc500b5162920cc2469d3dea8c28f9af0e9",
+      "mode": "retrieval",
+      "reader_input": null,
+      "sut_name": "bm25",
+      "variant": "bm25",
+      "started_at_utc": "2026-10-15T18:48:54.333949Z",
+      "planned": 75,
+      "status_counts": {
+        "scored": 75
+      },
+      "metrics": {
+        "all_evidence": {
+          "mean": 0.9069767441860465,
+          "n": 43
+        },
+        "empty_result_correct": {
+          "mean": 0.4375,
+          "n": 32
+        },
+        "hit": {
+          "mean": 0.9302325581395349,
+          "n": 43
+        },
+        "mrr": {
+          "mean": 0.8565891472868218,
+          "n": 43
+        },
+        "ndcg": {
+          "mean": 0.8603585084090906,
+          "n": 43
+        },
+        "precision": {
+          "mean": 0.3763856362217018,
+          "n": 61
+        },
+        "recall": {
+          "mean": 0.9186046511627907,
+          "n": 43
+        }
+      },
+      "top_k": 10,
+      "max_context_chars": 100000,
+      "reset_policy": "fresh_per_case",
+      "backend": "in-process",
+      "network_mode": "inherit",
+      "reader": null,
+      "judge": {
+        "kind": null,
+        "provider": null,
+        "model": null,
+        "cutoff": null
+      },
+      "embedding": null,
+      "resume_count": 0,
+      "sut_changes": 0,
+      "manifest_sha256": null,
+      "env_lock_sha256": null,
+      "recorded_version": "0.1.0"
+    },
+    {
+      "label": "Null",
+      "group": "PMB retrieval",
+      "run_id": "e9b60310-72a0-417a-b71f-1eea49be4470",
+      "run_label": "m1b-null",
+      "report_sha256": "5e4c2f9e55ca27304c3150a1a3d39fbd330bea730350d36880e31fdc87ddd387",
+      "suite_id": "pmb-retrieval",
+      "suite_sha256": "64bdace8103f89898262d659e3a69fc500b5162920cc2469d3dea8c28f9af0e9",
+      "mode": "retrieval",
+      "reader_input": null,
+      "sut_name": "null",
+      "variant": "null",
+      "started_at_utc": "2026-10-15T18:48:54.461671Z",
+      "planned": 75,
+      "status_counts": {
+        "scored": 75
+      },
+      "metrics": {
+        "all_evidence": {
+          "mean": 0,
+          "n": 43
+        },
+        "empty_result_correct": {
+          "mean": 1,
+          "n": 32
+        },
+        "hit": {
+          "mean": 0,
+          "n": 43
+        },
+        "mrr": {
+          "mean": 0,
+          "n": 43
+        },
+        "ndcg": {
+          "mean": 0,
+          "n": 43
+        },
+        "precision": {
+          "mean": 0,
+          "n": 43
+        },
+        "recall": {
+          "mean": 0,
+          "n": 43
+        }
+      },
+      "top_k": 10,
+      "max_context_chars": 100000,
+      "reset_policy": "fresh_per_case",
+      "backend": "in-process",
+      "network_mode": "inherit",
+      "reader": null,
+      "judge": {
+        "kind": null,
+        "provider": null,
+        "model": null,
+        "cutoff": null
+      },
+      "embedding": null,
+      "resume_count": 0,
+      "sut_changes": 0,
+      "manifest_sha256": null,
+      "env_lock_sha256": null,
+      "recorded_version": "0.1.0"
+    },
+    {
+      "label": "Recent",
+      "group": "PMB retrieval",
+      "run_id": "750fc894-d113-47ed-b5bc-e89e793109d6",
+      "run_label": "m1b-recent",
+      "report_sha256": "825a84e97a245832ab10605d0465b48d101f774de11bc77c5ac6a4b5f267c321",
+      "suite_id": "pmb-retrieval",
+      "suite_sha256": "64bdace8103f89898262d659e3a69fc500b5162920cc2469d3dea8c28f9af0e9",
+      "mode": "retrieval",
+      "reader_input": null,
+      "sut_name": "recent",
+      "variant": "recent",
+      "started_at_utc": "2026-10-15T18:48:54.403364Z",
+      "planned": 75,
+      "status_counts": {
+        "scored": 75
+      },
+      "metrics": {
+        "all_evidence": {
+          "mean": 0.09302325581395349,
+          "n": 43
+        },
+        "empty_result_correct": {
+          "mean": 0.125,
+          "n": 32
+        },
+        "hit": {
+          "mean": 0.23255813953488372,
+          "n": 43
+        },
+        "mrr": {
+          "mean": 0.07209302325581396,
+          "n": 43
+        },
+        "ndcg": {
+          "mean": 0.08402101286801947,
+          "n": 43
+        },
+        "precision": {
+          "mean": 0.01408450704225352,
+          "n": 71
+        },
+        "recall": {
+          "mean": 0.15448504983388703,
+          "n": 43
+        }
+      },
+      "top_k": 10,
+      "max_context_chars": 100000,
+      "reset_policy": "fresh_per_case",
+      "backend": "in-process",
+      "network_mode": "inherit",
+      "reader": null,
+      "judge": {
+        "kind": null,
+        "provider": null,
+        "model": null,
+        "cutoff": null
+      },
+      "embedding": null,
+      "resume_count": 0,
+      "sut_changes": 0,
+      "manifest_sha256": null,
+      "env_lock_sha256": null,
+      "recorded_version": "0.1.0"
+    },
+    {
+      "label": "CogletNet v5",
+      "group": "PMB retrieval",
+      "run_id": "e1b4a4d6-d285-4ab9-a021-b8ad99918619",
+      "run_label": "cogletnet-v5-pmb75",
+      "report_sha256": "83fdf8b1a1e63bdd2c25c271f7cfdae17ff65405845e0c3d03cbdbfa9cede409",
+      "suite_id": "pmb-retrieval",
+      "suite_sha256": "64bdace8103f89898262d659e3a69fc500b5162920cc2469d3dea8c28f9af0e9",
+      "mode": "retrieval",
+      "reader_input": null,
+      "sut_name": "cogletnet",
+      "variant": "native-jev-openai-embedding",
+      "started_at_utc": "2026-10-25T14:08:40.782031Z",
+      "planned": 75,
+      "status_counts": {
+        "scored": 75
+      },
+      "metrics": {
+        "all_evidence": {
+          "mean": 0.8604651162790697,
+          "n": 43
+        },
+        "empty_result_correct": {
+          "mean": 0.125,
+          "n": 32
+        },
+        "hit": {
+          "mean": 1,
+          "n": 43
+        },
+        "mrr": {
+          "mean": 0.8127906976744187,
+          "n": 43
+        },
+        "ndcg": {
+          "mean": 0.8129119327681806,
+          "n": 43
+        },
+        "precision": {
+          "mean": 0.1720210149787615,
+          "n": 71
+        },
+        "recall": {
+          "mean": 0.9396456256921373,
+          "n": 43
+        }
+      },
+      "top_k": 10,
+      "max_context_chars": 100000,
+      "reset_policy": "fresh_per_case",
+      "backend": "container/docker",
+      "network_mode": "open",
+      "reader": null,
+      "judge": {
+        "kind": null,
+        "provider": null,
+        "model": null,
+        "cutoff": null
+      },
+      "embedding": {
+        "dimensions": 3072,
+        "local": false,
+        "model": "text-embedding-3-large",
+        "provider": "OpenAI direct"
+      },
+      "resume_count": 1,
+      "sut_changes": 0,
+      "manifest_sha256": "e889b852bc144a55a2b0d633300b1bb5debdfbffd8795df46f8ea539a488e136",
+      "env_lock_sha256": "cdc19fdd1779be38b47d5642ef5971e746b3267d44d18e22a342312c502eee8b",
+      "recorded_version": "0.1.0"
+    },
+    {
+      "label": "Cognee / gateway",
+      "group": "PMB retrieval",
+      "run_id": "fb836e48-7213-42f1-8679-5e5e5118c2da",
+      "run_label": "cognee-llm-gateway-pmb75",
+      "report_sha256": "1b89cbf83703ffcd936229a91450505b63d83bfb35dac07d7520148a072aadc2",
+      "suite_id": "pmb-retrieval",
+      "suite_sha256": "64bdace8103f89898262d659e3a69fc500b5162920cc2469d3dea8c28f9af0e9",
+      "mode": "retrieval",
+      "reader_input": null,
+      "sut_name": "cognee",
+      "variant": "llm-gateway",
+      "started_at_utc": "2026-10-19T19:28:01.71397Z",
+      "planned": 75,
+      "status_counts": {
+        "scored": 75
+      },
+      "metrics": {
+        "all_evidence": {
+          "mean": 0.9069767441860465,
+          "n": 43
+        },
+        "empty_result_correct": {
+          "mean": 0.09375,
+          "n": 32
+        },
+        "hit": {
+          "mean": 0.9767441860465116,
+          "n": 43
+        },
+        "mrr": {
+          "mean": 0.8934108527131784,
+          "n": 43
+        },
+        "ndcg": {
+          "mean": 0.8798022481965326,
+          "n": 43
+        },
+        "precision": {
+          "mean": 0.08472222222222218,
+          "n": 72
+        },
+        "recall": {
+          "mean": 0.9507198228128461,
+          "n": 43
+        }
+      },
+      "top_k": 10,
+      "max_context_chars": 100000,
+      "reset_policy": "fresh_per_case",
+      "backend": "container/docker",
+      "network_mode": "gateway",
+      "reader": null,
+      "judge": {
+        "kind": null,
+        "provider": null,
+        "model": null,
+        "cutoff": null
+      },
+      "embedding": "local install-time assets; runtime downloads disabled",
+      "resume_count": 0,
+      "sut_changes": 0,
+      "manifest_sha256": "3fbd8261fd0352681262ad116d157076606cd3f93cf700b31f5d99e1a4463772",
+      "env_lock_sha256": "5bfbf33c97a881c4a998a640346f041609e1798b7c7962d3069b7f0a0041e0f3",
+      "recorded_version": "1.6.5"
+    },
+    {
+      "label": "Cognee / local",
+      "group": "PMB retrieval",
+      "run_id": "030f48c4-faf4-413f-816c-52fc704b3c2a",
+      "run_label": "pmb17-cognee",
+      "report_sha256": "bd4813c33ef706c22a0ef74e792eacef4bb775f6d0222f35bb791faaf51e835d",
+      "suite_id": "pmb-retrieval",
+      "suite_sha256": "64bdace8103f89898262d659e3a69fc500b5162920cc2469d3dea8c28f9af0e9",
+      "mode": "retrieval",
+      "reader_input": null,
+      "sut_name": "cognee",
+      "variant": "none",
+      "started_at_utc": "2026-10-18T01:38:19.628284Z",
+      "planned": 75,
+      "status_counts": {
+        "scored": 75
+      },
+      "metrics": {
+        "all_evidence": {
+          "mean": 0.9069767441860465,
+          "n": 43
+        },
+        "empty_result_correct": {
+          "mean": 0.09375,
+          "n": 32
+        },
+        "hit": {
+          "mean": 0.9767441860465116,
+          "n": 43
+        },
+        "mrr": {
+          "mean": 0.8934108527131784,
+          "n": 43
+        },
+        "ndcg": {
+          "mean": 0.8798022481965326,
+          "n": 43
+        },
+        "precision": {
+          "mean": 0.08472222222222218,
+          "n": 72
+        },
+        "recall": {
+          "mean": 0.9507198228128461,
+          "n": 43
+        }
+      },
+      "top_k": 10,
+      "max_context_chars": 100000,
+      "reset_policy": "fresh_per_case",
+      "backend": "process/seatbelt",
+      "network_mode": "none",
+      "reader": null,
+      "judge": {
+        "kind": null,
+        "provider": null,
+        "model": null,
+        "cutoff": null
+      },
+      "embedding": "local install-time assets; runtime downloads disabled",
+      "resume_count": 0,
+      "sut_changes": 0,
+      "manifest_sha256": "5ca5e95d931d5b2a5b133f8dfc4399aef4266ec477a58c12501336e8f731d7ae",
+      "env_lock_sha256": "deef1efc139650de7685d40aa4a6bd4cd23fc462e91b1bbe7d6a3bb374d4c131",
+      "recorded_version": "1.6.5"
+    },
+    {
+      "label": "Hindsight / gateway",
+      "group": "PMB retrieval",
+      "run_id": "bf2614d5-27d8-4976-9f0a-d74e03d30934",
+      "run_label": "hindsight-llm-gateway-pmb75",
+      "report_sha256": "767d832dfcc401bc9531c57476f3363e6c91259b11642e401be8c4e7f8affeb0",
+      "suite_id": "pmb-retrieval",
+      "suite_sha256": "64bdace8103f89898262d659e3a69fc500b5162920cc2469d3dea8c28f9af0e9",
+      "mode": "retrieval",
+      "reader_input": null,
+      "sut_name": "hindsight",
+      "variant": "llm-gateway",
+      "started_at_utc": "2026-10-20T00:51:23.14256Z",
+      "planned": 75,
+      "status_counts": {
+        "scored": 54,
+        "unsupported": 21
+      },
+      "metrics": {
+        "all_evidence": {
+          "mean": 0.8181818181818182,
+          "n": 33
+        },
+        "empty_result_correct": {
+          "mean": 0.14285714285714285,
+          "n": 21
+        },
+        "hit": {
+          "mean": 0.9090909090909091,
+          "n": 33
+        },
+        "mrr": {
+          "mean": 0.8358585858585859,
+          "n": 33
+        },
+        "ndcg": {
+          "mean": 0.8356938306280342,
+          "n": 33
+        },
+        "precision": {
+          "mean": 0.09455337690631808,
+          "n": 51
+        },
+        "recall": {
+          "mean": 0.8896103896103896,
+          "n": 33
+        }
+      },
+      "top_k": 10,
+      "max_context_chars": 100000,
+      "reset_policy": "fresh_per_case",
+      "backend": "container/docker",
+      "network_mode": "gateway",
+      "reader": null,
+      "judge": {
+        "kind": null,
+        "provider": null,
+        "model": null,
+        "cutoff": null
+      },
+      "embedding": "BAAI/bge-small-en-v1.5; local",
+      "resume_count": 0,
+      "sut_changes": 0,
+      "manifest_sha256": "e799cbf32c06be69073ec2140abaf2a62e6c8bec64dbdedc10823e8fb704ac56",
+      "env_lock_sha256": "4870f29eebf52b4386a40df919295baf199cfa62f4117098dfb3afb2016f0b18",
+      "recorded_version": "1.0.0"
+    },
+    {
+      "label": "Hindsight / local",
+      "group": "PMB retrieval",
+      "run_id": "cebf37fd-9df3-4b37-a42b-6f303c18a4d3",
+      "run_label": "pmb16-hindsight",
+      "report_sha256": "643611827b7faee6a62bc3d6c49e91ac10d58d53fcfa854a0446233e473cbab9",
+      "suite_id": "pmb-retrieval",
+      "suite_sha256": "64bdace8103f89898262d659e3a69fc500b5162920cc2469d3dea8c28f9af0e9",
+      "mode": "retrieval",
+      "reader_input": null,
+      "sut_name": "hindsight",
+      "variant": "none",
+      "started_at_utc": "2026-10-18T03:21:54.871512Z",
+      "planned": 75,
+      "status_counts": {
+        "scored": 75
+      },
+      "metrics": {
+        "all_evidence": {
+          "mean": 0.8604651162790697,
+          "n": 43
+        },
+        "empty_result_correct": {
+          "mean": 0.09375,
+          "n": 32
+        },
+        "hit": {
+          "mean": 0.9302325581395349,
+          "n": 43
+        },
+        "mrr": {
+          "mean": 0.8746770025839794,
+          "n": 43
+        },
+        "ndcg": {
+          "mean": 0.8678380134616508,
+          "n": 43
+        },
+        "precision": {
+          "mean": 0.08472222222222218,
+          "n": 72
+        },
+        "recall": {
+          "mean": 0.9108527131782945,
+          "n": 43
+        }
+      },
+      "top_k": 10,
+      "max_context_chars": 100000,
+      "reset_policy": "fresh_per_case",
+      "backend": "process/seatbelt",
+      "network_mode": "none",
+      "reader": null,
+      "judge": {
+        "kind": null,
+        "provider": null,
+        "model": null,
+        "cutoff": null
+      },
+      "embedding": "BAAI/bge-small-en-v1.5; local",
+      "resume_count": 0,
+      "sut_changes": 0,
+      "manifest_sha256": "2abe0102b3bff4d71c3e88b019b59d97ce7605826b28c96d5b31f93fddbf892a",
+      "env_lock_sha256": "e5c139ec2890a856fc5bdcbadc4d7cd7c7cbc0e63b3b335bc7de576445da2efa",
+      "recorded_version": "1.0.0"
+    },
+    {
+      "label": "Mastra / history",
+      "group": "PMB retrieval",
+      "run_id": "5662896b-399a-42a9-8ea4-15bd0af44004",
+      "run_label": "pmb-mastra",
+      "report_sha256": "bd9529c7b46744fd2625c820f55a618c34348b7d36e3b42f21a64412aba14a3e",
+      "suite_id": "pmb-retrieval",
+      "suite_sha256": "64bdace8103f89898262d659e3a69fc500b5162920cc2469d3dea8c28f9af0e9",
+      "mode": "retrieval",
+      "reader_input": null,
+      "sut_name": "mastra",
+      "variant": "history",
+      "started_at_utc": "2026-10-17T19:27:39.468789Z",
+      "planned": 75,
+      "status_counts": {
+        "scored": 75
+      },
+      "metrics": {
+        "all_evidence": {
+          "mean": 0.32558139534883723,
+          "n": 43
+        },
+        "empty_result_correct": {
+          "mean": 0,
+          "n": 32
+        },
+        "hit": {
+          "mean": 0.4418604651162791,
+          "n": 43
+        },
+        "mrr": {
+          "mean": 0.06726651901070506,
+          "n": 43
+        },
+        "ndcg": {
+          "mean": 0.13931074159357287,
+          "n": 43
+        },
+        "precision": {
+          "mean": 0.03333333333333334,
+          "n": 75
+        },
+        "recall": {
+          "mean": 0.3820598006644519,
+          "n": 43
+        }
+      },
+      "top_k": 10,
+      "max_context_chars": 100000,
+      "reset_policy": "fresh_per_case",
+      "backend": "process/seatbelt",
+      "network_mode": "none",
+      "reader": null,
+      "judge": {
+        "kind": null,
+        "provider": null,
+        "model": null,
+        "cutoff": null
+      },
+      "embedding": "none",
+      "resume_count": 0,
+      "sut_changes": 0,
+      "manifest_sha256": "6e5184fee225230c2f4a2aa1d51eed0f42b68f93962c9a45a8f35819f2472ed0",
+      "env_lock_sha256": "7c0b9551f8bfdb6f184180d00780abccd752204fddb40bc8d83aef0f103bbc0c",
+      "recorded_version": "1.38.0"
+    },
+    {
+      "label": "Mastra / semantic",
+      "group": "PMB retrieval",
+      "run_id": "409ad1af-cffc-4099-9c14-5adfadac486e",
+      "run_label": "pmb-mastra-semantic",
+      "report_sha256": "39361709c30d6673c796f7fa606581a1ad59bb9f9dc86f8b1d93a8dbab7e82a3",
+      "suite_id": "pmb-retrieval",
+      "suite_sha256": "64bdace8103f89898262d659e3a69fc500b5162920cc2469d3dea8c28f9af0e9",
+      "mode": "retrieval",
+      "reader_input": null,
+      "sut_name": "mastra-semantic",
+      "variant": "semantic-local",
+      "started_at_utc": "2026-10-17T19:28:47.153594Z",
+      "planned": 75,
+      "status_counts": {
+        "scored": 75
+      },
+      "metrics": {
+        "all_evidence": {
+          "mean": 0.8837209302325582,
+          "n": 43
+        },
+        "empty_result_correct": {
+          "mean": 0.09375,
+          "n": 32
+        },
+        "hit": {
+          "mean": 0.9767441860465116,
+          "n": 43
+        },
+        "mrr": {
+          "mean": 0.4244462901439647,
+          "n": 43
+        },
+        "ndcg": {
+          "mean": 0.5387147622685433,
+          "n": 43
+        },
+        "precision": {
+          "mean": 0.08055555555555553,
+          "n": 72
+        },
+        "recall": {
+          "mean": 0.9396456256921375,
+          "n": 43
+        }
+      },
+      "top_k": 10,
+      "max_context_chars": 100000,
+      "reset_policy": "fresh_per_case",
+      "backend": "process/seatbelt",
+      "network_mode": "none",
+      "reader": null,
+      "judge": {
+        "kind": null,
+        "provider": null,
+        "model": null,
+        "cutoff": null
+      },
+      "embedding": {
+        "local": true,
+        "model": "BAAI/bge-small-en-v1.5",
+        "provider": "fastembed"
+      },
+      "resume_count": 0,
+      "sut_changes": 0,
+      "manifest_sha256": "73e0b1d58d3aedd1ef24cdfef6b50df3f6fd2cdb3c14235d7c582e8f0bf9dbce",
+      "env_lock_sha256": "3077282d647955dc897133486c68e431fb9bc8cdd957773fd19c3a9fcbc50e11",
+      "recorded_version": "1.38.0"
+    },
+    {
+      "label": "Mem0 / raw local",
+      "group": "PMB retrieval",
+      "run_id": "93d43b32-e36b-4ea9-9ba4-cb4bc46f3665",
+      "run_label": "p9b-r2-raw-serial",
+      "report_sha256": "1cebae2f5ab0356527ddc8725252200e61bb0ede4974646bddf67eda29993598",
+      "suite_id": "pmb-retrieval",
+      "suite_sha256": "64bdace8103f89898262d659e3a69fc500b5162920cc2469d3dea8c28f9af0e9",
+      "mode": "retrieval",
+      "reader_input": null,
+      "sut_name": "mem0",
+      "variant": "raw-local",
+      "started_at_utc": "2026-10-19T11:05:58.905203Z",
+      "planned": 75,
+      "status_counts": {
+        "scored": 75
+      },
+      "metrics": {
+        "all_evidence": {
+          "mean": 0.8837209302325582,
+          "n": 43
+        },
+        "empty_result_correct": {
+          "mean": 0.09375,
+          "n": 32
+        },
+        "hit": {
+          "mean": 0.9767441860465116,
+          "n": 43
+        },
+        "mrr": {
+          "mean": 0.8496124031007751,
+          "n": 43
+        },
+        "ndcg": {
+          "mean": 0.8642184107076947,
+          "n": 43
+        },
+        "precision": {
+          "mean": 0.08611111111111108,
+          "n": 72
+        },
+        "recall": {
+          "mean": 0.9540420819490586,
+          "n": 43
+        }
+      },
+      "top_k": 10,
+      "max_context_chars": 100000,
+      "reset_policy": "fresh_per_case",
+      "backend": "container/docker",
+      "network_mode": "none",
+      "reader": null,
+      "judge": {
+        "kind": null,
+        "provider": null,
+        "model": null,
+        "cutoff": null
+      },
+      "embedding": {
+        "local": true,
+        "model": "BAAI/bge-small-en-v1.5",
+        "provider": "fastembed"
+      },
+      "resume_count": 0,
+      "sut_changes": 0,
+      "manifest_sha256": "f1d787e7b15df64ccc0f1729349d704403608d0719378fa8c6f1eb715b3b9295",
+      "env_lock_sha256": "87e34020ed60f9090c5eb54edf762ae5a63caf48485baf2de8009049684be7a9",
+      "recorded_version": "2.2.1"
+    },
+    {
+      "label": "Mem0 / infer local",
+      "group": "PMB retrieval",
+      "run_id": "3b15f370-0215-4f76-97ec-093874f67052",
+      "run_label": "mem0-infer-local-pmb75",
+      "report_sha256": "483b66838f7ef64fb95d3ef803a1a05574d8c372ec580bedb202ebb118b32be7",
+      "suite_id": "pmb-retrieval",
+      "suite_sha256": "64bdace8103f89898262d659e3a69fc500b5162920cc2469d3dea8c28f9af0e9",
+      "mode": "retrieval",
+      "reader_input": null,
+      "sut_name": "mem0-infer",
+      "variant": "infer-local",
+      "started_at_utc": "2026-10-19T17:05:50.454423Z",
+      "planned": 75,
+      "status_counts": {
+        "scored": 75
+      },
+      "metrics": {
+        "all_evidence": {
+          "mean": 0.046511627906976744,
+          "n": 43
+        },
+        "empty_result_correct": {
+          "mean": 0.09375,
+          "n": 32
+        },
+        "hit": {
+          "mean": 0.06976744186046512,
+          "n": 43
+        },
+        "mrr": {
+          "mean": 0.040697674418604654,
+          "n": 43
+        },
+        "ndcg": {
+          "mean": 0.04095938417399601,
+          "n": 43
+        },
+        "precision": {
+          "mean": 0.015046296296296295,
+          "n": 72
+        },
+        "recall": {
+          "mean": 0.05038759689922481,
+          "n": 43
+        }
+      },
+      "top_k": 10,
+      "max_context_chars": 100000,
+      "reset_policy": "fresh_per_case",
+      "backend": "container/docker",
+      "network_mode": "gateway",
+      "reader": null,
+      "judge": {
+        "kind": null,
+        "provider": null,
+        "model": null,
+        "cutoff": null
+      },
+      "embedding": {
+        "local": true,
+        "model": "BAAI/bge-small-en-v1.5",
+        "provider": "fastembed"
+      },
+      "resume_count": 0,
+      "sut_changes": 0,
+      "manifest_sha256": "af32906a99cd48268b824321976a3fcb223ca40e129be72df0f478f1277b2882",
+      "env_lock_sha256": "9407e4caa287eecbbed2a33d3dac1f35071f93592c479fdb984c9ba930c2e3b7",
+      "recorded_version": "2.2.1"
+    },
+    {
+      "label": "Octop-memory / lexical",
+      "group": "PMB retrieval",
+      "run_id": "97e34d95-48c7-4021-8438-29e8d707f066",
+      "run_label": "m1b-octop-b",
+      "report_sha256": "ac54a9c606b95ff3df6a3c2c0bce2a36ae9a54984345ea7cca8168215022d4fb",
+      "suite_id": "pmb-retrieval",
+      "suite_sha256": "64bdace8103f89898262d659e3a69fc500b5162920cc2469d3dea8c28f9af0e9",
+      "mode": "retrieval",
+      "reader_input": null,
+      "sut_name": "octop-memory",
+      "variant": "octop-lexical",
+      "started_at_utc": "2026-10-15T18:48:48.094093Z",
+      "planned": 75,
+      "status_counts": {
+        "scored": 75
+      },
+      "metrics": {
+        "all_evidence": {
+          "mean": 0.6046511627906976,
+          "n": 43
+        },
+        "empty_result_correct": {
+          "mean": 0.21875,
+          "n": 32
+        },
+        "hit": {
+          "mean": 0.7441860465116279,
+          "n": 43
+        },
+        "mrr": {
+          "mean": 0.4531284606866002,
+          "n": 43
+        },
+        "ndcg": {
+          "mean": 0.49062000412477924,
+          "n": 43
+        },
+        "precision": {
+          "mean": 0.1542016806722689,
+          "n": 68
+        },
+        "recall": {
+          "mean": 0.6799557032115171,
+          "n": 43
+        }
+      },
+      "top_k": 10,
+      "max_context_chars": 100000,
+      "reset_policy": "fresh_per_case",
+      "backend": "process/seatbelt",
+      "network_mode": "none",
+      "reader": null,
+      "judge": {
+        "kind": null,
+        "provider": null,
+        "model": null,
+        "cutoff": null
+      },
+      "embedding": null,
+      "resume_count": 0,
+      "sut_changes": 0,
+      "manifest_sha256": "d5e3660990ef49c23acd645ee24d7f5c7f7918f1b2ee22d15f58a737b0581097",
+      "env_lock_sha256": null,
+      "recorded_version": "1.0.1"
+    }
+  ],
+  "beam": [
+    {
+      "label": "CogletNet v5",
+      "group": "BEAM 100K answers",
+      "run_id": "34d3d778-8f20-46e1-91d0-9c3042a6a171",
+      "run_label": "cogletnet-v5-beam100k-400",
+      "report_sha256": "6eb27c93a596dd2c751a7ec46aab300fe8e681fafaaf83d8544b56e48a4207f1",
+      "suite_id": "beam-100k@3205395e897e",
+      "suite_sha256": "239c84b1a853dbf8d34db52ee0ce29286bfdb6e7d179832f5a5c448a36b3f349",
+      "mode": "fixed_reader",
+      "reader_input": "items",
+      "sut_name": "cogletnet",
+      "variant": "native-jev-openai-embedding",
+      "started_at_utc": "2026-10-26T07:05:40.019617Z",
+      "planned": 400,
+      "status_counts": {
+        "scored": 400
+      },
+      "metrics": {
+        "all_evidence": {
+          "mean": 0.4507042253521127,
+          "n": 355
+        },
+        "beam.event_ordering.f1": {
+          "mean": 0.2279978354978355,
+          "n": 40
+        },
+        "beam.event_ordering.final": {
+          "mean": 0.08327589177106677,
+          "n": 40
+        },
+        "beam.event_ordering.precision": {
+          "mean": 0.22845238095238093,
+          "n": 40
+        },
+        "beam.event_ordering.recall": {
+          "mean": 0.2276190476190476,
+          "n": 40
+        },
+        "beam.event_ordering.tau_b": {
+          "mean": -0.47491242892411745,
+          "n": 40
+        },
+        "beam.event_ordering.tau_norm": {
+          "mean": 0.2625437855379412,
+          "n": 40
+        },
+        "beam.llm_judge_score": {
+          "mean": 0.5207137896825398,
+          "n": 400
+        },
+        "empty_result_correct": {
+          "mean": null,
+          "n": 0
+        },
+        "hit": {
+          "mean": 0.7577464788732394,
+          "n": 355
+        },
+        "mrr": {
+          "mean": 0.5241281019450036,
+          "n": 355
+        },
+        "ndcg": {
+          "mean": 0.47452042527667504,
+          "n": 355
+        },
+        "precision": {
+          "mean": null,
+          "n": 0
+        },
+        "recall": {
+          "mean": 0.5769504908237302,
+          "n": 355
+        }
+      },
+      "top_k": 10,
+      "max_context_chars": 100000,
+      "reset_policy": "incremental_per_episode",
+      "backend": "container/docker",
+      "network_mode": "open",
+      "reader": {
+        "context_budget_chars": 100000,
+        "effective_max_tokens": 2048,
+        "fullcontext": false,
+        "input_mode": "items",
+        "max_tokens": 2048,
+        "min_tokens_reasoning": 128,
+        "model": "gpt-6-luna",
+        "official_max_tokens": null,
+        "prompt_id": "beam/reader-v1/input=items",
+        "provider": "openai-compat",
+        "reasoning": true,
+        "requested_max_tokens": 2048,
+        "template_sha256": "dcc41b8b00bcc48701d6ac26ba9049cbdf60c2b5cabf8728aba5db493d691e9f",
+        "token_budget_note": "official_max_tokens null means unspecified, configured upstream, or mixed (see token_budgets); effective_max_tokens null means no explicit cap or no reader request"
+      },
+      "judge": {
+        "kind": "decision",
+        "provider": "typesafe",
+        "model": "jev-1.14.0",
+        "cutoff": 0.5
+      },
+      "embedding": {
+        "dimensions": 3072,
+        "local": false,
+        "model": "text-embedding-3-large",
+        "provider": "OpenAI direct"
+      },
+      "resume_count": 2,
+      "sut_changes": 0,
+      "manifest_sha256": "e889b852bc144a55a2b0d633300b1bb5debdfbffd8795df46f8ea539a488e136",
+      "env_lock_sha256": "cdc19fdd1779be38b47d5642ef5971e746b3267d44d18e22a342312c502eee8b",
+      "recorded_version": "0.1.0",
+      "review_metrics": {
+        "beam.citation_coverage": {
+          "mean": 0.5769504908237303,
+          "n": 355
+        },
+        "beam.event_ordering.final": {
+          "mean": 0.08327589177106677,
+          "n": 40
+        },
+        "beam.evidence_f1": {
+          "mean": 0.26219246607292995,
+          "n": 354
+        },
+        "beam.evidence_precision": {
+          "mean": 0.19197269303201506,
+          "n": 354
+        },
+        "beam.evidence_recall": {
+          "mean": 0.5769504908237303,
+          "n": 355
+        },
+        "beam.llm_judge_score": {
+          "mean": 0.5207137896825398,
+          "n": 400
+        },
+        "beam.source_ids_episode_share": {
+          "mean": 0.025576101878714726,
+          "n": 355
+        },
+        "beam.source_ids_per_question": {
+          "mean": 7.059154929577465,
+          "n": 355
+        }
+      },
+      "review_metrics_source_sha256": "6b52fc17ca9315640f497e5ccdc4876e2e3a2f6de9973d351a3f6be1ab7fe488"
+    },
+    {
+      "label": "BM25",
+      "group": "BEAM 100K answers",
+      "run_id": "699ed8a9-a57d-4503-92f0-a5dafb5bb8be",
+      "run_label": "bm25-beam100k-400",
+      "report_sha256": "e50de851485e049748590551fb7c911cc0cd620cdecc231a654e1fd11896a4cb",
+      "suite_id": "beam-100k@3205395e897e",
+      "suite_sha256": "239c84b1a853dbf8d34db52ee0ce29286bfdb6e7d179832f5a5c448a36b3f349",
+      "mode": "fixed_reader",
+      "reader_input": "items",
+      "sut_name": "bm25",
+      "variant": "bm25",
+      "started_at_utc": "2026-10-23T09:31:13.407674Z",
+      "planned": 400,
+      "status_counts": {
+        "scored": 400
+      },
+      "metrics": {
+        "all_evidence": {
+          "mean": 0.27887323943661974,
+          "n": 355
+        },
+        "beam.event_ordering.f1": {
+          "mean": 0.14030122655122657,
+          "n": 40
+        },
+        "beam.event_ordering.final": {
+          "mean": 0.03601597737723895,
+          "n": 40
+        },
+        "beam.event_ordering.precision": {
+          "mean": 0.14121031746031748,
+          "n": 40
+        },
+        "beam.event_ordering.recall": {
+          "mean": 0.1395436507936508,
+          "n": 40
+        },
+        "beam.event_ordering.tau_b": {
+          "mean": -0.5855400168402455,
+          "n": 40
+        },
+        "beam.event_ordering.tau_norm": {
+          "mean": 0.2072299915798772,
+          "n": 40
+        },
+        "beam.llm_judge_score": {
+          "mean": 0.5024007936507934,
+          "n": 400
+        },
+        "empty_result_correct": {
+          "mean": null,
+          "n": 0
+        },
+        "hit": {
+          "mean": 0.6028169014084507,
+          "n": 355
+        },
+        "mrr": {
+          "mean": 0.36848535658394804,
+          "n": 355
+        },
+        "ndcg": {
+          "mean": 0.32007697218484327,
+          "n": 355
+        },
+        "precision": {
+          "mean": null,
+          "n": 0
+        },
+        "recall": {
+          "mean": 0.4066319634981606,
+          "n": 355
+        }
+      },
+      "top_k": 10,
+      "max_context_chars": 100000,
+      "reset_policy": "incremental_per_episode",
+      "backend": "in-process",
+      "network_mode": "inherit",
+      "reader": {
+        "context_budget_chars": 100000,
+        "effective_max_tokens": 2048,
+        "fullcontext": false,
+        "input_mode": "items",
+        "max_tokens": 2048,
+        "min_tokens_reasoning": 128,
+        "model": "gpt-6-luna",
+        "official_max_tokens": null,
+        "prompt_id": "beam/reader-v1/input=items",
+        "provider": "openai-compat",
+        "reasoning": true,
+        "requested_max_tokens": 2048,
+        "template_sha256": "dcc41b8b00bcc48701d6ac26ba9049cbdf60c2b5cabf8728aba5db493d691e9f",
+        "token_budget_note": "official_max_tokens null means unspecified, configured upstream, or mixed (see token_budgets); effective_max_tokens null means no explicit cap or no reader request"
+      },
+      "judge": {
+        "kind": "decision",
+        "provider": "typesafe",
+        "model": "jev-1.14.0",
+        "cutoff": 0.5
+      },
+      "embedding": null,
+      "resume_count": 1,
+      "sut_changes": 0,
+      "manifest_sha256": null,
+      "env_lock_sha256": null,
+      "recorded_version": "0.1.0",
+      "review_metrics": {
+        "beam.citation_coverage": {
+          "mean": 0.40663196349816066,
+          "n": 355
+        },
+        "beam.event_ordering.final": {
+          "mean": 0.03601597737723895,
+          "n": 40
+        },
+        "beam.evidence_f1": {
+          "mean": 0.1351947450408646,
+          "n": 354
+        },
+        "beam.evidence_precision": {
+          "mean": 0.08644067796610169,
+          "n": 354
+        },
+        "beam.evidence_recall": {
+          "mean": 0.40663196349816066,
+          "n": 355
+        },
+        "beam.llm_judge_score": {
+          "mean": 0.5024007936507934,
+          "n": 400
+        },
+        "beam.source_ids_episode_share": {
+          "mean": 0.03669308954724297,
+          "n": 355
+        },
+        "beam.source_ids_per_question": {
+          "mean": 9.971830985915492,
+          "n": 355
+        }
+      },
+      "review_metrics_source_sha256": "6b52fc17ca9315640f497e5ccdc4876e2e3a2f6de9973d351a3f6be1ab7fe488"
+    },
+    {
+      "label": "Null",
+      "group": "BEAM 100K answers",
+      "run_id": "f266c279-3289-4034-9ea2-fd30003e8265",
+      "run_label": "null-beam100k-400",
+      "report_sha256": "4c865ebeb3bac913ae9bafe3a1ca70c43a76c0d901f000abe669202b19876473",
+      "suite_id": "beam-100k@3205395e897e",
+      "suite_sha256": "239c84b1a853dbf8d34db52ee0ce29286bfdb6e7d179832f5a5c448a36b3f349",
+      "mode": "fixed_reader",
+      "reader_input": "items",
+      "sut_name": "null",
+      "variant": "null",
+      "started_at_utc": "2026-10-23T09:31:13.402441Z",
+      "planned": 400,
+      "status_counts": {
+        "scored": 400
+      },
+      "metrics": {
+        "all_evidence": {
+          "mean": 0,
+          "n": 355
+        },
+        "beam.event_ordering.f1": {
+          "mean": 0.0027777777777777775,
+          "n": 40
+        },
+        "beam.event_ordering.final": {
+          "mean": 0.0006944444444444444,
+          "n": 40
+        },
+        "beam.event_ordering.precision": {
+          "mean": 0.0027777777777777775,
+          "n": 40
+        },
+        "beam.event_ordering.recall": {
+          "mean": 0.0027777777777777775,
+          "n": 40
+        },
+        "beam.event_ordering.tau_b": {
+          "mean": -0.6253559763007372,
+          "n": 40
+        },
+        "beam.event_ordering.tau_norm": {
+          "mean": 0.18732201184963132,
+          "n": 40
+        },
+        "beam.llm_judge_score": {
+          "mean": 0.18549999999999997,
+          "n": 400
+        },
+        "empty_result_correct": {
+          "mean": null,
+          "n": 0
+        },
+        "hit": {
+          "mean": 0,
+          "n": 355
+        },
+        "mrr": {
+          "mean": 0,
+          "n": 355
+        },
+        "ndcg": {
+          "mean": 0,
+          "n": 355
+        },
+        "precision": {
+          "mean": null,
+          "n": 0
+        },
+        "recall": {
+          "mean": 0,
+          "n": 355
+        }
+      },
+      "top_k": 10,
+      "max_context_chars": 100000,
+      "reset_policy": "incremental_per_episode",
+      "backend": "in-process",
+      "network_mode": "inherit",
+      "reader": {
+        "context_budget_chars": 100000,
+        "effective_max_tokens": 2048,
+        "fullcontext": false,
+        "input_mode": "items",
+        "max_tokens": 2048,
+        "min_tokens_reasoning": 128,
+        "model": "gpt-6-luna",
+        "official_max_tokens": null,
+        "prompt_id": "beam/reader-v1/input=items",
+        "provider": "openai-compat",
+        "reasoning": true,
+        "requested_max_tokens": 2048,
+        "template_sha256": "dcc41b8b00bcc48701d6ac26ba9049cbdf60c2b5cabf8728aba5db493d691e9f",
+        "token_budget_note": "official_max_tokens null means unspecified, configured upstream, or mixed (see token_budgets); effective_max_tokens null means no explicit cap or no reader request"
+      },
+      "judge": {
+        "kind": "decision",
+        "provider": "typesafe",
+        "model": "jev-1.14.0",
+        "cutoff": 0.5
+      },
+      "embedding": null,
+      "resume_count": 1,
+      "sut_changes": 0,
+      "manifest_sha256": null,
+      "env_lock_sha256": null,
+      "recorded_version": "0.1.0",
+      "review_metrics": {
+        "beam.citation_coverage": {
+          "mean": 0.0,
+          "n": 355
+        },
+        "beam.event_ordering.final": {
+          "mean": 0.0006944444444444444,
+          "n": 40
+        },
+        "beam.evidence_f1": {
+          "mean": null,
+          "n": null
+        },
+        "beam.evidence_precision": {
+          "mean": null,
+          "n": null
+        },
+        "beam.evidence_recall": {
+          "mean": 0.0,
+          "n": 355
+        },
+        "beam.llm_judge_score": {
+          "mean": 0.18549999999999997,
+          "n": 400
+        },
+        "beam.source_ids_episode_share": {
+          "mean": 0.0,
+          "n": 355
+        },
+        "beam.source_ids_per_question": {
+          "mean": 0.0,
+          "n": 355
+        }
+      },
+      "review_metrics_source_sha256": "6b52fc17ca9315640f497e5ccdc4876e2e3a2f6de9973d351a3f6be1ab7fe488"
+    },
+    {
+      "label": "Mem0 / raw local",
+      "group": "BEAM 100K answers",
+      "run_id": "457b8dc9-0756-49c9-b8f2-3b087509d015",
+      "run_label": "mem0-raw-local-beam100k-400",
+      "report_sha256": "09c36e4b771f05329f0af9d1dc06bf2625cc26d99b865c79369ef3d37d64d3ca",
+      "suite_id": "beam-100k@3205395e897e",
+      "suite_sha256": "239c84b1a853dbf8d34db52ee0ce29286bfdb6e7d179832f5a5c448a36b3f349",
+      "mode": "fixed_reader",
+      "reader_input": "items",
+      "sut_name": "mem0",
+      "variant": "raw-local",
+      "started_at_utc": "2026-10-24T09:42:06.297965Z",
+      "planned": 400,
+      "status_counts": {
+        "invalid": 1,
+        "scored": 399
+      },
+      "metrics": {
+        "all_evidence": {
+          "mean": 0.3446327683615819,
+          "n": 354
+        },
+        "beam.event_ordering.f1": {
+          "mean": 0.1667261904761905,
+          "n": 40
+        },
+        "beam.event_ordering.final": {
+          "mean": 0.05298069233089074,
+          "n": 40
+        },
+        "beam.event_ordering.precision": {
+          "mean": 0.1667261904761905,
+          "n": 40
+        },
+        "beam.event_ordering.recall": {
+          "mean": 0.1667261904761905,
+          "n": 40
+        },
+        "beam.event_ordering.tau_b": {
+          "mean": -0.5363958930272987,
+          "n": 40
+        },
+        "beam.event_ordering.tau_norm": {
+          "mean": 0.23180205348635058,
+          "n": 40
+        },
+        "beam.llm_judge_score": {
+          "mean": 0.5208174205354656,
+          "n": 399
+        },
+        "empty_result_correct": {
+          "mean": null,
+          "n": 0
+        },
+        "hit": {
+          "mean": 0.655367231638418,
+          "n": 354
+        },
+        "mrr": {
+          "mean": 0.45157384987893456,
+          "n": 354
+        },
+        "ndcg": {
+          "mean": 0.38488241449885724,
+          "n": 354
+        },
+        "precision": {
+          "mean": null,
+          "n": 0
+        },
+        "recall": {
+          "mean": 0.46534539299369815,
+          "n": 354
+        }
+      },
+      "top_k": 10,
+      "max_context_chars": 100000,
+      "reset_policy": "incremental_per_episode",
+      "backend": "container/docker",
+      "network_mode": "none",
+      "reader": {
+        "context_budget_chars": 100000,
+        "effective_max_tokens": 2048,
+        "fullcontext": false,
+        "input_mode": "items",
+        "max_tokens": 2048,
+        "min_tokens_reasoning": 128,
+        "model": "gpt-6-luna",
+        "official_max_tokens": null,
+        "prompt_id": "beam/reader-v1/input=items",
+        "provider": "openai-compat",
+        "reasoning": true,
+        "requested_max_tokens": 2048,
+        "template_sha256": "dcc41b8b00bcc48701d6ac26ba9049cbdf60c2b5cabf8728aba5db493d691e9f",
+        "token_budget_note": "official_max_tokens null means unspecified, configured upstream, or mixed (see token_budgets); effective_max_tokens null means no explicit cap or no reader request"
+      },
+      "judge": {
+        "kind": "decision",
+        "provider": "typesafe",
+        "model": "jev-1.14.0",
+        "cutoff": 0.5
+      },
+      "embedding": {
+        "local": true,
+        "model": "BAAI/bge-small-en-v1.5",
+        "provider": "fastembed"
+      },
+      "resume_count": 1,
+      "sut_changes": 0,
+      "manifest_sha256": "43d46d75f67e5244e1c38ce629cf855013249bdf01ba7857a45d8f20d2636d9e",
+      "env_lock_sha256": "626abf2efca05a8a3efd95557952d4e3d52d21f4d8c0176f3f4421a8ec94b3a9",
+      "recorded_version": "2.2.1",
+      "review_metrics": {
+        "beam.citation_coverage": {
+          "mean": 0.46534539299369804,
+          "n": 354
+        },
+        "beam.event_ordering.final": {
+          "mean": 0.05298069233089074,
+          "n": 40
+        },
+        "beam.evidence_f1": {
+          "mean": 0.15622853151582752,
+          "n": 354
+        },
+        "beam.evidence_precision": {
+          "mean": 0.10084745762711865,
+          "n": 354
+        },
+        "beam.evidence_recall": {
+          "mean": 0.46534539299369804,
+          "n": 354
+        },
+        "beam.llm_judge_score": {
+          "mean": 0.5208174205354656,
+          "n": 399
+        },
+        "beam.source_ids_episode_share": {
+          "mean": 0.03672319378983138,
+          "n": 354
+        },
+        "beam.source_ids_per_question": {
+          "mean": 10.0,
+          "n": 354
+        }
+      },
+      "review_metrics_source_sha256": "6b52fc17ca9315640f497e5ccdc4876e2e3a2f6de9973d351a3f6be1ab7fe488"
+    },
+    {
+      "label": "Mem0 / infer local",
+      "group": "BEAM 100K answers",
+      "run_id": "c5a583b6-a8e2-452b-a240-76f11018fcde",
+      "run_label": "mem0-infer-local-beam100k-400",
+      "report_sha256": "865569d5aa745abcd5c40e296254b8a27d7d231892896401caa77e5b2641abd9",
+      "suite_id": "beam-100k@3205395e897e",
+      "suite_sha256": "239c84b1a853dbf8d34db52ee0ce29286bfdb6e7d179832f5a5c448a36b3f349",
+      "mode": "fixed_reader",
+      "reader_input": "items",
+      "sut_name": "mem0-infer",
+      "variant": "infer-local",
+      "started_at_utc": "2026-10-24T10:08:02.371204Z",
+      "planned": 400,
+      "status_counts": {
+        "error": 22,
+        "scored": 378
+      },
+      "metrics": {
+        "all_evidence": {
+          "mean": 0.34718100890207715,
+          "n": 337
+        },
+        "beam.event_ordering.f1": {
+          "mean": 0.1843795093795094,
+          "n": 38
+        },
+        "beam.event_ordering.final": {
+          "mean": 0.0651753706657276,
+          "n": 38
+        },
+        "beam.event_ordering.precision": {
+          "mean": 0.18485797827903094,
+          "n": 38
+        },
+        "beam.event_ordering.recall": {
+          "mean": 0.1839807852965748,
+          "n": 38
+        },
+        "beam.event_ordering.tau_b": {
+          "mean": -0.5297261888879535,
+          "n": 38
+        },
+        "beam.event_ordering.tau_norm": {
+          "mean": 0.23513690555602318,
+          "n": 38
+        },
+        "beam.llm_judge_score": {
+          "mean": 0.5127194087511547,
+          "n": 378
+        },
+        "empty_result_correct": {
+          "mean": null,
+          "n": 0
+        },
+        "hit": {
+          "mean": 0.6706231454005934,
+          "n": 337
+        },
+        "mrr": {
+          "mean": 0.42348217229522866,
+          "n": 337
+        },
+        "ndcg": {
+          "mean": 0.3703047054824412,
+          "n": 337
+        },
+        "precision": {
+          "mean": null,
+          "n": 0
+        },
+        "recall": {
+          "mean": 0.46672227788696613,
+          "n": 337
+        }
+      },
+      "top_k": 10,
+      "max_context_chars": 100000,
+      "reset_policy": "incremental_per_episode",
+      "backend": "container/docker",
+      "network_mode": "gateway",
+      "reader": {
+        "context_budget_chars": 100000,
+        "effective_max_tokens": 2048,
+        "fullcontext": false,
+        "input_mode": "items",
+        "max_tokens": 2048,
+        "min_tokens_reasoning": 128,
+        "model": "gpt-6-luna",
+        "official_max_tokens": null,
+        "prompt_id": "beam/reader-v1/input=items",
+        "provider": "openai-compat",
+        "reasoning": true,
+        "requested_max_tokens": 2048,
+        "template_sha256": "dcc41b8b00bcc48701d6ac26ba9049cbdf60c2b5cabf8728aba5db493d691e9f",
+        "token_budget_note": "official_max_tokens null means unspecified, configured upstream, or mixed (see token_budgets); effective_max_tokens null means no explicit cap or no reader request"
+      },
+      "judge": {
+        "kind": "decision",
+        "provider": "typesafe",
+        "model": "jev-1.14.0",
+        "cutoff": 0.5
+      },
+      "embedding": {
+        "local": true,
+        "model": "BAAI/bge-small-en-v1.5",
+        "provider": "fastembed"
+      },
+      "resume_count": 1,
+      "sut_changes": 0,
+      "manifest_sha256": "56ab7f172dae8602ec41801911e7d067319b71945ef738b35304ab46811dd0d9",
+      "env_lock_sha256": "654876c9d776dbc8add4da6950e2e40e0e0c891a5286faba96b2c8c9efc3f8a4",
+      "recorded_version": "2.2.1",
+      "review_metrics": {
+        "beam.citation_coverage": {
+          "mean": 0.4667222778869663,
+          "n": 337
+        },
+        "beam.event_ordering.final": {
+          "mean": 0.0651753706657276,
+          "n": 38
+        },
+        "beam.evidence_f1": {
+          "mean": 0.16575614822493384,
+          "n": 337
+        },
+        "beam.evidence_precision": {
+          "mean": 0.10943431774292309,
+          "n": 337
+        },
+        "beam.evidence_recall": {
+          "mean": 0.4667222778869663,
+          "n": 337
+        },
+        "beam.llm_judge_score": {
+          "mean": 0.5127194087511547,
+          "n": 378
+        },
+        "beam.source_ids_episode_share": {
+          "mean": 0.03559389195564585,
+          "n": 337
+        },
+        "beam.source_ids_per_question": {
+          "mean": 9.554896142433234,
+          "n": 337
+        }
+      },
+      "review_metrics_source_sha256": "6b52fc17ca9315640f497e5ccdc4876e2e3a2f6de9973d351a3f6be1ab7fe488"
+    },
+    {
+      "label": "Hindsight / none",
+      "group": "BEAM 100K answers",
+      "run_id": "2c966c1d-36e6-4d8c-ac9d-fda9865c4569",
+      "run_label": "hindsight-none-beam100k-400",
+      "report_sha256": "7df8ee109594dc5f5d22e47b91505f1d5b75abb5ad7622fb8ae09d33123c41b6",
+      "suite_id": "beam-100k@3205395e897e",
+      "suite_sha256": "239c84b1a853dbf8d34db52ee0ce29286bfdb6e7d179832f5a5c448a36b3f349",
+      "mode": "fixed_reader",
+      "reader_input": "items",
+      "sut_name": "hindsight",
+      "variant": "none",
+      "started_at_utc": "2026-10-24T14:52:19.596321Z",
+      "planned": 400,
+      "status_counts": {
+        "invalid": 1,
+        "scored": 399
+      },
+      "metrics": {
+        "all_evidence": {
+          "mean": 0.3983050847457627,
+          "n": 354
+        },
+        "beam.event_ordering.f1": {
+          "mean": 0.17643217893217897,
+          "n": 40
+        },
+        "beam.event_ordering.final": {
+          "mean": 0.062190466104075345,
+          "n": 40
+        },
+        "beam.event_ordering.precision": {
+          "mean": 0.17734126984126988,
+          "n": 40
+        },
+        "beam.event_ordering.recall": {
+          "mean": 0.1756746031746032,
+          "n": 40
+        },
+        "beam.event_ordering.tau_b": {
+          "mean": -0.5445256384525033,
+          "n": 40
+        },
+        "beam.event_ordering.tau_norm": {
+          "mean": 0.22773718077374835,
+          "n": 40
+        },
+        "beam.llm_judge_score": {
+          "mean": 0.5130649043243025,
+          "n": 399
+        },
+        "empty_result_correct": {
+          "mean": null,
+          "n": 0
+        },
+        "hit": {
+          "mean": 0.7146892655367232,
+          "n": 354
+        },
+        "mrr": {
+          "mean": 0.46925275760021523,
+          "n": 354
+        },
+        "ndcg": {
+          "mean": 0.41974293468770785,
+          "n": 354
+        },
+        "precision": {
+          "mean": null,
+          "n": 0
+        },
+        "recall": {
+          "mean": 0.513689813795746,
+          "n": 354
+        }
+      },
+      "top_k": 10,
+      "max_context_chars": 100000,
+      "reset_policy": "incremental_per_episode",
+      "backend": "container/docker",
+      "network_mode": "none",
+      "reader": {
+        "context_budget_chars": 100000,
+        "effective_max_tokens": 2048,
+        "fullcontext": false,
+        "input_mode": "items",
+        "max_tokens": 2048,
+        "min_tokens_reasoning": 128,
+        "model": "gpt-6-luna",
+        "official_max_tokens": null,
+        "prompt_id": "beam/reader-v1/input=items",
+        "provider": "openai-compat",
+        "reasoning": true,
+        "requested_max_tokens": 2048,
+        "template_sha256": "dcc41b8b00bcc48701d6ac26ba9049cbdf60c2b5cabf8728aba5db493d691e9f",
+        "token_budget_note": "official_max_tokens null means unspecified, configured upstream, or mixed (see token_budgets); effective_max_tokens null means no explicit cap or no reader request"
+      },
+      "judge": {
+        "kind": "decision",
+        "provider": "typesafe",
+        "model": "jev-1.14.0",
+        "cutoff": 0.5
+      },
+      "embedding": "BAAI/bge-small-en-v1.5; local",
+      "resume_count": 1,
+      "sut_changes": 0,
+      "manifest_sha256": "76988c8a9925575f92a36a01d92f7fcceae5ae6585fc50d71c00559df4d7acba",
+      "env_lock_sha256": "7e57857c09b18b564ab922ff443e15d5d924bf0a1e820c1fcc777c5428f4643f",
+      "recorded_version": "1.0.0",
+      "review_metrics": {
+        "beam.citation_coverage": {
+          "mean": 0.513689813795746,
+          "n": 354
+        },
+        "beam.event_ordering.final": {
+          "mean": 0.062190466104075345,
+          "n": 40
+        },
+        "beam.evidence_f1": {
+          "mean": 0.18200202667795315,
+          "n": 354
+        },
+        "beam.evidence_precision": {
+          "mean": 0.12008676351896691,
+          "n": 354
+        },
+        "beam.evidence_recall": {
+          "mean": 0.513689813795746,
+          "n": 354
+        },
+        "beam.llm_judge_score": {
+          "mean": 0.5130649043243025,
+          "n": 399
+        },
+        "beam.source_ids_episode_share": {
+          "mean": 0.033823638735410326,
+          "n": 354
+        },
+        "beam.source_ids_per_question": {
+          "mean": 9.209039548022599,
+          "n": 354
+        }
+      },
+      "review_metrics_source_sha256": "6b52fc17ca9315640f497e5ccdc4876e2e3a2f6de9973d351a3f6be1ab7fe488"
+    },
+    {
+      "label": "Hindsight / llm-gateway",
+      "group": "BEAM 100K answers",
+      "run_id": "c7ccb809-3734-49ee-b749-2e7b7a774da2",
+      "run_label": "hindsight-llm-gateway-beam100k-400",
+      "report_sha256": "f80a49b6e26e9ddc08893bc287d6fb36163c4f25bd4aeca7b9bd99b3153de413",
+      "suite_id": "beam-100k@3205395e897e",
+      "suite_sha256": "239c84b1a853dbf8d34db52ee0ce29286bfdb6e7d179832f5a5c448a36b3f349",
+      "mode": "fixed_reader",
+      "reader_input": "items",
+      "sut_name": "hindsight",
+      "variant": "llm-gateway",
+      "started_at_utc": "2026-10-24T16:06:04.233695Z",
+      "planned": 400,
+      "status_counts": {
+        "invalid": 2,
+        "scored": 398
+      },
+      "metrics": {
+        "all_evidence": {
+          "mean": 0.3076923076923077,
+          "n": 26
+        },
+        "beam.event_ordering.f1": {
+          "mean": 0.180952380952381,
+          "n": 40
+        },
+        "beam.event_ordering.final": {
+          "mean": 0.06183863728758855,
+          "n": 40
+        },
+        "beam.event_ordering.precision": {
+          "mean": 0.180952380952381,
+          "n": 40
+        },
+        "beam.event_ordering.recall": {
+          "mean": 0.180952380952381,
+          "n": 40
+        },
+        "beam.event_ordering.tau_b": {
+          "mean": -0.5192317401089442,
+          "n": 40
+        },
+        "beam.event_ordering.tau_norm": {
+          "mean": 0.24038412994552782,
+          "n": 40
+        },
+        "beam.llm_judge_score": {
+          "mean": 0.4624785634521815,
+          "n": 398
+        },
+        "empty_result_correct": {
+          "mean": null,
+          "n": 0
+        },
+        "hit": {
+          "mean": 0.6923076923076923,
+          "n": 26
+        },
+        "mrr": {
+          "mean": 0.46153846153846156,
+          "n": 26
+        },
+        "ndcg": {
+          "mean": 0.38252111153225543,
+          "n": 26
+        },
+        "precision": {
+          "mean": null,
+          "n": 0
+        },
+        "recall": {
+          "mean": 0.4576923076923076,
+          "n": 26
+        }
+      },
+      "top_k": 10,
+      "max_context_chars": 100000,
+      "reset_policy": "incremental_per_episode",
+      "backend": "container/docker",
+      "network_mode": "gateway",
+      "reader": {
+        "context_budget_chars": 100000,
+        "effective_max_tokens": 2048,
+        "fullcontext": false,
+        "input_mode": "items",
+        "max_tokens": 2048,
+        "min_tokens_reasoning": 128,
+        "model": "gpt-6-luna",
+        "official_max_tokens": null,
+        "prompt_id": "beam/reader-v1/input=items",
+        "provider": "openai-compat",
+        "reasoning": true,
+        "requested_max_tokens": 2048,
+        "template_sha256": "dcc41b8b00bcc48701d6ac26ba9049cbdf60c2b5cabf8728aba5db493d691e9f",
+        "token_budget_note": "official_max_tokens null means unspecified, configured upstream, or mixed (see token_budgets); effective_max_tokens null means no explicit cap or no reader request"
+      },
+      "judge": {
+        "kind": "decision",
+        "provider": "typesafe",
+        "model": "jev-1.14.0",
+        "cutoff": 0.5
+      },
+      "embedding": "BAAI/bge-small-en-v1.5; local",
+      "resume_count": 1,
+      "sut_changes": 0,
+      "manifest_sha256": "11d425f0624eb3d2c1fbd2ae751943ac98eb6a3bd7842097d5ecb3d44134c28b",
+      "env_lock_sha256": "d7e1b45fd20efd4c6305f4810b55d1a45a8fb1d50d588e449ab979e9dea68dc8",
+      "recorded_version": "1.0.0",
+      "review_metrics": {
+        "beam.citation_coverage": {
+          "mean": 0.41732853627329547,
+          "n": 353
+        },
+        "beam.event_ordering.final": {
+          "mean": 0.06183863728758855,
+          "n": 40
+        },
+        "beam.evidence_f1": {
+          "mean": 0.1849422974471349,
+          "n": 352
+        },
+        "beam.evidence_precision": {
+          "mean": 0.13126127344877345,
+          "n": 352
+        },
+        "beam.evidence_recall": {
+          "mean": 0.41732853627329547,
+          "n": 353
+        },
+        "beam.llm_judge_score": {
+          "mean": 0.4624785634521815,
+          "n": 398
+        },
+        "beam.source_ids_episode_share": {
+          "mean": 0.025118190568245106,
+          "n": 353
+        },
+        "beam.source_ids_per_question": {
+          "mean": 6.934844192634561,
+          "n": 353
+        }
+      },
+      "review_metrics_source_sha256": "6b52fc17ca9315640f497e5ccdc4876e2e3a2f6de9973d351a3f6be1ab7fe488"
+    },
+    {
+      "label": "Cognee / llm-gateway",
+      "group": "BEAM 100K answers",
+      "run_id": "e8d8188d-f218-469d-9ad5-b2cedb488b5e",
+      "run_label": "cognee-llm-gateway-beam100k-400",
+      "report_sha256": "845b090f422b8826a132a378286016fc27edfa8338400f3efcd81e5fb1a4f882",
+      "suite_id": "beam-100k@3205395e897e",
+      "suite_sha256": "239c84b1a853dbf8d34db52ee0ce29286bfdb6e7d179832f5a5c448a36b3f349",
+      "mode": "fixed_reader",
+      "reader_input": "items",
+      "sut_name": "cognee",
+      "variant": "llm-gateway",
+      "started_at_utc": "2026-10-24T12:59:32.586895Z",
+      "planned": 400,
+      "status_counts": {
+        "invalid": 1,
+        "scored": 399
+      },
+      "metrics": {
+        "all_evidence": {
+          "mean": 0.3778409090909091,
+          "n": 352
+        },
+        "beam.event_ordering.f1": {
+          "mean": 0.16234307359307362,
+          "n": 40
+        },
+        "beam.event_ordering.final": {
+          "mean": 0.059037949979228045,
+          "n": 40
+        },
+        "beam.event_ordering.precision": {
+          "mean": 0.16190476190476194,
+          "n": 40
+        },
+        "beam.event_ordering.recall": {
+          "mean": 0.16315476190476194,
+          "n": 40
+        },
+        "beam.event_ordering.tau_b": {
+          "mean": -0.5466916728388157,
+          "n": 40
+        },
+        "beam.event_ordering.tau_norm": {
+          "mean": 0.22665416358059215,
+          "n": 40
+        },
+        "beam.llm_judge_score": {
+          "mean": 0.5034093169431514,
+          "n": 399
+        },
+        "empty_result_correct": {
+          "mean": null,
+          "n": 0
+        },
+        "hit": {
+          "mean": 0.6903409090909091,
+          "n": 352
+        },
+        "mrr": {
+          "mean": 0.45620039682539654,
+          "n": 352
+        },
+        "ndcg": {
+          "mean": 0.3993089208808209,
+          "n": 352
+        },
+        "precision": {
+          "mean": null,
+          "n": 0
+        },
+        "recall": {
+          "mean": 0.495347140233504,
+          "n": 352
+        }
+      },
+      "top_k": 10,
+      "max_context_chars": 100000,
+      "reset_policy": "incremental_per_episode",
+      "backend": "container/docker",
+      "network_mode": "gateway",
+      "reader": {
+        "context_budget_chars": 100000,
+        "effective_max_tokens": 2048,
+        "fullcontext": false,
+        "input_mode": "items",
+        "max_tokens": 2048,
+        "min_tokens_reasoning": 128,
+        "model": "gpt-6-luna",
+        "official_max_tokens": null,
+        "prompt_id": "beam/reader-v1/input=items",
+        "provider": "openai-compat",
+        "reasoning": true,
+        "requested_max_tokens": 2048,
+        "template_sha256": "dcc41b8b00bcc48701d6ac26ba9049cbdf60c2b5cabf8728aba5db493d691e9f",
+        "token_budget_note": "official_max_tokens null means unspecified, configured upstream, or mixed (see token_budgets); effective_max_tokens null means no explicit cap or no reader request"
+      },
+      "judge": {
+        "kind": "decision",
+        "provider": "typesafe",
+        "model": "jev-1.14.0",
+        "cutoff": 0.5
+      },
+      "embedding": "local install-time assets; runtime downloads disabled",
+      "resume_count": 1,
+      "sut_changes": 0,
+      "manifest_sha256": "d1df3eb582e7489dd6bcc0ad52ab9b7e2c6714fe8a9df3024e444e55982a3312",
+      "env_lock_sha256": "5c4df23f1cc9ab443d7866e47bc9bc0730dd149fa40447f94be949864fb8940e",
+      "recorded_version": "1.6.5",
+      "review_metrics": {
+        "beam.citation_coverage": {
+          "mean": 0.4958442373696611,
+          "n": 354
+        },
+        "beam.event_ordering.final": {
+          "mean": 0.059037949979228045,
+          "n": 40
+        },
+        "beam.evidence_f1": {
+          "mean": 0.18073244227229068,
+          "n": 354
+        },
+        "beam.evidence_precision": {
+          "mean": 0.11936037126715092,
+          "n": 354
+        },
+        "beam.evidence_recall": {
+          "mean": 0.4958442373696611,
+          "n": 354
+        },
+        "beam.llm_judge_score": {
+          "mean": 0.5034093169431514,
+          "n": 399
+        },
+        "beam.source_ids_episode_share": {
+          "mean": 0.033501048494440286,
+          "n": 354
+        },
+        "beam.source_ids_per_question": {
+          "mean": 9.141242937853107,
+          "n": 354
+        }
+      },
+      "review_metrics_source_sha256": "6b52fc17ca9315640f497e5ccdc4876e2e3a2f6de9973d351a3f6be1ab7fe488"
+    },
+    {
+      "label": "Cognee / none",
+      "group": "BEAM 100K answers",
+      "run_id": "497f433e-c3c6-47c1-a086-c19946224d9f",
+      "run_label": "cognee-none-beam100k-400",
+      "report_sha256": "ae5bdc553ce4fd6ece3346ec6eca146d1f12c52a87a8e31b23ad5eb259aaa2e4",
+      "suite_id": "beam-100k@3205395e897e",
+      "suite_sha256": "239c84b1a853dbf8d34db52ee0ce29286bfdb6e7d179832f5a5c448a36b3f349",
+      "mode": "fixed_reader",
+      "reader_input": "items",
+      "sut_name": "cognee",
+      "variant": "none",
+      "started_at_utc": "2026-10-26T18:06:06.631029Z",
+      "planned": 400,
+      "status_counts": {
+        "error": 186,
+        "invalid": 1,
+        "scored": 213
+      },
+      "metrics": {
+        "all_evidence": {
+          "mean": 0.39361702127659576,
+          "n": 188
+        },
+        "beam.event_ordering.f1": {
+          "mean": 0.1192857142857143,
+          "n": 20
+        },
+        "beam.event_ordering.final": {
+          "mean": 0.034929925864846514,
+          "n": 20
+        },
+        "beam.event_ordering.precision": {
+          "mean": 0.11928571428571429,
+          "n": 20
+        },
+        "beam.event_ordering.recall": {
+          "mean": 0.11928571428571429,
+          "n": 20
+        },
+        "beam.event_ordering.tau_b": {
+          "mean": -0.5889040121098943,
+          "n": 20
+        },
+        "beam.event_ordering.tau_norm": {
+          "mean": 0.20554799394505277,
+          "n": 20
+        },
+        "beam.llm_judge_score": {
+          "mean": 0.4727690215366272,
+          "n": 213
+        },
+        "empty_result_correct": {
+          "mean": null,
+          "n": 0
+        },
+        "hit": {
+          "mean": 0.7287234042553191,
+          "n": 188
+        },
+        "mrr": {
+          "mean": 0.4777672239108409,
+          "n": 188
+        },
+        "ndcg": {
+          "mean": 0.42295355613354746,
+          "n": 188
+        },
+        "precision": {
+          "mean": null,
+          "n": 0
+        },
+        "recall": {
+          "mean": 0.5193602053974397,
+          "n": 188
+        }
+      },
+      "top_k": 10,
+      "max_context_chars": 100000,
+      "reset_policy": "incremental_per_episode",
+      "backend": "container/docker",
+      "network_mode": "none",
+      "reader": {
+        "context_budget_chars": 100000,
+        "effective_max_tokens": 2048,
+        "fullcontext": false,
+        "input_mode": "items",
+        "max_tokens": 2048,
+        "min_tokens_reasoning": 128,
+        "model": "gpt-6-luna",
+        "official_max_tokens": null,
+        "prompt_id": "beam/reader-v1/input=items",
+        "provider": "openai-compat",
+        "reasoning": true,
+        "requested_max_tokens": 2048,
+        "template_sha256": "dcc41b8b00bcc48701d6ac26ba9049cbdf60c2b5cabf8728aba5db493d691e9f",
+        "token_budget_note": "official_max_tokens null means unspecified, configured upstream, or mixed (see token_budgets); effective_max_tokens null means no explicit cap or no reader request"
+      },
+      "judge": {
+        "kind": "decision",
+        "provider": "typesafe",
+        "model": "jev-1.14.0",
+        "cutoff": 0.5
+      },
+      "embedding": "local install-time assets; runtime downloads disabled",
+      "resume_count": 0,
+      "sut_changes": 0,
+      "manifest_sha256": "5c403f057bb3716511f42c976925f46e4b7bf6b9c0b6b510e6ff19e5212f5150",
+      "env_lock_sha256": "c691057e5861dd40a90dea183299aa24cfe739534e0ccb2adb9abea2193ea3d7",
+      "recorded_version": "1.6.5",
+      "review_metrics": {
+        "beam.citation_coverage": {
+          "mean": 0.5192577704482466,
+          "n": 189
+        },
+        "beam.event_ordering.final": {
+          "mean": 0.034929925864846514,
+          "n": 20
+        },
+        "beam.evidence_f1": {
+          "mean": 0.18199815556736204,
+          "n": 189
+        },
+        "beam.evidence_precision": {
+          "mean": 0.11844713193919543,
+          "n": 189
+        },
+        "beam.evidence_recall": {
+          "mean": 0.5192577704482466,
+          "n": 189
+        },
+        "beam.llm_judge_score": {
+          "mean": 0.4727690215366272,
+          "n": 213
+        },
+        "beam.source_ids_episode_share": {
+          "mean": 0.03698827817258688,
+          "n": 189
+        },
+        "beam.source_ids_per_question": {
+          "mean": 9.08994708994709,
+          "n": 189
+        }
+      },
+      "review_metrics_source_sha256": "6b52fc17ca9315640f497e5ccdc4876e2e3a2f6de9973d351a3f6be1ab7fe488"
+    },
+    {
+      "label": "CogletNet v6",
+      "group": "BEAM 100K answers",
+      "run_id": "565b7265-e360-4c79-94f0-b4740283016f",
+      "run_label": "cogletnet-v6-beam100k-400",
+      "report_sha256": "5e808629e1dde824ce46057827bb5f8e6c40e28588331ab935fdd62de7fead67",
+      "suite_id": "beam-100k@3205395e897e",
+      "suite_sha256": "239c84b1a853dbf8d34db52ee0ce29286bfdb6e7d179832f5a5c448a36b3f349",
+      "mode": "fixed_reader",
+      "reader_input": "items",
+      "sut_name": "cogletnet",
+      "variant": "native-jev-openai-embedding",
+      "started_at_utc": "2026-10-28T03:18:12.133073Z",
+      "planned": 400,
+      "status_counts": {
+        "scored": 400
+      },
+      "metrics": {
+        "all_evidence": {
+          "mean": 0.4450704225352113,
+          "n": 355
+        },
+        "beam.event_ordering.f1": {
+          "mean": 0.22643217893217896,
+          "n": 40
+        },
+        "beam.event_ordering.final": {
+          "mean": 0.08844362323420672,
+          "n": 40
+        },
+        "beam.event_ordering.precision": {
+          "mean": 0.22734126984126987,
+          "n": 40
+        },
+        "beam.event_ordering.recall": {
+          "mean": 0.22567460317460322,
+          "n": 40
+        },
+        "beam.event_ordering.tau_b": {
+          "mean": -0.4578986561555773,
+          "n": 40
+        },
+        "beam.event_ordering.tau_norm": {
+          "mean": 0.27105067192221133,
+          "n": 40
+        },
+        "beam.llm_judge_score": {
+          "mean": 0.508062996031746,
+          "n": 400
+        },
+        "empty_result_correct": {
+          "mean": null,
+          "n": 0
+        },
+        "hit": {
+          "mean": 0.7605633802816901,
+          "n": 355
+        },
+        "mrr": {
+          "mean": 0.5283266264252179,
+          "n": 355
+        },
+        "ndcg": {
+          "mean": 0.48046729016309503,
+          "n": 355
+        },
+        "precision": {
+          "mean": null,
+          "n": 0
+        },
+        "recall": {
+          "mean": 0.5748109871349307,
+          "n": 355
+        }
+      },
+      "top_k": 10,
+      "max_context_chars": 100000,
+      "reset_policy": "incremental_per_episode",
+      "backend": "container/docker",
+      "network_mode": "open",
+      "reader": {
+        "context_budget_chars": 100000,
+        "effective_max_tokens": 2048,
+        "fullcontext": false,
+        "input_mode": "items",
+        "max_tokens": 2048,
+        "min_tokens_reasoning": 128,
+        "model": "gpt-6-luna",
+        "official_max_tokens": null,
+        "prompt_id": "beam/reader-v1/input=items",
+        "provider": "openai-compat",
+        "reasoning": true,
+        "requested_max_tokens": 2048,
+        "template_sha256": "dcc41b8b00bcc48701d6ac26ba9049cbdf60c2b5cabf8728aba5db493d691e9f",
+        "token_budget_note": "official_max_tokens null means unspecified, configured upstream, or mixed (see token_budgets); effective_max_tokens null means no explicit cap or no reader request"
+      },
+      "judge": {
+        "kind": "decision",
+        "provider": "typesafe",
+        "model": "jev-1.14.0",
+        "cutoff": 0.5
+      },
+      "embedding": {
+        "dimensions": 3072,
+        "local": false,
+        "model": "text-embedding-3-large",
+        "provider": "OpenAI direct"
+      },
+      "resume_count": 3,
+      "sut_changes": 0,
+      "manifest_sha256": "47db5a2b079b2819029dea11584146abe8df23763c081a924ee220e3317b094c",
+      "env_lock_sha256": "17ebdf26970c517f85c31f51860dc2d991f83f6cea55f1be469cdeb8fa28f8ae",
+      "recorded_version": "0.1.0",
+      "review_metrics": {
+        "beam.citation_coverage": {
+          "mean": 0.5748109871349307,
+          "n": 355
+        },
+        "beam.event_ordering.final": {
+          "mean": 0.08844362323420672,
+          "n": 40
+        },
+        "beam.evidence_f1": {
+          "mean": 0.2640480805433316,
+          "n": 354
+        },
+        "beam.evidence_precision": {
+          "mean": 0.19256008429737242,
+          "n": 354
+        },
+        "beam.evidence_recall": {
+          "mean": 0.5748109871349307,
+          "n": 355
+        },
+        "beam.llm_judge_score": {
+          "mean": 0.508062996031746,
+          "n": 400
+        },
+        "beam.source_ids_episode_share": {
+          "mean": 0.02512560450065952,
+          "n": 355
+        },
+        "beam.source_ids_per_question": {
+          "mean": 6.949295774647887,
+          "n": 355
+        }
+      },
+      "review_metrics_source_sha256": "6b52fc17ca9315640f497e5ccdc4876e2e3a2f6de9973d351a3f6be1ab7fe488"
+    },
+    {
+      "label": "CogletNet v6-leaf-memory",
+      "group": "BEAM 100K answers",
+      "run_id": "54456607-0c3d-4996-81e2-f78cb7df77dc",
+      "run_label": "cogletnet-v6-leaf-memory-beam100k-400",
+      "report_sha256": "841e7eca6a02e5bc23a7121476ee3574ae12a9cf94afe72feabc049d0709bf57",
+      "suite_id": "beam-100k@3205395e897e",
+      "suite_sha256": "239c84b1a853dbf8d34db52ee0ce29286bfdb6e7d179832f5a5c448a36b3f349",
+      "mode": "fixed_reader",
+      "reader_input": "items",
+      "sut_name": "cogletnet",
+      "variant": "native-leaf-memory-jev3-openai-embedding",
+      "started_at_utc": "2026-10-29T03:28:32.369065Z",
+      "planned": 400,
+      "status_counts": {
+        "scored": 400
+      },
+      "metrics": {
+        "all_evidence": {
+          "mean": 0.022535211267605635,
+          "n": 355
+        },
+        "beam.event_ordering.f1": {
+          "mean": 0.1789285714285715,
+          "n": 40
+        },
+        "beam.event_ordering.final": {
+          "mean": 0.06279592387330483,
+          "n": 40
+        },
+        "beam.event_ordering.precision": {
+          "mean": 0.1789285714285715,
+          "n": 40
+        },
+        "beam.event_ordering.recall": {
+          "mean": 0.1789285714285715,
+          "n": 40
+        },
+        "beam.event_ordering.tau_b": {
+          "mean": -0.5119420897499662,
+          "n": 40
+        },
+        "beam.event_ordering.tau_norm": {
+          "mean": 0.24402895512501685,
+          "n": 40
+        },
+        "beam.llm_judge_score": {
+          "mean": 0.4908749999999999,
+          "n": 400
+        },
+        "empty_result_correct": {
+          "mean": null,
+          "n": 0
+        },
+        "hit": {
+          "mean": 0.14647887323943662,
+          "n": 355
+        },
+        "mrr": {
+          "mean": 0.04390900961323495,
+          "n": 355
+        },
+        "ndcg": {
+          "mean": 0.03421218095784496,
+          "n": 355
+        },
+        "precision": {
+          "mean": null,
+          "n": 0
+        },
+        "recall": {
+          "mean": 0.05789591081844602,
+          "n": 355
+        }
+      },
+      "top_k": 10,
+      "max_context_chars": 100000,
+      "reset_policy": "incremental_per_episode",
+      "backend": "container/docker",
+      "network_mode": "open",
+      "reader": {
+        "context_budget_chars": 100000,
+        "effective_max_tokens": 2048,
+        "fullcontext": false,
+        "input_mode": "items",
+        "max_tokens": 2048,
+        "min_tokens_reasoning": 128,
+        "model": "gpt-6-luna",
+        "official_max_tokens": null,
+        "prompt_id": "beam/reader-v1/input=items",
+        "provider": "openai-compat",
+        "reasoning": true,
+        "requested_max_tokens": 2048,
+        "template_sha256": "dcc41b8b00bcc48701d6ac26ba9049cbdf60c2b5cabf8728aba5db493d691e9f",
+        "token_budget_note": "official_max_tokens null means unspecified, configured upstream, or mixed (see token_budgets); effective_max_tokens null means no explicit cap or no reader request"
+      },
+      "judge": {
+        "kind": "decision",
+        "provider": "typesafe",
+        "model": "jev-1.14.0",
+        "cutoff": 0.5
+      },
+      "embedding": {
+        "dimensions": 3072,
+        "local": false,
+        "model": "text-embedding-3-large",
+        "provider": "OpenAI direct"
+      },
+      "resume_count": 5,
+      "sut_changes": 1,
+      "manifest_sha256": "e82aab40b2aa245c37165c3a25cf175da1fc8ebdb50d14477748ebbe75e7e7ca",
+      "env_lock_sha256": "50c56a500e330df2698e19fff524a4c45a1c23baf4f79f764b269e76c7152c15",
+      "recorded_version": "0.1.0",
+      "review_metrics": {
+        "beam.citation_coverage": {
+          "mean": 0.8336032355750665,
+          "n": 355
+        },
+        "beam.event_ordering.final": {
+          "mean": 0.06279592387330483,
+          "n": 40
+        },
+        "beam.evidence_f1": {
+          "mean": 0.1479284163426136,
+          "n": 350
+        },
+        "beam.evidence_precision": {
+          "mean": 0.12604761904761905,
+          "n": 350
+        },
+        "beam.evidence_recall": {
+          "mean": 0.2435294595857976,
+          "n": 355
+        },
+        "beam.llm_judge_score": {
+          "mean": 0.4908749999999999,
+          "n": 400
+        },
+        "beam.source_ids_episode_share": {
+          "mean": 0.016423996618886647,
+          "n": 355
+        },
+        "beam.source_ids_per_question": {
+          "mean": 4.436619718309859,
+          "n": 355
+        }
+      },
+      "review_metrics_source_sha256": "6b52fc17ca9315640f497e5ccdc4876e2e3a2f6de9973d351a3f6be1ab7fe488"
+    },
+    {
+      "label": "CogletNet v6-leaf-memory-leaf-embed",
+      "group": "BEAM 100K answers",
+      "run_id": "c8dd87e3-145b-49b4-a084-8598f086851d",
+      "run_label": "cogletnet-v6-leaf-memory-leaf-embed-beam100k-400",
+      "report_sha256": "fdbcdc3e737747b7c11e447e7da859ed40e14fa17402223253cef2b6d05c08c5",
+      "suite_id": "beam-100k@3205395e897e",
+      "suite_sha256": "239c84b1a853dbf8d34db52ee0ce29286bfdb6e7d179832f5a5c448a36b3f349",
+      "mode": "fixed_reader",
+      "reader_input": "items",
+      "sut_name": "cogletnet",
+      "variant": "native-leaf-memory-leaf-embed-jev3-openai-embedding",
+      "started_at_utc": "2026-10-30T18:03:16.752883Z",
+      "planned": 400,
+      "status_counts": {
+        "scored": 400
+      },
+      "metrics": {
+        "all_evidence": {
+          "mean": 0.016901408450704224,
+          "n": 355
+        },
+        "beam.event_ordering.f1": {
+          "mean": 0.18152958152958154,
+          "n": 40
+        },
+        "beam.event_ordering.final": {
+          "mean": 0.06191004236474116,
+          "n": 40
+        },
+        "beam.event_ordering.precision": {
+          "mean": 0.181984126984127,
+          "n": 40
+        },
+        "beam.event_ordering.recall": {
+          "mean": 0.18115079365079367,
+          "n": 40
+        },
+        "beam.event_ordering.tau_b": {
+          "mean": -0.5252777645688651,
+          "n": 40
+        },
+        "beam.event_ordering.tau_norm": {
+          "mean": 0.2373611177155675,
+          "n": 40
+        },
+        "beam.llm_judge_score": {
+          "mean": 0.5375248015873018,
+          "n": 400
+        },
+        "empty_result_correct": {
+          "mean": null,
+          "n": 0
+        },
+        "hit": {
+          "mean": 0.16056338028169015,
+          "n": 355
+        },
+        "mrr": {
+          "mean": 0.046206125642745344,
+          "n": 355
+        },
+        "ndcg": {
+          "mean": 0.036637138812619104,
+          "n": 355
+        },
+        "precision": {
+          "mean": null,
+          "n": 0
+        },
+        "recall": {
+          "mean": 0.06371166392293152,
+          "n": 355
+        }
+      },
+      "top_k": 10,
+      "max_context_chars": 100000,
+      "reset_policy": "incremental_per_episode",
+      "backend": "container/docker",
+      "network_mode": "open",
+      "reader": {
+        "context_budget_chars": 100000,
+        "effective_max_tokens": 2048,
+        "fullcontext": false,
+        "input_mode": "items",
+        "max_tokens": 2048,
+        "min_tokens_reasoning": 128,
+        "model": "gpt-6-luna",
+        "official_max_tokens": null,
+        "prompt_id": "beam/reader-v1/input=items",
+        "provider": "openai-compat",
+        "reasoning": true,
+        "requested_max_tokens": 2048,
+        "template_sha256": "dcc41b8b00bcc48701d6ac26ba9049cbdf60c2b5cabf8728aba5db493d691e9f",
+        "token_budget_note": "official_max_tokens null means unspecified, configured upstream, or mixed (see token_budgets); effective_max_tokens null means no explicit cap or no reader request"
+      },
+      "judge": {
+        "kind": "decision",
+        "provider": "typesafe",
+        "model": "jev-1.14.0",
+        "cutoff": 0.5
+      },
+      "embedding": {
+        "dimensions": 3072,
+        "local": false,
+        "model": "text-embedding-3-large",
+        "provider": "OpenAI direct"
+      },
+      "resume_count": 1,
+      "sut_changes": 0,
+      "manifest_sha256": "4ef7d8122a72e1c528e950aea7824810d9ac3f106ef10221c444a867d45146e3",
+      "env_lock_sha256": "73af66c3762af5589c4e8df957dc3e359afcea8360ab0aa5cfdc7ed41fc489e7",
+      "recorded_version": "0.1.0",
+      "review_metrics": {
+        "beam.citation_coverage": {
+          "mean": 0.9112087677580635,
+          "n": 355
+        },
+        "beam.event_ordering.final": {
+          "mean": 0.06191004236474116,
+          "n": 40
+        },
+        "beam.evidence_f1": {
+          "mean": 0.22733571440102807,
+          "n": 353
+        },
+        "beam.evidence_precision": {
+          "mean": 0.17985970592202885,
+          "n": 353
+        },
+        "beam.evidence_recall": {
+          "mean": 0.40069858545210657,
+          "n": 355
+        },
+        "beam.llm_judge_score": {
+          "mean": 0.5375248015873018,
+          "n": 400
+        },
+        "beam.source_ids_episode_share": {
+          "mean": 0.01863314754707247,
+          "n": 355
+        },
+        "beam.source_ids_per_question": {
+          "mean": 5.050704225352113,
+          "n": 355
+        }
+      },
+      "review_metrics_source_sha256": "6b52fc17ca9315640f497e5ccdc4876e2e3a2f6de9973d351a3f6be1ab7fe488"
+    },
+    {
+      "label": "Mem0 / OpenAI embed",
+      "group": "BEAM 100K answers",
+      "run_id": "9d518c00-9626-4d6b-a741-078b4c1f3e5c",
+      "run_label": "mem0-raw-openai-embed-beam100k-400",
+      "report_sha256": "453d9e91d2c789a403fe078bba0ed9f982cbcebc183d09e58fa11c4524ebeb72",
+      "suite_id": "beam-100k@3205395e897e",
+      "suite_sha256": "239c84b1a853dbf8d34db52ee0ce29286bfdb6e7d179832f5a5c448a36b3f349",
+      "mode": "fixed_reader",
+      "reader_input": "items",
+      "sut_name": "mem0-openai-embed",
+      "variant": "raw-openai-embed",
+      "started_at_utc": "2026-11-01T02:29:03.54053Z",
+      "planned": 400,
+      "status_counts": {
+        "invalid": 1,
+        "scored": 399
+      },
+      "metrics": {
+        "all_evidence": {
+          "mean": 0.3615819209039548,
+          "n": 354
+        },
+        "beam.event_ordering.f1": {
+          "mean": 0.17585497835497838,
+          "n": 40
+        },
+        "beam.event_ordering.final": {
+          "mean": 0.05976242437001474,
+          "n": 40
+        },
+        "beam.event_ordering.precision": {
+          "mean": 0.17630952380952383,
+          "n": 40
+        },
+        "beam.event_ordering.recall": {
+          "mean": 0.1754761904761905,
+          "n": 40
+        },
+        "beam.event_ordering.tau_b": {
+          "mean": -0.5359281575726048,
+          "n": 40
+        },
+        "beam.event_ordering.tau_norm": {
+          "mean": 0.2320359212136976,
+          "n": 40
+        },
+        "beam.llm_judge_score": {
+          "mean": 0.5147670764212119,
+          "n": 399
+        },
+        "empty_result_correct": {
+          "mean": null,
+          "n": 0
+        },
+        "hit": {
+          "mean": 0.6666666666666666,
+          "n": 354
+        },
+        "mrr": {
+          "mean": 0.48765693659761455,
+          "n": 354
+        },
+        "ndcg": {
+          "mean": 0.4193646508647653,
+          "n": 354
+        },
+        "precision": {
+          "mean": null,
+          "n": 0
+        },
+        "recall": {
+          "mean": 0.48381774769486635,
+          "n": 354
+        }
+      },
+      "top_k": 10,
+      "max_context_chars": 100000,
+      "reset_policy": "incremental_per_episode",
+      "backend": "container/docker",
+      "network_mode": "open",
+      "reader": {
+        "context_budget_chars": 100000,
+        "effective_max_tokens": 2048,
+        "fullcontext": false,
+        "input_mode": "items",
+        "max_tokens": 2048,
+        "min_tokens_reasoning": 128,
+        "model": "gpt-6-luna",
+        "official_max_tokens": null,
+        "prompt_id": "beam/reader-v1/input=items",
+        "provider": "openai-compat",
+        "reasoning": true,
+        "requested_max_tokens": 2048,
+        "template_sha256": "dcc41b8b00bcc48701d6ac26ba9049cbdf60c2b5cabf8728aba5db493d691e9f",
+        "token_budget_note": "official_max_tokens null means unspecified, configured upstream, or mixed (see token_budgets); effective_max_tokens null means no explicit cap or no reader request"
+      },
+      "judge": {
+        "kind": "decision",
+        "provider": "typesafe",
+        "model": "jev-1.14.0",
+        "cutoff": 0.5
+      },
+      "embedding": {
+        "dimensions": 3072,
+        "local": false,
+        "model": "text-embedding-3-large",
+        "provider": "OpenAI direct"
+      },
+      "resume_count": 3,
+      "sut_changes": 0,
+      "manifest_sha256": "659551823e1da0624db26b892670ba0e589c8beffa1f1d3d44d4ffb99fa49ebd",
+      "env_lock_sha256": "26b7b76b057efe175e0dc8c5c553ccf3526c13bbdc34e7b5e2ba24e91e5e9b47",
+      "recorded_version": "2.2.1",
+      "review_metrics": {
+        "beam.citation_coverage": {
+          "mean": 0.48381774769486635,
+          "n": 354
+        },
+        "beam.event_ordering.final": {
+          "mean": 0.05976242437001474,
+          "n": 40
+        },
+        "beam.evidence_f1": {
+          "mean": 0.1620918691279976,
+          "n": 354
+        },
+        "beam.evidence_precision": {
+          "mean": 0.10480225988700566,
+          "n": 354
+        },
+        "beam.evidence_recall": {
+          "mean": 0.48381774769486635,
+          "n": 354
+        },
+        "beam.llm_judge_score": {
+          "mean": 0.5147670764212119,
+          "n": 399
+        },
+        "beam.source_ids_episode_share": {
+          "mean": 0.03672319378983138,
+          "n": 354
+        },
+        "beam.source_ids_per_question": {
+          "mean": 10.0,
+          "n": 354
+        }
+      },
+      "review_metrics_source_sha256": "6b52fc17ca9315640f497e5ccdc4876e2e3a2f6de9973d351a3f6be1ab7fe488"
+    },
+    {
+      "label": "CogletNet v7-leaf-memory-abstractive",
+      "group": "BEAM 100K answers",
+      "run_id": "f4d3bdbf-1510-453c-924d-60e9828d4bba",
+      "run_label": "cogletnet-v7-leaf-memory-abstractive-beam100k-400",
+      "report_sha256": "858b293cecdf4a7b5d993e7a9f52898102cb3a969f7cea6dc37b999d832db307",
+      "suite_id": "beam-100k@3205395e897e",
+      "suite_sha256": "239c84b1a853dbf8d34db52ee0ce29286bfdb6e7d179832f5a5c448a36b3f349",
+      "mode": "fixed_reader",
+      "reader_input": "items",
+      "sut_name": "cogletnet",
+      "variant": "native-leaf-memory-abstractive-jev3-openai-embedding",
+      "started_at_utc": "2026-11-01T07:43:03.4832Z",
+      "planned": 400,
+      "status_counts": {
+        "error": 20,
+        "invalid": 1,
+        "scored": 379
+      },
+      "metrics": {
+        "all_evidence": {
+          "mean": 0.01488095238095238,
+          "n": 336
+        },
+        "beam.event_ordering.f1": {
+          "mean": 0.237406015037594,
+          "n": 38
+        },
+        "beam.event_ordering.final": {
+          "mean": 0.08780942553686916,
+          "n": 38
+        },
+        "beam.event_ordering.precision": {
+          "mean": 0.237406015037594,
+          "n": 38
+        },
+        "beam.event_ordering.recall": {
+          "mean": 0.237406015037594,
+          "n": 38
+        },
+        "beam.event_ordering.tau_b": {
+          "mean": -0.45541149336715275,
+          "n": 38
+        },
+        "beam.event_ordering.tau_norm": {
+          "mean": 0.2722942533164236,
+          "n": 38
+        },
+        "beam.llm_judge_score": {
+          "mean": 0.5024767558738537,
+          "n": 379
+        },
+        "empty_result_correct": {
+          "mean": null,
+          "n": 0
+        },
+        "hit": {
+          "mean": 0.13690476190476192,
+          "n": 336
+        },
+        "mrr": {
+          "mean": 0.04433106575963717,
+          "n": 336
+        },
+        "ndcg": {
+          "mean": 0.032022859853672266,
+          "n": 336
+        },
+        "precision": {
+          "mean": null,
+          "n": 0
+        },
+        "recall": {
+          "mean": 0.049494520030234315,
+          "n": 336
+        }
+      },
+      "top_k": 10,
+      "max_context_chars": 100000,
+      "reset_policy": "incremental_per_episode",
+      "backend": "container/docker",
+      "network_mode": "open",
+      "reader": {
+        "context_budget_chars": 100000,
+        "effective_max_tokens": 2048,
+        "fullcontext": false,
+        "input_mode": "items",
+        "max_tokens": 2048,
+        "min_tokens_reasoning": 128,
+        "model": "gpt-6-luna",
+        "official_max_tokens": null,
+        "prompt_id": "beam/reader-v1/input=items",
+        "provider": "openai-compat",
+        "reasoning": true,
+        "requested_max_tokens": 2048,
+        "template_sha256": "dcc41b8b00bcc48701d6ac26ba9049cbdf60c2b5cabf8728aba5db493d691e9f",
+        "token_budget_note": "official_max_tokens null means unspecified, configured upstream, or mixed (see token_budgets); effective_max_tokens null means no explicit cap or no reader request"
+      },
+      "judge": {
+        "kind": "decision",
+        "provider": "typesafe",
+        "model": "jev-1.14.0",
+        "cutoff": 0.5
+      },
+      "embedding": {
+        "dimensions": 3072,
+        "local": false,
+        "model": "text-embedding-3-large",
+        "provider": "OpenAI direct"
+      },
+      "resume_count": 3,
+      "sut_changes": 0,
+      "manifest_sha256": "5af53a3db307e0730b1f59068bf41274bf9517cfef8731720fbec4cc7afd4099",
+      "env_lock_sha256": "56f20da67bbb1613281f7eb1d47a56b867ad74e535d313d39ea29b951f504426",
+      "recorded_version": "0.1.0",
+      "review_metrics": {
+        "beam.citation_coverage": {
+          "mean": 0.9006200396825397,
+          "n": 336
+        },
+        "beam.event_ordering.final": {
+          "mean": 0.08780942553686916,
+          "n": 38
+        },
+        "beam.evidence_f1": {
+          "mean": 0.12096363041678294,
+          "n": 334
+        },
+        "beam.evidence_precision": {
+          "mean": 0.09818933561448533,
+          "n": 334
+        },
+        "beam.evidence_recall": {
+          "mean": 0.2194066515495087,
+          "n": 336
+        },
+        "beam.llm_judge_score": {
+          "mean": 0.5024767558738537,
+          "n": 379
+        },
+        "beam.source_ids_episode_share": {
+          "mean": 0.018201524025156852,
+          "n": 336
+        },
+        "beam.source_ids_per_question": {
+          "mean": 4.934523809523809,
+          "n": 336
+        }
+      },
+      "review_metrics_source_sha256": "6b52fc17ca9315640f497e5ccdc4876e2e3a2f6de9973d351a3f6be1ab7fe488"
+    },
+    {
+      "label": "CogletNet v8-LV1",
+      "group": "BEAM 100K answers",
+      "run_id": "4f21e719-cbe7-4797-a7e9-b80dd5e45e23",
+      "run_label": "cogletnet-v8-LV1-beam100k-400",
+      "report_sha256": "0585db2055130719e69f54213618634184f252f1aa9423ce0f5f00852f1e7b52",
+      "suite_id": "beam-100k@3205395e897e",
+      "suite_sha256": "239c84b1a853dbf8d34db52ee0ce29286bfdb6e7d179832f5a5c448a36b3f349",
+      "mode": "fixed_reader",
+      "reader_input": "items",
+      "sut_name": "cogletnet",
+      "variant": "native-leaf-memory-abstractive-lv1-jev3-openai-embedding",
+      "started_at_utc": "2026-11-02T02:49:46.787514Z",
+      "planned": 400,
+      "status_counts": {
+        "invalid": 2,
+        "scored": 398
+      },
+      "metrics": {
+        "all_evidence": {
+          "mean": 0.26062322946175637,
+          "n": 353
+        },
+        "beam.event_ordering.f1": {
+          "mean": 0.18203093203093207,
+          "n": 39
+        },
+        "beam.event_ordering.final": {
+          "mean": 0.06105148535571816,
+          "n": 39
+        },
+        "beam.event_ordering.precision": {
+          "mean": 0.18203093203093207,
+          "n": 39
+        },
+        "beam.event_ordering.recall": {
+          "mean": 0.18203093203093207,
+          "n": 39
+        },
+        "beam.event_ordering.tau_b": {
+          "mean": -0.5314366207267504,
+          "n": 39
+        },
+        "beam.event_ordering.tau_norm": {
+          "mean": 0.23428168963662474,
+          "n": 39
+        },
+        "beam.llm_judge_score": {
+          "mean": 0.5297319932998326,
+          "n": 398
+        },
+        "empty_result_correct": {
+          "mean": null,
+          "n": 0
+        },
+        "hit": {
+          "mean": 0.6005665722379604,
+          "n": 353
+        },
+        "mrr": {
+          "mean": 0.38031498718467543,
+          "n": 353
+        },
+        "ndcg": {
+          "mean": 0.32411035696292395,
+          "n": 353
+        },
+        "precision": {
+          "mean": null,
+          "n": 0
+        },
+        "recall": {
+          "mean": 0.40249745533031667,
+          "n": 353
+        }
+      },
+      "top_k": 10,
+      "max_context_chars": 100000,
+      "reset_policy": "incremental_per_episode",
+      "backend": "container/docker",
+      "network_mode": "open",
+      "reader": {
+        "context_budget_chars": 100000,
+        "effective_max_tokens": 2048,
+        "fullcontext": false,
+        "input_mode": "items",
+        "max_tokens": 2048,
+        "min_tokens_reasoning": 128,
+        "model": "gpt-6-luna",
+        "official_max_tokens": null,
+        "prompt_id": "beam/reader-v1/input=items",
+        "provider": "openai-compat",
+        "reasoning": true,
+        "requested_max_tokens": 2048,
+        "template_sha256": "dcc41b8b00bcc48701d6ac26ba9049cbdf60c2b5cabf8728aba5db493d691e9f",
+        "token_budget_note": "official_max_tokens null means unspecified, configured upstream, or mixed (see token_budgets); effective_max_tokens null means no explicit cap or no reader request"
+      },
+      "judge": {
+        "kind": "decision",
+        "provider": "typesafe",
+        "model": "jev-1.14.0",
+        "cutoff": 0.5
+      },
+      "embedding": {
+        "dimensions": 3072,
+        "local": false,
+        "model": "text-embedding-3-large",
+        "provider": "OpenAI direct"
+      },
+      "resume_count": 1,
+      "sut_changes": 0,
+      "manifest_sha256": "cc96cae5a5e6686731c0a8b44a8a334d20d02999a12a313afc01a21242d7c5e9",
+      "env_lock_sha256": "ea41aee4608a9190e1268b8743fd13b1ff09c3b97f38298763d4874cf590f746",
+      "recorded_version": "0.1.0",
+      "review_metrics": {
+        "beam.citation_coverage": {
+          "mean": 0.4024974553303165,
+          "n": 353
+        },
+        "beam.event_ordering.final": {
+          "mean": 0.06105148535571816,
+          "n": 39
+        },
+        "beam.evidence_f1": {
+          "mean": 0.16560713474808958,
+          "n": 352
+        },
+        "beam.evidence_precision": {
+          "mean": 0.11785601551226552,
+          "n": 352
+        },
+        "beam.evidence_recall": {
+          "mean": 0.4024974553303165,
+          "n": 353
+        },
+        "beam.llm_judge_score": {
+          "mean": 0.5297319932998326,
+          "n": 398
+        },
+        "beam.source_ids_episode_share": {
+          "mean": 0.02998969296802039,
+          "n": 353
+        },
+        "beam.source_ids_per_question": {
+          "mean": 8.21813031161473,
+          "n": 353
+        }
+      },
+      "review_metrics_source_sha256": "6b52fc17ca9315640f497e5ccdc4876e2e3a2f6de9973d351a3f6be1ab7fe488"
+    },
+    {
+      "label": "CogletNet v8",
+      "group": "BEAM 100K answers",
+      "run_id": "ee6940ca-b7a5-40ce-9757-c275c656e15f",
+      "run_label": "cogletnet-v8-beam100k-400",
+      "report_sha256": "ab359d43c26df3e0e659593e7de160b3013ff469deb2c50d4b4034a6b461a00b",
+      "suite_id": "beam-100k@3205395e897e",
+      "suite_sha256": "239c84b1a853dbf8d34db52ee0ce29286bfdb6e7d179832f5a5c448a36b3f349",
+      "mode": "fixed_reader",
+      "reader_input": "items",
+      "sut_name": "cogletnet",
+      "variant": "native-leaf-memory-abstractive-jev3-openai-embedding",
+      "started_at_utc": "2026-11-02T13:44:16.362921Z",
+      "planned": 400,
+      "status_counts": {
+        "scored": 400
+      },
+      "metrics": {
+        "all_evidence": {
+          "mean": 0.15492957746478872,
+          "n": 355
+        },
+        "beam.event_ordering.f1": {
+          "mean": 0.19563672438672444,
+          "n": 40
+        },
+        "beam.event_ordering.final": {
+          "mean": 0.07065815909955017,
+          "n": 40
+        },
+        "beam.event_ordering.precision": {
+          "mean": 0.1960912698412699,
+          "n": 40
+        },
+        "beam.event_ordering.recall": {
+          "mean": 0.19525793650793657,
+          "n": 40
+        },
+        "beam.event_ordering.tau_b": {
+          "mean": -0.4921487642456384,
+          "n": 40
+        },
+        "beam.event_ordering.tau_norm": {
+          "mean": 0.2539256178771808,
+          "n": 40
+        },
+        "beam.llm_judge_score": {
+          "mean": 0.5237604166666666,
+          "n": 400
+        },
+        "empty_result_correct": {
+          "mean": null,
+          "n": 0
+        },
+        "hit": {
+          "mean": 0.447887323943662,
+          "n": 355
+        },
+        "mrr": {
+          "mean": 0.2532729711602952,
+          "n": 355
+        },
+        "ndcg": {
+          "mean": 0.2154133918306184,
+          "n": 355
+        },
+        "precision": {
+          "mean": null,
+          "n": 0
+        },
+        "recall": {
+          "mean": 0.2781291791150946,
+          "n": 355
+        }
+      },
+      "top_k": 10,
+      "max_context_chars": 100000,
+      "reset_policy": "incremental_per_episode",
+      "backend": "container/docker",
+      "network_mode": "open",
+      "reader": {
+        "context_budget_chars": 100000,
+        "effective_max_tokens": 2048,
+        "fullcontext": false,
+        "input_mode": "items",
+        "max_tokens": 2048,
+        "min_tokens_reasoning": 128,
+        "model": "gpt-6-luna",
+        "official_max_tokens": null,
+        "prompt_id": "beam/reader-v1/input=items",
+        "provider": "openai-compat",
+        "reasoning": true,
+        "requested_max_tokens": 2048,
+        "template_sha256": "dcc41b8b00bcc48701d6ac26ba9049cbdf60c2b5cabf8728aba5db493d691e9f",
+        "token_budget_note": "official_max_tokens null means unspecified, configured upstream, or mixed (see token_budgets); effective_max_tokens null means no explicit cap or no reader request"
+      },
+      "judge": {
+        "kind": "decision",
+        "provider": "typesafe",
+        "model": "jev-1.14.0",
+        "cutoff": 0.5
+      },
+      "embedding": {
+        "dimensions": 3072,
+        "local": false,
+        "model": "text-embedding-3-large",
+        "provider": "OpenAI direct"
+      },
+      "resume_count": 1,
+      "sut_changes": 0,
+      "manifest_sha256": "035b77ed27d06ad76238ae7b5fddf77124cbee1903b950e379e19fbe26bb74eb",
+      "env_lock_sha256": "8cc072cd2566a70f892c33090a8d133aecbbc221fd2ec34f5163004e16cfd5c8",
+      "recorded_version": "0.1.0",
+      "review_metrics": {
+        "beam.citation_coverage": {
+          "mean": 0.2781291791150946,
+          "n": 355
+        },
+        "beam.event_ordering.final": {
+          "mean": 0.07065815909955017,
+          "n": 40
+        },
+        "beam.evidence_f1": {
+          "mean": 0.13112413909103632,
+          "n": 352
+        },
+        "beam.evidence_precision": {
+          "mean": 0.09691107503607505,
+          "n": 352
+        },
+        "beam.evidence_recall": {
+          "mean": 0.2781291791150946,
+          "n": 355
+        },
+        "beam.llm_judge_score": {
+          "mean": 0.5237604166666666,
+          "n": 400
+        },
+        "beam.source_ids_episode_share": {
+          "mean": 0.021874589913126956,
+          "n": 355
+        },
+        "beam.source_ids_per_question": {
+          "mean": 5.952112676056338,
+          "n": 355
+        }
+      },
+      "review_metrics_source_sha256": "6b52fc17ca9315640f497e5ccdc4876e2e3a2f6de9973d351a3f6be1ab7fe488"
+    },
+    {
+      "label": "CogletNet v9",
+      "group": "BEAM 100K answers",
+      "run_id": "36923153-599d-4cc6-8c25-0acd4b794e60",
+      "run_label": "cogletnet-v9-beam100k-400",
+      "report_sha256": "573708a48ede5b4c9f6d97fe384568c6003bfb72417d88dffeb714d0a976c01b",
+      "suite_id": "beam-100k@3205395e897e",
+      "suite_sha256": "239c84b1a853dbf8d34db52ee0ce29286bfdb6e7d179832f5a5c448a36b3f349",
+      "mode": "fixed_reader",
+      "reader_input": "items",
+      "sut_name": "cogletnet",
+      "variant": "native-tree-jev3-openai-embedding",
+      "started_at_utc": "2026-11-03T10:46:05.389707Z",
+      "planned": 400,
+      "status_counts": {
+        "invalid": 1,
+        "scored": 399
+      },
+      "metrics": {
+        "all_evidence": {
+          "mean": 0.3757062146892655,
+          "n": 354
+        },
+        "beam.event_ordering.f1": {
+          "mean": 0.23404761904761912,
+          "n": 40
+        },
+        "beam.event_ordering.final": {
+          "mean": 0.0842950071533405,
+          "n": 40
+        },
+        "beam.event_ordering.precision": {
+          "mean": 0.23404761904761906,
+          "n": 40
+        },
+        "beam.event_ordering.recall": {
+          "mean": 0.23404761904761906,
+          "n": 40
+        },
+        "beam.event_ordering.tau_b": {
+          "mean": -0.447053640508576,
+          "n": 40
+        },
+        "beam.event_ordering.tau_norm": {
+          "mean": 0.2764731797457121,
+          "n": 40
+        },
+        "beam.llm_judge_score": {
+          "mean": 0.5146372876636034,
+          "n": 399
+        },
+        "empty_result_correct": {
+          "mean": null,
+          "n": 0
+        },
+        "hit": {
+          "mean": 0.711864406779661,
+          "n": 354
+        },
+        "mrr": {
+          "mean": 0.5562942785400412,
+          "n": 354
+        },
+        "ndcg": {
+          "mean": 0.4657946289766886,
+          "n": 354
+        },
+        "precision": {
+          "mean": null,
+          "n": 0
+        },
+        "recall": {
+          "mean": 0.5090691010182536,
+          "n": 354
+        }
+      },
+      "top_k": 10,
+      "max_context_chars": 100000,
+      "reset_policy": "incremental_per_episode",
+      "backend": "container/docker",
+      "network_mode": "open",
+      "reader": {
+        "context_budget_chars": 100000,
+        "effective_max_tokens": 2048,
+        "fullcontext": false,
+        "input_mode": "items",
+        "max_tokens": 2048,
+        "min_tokens_reasoning": 128,
+        "model": "gpt-6-luna",
+        "official_max_tokens": null,
+        "prompt_id": "beam/reader-v1/input=items",
+        "provider": "openai-compat",
+        "reasoning": true,
+        "requested_max_tokens": 2048,
+        "template_sha256": "dcc41b8b00bcc48701d6ac26ba9049cbdf60c2b5cabf8728aba5db493d691e9f",
+        "token_budget_note": "official_max_tokens null means unspecified, configured upstream, or mixed (see token_budgets); effective_max_tokens null means no explicit cap or no reader request"
+      },
+      "judge": {
+        "kind": "decision",
+        "provider": "typesafe",
+        "model": "jev-1.14.0",
+        "cutoff": 0.5
+      },
+      "embedding": {
+        "dimensions": 3072,
+        "local": false,
+        "model": "text-embedding-3-large",
+        "provider": "OpenAI direct"
+      },
+      "resume_count": 3,
+      "sut_changes": 0,
+      "manifest_sha256": "bbaf92b1b90a5563b6cb7e1b7c26374c724e770bf94e07445a6e85f9c050a849",
+      "env_lock_sha256": "cd632a8880cfd4303227fe69f305a169acc89196def58fb03bbdc127573a1260",
+      "recorded_version": "0.1.0",
+      "review_metrics": {
+        "beam.citation_coverage": {
+          "mean": 0.6386554711766577,
+          "n": 354
+        },
+        "beam.event_ordering.final": {
+          "mean": 0.0842950071533405,
+          "n": 40
+        },
+        "beam.evidence_f1": {
+          "mean": 0.2980620476137432,
+          "n": 353
+        },
+        "beam.evidence_precision": {
+          "mean": 0.24437587121723098,
+          "n": 353
+        },
+        "beam.evidence_recall": {
+          "mean": 0.5432530001385933,
+          "n": 354
+        },
+        "beam.llm_judge_score": {
+          "mean": 0.5146372876636034,
+          "n": 399
+        },
+        "beam.source_ids_episode_share": {
+          "mean": 0.023146062591686598,
+          "n": 354
+        },
+        "beam.source_ids_per_question": {
+          "mean": 6.344632768361582,
+          "n": 354
+        }
+      },
+      "review_metrics_source_sha256": "6b52fc17ca9315640f497e5ccdc4876e2e3a2f6de9973d351a3f6be1ab7fe488"
+    }
+  ],
+  "datasets": [
+    {
+      "id": "beam",
+      "name": "BEAM",
+      "repository": "https://github.com/mohammadtavakoli78/BEAM",
+      "implementation_status": "imported",
+      "task_kinds": [
+        "rubric"
+      ],
+      "variants": [
+        "100K",
+        "500K",
+        "1M"
+      ]
+    },
+    {
+      "id": "convomem",
+      "name": "ConvoMem",
+      "repository": "https://github.com/SalesforceAIResearch/ConvoMem",
+      "implementation_status": "imported",
+      "task_kinds": [
+        "qa",
+        "rubric"
+      ],
+      "variants": [
+        "abstention",
+        "assistant_facts",
+        "changing",
+        "implicit_connection",
+        "preference"
+      ]
+    },
+    {
+      "id": "halumem",
+      "name": "HaluMem",
+      "repository": "https://github.com/MemTensor/HaluMem",
+      "implementation_status": "imported",
+      "task_kinds": [
+        "qa",
+        "memory_audit"
+      ],
+      "variants": [
+        "medium",
+        "long"
+      ]
+    },
+    {
+      "id": "locomo",
+      "name": "LoCoMo",
+      "repository": "https://github.com/snap-research/locomo",
+      "implementation_status": "imported",
+      "task_kinds": [
+        "qa"
+      ],
+      "variants": [
+        "text_only",
+        "multimodal"
+      ]
+    },
+    {
+      "id": "longmemeval-v2",
+      "name": "LongMemEval-V2",
+      "repository": "",
+      "implementation_status": "registered",
+      "task_kinds": [
+        "qa",
+        "mcq",
+        "agentic"
+      ],
+      "variants": [
+        "small",
+        "medium"
+      ]
+    },
+    {
+      "id": "longmemeval",
+      "name": "LongMemEval",
+      "repository": "https://github.com/xiaowu0162/LongMemEval",
+      "implementation_status": "run",
+      "task_kinds": [
+        "qa"
+      ],
+      "variants": [
+        "s",
+        "m",
+        "oracle"
+      ]
+    },
+    {
+      "id": "memora",
+      "name": "Memora",
+      "repository": "https://github.com/geniesinc/Memora",
+      "implementation_status": "imported",
+      "task_kinds": [
+        "rubric"
+      ],
+      "variants": [
+        "weekly",
+        "monthly",
+        "quarterly"
+      ]
+    },
+    {
+      "id": "memoryagentbench",
+      "name": "MemoryAgentBench",
+      "repository": "https://github.com/HUST-AI-HYZ/MemoryAgentBench",
+      "implementation_status": "imported",
+      "task_kinds": [
+        "qa",
+        "summary",
+        "recsys"
+      ],
+      "variants": [
+        "accurate_retrieval",
+        "longmemeval-overlap",
+        "conflict_resolution",
+        "long_range_understanding",
+        "test_time_learning"
+      ]
+    },
+    {
+      "id": "memoryarena",
+      "name": "MemoryArena",
+      "repository": "",
+      "implementation_status": "registered",
+      "task_kinds": [
+        "agentic"
+      ],
+      "variants": [
+        "bundled_shopping",
+        "progressive_search",
+        "group_travel_planner",
+        "formal_reasoning_math",
+        "formal_reasoning_phys"
+      ]
+    },
+    {
+      "id": "personamem",
+      "name": "PersonaMem v1",
+      "repository": "https://github.com/bowen-upenn/PersonaMem",
+      "implementation_status": "imported",
+      "task_kinds": [
+        "mcq"
+      ],
+      "variants": [
+        "32k"
+      ]
+    },
+    {
+      "id": "precisionmembench",
+      "name": "PrecisionMemBench",
+      "repository": "https://github.com/tenurehq/precisionMemBench",
+      "implementation_status": "run",
+      "task_kinds": [
+        "typed_context",
+        "retrieval"
+      ],
+      "variants": [
+        "typed_context",
+        "retrieval"
+      ]
+    },
+    {
+      "id": "prefeval",
+      "name": "PrefEval",
+      "repository": "https://github.com/amazon-science/prefeval",
+      "implementation_status": "imported",
+      "task_kinds": [
+        "rubric",
+        "mcq"
+      ],
+      "variants": [
+        "explicit-generation-t10",
+        "explicit-generation-t300",
+        "explicit-mcq-t10",
+        "implicit-choice-generation-t10"
+      ]
+    }
+  ],
+  "gaps": {
+    "graphiti": "Adapter exists; no full scored report found in the 222-card index or graphiti-named report directories. No numerical score is claimed.",
+    "honcho": "Deferred; not an evaluated result.",
+    "echo": "Protocol fixture; not a memory competitor."
+  }
+}

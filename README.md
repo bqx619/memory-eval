@@ -63,7 +63,7 @@ Episode and run cleanup verify residues. `env destroy` removes an environment; `
 | [Design index](design/README.md) / [Changelog](CHANGELOG.md) | Current references and dated history |
 | [Contributing](CONTRIBUTING.md) / [Security](SECURITY.md) | Validation, contributions, and publication boundaries |
 
-Page source and evaluation data are separate. `results build`, `scripts/build_case_review.py`, and `scripts/build_beam_review.py` generate viewer data. Local results are not automatically distributed with the source.
+Page source and evaluation data are separate. `results build`, `scripts/build_case_review.py`, and `scripts/build_beam_review.py` generate viewer data. Local results are not automatically distributed with the source. A selected [aggregate evidence snapshot](evidence/README.md) provides downloadable PMB and BEAM summary tables with denominators, configuration identifiers, and report hashes; full reports, logs, and per-case data remain local.
 
 `cmd/` and `internal/` contain the evaluator, `suts/` contains adapters, and `schemas/` contains generated contracts. `docs/` preserves an early prototype and still-used PMB/regression inputs. `reports/`, `bin/`, private configuration, and bulk data remain local.
 
