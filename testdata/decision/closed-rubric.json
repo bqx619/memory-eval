@@ -1,0 +1,42 @@
+{
+  "schema_version": "1",
+  "cases": [
+    {
+      "id": "closed-rubric-fixture",
+      "cluster_id": "fixture-corpus",
+      "state": "Synthetic fixture: the user explicitly asked to retain a confirmed preference.",
+      "questions": [
+        {
+          "name": "correct",
+          "type": "noul",
+          "instructions": "Is retention explicitly requested? The state says the user explicitly asked to retain the preference.",
+          "criteria": null
+        },
+        {
+          "name": "action",
+          "type": "choice",
+          "instructions": "Choose an action.",
+          "criteria": {
+            "keep": "retain confirmed preference",
+            "drop": "discard preference"
+          },
+          "options": [
+            "keep",
+            "drop"
+          ]
+        },
+        {
+          "name": "quality",
+          "type": "score",
+          "instructions": "Rate how explicit the request is.",
+          "criteria": [
+            "implicit",
+            "partly explicit",
+            "explicit"
+          ],
+          "levels": 3
+        }
+      ]
+    }
+  ]
+}

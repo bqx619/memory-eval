@@ -1,0 +1,112 @@
+{
+  "protocol_id": "beam",
+  "version": "1",
+  "upstream": {
+    "repo": "https://github.com/mohammadtavakoli78/BEAM",
+    "commit": "b2da22eac88bb0874c64665f13457eb99835774a",
+    "files": [
+      {
+        "path": "design/upstream/beam/src/prompts.py",
+        "sha256": "81fe51ab2bcd7e8ad218b3a9a969a340c38d31f90ac2d93fa78a3bb890ba157b"
+      },
+      {
+        "path": "design/upstream/beam/src/evaluation/compute_metrics.py",
+        "sha256": "e72bf25d36d521d166862063ec94f8e7875328193142d1edddb9b4677d47780d"
+      },
+      {
+        "path": "design/upstream/beam/src/evaluation/run_evaluation.py",
+        "sha256": "518894ab65860043a24259457ddf3b1ab8ae18427b6e01e5aa90cd29c4256a3b"
+      },
+      {
+        "path": "design/upstream/beam/src/answer_probing_questions/answer_generation.py",
+        "sha256": "b8117f64146ebfe5693b0ce6f3478fed7584bca6023c25059f2def49341a1f42"
+      },
+      {
+        "path": "design/upstream/beam/src/answer_probing_questions/long_term_memory_methods.py",
+        "sha256": "d3fd96786d2d58a4b0b60ff726ebf00d1adf84f7bb8487abfd8768f3519cffd8"
+      }
+    ]
+  },
+  "variants": {
+    "100K": {
+      "description": "BEAM 100K rubric and LLM-aligned ordering",
+      "suite_id_patterns": [
+        "beam-100k@*"
+      ],
+      "params": {
+        "reset_policy": "incremental_per_episode",
+        "conversations": 20,
+        "reset_policy_default": "incremental_per_episode",
+        "questions": 400,
+        "turns": 5732
+      }
+    },
+    "500K": {
+      "description": "BEAM 500K rubric and LLM-aligned ordering",
+      "suite_id_patterns": [
+        "beam-500k@*"
+      ],
+      "params": {
+        "reset_policy": "incremental_per_episode",
+        "conversations": 35,
+        "reset_policy_default": "incremental_per_episode",
+        "questions": 700,
+        "turns": 38058
+      }
+    },
+    "1M": {
+      "description": "BEAM 1M rubric and LLM-aligned ordering",
+      "suite_id_patterns": [
+        "beam-1m@*"
+      ],
+      "params": {
+        "reset_policy": "incremental_per_episode",
+        "conversations": 35,
+        "reset_policy_default": "incremental_per_episode",
+        "questions": 700,
+        "turns": 74630
+      }
+    }
+  },
+  "scoring": {
+    "primary": "judge",
+    "reader": {
+      "file": "design/upstream/beam/src/answer_probing_questions/long_term_memory_methods.py",
+      "sha256": "d3fd96786d2d58a4b0b60ff726ebf00d1adf84f7bb8487abfd8768f3519cffd8",
+      "input_mode_default": "sources"
+    },
+    "judge": {
+      "file": "design/upstream/beam/src/prompts.py",
+      "sha256": "81fe51ab2bcd7e8ad218b3a9a969a340c38d31f90ac2d93fa78a3bb890ba157b",
+      "model_official": "gpt-4.1-mini",
+      "params": {
+        "temperature": 0
+      },
+      "label_rule": "rubric item score 0/0.5/1; mean; event ordering additionally (tau_b+1)/2 * F1"
+    },
+    "answer_parsing": "parse_json_response without repair_json; alignment uses lowercase contains yes",
+    "denominators": {
+      "exclude": [],
+      "per_type_report": true
+    },
+    "secondary": [
+      "beam.llm_judge_score",
+      "beam.event_ordering.final"
+    ]
+  },
+  "fidelity_rules": {
+    "full": [],
+    "equivalent": [
+      "matching replacement judge agreement study"
+    ],
+    "else": "partial"
+  },
+  "cluster_basis": "conversation",
+  "notes": [
+    "Character budget replaces upstream model token budget; missing Kendall tau is JSON null",
+    "Official model and temperature are declaration only; evaluator configured reference/Jev gating applies",
+    "Only 100K/500K/1M are locally fetched; 10M not imported",
+    "Pinned split counts verified against README front matter and parquet: 100K 20/400, 500K 35/700, 1M 35/700 conversations/questions. 100/2000 is the full benchmark including unfetched 10M.",
+    "1M contains 1720 repeated turn-ID occurrences across conversations 5/26/33/34. All turns retained with :occN suffix; 198 source_chat_ids references expand to every occurrence and are ambiguous (user-approved)."
+  ]
+}

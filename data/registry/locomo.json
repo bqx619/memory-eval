@@ -1,0 +1,61 @@
+{
+  "id": "locomo",
+  "name": "LoCoMo",
+  "repository": "https://github.com/snap-research/locomo",
+  "dataset_url": "",
+  "data_nature": "model-generated",
+  "task_kinds": [
+    "qa"
+  ],
+  "protocol_id": "locomo",
+  "variants": [
+    "text_only",
+    "multimodal"
+  ],
+  "reported_scale": {
+    "conversations": 10,
+    "qa": 1986
+  },
+  "license": {
+    "id": "CC-BY-NC-4.0",
+    "noncommercial": true,
+    "no_derivatives": false,
+    "share_alike": false,
+    "redistribute_normalized": true,
+    "source": "https://github.com/snap-research/locomo/blob/3eb6f2c585f5e1699204e3c3bdf7adc5c28cb376/LICENSE.txt"
+  },
+  "pinned_revision": "3eb6f2c585f5e1699204e3c3bdf7adc5c28cb376",
+  "implementation_status": "imported",
+  "importer": "memeval import locomo",
+  "suites": [
+    {
+      "suite_id": "locomo10@3eb6f2c585f5",
+      "path": "data/normalized/locomo10@3eb6f2c585f5",
+      "protocol_ref": "protocols/locomo.json#text_only",
+      "import_stats_path": "data/normalized/locomo10@3eb6f2c585f5/import.json",
+      "suite_sha256": "7aeb6b2981ad4039f28bf70349ce8ccf466d6db88cefed3a93984c0d8af5b55a"
+    },
+    {
+      "suite_id": "locomo10@3eb6f2c585f5-reader-v2",
+      "path": "data/normalized/locomo10@3eb6f2c585f5-reader-v2",
+      "protocol_ref": "protocols/locomo.json#text_only",
+      "import_stats_path": "data/normalized/locomo10@3eb6f2c585f5-reader-v2/import.json",
+      "suite_sha256": "cf07281ae877852f6af864f57aed20d22d34e9f3b3af8b7c472e7b5a9f0efacd"
+    }
+  ],
+  "overlaps": [
+    "convomem"
+  ],
+  "notes": [
+    "Facts: design/p2-locomo-personamem.md; local verified source.lock.json and official vendored code.",
+    "Offline synthetic reader acceptance only; no live model score claimed.",
+    "text_only imported; multimodal registered only, no importer.",
+    "ConvoMem includes a LoCoMo runner: code/protocol overlap only, no claim of dataset overlap.",
+    "Evidence repair: one semicolon list, three whitespace lists, two unambiguous ID canonicalizations; three unresolved references dropped and disclosed in import diagnostics.",
+    "F17 reader-v2 bundle retains cat5 private adversarial_answer for the official reader suffix; the original v1 bundle and its trusted root are preserved.",
+    "Raw release: all 446 cat5 rows have adversarial_answer; 2 also have a differing answer. The private distractor prefers adversarial_answer, with answer-only fallback for preprocessed inputs.",
+    "The reader-v2 suite has a different Merkle root and is not pairable with v1 runs; evaluator sample identity changes, so prior suite cassettes are not reusable. No existing reports or cassettes were modified."
+  ],
+  "verification_date": "2026-10-17",
+  "lock_path": "data/upstream/locomo/source.lock.json"
+}

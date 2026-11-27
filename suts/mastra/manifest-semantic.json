@@ -1,0 +1,81 @@
+{
+  "schema_version": "3",
+  "name": "mastra-semantic",
+  "variant": "semantic-local",
+  "notes": "Mastra 语义召回（semantic）：@mastra/fastembed 本地嵌入 + LibSQL 向量检索（semanticRecall），不调用 LLM。",
+  "adapter": {
+    "kind": "generic",
+    "transport": "jsonrpc-stdio",
+    "max_frame_bytes": 16777216,
+    "request_timeout_s": 120
+  },
+  "runtime": {
+    "kind": "node",
+    "version": "24.22.0",
+    "prepare": [
+      [
+        "{node}",
+        "{project}/prepare_models.mjs"
+      ]
+    ],
+    "sources": {
+      "darwin-arm64": {
+        "url": "https://nodejs.org/dist/v24.22.0/node-v24.22.0-darwin-arm64.tar.gz",
+        "sha256": "6a9724d9b50a5f22b4816cded441b5a8d9ddae546191a5e5b7efa5a5e2ee26d5"
+      },
+      "linux-amd64": {
+        "url": "https://nodejs.org/dist/v24.22.0/node-v24.22.0-linux-x64.tar.gz",
+        "sha256": "28ea0a438de9a13bd7891fd758eee6c7819ee8af5442dfd8d45bd65e56d4228c"
+      },
+      "linux-arm64": {
+        "url": "https://nodejs.org/dist/v24.22.0/node-v24.22.0-linux-arm64.tar.gz",
+        "sha256": "b7e7991d5407815adfa74a2a9cd4db683552c8ce32ff4a295c22e972849c3f5d"
+      }
+    },
+    "base": "node",
+    "cache_links": {
+      "home/.cache/mastra": "{env}/models-home/.cache/mastra"
+    }
+  },
+  "process": {
+    "command": [
+      "{node}",
+      "{env}/bridge/node/index.mjs",
+      "--adapter",
+      "{project}/adapter.mjs",
+      "--config",
+      "{config_json}"
+    ],
+    "cwd": "{ep}/work",
+    "env": {},
+    "env_passthrough": []
+  },
+  "sandbox": {
+    "network": "none",
+    "limits": {
+      "timeout_s": 600
+    },
+    "backend": "container"
+  },
+  "ready": {
+    "strategy": "sync"
+  },
+  "telemetry_env": {
+    "MASTRA_TELEMETRY_DISABLED": "1",
+    "HF_HUB_OFFLINE": "1"
+  },
+  "declared": {
+    "llm": "none",
+    "embedding": {
+      "provider": "fastembed",
+      "model": "BAAI/bge-small-en-v1.5",
+      "local": true
+    }
+  },
+  "config": {
+    "semantic": true
+  },
+  "llm": {
+    "required": false
+  }
+}

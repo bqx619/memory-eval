@@ -1,0 +1,85 @@
+{
+  "id": "beam",
+  "name": "BEAM",
+  "repository": "https://github.com/mohammadtavakoli78/BEAM",
+  "dataset_url": "https://huggingface.co/datasets/Mohammadta/BEAM",
+  "data_nature": "model-generated",
+  "task_kinds": [
+    "rubric"
+  ],
+  "protocol_id": "beam",
+  "variants": [
+    "100K",
+    "500K",
+    "1M"
+  ],
+  "reported_scale": {
+    "whole_benchmark": {
+      "conversations": 100,
+      "questions": 2000
+    },
+    "locally_imported": {
+      "conversations": 90,
+      "questions": 1800
+    },
+    "by_variant": {
+      "100K": {
+        "conversations": 20,
+        "questions": 400
+      },
+      "500K": {
+        "conversations": 35,
+        "questions": 700
+      },
+      "1M": {
+        "conversations": 35,
+        "questions": 700
+      }
+    }
+  },
+  "license": {
+    "id": "CC-BY-SA-4.0",
+    "noncommercial": false,
+    "no_derivatives": false,
+    "share_alike": true,
+    "redistribute_normalized": true,
+    "source": "https://huggingface.co/datasets/Mohammadta/BEAM"
+  },
+  "pinned_revision": "3205395e897e7318c7b094ef4e6047b9b82dbb03",
+  "implementation_status": "imported",
+  "importer": "memeval-import-beam/1",
+  "suites": [
+    {
+      "suite_id": "beam-100k@3205395e897e",
+      "path": "data/normalized/beam-100k@3205395e897e",
+      "protocol_ref": "protocols/beam.json#100K",
+      "import_stats_path": "data/normalized/beam-100k@3205395e897e/import.json",
+      "suite_sha256": "239c84b1a853dbf8d34db52ee0ce29286bfdb6e7d179832f5a5c448a36b3f349"
+    },
+    {
+      "suite_id": "beam-500k@3205395e897e",
+      "path": "data/normalized/beam-500k@3205395e897e",
+      "protocol_ref": "protocols/beam.json#500K",
+      "import_stats_path": "data/normalized/beam-500k@3205395e897e/import.json",
+      "suite_sha256": "9479898c34a2dd21d84ff52772a70a108d4bf1133794b3500f41c70e56e5df0e"
+    },
+    {
+      "suite_id": "beam-1m@3205395e897e",
+      "path": "data/normalized/beam-1m@3205395e897e",
+      "protocol_ref": "protocols/beam.json#1M",
+      "import_stats_path": "data/normalized/beam-1m@3205395e897e/import.json",
+      "suite_sha256": "d5d226ed8f5c0749bbb6665297755165fdde1aaa886fe513d5d5b3d7281fa615"
+    }
+  ],
+  "overlaps": [],
+  "notes": [
+    "Facts: data/upstream/beam/README.md front matter and design/upstream/beam/SOURCES.md.",
+    "100K/500K/1M imported. 10M not fetched or imported; 100 conversations/2000 questions is the whole benchmark scale.",
+    "Data is generated as described by the data card. Each normalized conversation is a cluster. All question kinds are rubric, with an additional event-ordering checker where applicable.",
+    "1M retains 1720 repeated turn-ID occurrences across 4 conversations; 198 evidence references expand to all matching occurrences (ambiguous), per user approval.",
+    "Reference gpt-4.1-mini temperature 0 is an upstream declaration; actual evaluator judge policy applies.",
+    "Implementation and acceptance: design/p3b-implementation-notes.md."
+  ],
+  "verification_date": "2026-10-17",
+  "lock_path": "data/upstream/beam/source.lock.json"
+}

@@ -1,0 +1,60 @@
+{
+  "checkpoint": "private-checkpoint",
+  "evidence_items": [
+    {
+      "question": "What color was chosen?",
+      "answer": "Blue",
+      "personId": "synthetic-person",
+      "category": "Synthetic topic",
+      "scenario_description": "private scenario",
+      "use_case_model_name": null,
+      "core_model_name": null,
+      "conversations": [
+        {
+          "id": "private-conv-a",
+          "containsEvidence": true,
+          "model_name": null,
+          "messages": [
+            {
+              "speaker": "User",
+              "text": "I chose blue."
+            },
+            {
+              "speaker": "Assistant",
+              "text": "Understood."
+            }
+          ]
+        },
+        {
+          "id": "private-conv-b",
+          "containsEvidence": true,
+          "model_name": null,
+          "messages": [
+            {
+              "speaker": "User",
+              "text": "I chose blue."
+            },
+            {
+              "speaker": "Assistant",
+              "text": "Blue confirmed."
+            }
+          ]
+        }
+      ],
+      "message_evidences": [
+        {
+          "speaker": "User",
+          "text": "I chose blue."
+        },
+        {
+          "speaker": "Assistant",
+          "text": "Blue confirmed."
+        },
+        {
+          "speaker": "User",
+          "text": "Absent text."
+        }
+      ]
+    }
+  ]
+}

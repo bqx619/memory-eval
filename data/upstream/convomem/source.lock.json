@@ -1,0 +1,22 @@
+{
+  "dataset_id": "Salesforce/ConvoMem",
+  "source_url": "https://huggingface.co/datasets/Salesforce/ConvoMem",
+  "revision": "e3e9b39115b02346824c70d349350de738f8be41",
+  "license_ack": {
+    "id": "CC-BY-NC-4.0",
+    "source": "dataset card (README.md front matter: license: cc-by-nc-4.0)",
+    "acknowledged_by": "claude (manual review of data card)",
+    "noncommercial": true,
+    "no_derivatives": false,
+    "share_alike": false,
+    "redistribute_normalized": true,
+    "note": "NonCommercial; evaluation use only; at this revision the repository holds core_benchmark/evidence_questions only (906 files); pre_mixed_testcases / filler_conversations / personas described in the research note are not present at this revision"
+  },
+  "files_manifest": "files.sha256.jsonl",
+  "files_total": 908,
+  "files_verified": 908,
+  "files_failed": [],
+  "fetched_at": "2026-10-17T05:54:21Z",
+  "fetched_by": "curl per file (manual, pre-Go-fetch; Claude)",
+  "hash_authority": "LFS files: HF tree API lfs.oid sha256; others: git blob sha1 oid then local sha256"
+}

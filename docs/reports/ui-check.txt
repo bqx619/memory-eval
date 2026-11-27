@@ -1,0 +1,1 @@
+Actual Chromium set_content smoke check:231 rendered case rows; search reduces to3 for recency-tiebreak; no JS page errors; desktop1440px and mobile390px fit viewport; file URL navigation unavailable under host browser policy.

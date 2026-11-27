@@ -1,0 +1,56 @@
+{
+  "dataset_id": "Mohammadta/BEAM",
+  "source_url": "https://huggingface.co/datasets/Mohammadta/BEAM",
+  "revision": "3205395e897e7318c7b094ef4e6047b9b82dbb03",
+  "license_ack": {
+    "id": "CC-BY-SA-4.0",
+    "source": "dataset card (README.md front matter: license: cc-by-sa-4.0)",
+    "acknowledged_by": "claude (manual review of data card)",
+    "noncommercial": false,
+    "no_derivatives": false,
+    "share_alike": true,
+    "redistribute_normalized": true,
+    "note": "ShareAlike: normalized copies carry the same license and attribution"
+  },
+  "files": [
+    {
+      "path": "README.md",
+      "bytes": 7437,
+      "sha256": "30b9ff56f4ca52e4078754e91f5e8dd8cd73b1b1246a42a000f11ce6b940400d",
+      "git_blob_sha1": "4dab433cdea8a4a8072c5ffa4b7a233738e020f7",
+      "expected_git_blob_sha1": "4dab433cdea8a4a8072c5ffa4b7a233738e020f7",
+      "verified": true,
+      "hash_authority": "HF tree API git blob oid (sha1); sha256 local"
+    },
+    {
+      "path": "data/100K-00000-of-00001.parquet",
+      "bytes": 5429768,
+      "sha256": "c0519be25907005ba873c927c50877471d550873039d96c041554d0075a78ace",
+      "expected_sha256": "c0519be25907005ba873c927c50877471d550873039d96c041554d0075a78ace",
+      "verified": true,
+      "hash_authority": "HF tree API lfs.oid (sha256)"
+    },
+    {
+      "path": "data/500K-00000-of-00001.parquet",
+      "bytes": 33956263,
+      "sha256": "af05921c979355038e1761b7cde3d2dd713200dd3071b278de0200f6c7f30122",
+      "expected_sha256": "af05921c979355038e1761b7cde3d2dd713200dd3071b278de0200f6c7f30122",
+      "verified": true,
+      "hash_authority": "HF tree API lfs.oid (sha256)"
+    },
+    {
+      "path": "data/1M-00000-of-00001.parquet",
+      "bytes": 66156374,
+      "sha256": "41b5acbbb55a586b1305514ef9d9fb03365d9b3331b598a1c2dd7603d93ef533",
+      "expected_sha256": "41b5acbbb55a586b1305514ef9d9fb03365d9b3331b598a1c2dd7603d93ef533",
+      "verified": true,
+      "hash_authority": "HF tree API lfs.oid (sha256)"
+    }
+  ],
+  "not_fetched": [
+    "Mohammadta/BEAM-10M (sha 9b2096193fe74e2837e4713e483351e19817773c): data/10M-00000-of-00002.parquet (lfs 31d96fd47ec56221…), data/10M-00001-of-00002.parquet (lfs a4f13fe25af51d57…)"
+  ],
+  "fetched_at": "2026-10-17T01:38:44Z",
+  "fetched_by": "curl (manual, pre-Go-fetch; Claude)",
+  "hash_authority": "parquet: HF tree API lfs.oid sha256; README: git blob sha1 oid then local sha256"
+}

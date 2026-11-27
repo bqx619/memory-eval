@@ -1,0 +1,23 @@
+FROM ghcr.io/astral-sh/uv:python3.12-bookworm-slim@sha256:e5b65587bce7de595f299855d7385fe7fca39b8a74baa261ba1b7147afa78e58 AS base
+ENV UV_LINK_MODE=copy UV_NO_CACHE=1 PYTHONDONTWRITEBYTECODE=1 UV_PYTHON_INSTALL_DIR=/opt/memeval/env/runtime
+RUN groupadd -g 65532 memeval && useradd -u 65532 -g 65532 -M memeval && mkdir -p /opt/memeval/env/models-home
+FROM base AS lockfile
+WORKDIR /lock
+COPY ["project/requirements.in","requirements.in"]
+RUN uv pip compile requirements.in --python-version '3.12' --generate-hashes -o requirements.lock.txt
+FROM scratch AS lockout
+COPY --from=lockfile /lock/requirements.lock.txt /requirements.lock.txt
+FROM base AS env
+LABEL memeval.env="golden@111111111111"
+LABEL memeval.framework="p8-k3-v3.1"
+LABEL memeval.input="2222222222222222222222222222222222222222222222222222222222222222"
+LABEL memeval.lock="1111111111111111111111111111111111111111111111111111111111111111"
+COPY requirements.lock.txt /opt/memeval/env/requirements.lock.txt
+RUN uv venv --python '3.12' /opt/memeval/env/.venv && uv pip install --python /opt/memeval/env/.venv/bin/python --require-hashes -r /opt/memeval/env/requirements.lock.txt
+COPY --chown=65532:65532 bridge/ /opt/memeval/env/bridge/
+COPY --chown=65532:65532 project/ /opt/memeval/env/project/
+COPY --chown=65532:65532 assets/ /opt/memeval/env/assets/
+WORKDIR /opt/memeval/env/project
+RUN mkdir -p /opt/memeval/env/models-home /opt/memeval/env/models && chown -R 65532:65532 /opt/memeval/env/models-home /opt/memeval/env/models
+USER 65532:65532
+RUN find /opt/memeval/env/models-home /opt/memeval/env/models ! -readable -print -quit > /tmp/memeval-unreadable && if test -s /tmp/memeval-unreadable; then cat /tmp/memeval-unreadable; exit 1; fi && rm /tmp/memeval-unreadable

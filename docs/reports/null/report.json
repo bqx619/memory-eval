@@ -1,0 +1,4603 @@
+{
+  "framework_version": "0.1.0",
+  "run_id": "e2d7d61e-b09b-46ee-98be-32c7ad186cc3",
+  "started_at_runtime_utc": "2026-10-15T08:03:33.292000+00:00",
+  "research_snapshot_date": "2026-10-15",
+  "wall_seconds": 0.11034520199973485,
+  "suite_id": "precisionmembench-projection-v1",
+  "suite_sha256": "b9f3cc50a25b3759539466bb3596673f755bad464a2893c48a6549c2b4d45527",
+  "source": {
+    "dataset": "precisionmembench_projection",
+    "source_kind": "upstream_authored_synthetic_fixture",
+    "upstream": "https://github.com/tenurehq/precisionMemBench",
+    "revision": "61a712a1754e7d27b6dee42da32a2c214b003ece",
+    "seed_blob_sha": "2d9c9daf55c075f0f64a9a9f71db61feda7ad4c2",
+    "cases_blob_sha": "dd0ee63d91b9b19f4c891463ab104bb2ec0485bd",
+    "license": "MIT",
+    "author": "Jeffrey Flynt",
+    "retrieved_date": "2026-10-15",
+    "acquisition": "Manually transcribed field projection from GitHub connector; full raw-byte download unavailable in build environment.",
+    "transformation": "Seed retains id, user, type, name, aliases, content, scope, status, pinned, supersession, resolution, edit flag, participants; missing optional fields normalized; cases omit description/notes; queries and assertions unchanged.",
+    "limitations": [
+      "Not the full upstream benchmark protocol; single-turn assertions only; 12 session assertions are catalogued, not bundled.",
+      "Descriptions contain framework-specific assumptions; report is diagnostic, not a universal PA score.",
+      "One case contains no effective assertion and is explicitly unscored.",
+      "Original prose inconsistency \"fails open (denies all)\" is preserved; no correction made."
+    ],
+    "source_url": "https://github.com/tenurehq/precisionMemBench",
+    "projection_sha256": "26a2748bbb941451847b984c9d48ace93c59b263f07d6468b0902381d97c744e"
+  },
+  "source_counts": {
+    "episodes": 1,
+    "events": 35,
+    "cases": 77
+  },
+  "source_limitations": [
+    "Source-specific output tiers and expectations are not a universal memory benchmark",
+    "35 structured seeds are not longitudinal raw conversations",
+    "Vacuous assertions are unscored, unlike upstream all([]) success",
+    "Context prelude is produced by the tested adapter, not the upstream fixed persona service"
+  ],
+  "mode": "retrieval",
+  "adapter": {
+    "name": "null",
+    "version": "0.1.0",
+    "capabilities": [
+      "retrieve",
+      "typed_context"
+    ],
+    "read_only_queries": true,
+    "implementation": "stdlib lexical diagnostic baseline",
+    "config": {
+      "k1": 1.5,
+      "b": 0.75,
+      "positive_score_only": true,
+      "policy": "metadata owner/scope/state; no learned judgments"
+    }
+  },
+  "reader": null,
+  "protocol": {
+    "version": "paeval-v1",
+    "budget": {
+      "top_k": 10,
+      "max_context_chars": 100000
+    },
+    "batch_size": 64,
+    "reset_policy": "fresh-namespace-per-case",
+    "scoring": "deterministic-source-assertions-and-diagnostics-v1",
+    "case_limit": null,
+    "gold_hidden_from_adapter": true,
+    "process_security": "trusted Python adapters; no OS sandbox",
+    "trace_text": false,
+    "cost_model": "No API billing measured; null is not zero"
+  },
+  "environment": {
+    "python": "3.13.5",
+    "platform": "Linux-6.18.44-x86_64-with-glibc2.41",
+    "code_sha256": "3a7de15fe8ac44b2e1163ab44c768ffa74b928abc4dd02424c9b0e74233d6c7f"
+  },
+  "summary": {
+    "planned": 77,
+    "status_counts": {
+      "scored": 76,
+      "unscored": 1
+    },
+    "n_with_pass_judgment": 76,
+    "passed": 15,
+    "pass_rate_on_scored": 0.19736842105263158,
+    "scoring_coverage": 0.987012987012987,
+    "execution_errors": 0,
+    "unsupported": 0,
+    "metrics": {
+      "all_evidence": {
+        "mean": 0.0,
+        "n": 43
+      },
+      "empty_result_correct": {
+        "mean": 1.0,
+        "n": 32
+      },
+      "hit": {
+        "mean": 0.0,
+        "n": 43
+      },
+      "mrr": {
+        "mean": 0.0,
+        "n": 43
+      },
+      "ndcg": {
+        "mean": 0.0,
+        "n": 43
+      },
+      "pinned_coverage": {
+        "mean": 0.0,
+        "n": 10
+      },
+      "precision": {
+        "mean": 0.0,
+        "n": 43
+      },
+      "recall": {
+        "mean": 0.0,
+        "n": 43
+      }
+    },
+    "timings": {
+      "reset_ms": {
+        "p50": 0.00033099968277383596,
+        "p95": 0.0007529998583777342,
+        "total": 0.030583001262129983,
+        "n": 77
+      },
+      "ingest_ms": {
+        "p50": 0.294433999897592,
+        "p95": 0.329421199967328,
+        "total": 23.36828000125024,
+        "n": 77
+      },
+      "ready_ms": {
+        "p50": 0.00017999991541728377,
+        "p95": 0.00030999990485724993,
+        "total": 0.014503999864245998,
+        "n": 77
+      },
+      "query_ms": {
+        "p50": 0.007701999948039884,
+        "p95": 0.009482000223215437,
+        "total": 0.6341770031212945,
+        "n": 77
+      },
+      "answer_ms": {
+        "p50": null,
+        "p95": null,
+        "total": 0,
+        "n": 0
+      }
+    },
+    "returned_chars": {
+      "p50": 0.0,
+      "p95": 0.0
+    },
+    "billing": {
+      "api_cost_usd": null,
+      "model_tokens": null,
+      "note": "No billing integration was executed; characters are not tokens"
+    }
+  },
+  "by_category": {
+    "Alias resolution": {
+      "planned": 23,
+      "status_counts": {
+        "scored": 23
+      },
+      "n_with_pass_judgment": 23,
+      "passed": 0,
+      "pass_rate_on_scored": 0,
+      "scoring_coverage": 1.0,
+      "execution_errors": 0,
+      "unsupported": 0,
+      "metrics": {
+        "all_evidence": {
+          "mean": 0.0,
+          "n": 22
+        },
+        "empty_result_correct": {
+          "mean": 1.0,
+          "n": 1
+        },
+        "hit": {
+          "mean": 0.0,
+          "n": 22
+        },
+        "mrr": {
+          "mean": 0.0,
+          "n": 22
+        },
+        "ndcg": {
+          "mean": 0.0,
+          "n": 22
+        },
+        "pinned_coverage": {
+          "mean": 0.0,
+          "n": 2
+        },
+        "precision": {
+          "mean": 0.0,
+          "n": 22
+        },
+        "recall": {
+          "mean": 0.0,
+          "n": 22
+        }
+      },
+      "timings": {
+        "reset_ms": {
+          "p50": 0.00034000004234258085,
+          "p95": 0.0005930000497755826,
+          "total": 0.008756000624998705,
+          "n": 23
+        },
+        "ingest_ms": {
+          "p50": 0.29504500025723246,
+          "p95": 0.32534319984733884,
+          "total": 6.973438001296017,
+          "n": 23
+        },
+        "ready_ms": {
+          "p50": 0.00018999980966327712,
+          "p95": 0.0002288998530275421,
+          "total": 0.004324000656197313,
+          "n": 23
+        },
+        "query_ms": {
+          "p50": 0.00780099981056992,
+          "p95": 0.009177900210488588,
+          "total": 0.18247000207338715,
+          "n": 23
+        },
+        "answer_ms": {
+          "p50": null,
+          "p95": null,
+          "total": 0,
+          "n": 0
+        }
+      },
+      "returned_chars": {
+        "p50": 0.0,
+        "p95": 0.0
+      },
+      "billing": {
+        "api_cost_usd": null,
+        "model_tokens": null,
+        "note": "No billing integration was executed; characters are not tokens"
+      }
+    },
+    "Budget eviction and capacity": {
+      "planned": 5,
+      "status_counts": {
+        "scored": 5
+      },
+      "n_with_pass_judgment": 5,
+      "passed": 2,
+      "pass_rate_on_scored": 0.4,
+      "scoring_coverage": 1.0,
+      "execution_errors": 0,
+      "unsupported": 0,
+      "metrics": {
+        "all_evidence": {
+          "mean": 0.0,
+          "n": 2
+        },
+        "empty_result_correct": {
+          "mean": 1.0,
+          "n": 3
+        },
+        "hit": {
+          "mean": 0.0,
+          "n": 2
+        },
+        "mrr": {
+          "mean": 0.0,
+          "n": 2
+        },
+        "ndcg": {
+          "mean": 0.0,
+          "n": 2
+        },
+        "pinned_coverage": {
+          "mean": 0.0,
+          "n": 1
+        },
+        "precision": {
+          "mean": 0.0,
+          "n": 2
+        },
+        "recall": {
+          "mean": 0.0,
+          "n": 2
+        }
+      },
+      "timings": {
+        "reset_ms": {
+          "p50": 0.00031100034902920015,
+          "p95": 0.0005530000635189936,
+          "total": 0.0018030000319413375,
+          "n": 5
+        },
+        "ingest_ms": {
+          "p50": 0.2904079997279041,
+          "p95": 0.3098708000834449,
+          "total": 1.484047999838367,
+          "n": 5
+        },
+        "ready_ms": {
+          "p50": 0.00018000037016463466,
+          "p95": 0.0002281997694808524,
+          "total": 0.0009210002644977067,
+          "n": 5
+        },
+        "query_ms": {
+          "p50": 0.007871999969211174,
+          "p95": 0.008199999865610152,
+          "total": 0.03896899988831137,
+          "n": 5
+        },
+        "answer_ms": {
+          "p50": null,
+          "p95": null,
+          "total": 0,
+          "n": 0
+        }
+      },
+      "returned_chars": {
+        "p50": 0.0,
+        "p95": 0.0
+      },
+      "billing": {
+        "api_cost_usd": null,
+        "model_tokens": null,
+        "note": "No billing integration was executed; characters are not tokens"
+      }
+    },
+    "Cold start behavior": {
+      "planned": 1,
+      "status_counts": {
+        "scored": 1
+      },
+      "n_with_pass_judgment": 1,
+      "passed": 1,
+      "pass_rate_on_scored": 1,
+      "scoring_coverage": 1.0,
+      "execution_errors": 0,
+      "unsupported": 0,
+      "metrics": {
+        "all_evidence": {
+          "mean": null,
+          "n": 0
+        },
+        "empty_result_correct": {
+          "mean": 1.0,
+          "n": 1
+        },
+        "hit": {
+          "mean": null,
+          "n": 0
+        },
+        "mrr": {
+          "mean": null,
+          "n": 0
+        },
+        "ndcg": {
+          "mean": null,
+          "n": 0
+        },
+        "pinned_coverage": {
+          "mean": null,
+          "n": 0
+        },
+        "precision": {
+          "mean": null,
+          "n": 0
+        },
+        "recall": {
+          "mean": null,
+          "n": 0
+        }
+      },
+      "timings": {
+        "reset_ms": {
+          "p50": 0.0002800002221192699,
+          "p95": 0.0002800002221192699,
+          "total": 0.0002800002221192699,
+          "n": 1
+        },
+        "ingest_ms": {
+          "p50": 0.3125210000689549,
+          "p95": 0.3125210000689549,
+          "total": 0.3125210000689549,
+          "n": 1
+        },
+        "ready_ms": {
+          "p50": 0.00015000023267930374,
+          "p95": 0.00015000023267930374,
+          "total": 0.00015000023267930374,
+          "n": 1
+        },
+        "query_ms": {
+          "p50": 0.006820000180596253,
+          "p95": 0.006820000180596253,
+          "total": 0.006820000180596253,
+          "n": 1
+        },
+        "answer_ms": {
+          "p50": null,
+          "p95": null,
+          "total": 0,
+          "n": 0
+        }
+      },
+      "returned_chars": {
+        "p50": 0.0,
+        "p95": 0.0
+      },
+      "billing": {
+        "api_cost_usd": null,
+        "model_tokens": null,
+        "note": "No billing integration was executed; characters are not tokens"
+      }
+    },
+    "Counter-signal retrieval": {
+      "planned": 2,
+      "status_counts": {
+        "scored": 2
+      },
+      "n_with_pass_judgment": 2,
+      "passed": 0,
+      "pass_rate_on_scored": 0,
+      "scoring_coverage": 1.0,
+      "execution_errors": 0,
+      "unsupported": 0,
+      "metrics": {
+        "all_evidence": {
+          "mean": 0.0,
+          "n": 2
+        },
+        "empty_result_correct": {
+          "mean": null,
+          "n": 0
+        },
+        "hit": {
+          "mean": 0.0,
+          "n": 2
+        },
+        "mrr": {
+          "mean": 0.0,
+          "n": 2
+        },
+        "ndcg": {
+          "mean": 0.0,
+          "n": 2
+        },
+        "pinned_coverage": {
+          "mean": null,
+          "n": 0
+        },
+        "precision": {
+          "mean": 0.0,
+          "n": 2
+        },
+        "recall": {
+          "mean": 0.0,
+          "n": 2
+        }
+      },
+      "timings": {
+        "reset_ms": {
+          "p50": 0.0002700001004996011,
+          "p95": 0.000288000114778697,
+          "total": 0.0005400002009992022,
+          "n": 2
+        },
+        "ingest_ms": {
+          "p50": 0.30859950015837967,
+          "p95": 0.3265405503270813,
+          "total": 0.6171990003167593,
+          "n": 2
+        },
+        "ready_ms": {
+          "p50": 0.00022499989427160472,
+          "p95": 0.0003014999037986854,
+          "total": 0.00044999978854320943,
+          "n": 2
+        },
+        "query_ms": {
+          "p50": 0.007761500228298246,
+          "p95": 0.0078069501569189015,
+          "total": 0.015523000456596492,
+          "n": 2
+        },
+        "answer_ms": {
+          "p50": null,
+          "p95": null,
+          "total": 0,
+          "n": 0
+        }
+      },
+      "returned_chars": {
+        "p50": 0.0,
+        "p95": 0.0
+      },
+      "billing": {
+        "api_cost_usd": null,
+        "model_tokens": null,
+        "note": "No billing integration was executed; characters are not tokens"
+      }
+    },
+    "Cross-user isolation": {
+      "planned": 1,
+      "status_counts": {
+        "scored": 1
+      },
+      "n_with_pass_judgment": 1,
+      "passed": 1,
+      "pass_rate_on_scored": 1,
+      "scoring_coverage": 1.0,
+      "execution_errors": 0,
+      "unsupported": 0,
+      "metrics": {
+        "all_evidence": {
+          "mean": null,
+          "n": 0
+        },
+        "hit": {
+          "mean": null,
+          "n": 0
+        },
+        "mrr": {
+          "mean": null,
+          "n": 0
+        },
+        "ndcg": {
+          "mean": null,
+          "n": 0
+        },
+        "pinned_coverage": {
+          "mean": null,
+          "n": 0
+        },
+        "precision": {
+          "mean": null,
+          "n": 0
+        },
+        "recall": {
+          "mean": null,
+          "n": 0
+        }
+      },
+      "timings": {
+        "reset_ms": {
+          "p50": 0.00028999966161791235,
+          "p95": 0.00028999966161791235,
+          "total": 0.00028999966161791235,
+          "n": 1
+        },
+        "ingest_ms": {
+          "p50": 0.29088800010868,
+          "p95": 0.29088800010868,
+          "total": 0.29088800010868,
+          "n": 1
+        },
+        "ready_ms": {
+          "p50": 0.0001399998836859595,
+          "p95": 0.0001399998836859595,
+          "total": 0.0001399998836859595,
+          "n": 1
+        },
+        "query_ms": {
+          "p50": 0.0076020000960852485,
+          "p95": 0.0076020000960852485,
+          "total": 0.0076020000960852485,
+          "n": 1
+        },
+        "answer_ms": {
+          "p50": null,
+          "p95": null,
+          "total": 0,
+          "n": 0
+        }
+      },
+      "returned_chars": {
+        "p50": 0.0,
+        "p95": 0.0
+      },
+      "billing": {
+        "api_cost_usd": null,
+        "model_tokens": null,
+        "note": "No billing integration was executed; characters are not tokens"
+      }
+    },
+    "Design boundary cases": {
+      "planned": 6,
+      "status_counts": {
+        "scored": 6
+      },
+      "n_with_pass_judgment": 6,
+      "passed": 3,
+      "pass_rate_on_scored": 0.5,
+      "scoring_coverage": 1.0,
+      "execution_errors": 0,
+      "unsupported": 0,
+      "metrics": {
+        "all_evidence": {
+          "mean": 0.0,
+          "n": 1
+        },
+        "empty_result_correct": {
+          "mean": 1.0,
+          "n": 5
+        },
+        "hit": {
+          "mean": 0.0,
+          "n": 1
+        },
+        "mrr": {
+          "mean": 0.0,
+          "n": 1
+        },
+        "ndcg": {
+          "mean": 0.0,
+          "n": 1
+        },
+        "pinned_coverage": {
+          "mean": 0.0,
+          "n": 1
+        },
+        "precision": {
+          "mean": 0.0,
+          "n": 1
+        },
+        "recall": {
+          "mean": 0.0,
+          "n": 1
+        }
+      },
+      "timings": {
+        "reset_ms": {
+          "p50": 0.00036050005292054266,
+          "p95": 0.0012417499419825617,
+          "total": 0.003153999386995565,
+          "n": 6
+        },
+        "ingest_ms": {
+          "p50": 0.2920104998338502,
+          "p95": 0.30177274970810686,
+          "total": 1.7612159990676446,
+          "n": 6
+        },
+        "ready_ms": {
+          "p50": 0.00016000012692529708,
+          "p95": 0.00030774992865190143,
+          "total": 0.0011319998520775698,
+          "n": 6
+        },
+        "query_ms": {
+          "p50": 0.008017000027393806,
+          "p95": 0.019952249886046047,
+          "total": 0.06316500048342277,
+          "n": 6
+        },
+        "answer_ms": {
+          "p50": null,
+          "p95": null,
+          "total": 0,
+          "n": 0
+        }
+      },
+      "returned_chars": {
+        "p50": 0.0,
+        "p95": 0.0
+      },
+      "billing": {
+        "api_cost_usd": null,
+        "model_tokens": null,
+        "note": "No billing integration was executed; characters are not tokens"
+      }
+    },
+    "Fuzzy matching and prefix guards": {
+      "planned": 7,
+      "status_counts": {
+        "scored": 7
+      },
+      "n_with_pass_judgment": 7,
+      "passed": 2,
+      "pass_rate_on_scored": 0.2857142857142857,
+      "scoring_coverage": 1.0,
+      "execution_errors": 0,
+      "unsupported": 0,
+      "metrics": {
+        "all_evidence": {
+          "mean": 0.0,
+          "n": 5
+        },
+        "empty_result_correct": {
+          "mean": 1.0,
+          "n": 2
+        },
+        "hit": {
+          "mean": 0.0,
+          "n": 5
+        },
+        "mrr": {
+          "mean": 0.0,
+          "n": 5
+        },
+        "ndcg": {
+          "mean": 0.0,
+          "n": 5
+        },
+        "pinned_coverage": {
+          "mean": null,
+          "n": 0
+        },
+        "precision": {
+          "mean": 0.0,
+          "n": 5
+        },
+        "recall": {
+          "mean": 0.0,
+          "n": 5
+        }
+      },
+      "timings": {
+        "reset_ms": {
+          "p50": 0.0003010000000358559,
+          "p95": 0.0010866999218706037,
+          "total": 0.0034149998100474477,
+          "n": 7
+        },
+        "ingest_ms": {
+          "p50": 0.30236600014177384,
+          "p95": 0.3685172000132297,
+          "total": 2.2019660000296426,
+          "n": 7
+        },
+        "ready_ms": {
+          "p50": 0.00017999991541728377,
+          "p95": 0.0002100000529026147,
+          "total": 0.0013220001164881978,
+          "n": 7
+        },
+        "query_ms": {
+          "p50": 0.007510999694204656,
+          "p95": 0.008891000015864847,
+          "total": 0.05502099929799442,
+          "n": 7
+        },
+        "answer_ms": {
+          "p50": null,
+          "p95": null,
+          "total": 0,
+          "n": 0
+        }
+      },
+      "returned_chars": {
+        "p50": 0.0,
+        "p95": 0.0
+      },
+      "billing": {
+        "api_cost_usd": null,
+        "model_tokens": null,
+        "note": "No billing integration was executed; characters are not tokens"
+      }
+    },
+    "Persona prelude content": {
+      "planned": 4,
+      "status_counts": {
+        "scored": 4
+      },
+      "n_with_pass_judgment": 4,
+      "passed": 0,
+      "pass_rate_on_scored": 0,
+      "scoring_coverage": 1.0,
+      "execution_errors": 0,
+      "unsupported": 0,
+      "metrics": {
+        "all_evidence": {
+          "mean": null,
+          "n": 0
+        },
+        "empty_result_correct": {
+          "mean": 1.0,
+          "n": 4
+        },
+        "hit": {
+          "mean": null,
+          "n": 0
+        },
+        "mrr": {
+          "mean": null,
+          "n": 0
+        },
+        "ndcg": {
+          "mean": null,
+          "n": 0
+        },
+        "pinned_coverage": {
+          "mean": 0.0,
+          "n": 1
+        },
+        "precision": {
+          "mean": null,
+          "n": 0
+        },
+        "recall": {
+          "mean": null,
+          "n": 0
+        }
+      },
+      "timings": {
+        "reset_ms": {
+          "p50": 0.0002899998889915878,
+          "p95": 0.0006933501026651354,
+          "total": 0.0016019998838601168,
+          "n": 4
+        },
+        "ingest_ms": {
+          "p50": 0.30253100021582213,
+          "p95": 0.3202646998943237,
+          "total": 1.217355000335374,
+          "n": 4
+        },
+        "ready_ms": {
+          "p50": 0.00019050003174925223,
+          "p95": 0.0002949999270640546,
+          "total": 0.0008619999789516442,
+          "n": 4
+        },
+        "query_ms": {
+          "p50": 0.007776500069667236,
+          "p95": 0.008876349806996586,
+          "total": 0.03196699981344864,
+          "n": 4
+        },
+        "answer_ms": {
+          "p50": null,
+          "p95": null,
+          "total": 0,
+          "n": 0
+        }
+      },
+      "returned_chars": {
+        "p50": 0.0,
+        "p95": 0.0
+      },
+      "billing": {
+        "api_cost_usd": null,
+        "model_tokens": null,
+        "note": "No billing integration was executed; characters are not tokens"
+      }
+    },
+    "Ranking stability": {
+      "planned": 3,
+      "status_counts": {
+        "scored": 2,
+        "unscored": 1
+      },
+      "n_with_pass_judgment": 2,
+      "passed": 0,
+      "pass_rate_on_scored": 0,
+      "scoring_coverage": 0.6666666666666666,
+      "execution_errors": 0,
+      "unsupported": 0,
+      "metrics": {
+        "all_evidence": {
+          "mean": 0.0,
+          "n": 2
+        },
+        "empty_result_correct": {
+          "mean": null,
+          "n": 0
+        },
+        "hit": {
+          "mean": 0.0,
+          "n": 2
+        },
+        "mrr": {
+          "mean": 0.0,
+          "n": 2
+        },
+        "ndcg": {
+          "mean": 0.0,
+          "n": 2
+        },
+        "pinned_coverage": {
+          "mean": null,
+          "n": 0
+        },
+        "precision": {
+          "mean": 0.0,
+          "n": 2
+        },
+        "recall": {
+          "mean": 0.0,
+          "n": 2
+        }
+      },
+      "timings": {
+        "reset_ms": {
+          "p50": 0.00025000008463393897,
+          "p95": 0.0005389003035816131,
+          "total": 0.0010510007086850237,
+          "n": 3
+        },
+        "ingest_ms": {
+          "p50": 0.2959270000246761,
+          "p95": 0.3082921002260264,
+          "total": 0.8924359999582521,
+          "n": 3
+        },
+        "ready_ms": {
+          "p50": 0.0001399998836859595,
+          "p95": 0.00019400013115955517,
+          "total": 0.000470000031782547,
+          "n": 3
+        },
+        "query_ms": {
+          "p50": 0.007561000074929325,
+          "p95": 0.008389899903704645,
+          "total": 0.02351400007682969,
+          "n": 3
+        },
+        "answer_ms": {
+          "p50": null,
+          "p95": null,
+          "total": 0,
+          "n": 0
+        }
+      },
+      "returned_chars": {
+        "p50": 0.0,
+        "p95": 0.0
+      },
+      "billing": {
+        "api_cost_usd": null,
+        "model_tokens": null,
+        "note": "No billing integration was executed; characters are not tokens"
+      }
+    },
+    "Relation expansion": {
+      "planned": 4,
+      "status_counts": {
+        "scored": 4
+      },
+      "n_with_pass_judgment": 4,
+      "passed": 0,
+      "pass_rate_on_scored": 0,
+      "scoring_coverage": 1.0,
+      "execution_errors": 0,
+      "unsupported": 0,
+      "metrics": {
+        "all_evidence": {
+          "mean": 0.0,
+          "n": 4
+        },
+        "empty_result_correct": {
+          "mean": null,
+          "n": 0
+        },
+        "hit": {
+          "mean": 0.0,
+          "n": 4
+        },
+        "mrr": {
+          "mean": 0.0,
+          "n": 4
+        },
+        "ndcg": {
+          "mean": 0.0,
+          "n": 4
+        },
+        "pinned_coverage": {
+          "mean": null,
+          "n": 0
+        },
+        "precision": {
+          "mean": 0.0,
+          "n": 4
+        },
+        "recall": {
+          "mean": 0.0,
+          "n": 4
+        }
+      },
+      "timings": {
+        "reset_ms": {
+          "p50": 0.0003754998942895327,
+          "p95": 0.00047265032208088087,
+          "total": 0.0015110003914742265,
+          "n": 4
+        },
+        "ingest_ms": {
+          "p50": 0.2887805001137167,
+          "p95": 0.3227183000490186,
+          "total": 1.1929970000892354,
+          "n": 4
+        },
+        "ready_ms": {
+          "p50": 0.00017000002117129043,
+          "p95": 0.00018699984138947912,
+          "total": 0.0006499999471998308,
+          "n": 4
+        },
+        "query_ms": {
+          "p50": 0.007911500006230199,
+          "p95": 0.020688200129370664,
+          "total": 0.04607800019584829,
+          "n": 4
+        },
+        "answer_ms": {
+          "p50": null,
+          "p95": null,
+          "total": 0,
+          "n": 0
+        }
+      },
+      "returned_chars": {
+        "p50": 0.0,
+        "p95": 0.0
+      },
+      "billing": {
+        "api_cost_usd": null,
+        "model_tokens": null,
+        "note": "No billing integration was executed; characters are not tokens"
+      }
+    },
+    "Scope disambiguation": {
+      "planned": 12,
+      "status_counts": {
+        "scored": 12
+      },
+      "n_with_pass_judgment": 12,
+      "passed": 4,
+      "pass_rate_on_scored": 0.3333333333333333,
+      "scoring_coverage": 1.0,
+      "execution_errors": 0,
+      "unsupported": 0,
+      "metrics": {
+        "all_evidence": {
+          "mean": 0.0,
+          "n": 4
+        },
+        "empty_result_correct": {
+          "mean": 1.0,
+          "n": 8
+        },
+        "hit": {
+          "mean": 0.0,
+          "n": 4
+        },
+        "mrr": {
+          "mean": 0.0,
+          "n": 4
+        },
+        "ndcg": {
+          "mean": 0.0,
+          "n": 4
+        },
+        "pinned_coverage": {
+          "mean": 0.0,
+          "n": 1
+        },
+        "precision": {
+          "mean": 0.0,
+          "n": 4
+        },
+        "recall": {
+          "mean": 0.0,
+          "n": 4
+        }
+      },
+      "timings": {
+        "reset_ms": {
+          "p50": 0.0003605002802942181,
+          "p95": 0.0007710000545557703,
+          "total": 0.004766000529343728,
+          "n": 12
+        },
+        "ingest_ms": {
+          "p50": 0.2929720001247915,
+          "p95": 0.3671452502658212,
+          "total": 3.6814850000155275,
+          "n": 12
+        },
+        "ready_ms": {
+          "p50": 0.00017999991541728377,
+          "p95": 0.00024149992441380158,
+          "total": 0.00220199990508263,
+          "n": 12
+        },
+        "query_ms": {
+          "p50": 0.0076259998422756325,
+          "p95": 0.008358500190297491,
+          "total": 0.09188299964080215,
+          "n": 12
+        },
+        "answer_ms": {
+          "p50": null,
+          "p95": null,
+          "total": 0,
+          "n": 0
+        }
+      },
+      "returned_chars": {
+        "p50": 0.0,
+        "p95": 0.0
+      },
+      "billing": {
+        "api_cost_usd": null,
+        "model_tokens": null,
+        "note": "No billing integration was executed; characters are not tokens"
+      }
+    },
+    "Supersession chain exclusion": {
+      "planned": 3,
+      "status_counts": {
+        "scored": 3
+      },
+      "n_with_pass_judgment": 3,
+      "passed": 0,
+      "pass_rate_on_scored": 0,
+      "scoring_coverage": 1.0,
+      "execution_errors": 0,
+      "unsupported": 0,
+      "metrics": {
+        "all_evidence": {
+          "mean": null,
+          "n": 0
+        },
+        "empty_result_correct": {
+          "mean": 1.0,
+          "n": 3
+        },
+        "hit": {
+          "mean": null,
+          "n": 0
+        },
+        "mrr": {
+          "mean": null,
+          "n": 0
+        },
+        "ndcg": {
+          "mean": null,
+          "n": 0
+        },
+        "pinned_coverage": {
+          "mean": 0.0,
+          "n": 3
+        },
+        "precision": {
+          "mean": null,
+          "n": 0
+        },
+        "recall": {
+          "mean": null,
+          "n": 0
+        }
+      },
+      "timings": {
+        "reset_ms": {
+          "p50": 0.000461000126961153,
+          "p95": 0.0004780999461218016,
+          "total": 0.0012710002010862809,
+          "n": 3
+        },
+        "ingest_ms": {
+          "p50": 0.3135819997623912,
+          "p95": 0.313672000038423,
+          "total": 0.9277570002268476,
+          "n": 3
+        },
+        "ready_ms": {
+          "p50": 0.0002100000529026147,
+          "p95": 0.00022799986254540272,
+          "total": 0.0006199998097144999,
+          "n": 3
+        },
+        "query_ms": {
+          "p50": 0.008152000191330444,
+          "p95": 0.008332000334121403,
+          "total": 0.02416600045762607,
+          "n": 3
+        },
+        "answer_ms": {
+          "p50": null,
+          "p95": null,
+          "total": 0,
+          "n": 0
+        }
+      },
+      "returned_chars": {
+        "p50": 0.0,
+        "p95": 0.0
+      },
+      "billing": {
+        "api_cost_usd": null,
+        "model_tokens": null,
+        "note": "No billing integration was executed; characters are not tokens"
+      }
+    },
+    "Type routing and open questions": {
+      "planned": 6,
+      "status_counts": {
+        "scored": 6
+      },
+      "n_with_pass_judgment": 6,
+      "passed": 2,
+      "pass_rate_on_scored": 0.3333333333333333,
+      "scoring_coverage": 1.0,
+      "execution_errors": 0,
+      "unsupported": 0,
+      "metrics": {
+        "all_evidence": {
+          "mean": 0.0,
+          "n": 1
+        },
+        "empty_result_correct": {
+          "mean": 1.0,
+          "n": 5
+        },
+        "hit": {
+          "mean": 0.0,
+          "n": 1
+        },
+        "mrr": {
+          "mean": 0.0,
+          "n": 1
+        },
+        "ndcg": {
+          "mean": 0.0,
+          "n": 1
+        },
+        "pinned_coverage": {
+          "mean": 0.0,
+          "n": 1
+        },
+        "precision": {
+          "mean": 0.0,
+          "n": 1
+        },
+        "recall": {
+          "mean": 0.0,
+          "n": 1
+        }
+      },
+      "timings": {
+        "reset_ms": {
+          "p50": 0.0002804999894578941,
+          "p95": 0.0006484998493760941,
+          "total": 0.002143999608961167,
+          "n": 6
+        },
+        "ingest_ms": {
+          "p50": 0.3003325000463519,
+          "p95": 0.320722499736803,
+          "total": 1.814973999898939,
+          "n": 6
+        },
+        "ready_ms": {
+          "p50": 0.00018049991012958344,
+          "p95": 0.00033999992865574313,
+          "total": 0.0012609993973455857,
+          "n": 6
+        },
+        "query_ms": {
+          "p50": 0.007481000011466676,
+          "p95": 0.009065750191439292,
+          "total": 0.046999000460346,
+          "n": 6
+        },
+        "answer_ms": {
+          "p50": null,
+          "p95": null,
+          "total": 0,
+          "n": 0
+        }
+      },
+      "returned_chars": {
+        "p50": 0.0,
+        "p95": 0.0
+      },
+      "billing": {
+        "api_cost_usd": null,
+        "model_tokens": null,
+        "note": "No billing integration was executed; characters are not tokens"
+      }
+    }
+  },
+  "cases": [
+    {
+      "case_id": "happy-stack-repository-layer",
+      "episode_id": "pmb-seed-corpus",
+      "category": "Type routing and open questions",
+      "cluster_id": "pmb-seed-corpus",
+      "timings": {
+        "reset_ms": 0.0007509997885790654,
+        "ingest_ms": 0.30768299984629266,
+        "ready_ms": 0.00038999996831989847,
+        "query_ms": 0.009474000307818642
+      },
+      "budget": {
+        "top_k": 10,
+        "max_context_chars": 100000
+      },
+      "cutoff": 35,
+      "failures": [
+        "pinnedFacts: missing b-db-decision",
+        "openQuestions: missing b-auth-open-q",
+        "personaPrelude empty"
+      ],
+      "metrics": {
+        "hit": null,
+        "recall": null,
+        "mrr": null,
+        "all_evidence": null,
+        "ndcg": null,
+        "precision": null,
+        "empty_result_correct": 1.0,
+        "empty_expected": true,
+        "pinned_coverage": 0.0
+      },
+      "passed": false,
+      "public_input_sha256": "66f926cb6d8f079f3a09d32d076c5d719e0339ea963ad0cf8d69522760044b5d",
+      "returned_chars": 0,
+      "retrieved_source_ids": [],
+      "diagnostics": {
+        "cross_user_source_count": 0,
+        "duplicate_source_occurrences": 0
+      },
+      "status": "scored",
+      "assertions": 4,
+      "assertions_passed": 1,
+      "note": null
+    },
+    {
+      "case_id": "happy-alias-match-kubernetes",
+      "episode_id": "pmb-seed-corpus",
+      "category": "Alias resolution",
+      "cluster_id": "pmb-seed-corpus",
+      "timings": {
+        "reset_ms": 0.0006010000106471125,
+        "ingest_ms": 0.3124710001429776,
+        "ready_ms": 0.00031100034902920015,
+        "query_ms": 0.009123000381805468
+      },
+      "budget": {
+        "top_k": 10,
+        "max_context_chars": 100000
+      },
+      "cutoff": 35,
+      "failures": [
+        "relevantBeliefs exact-set mismatch"
+      ],
+      "metrics": {
+        "hit": 0.0,
+        "recall": 0.0,
+        "mrr": 0.0,
+        "all_evidence": 0.0,
+        "ndcg": 0.0,
+        "precision": 0.0,
+        "empty_result_correct": null,
+        "empty_expected": false,
+        "pinned_coverage": null
+      },
+      "passed": false,
+      "public_input_sha256": "f9318146297fdcec1eecffff5348b95eb6c10403f841ca5cd47777e64f0029dd",
+      "returned_chars": 0,
+      "retrieved_source_ids": [],
+      "diagnostics": {
+        "cross_user_source_count": 0,
+        "duplicate_source_occurrences": 0
+      },
+      "status": "scored",
+      "assertions": 1,
+      "assertions_passed": 0,
+      "note": null
+    },
+    {
+      "case_id": "alias-kube-resolves",
+      "episode_id": "pmb-seed-corpus",
+      "category": "Alias resolution",
+      "cluster_id": "pmb-seed-corpus",
+      "timings": {
+        "reset_ms": 0.0003710001692525111,
+        "ingest_ms": 0.2936030000455503,
+        "ready_ms": 0.00020000015865662135,
+        "query_ms": 0.008041999990382465
+      },
+      "budget": {
+        "top_k": 10,
+        "max_context_chars": 100000
+      },
+      "cutoff": 35,
+      "failures": [
+        "relevantBeliefs exact-set mismatch"
+      ],
+      "metrics": {
+        "hit": 0.0,
+        "recall": 0.0,
+        "mrr": 0.0,
+        "all_evidence": 0.0,
+        "ndcg": 0.0,
+        "precision": 0.0,
+        "empty_result_correct": null,
+        "empty_expected": false,
+        "pinned_coverage": null
+      },
+      "passed": false,
+      "public_input_sha256": "fc13164cb030dfe4729a4fc364bc393611d9d035ecb401ab44378851bed417bd",
+      "returned_chars": 0,
+      "retrieved_source_ids": [],
+      "diagnostics": {
+        "cross_user_source_count": 0,
+        "duplicate_source_occurrences": 0
+      },
+      "status": "scored",
+      "assertions": 1,
+      "assertions_passed": 0,
+      "note": null
+    },
+    {
+      "case_id": "alias-gha-resolves",
+      "episode_id": "pmb-seed-corpus",
+      "category": "Alias resolution",
+      "cluster_id": "pmb-seed-corpus",
+      "timings": {
+        "reset_ms": 0.00045100023271515965,
+        "ingest_ms": 0.29504500025723246,
+        "ready_ms": 0.00017000002117129043,
+        "query_ms": 0.009513999884802615
+      },
+      "budget": {
+        "top_k": 10,
+        "max_context_chars": 100000
+      },
+      "cutoff": 35,
+      "failures": [
+        "relevantBeliefs exact-set mismatch"
+      ],
+      "metrics": {
+        "hit": 0.0,
+        "recall": 0.0,
+        "mrr": 0.0,
+        "all_evidence": 0.0,
+        "ndcg": 0.0,
+        "precision": 0.0,
+        "empty_result_correct": null,
+        "empty_expected": false,
+        "pinned_coverage": null
+      },
+      "passed": false,
+      "public_input_sha256": "08fad782009d91f98266bf886e71f40b2c0b48d7ffcf60d1263694e1e2b88642",
+      "returned_chars": 0,
+      "retrieved_source_ids": [],
+      "diagnostics": {
+        "cross_user_source_count": 0,
+        "duplicate_source_occurrences": 0
+      },
+      "status": "scored",
+      "assertions": 1,
+      "assertions_passed": 0,
+      "note": null
+    },
+    {
+      "case_id": "long-query-rambling-kubernetes",
+      "episode_id": "pmb-seed-corpus",
+      "category": "Alias resolution",
+      "cluster_id": "pmb-seed-corpus",
+      "timings": {
+        "reset_ms": 0.00040999975681188516,
+        "ingest_ms": 0.2943740000773687,
+        "ready_ms": 0.00017000002117129043,
+        "query_ms": 0.007911000011517899
+      },
+      "budget": {
+        "top_k": 10,
+        "max_context_chars": 100000
+      },
+      "cutoff": 35,
+      "failures": [
+        "relevantBeliefs exact-set mismatch",
+        "openQuestions: missing b-auth-open-q",
+        "personaPrelude empty"
+      ],
+      "metrics": {
+        "hit": 0.0,
+        "recall": 0.0,
+        "mrr": 0.0,
+        "all_evidence": 0.0,
+        "ndcg": 0.0,
+        "precision": 0.0,
+        "empty_result_correct": null,
+        "empty_expected": false,
+        "pinned_coverage": null
+      },
+      "passed": false,
+      "public_input_sha256": "8d3e3dd2a3fb177d4f4885ea149f1f9b6b3bef88b41819359591ab31d7f31d6b",
+      "returned_chars": 0,
+      "retrieved_source_ids": [],
+      "diagnostics": {
+        "cross_user_source_count": 0,
+        "duplicate_source_occurrences": 0
+      },
+      "status": "scored",
+      "assertions": 3,
+      "assertions_passed": 0,
+      "note": null
+    },
+    {
+      "case_id": "out-of-scope-coin-collecting",
+      "episode_id": "pmb-seed-corpus",
+      "category": "Scope disambiguation",
+      "cluster_id": "pmb-seed-corpus",
+      "timings": {
+        "reset_ms": 0.00043000000005122274,
+        "ingest_ms": 0.31006699964564177,
+        "ready_ms": 0.00017999991541728377,
+        "query_ms": 0.007620999895152636
+      },
+      "budget": {
+        "top_k": 10,
+        "max_context_chars": 100000
+      },
+      "cutoff": 35,
+      "failures": [
+        "personaPrelude empty"
+      ],
+      "metrics": {
+        "hit": null,
+        "recall": null,
+        "mrr": null,
+        "all_evidence": null,
+        "ndcg": null,
+        "precision": null,
+        "empty_result_correct": 1.0,
+        "empty_expected": true,
+        "pinned_coverage": null
+      },
+      "passed": false,
+      "public_input_sha256": "8e370ee31a18142243650bf8ebbb6a6890cd28ed3f2fc24bd0d5c07b3e796bb8",
+      "returned_chars": 0,
+      "retrieved_source_ids": [],
+      "diagnostics": {
+        "cross_user_source_count": 0,
+        "duplicate_source_occurrences": 0
+      },
+      "status": "scored",
+      "assertions": 2,
+      "assertions_passed": 1,
+      "note": null
+    },
+    {
+      "case_id": "happy-writing-scope",
+      "episode_id": "pmb-seed-corpus",
+      "category": "Scope disambiguation",
+      "cluster_id": "pmb-seed-corpus",
+      "timings": {
+        "reset_ms": 0.0003210002432751935,
+        "ingest_ms": 0.2864819998649182,
+        "ready_ms": 0.00017000002117129043,
+        "query_ms": 0.007630999789398629
+      },
+      "budget": {
+        "top_k": 10,
+        "max_context_chars": 100000
+      },
+      "cutoff": 35,
+      "failures": [
+        "pinnedFacts: missing b-protagonist-entity",
+        "personaPrelude empty"
+      ],
+      "metrics": {
+        "hit": null,
+        "recall": null,
+        "mrr": null,
+        "all_evidence": null,
+        "ndcg": null,
+        "precision": null,
+        "empty_result_correct": 1.0,
+        "empty_expected": true,
+        "pinned_coverage": 0.0
+      },
+      "passed": false,
+      "public_input_sha256": "1846b8c6bb091a7e11e2d33dfa8704d74ec783fd49a871c7a532142f5451c2a2",
+      "returned_chars": 0,
+      "retrieved_source_ids": [],
+      "diagnostics": {
+        "cross_user_source_count": 0,
+        "duplicate_source_occurrences": 0
+      },
+      "status": "scored",
+      "assertions": 3,
+      "assertions_passed": 1,
+      "note": null
+    },
+    {
+      "case_id": "conflict-scope-disambiguation-redis-writing",
+      "episode_id": "pmb-seed-corpus",
+      "category": "Scope disambiguation",
+      "cluster_id": "pmb-seed-corpus",
+      "timings": {
+        "reset_ms": 0.000990999978967011,
+        "ingest_ms": 0.42141100038861623,
+        "ready_ms": 0.0002100000529026147,
+        "query_ms": 0.0084520002019417
+      },
+      "budget": {
+        "top_k": 10,
+        "max_context_chars": 100000
+      },
+      "cutoff": 35,
+      "failures": [
+        "relevantBeliefs exact-set mismatch"
+      ],
+      "metrics": {
+        "hit": 0.0,
+        "recall": 0.0,
+        "mrr": 0.0,
+        "all_evidence": 0.0,
+        "ndcg": 0.0,
+        "precision": 0.0,
+        "empty_result_correct": null,
+        "empty_expected": false,
+        "pinned_coverage": null
+      },
+      "passed": false,
+      "public_input_sha256": "7aaa8cdece8cb4954bf0da15251a71146b14662377278baf351cbab22c7d082a",
+      "returned_chars": 0,
+      "retrieved_source_ids": [],
+      "diagnostics": {
+        "cross_user_source_count": 0,
+        "duplicate_source_occurrences": 0
+      },
+      "status": "scored",
+      "assertions": 1,
+      "assertions_passed": 0,
+      "note": null
+    },
+    {
+      "case_id": "conflict-scope-disambiguation-redis-code",
+      "episode_id": "pmb-seed-corpus",
+      "category": "Scope disambiguation",
+      "cluster_id": "pmb-seed-corpus",
+      "timings": {
+        "reset_ms": 0.0003999998625658918,
+        "ingest_ms": 0.2919300000030489,
+        "ready_ms": 0.00018000037016463466,
+        "query_ms": 0.007920999905763892
+      },
+      "budget": {
+        "top_k": 10,
+        "max_context_chars": 100000
+      },
+      "cutoff": 35,
+      "failures": [
+        "relevantBeliefs exact-set mismatch"
+      ],
+      "metrics": {
+        "hit": 0.0,
+        "recall": 0.0,
+        "mrr": 0.0,
+        "all_evidence": 0.0,
+        "ndcg": 0.0,
+        "precision": 0.0,
+        "empty_result_correct": null,
+        "empty_expected": false,
+        "pinned_coverage": null
+      },
+      "passed": false,
+      "public_input_sha256": "c428d30581373233d300c87a80dc0e10e19ab943df1c1d32faaa71dfe2da6b9c",
+      "returned_chars": 0,
+      "retrieved_source_ids": [],
+      "diagnostics": {
+        "cross_user_source_count": 0,
+        "duplicate_source_occurrences": 0
+      },
+      "status": "scored",
+      "assertions": 1,
+      "assertions_passed": 0,
+      "note": null
+    },
+    {
+      "case_id": "multi-scope-redis-both-surfaces",
+      "episode_id": "pmb-seed-corpus",
+      "category": "Scope disambiguation",
+      "cluster_id": "pmb-seed-corpus",
+      "timings": {
+        "reset_ms": 0.0005910001164011192,
+        "ingest_ms": 0.2943929998764361,
+        "ready_ms": 0.00017999991541728377,
+        "query_ms": 0.00828200018077041
+      },
+      "budget": {
+        "top_k": 10,
+        "max_context_chars": 100000
+      },
+      "cutoff": 35,
+      "failures": [
+        "relevantBeliefs exact-set mismatch"
+      ],
+      "metrics": {
+        "hit": 0.0,
+        "recall": 0.0,
+        "mrr": 0.0,
+        "all_evidence": 0.0,
+        "ndcg": 0.0,
+        "precision": 0.0,
+        "empty_result_correct": null,
+        "empty_expected": false,
+        "pinned_coverage": null
+      },
+      "passed": false,
+      "public_input_sha256": "5a6188d97a6cef1bd5df4d7fe102fa0f14d818be098d936047c9f3d20cb77afd",
+      "returned_chars": 0,
+      "retrieved_source_ids": [],
+      "diagnostics": {
+        "cross_user_source_count": 0,
+        "duplicate_source_occurrences": 0
+      },
+      "status": "scored",
+      "assertions": 1,
+      "assertions_passed": 0,
+      "note": null
+    },
+    {
+      "case_id": "conflict-mongodb-supersedes-sqlalchemy",
+      "episode_id": "pmb-seed-corpus",
+      "category": "Supersession chain exclusion",
+      "cluster_id": "pmb-seed-corpus",
+      "timings": {
+        "reset_ms": 0.000461000126961153,
+        "ingest_ms": 0.3135819997623912,
+        "ready_ms": 0.0002100000529026147,
+        "query_ms": 0.008352000349987065
+      },
+      "budget": {
+        "top_k": 10,
+        "max_context_chars": 100000
+      },
+      "cutoff": 35,
+      "failures": [
+        "pinnedFacts: missing b-db-decision"
+      ],
+      "metrics": {
+        "hit": null,
+        "recall": null,
+        "mrr": null,
+        "all_evidence": null,
+        "ndcg": null,
+        "precision": null,
+        "empty_result_correct": 1.0,
+        "empty_expected": true,
+        "pinned_coverage": 0.0
+      },
+      "passed": false,
+      "public_input_sha256": "6ee0e833bbeae1cc0fbe8fade5597b31518ebb9493118f0256064c59c73dee8f",
+      "returned_chars": 0,
+      "retrieved_source_ids": [],
+      "diagnostics": {
+        "cross_user_source_count": 0,
+        "duplicate_source_occurrences": 0
+      },
+      "status": "scored",
+      "assertions": 2,
+      "assertions_passed": 1,
+      "note": null
+    },
+    {
+      "case_id": "edge-empty-query",
+      "episode_id": "pmb-seed-corpus",
+      "category": "Design boundary cases",
+      "cluster_id": "pmb-seed-corpus",
+      "timings": {
+        "reset_ms": 0.00033100013752118684,
+        "ingest_ms": 0.28992699981245096,
+        "ready_ms": 0.00015000023267930374,
+        "query_ms": 0.02340499986530631
+      },
+      "budget": {
+        "top_k": 10,
+        "max_context_chars": 100000
+      },
+      "cutoff": 35,
+      "failures": [
+        "pinnedFacts: missing b-db-decision",
+        "personaPrelude empty"
+      ],
+      "metrics": {
+        "hit": null,
+        "recall": null,
+        "mrr": null,
+        "all_evidence": null,
+        "ndcg": null,
+        "precision": null,
+        "empty_result_correct": 1.0,
+        "empty_expected": true,
+        "pinned_coverage": 0.0
+      },
+      "passed": false,
+      "public_input_sha256": "60510b15bbb4896039e74aab9aee44e9d5210534aebc3c6e311fa2caa83f06b7",
+      "returned_chars": 0,
+      "retrieved_source_ids": [],
+      "diagnostics": {
+        "cross_user_source_count": 0,
+        "duplicate_source_occurrences": 0
+      },
+      "status": "scored",
+      "assertions": 5,
+      "assertions_passed": 3,
+      "note": null
+    },
+    {
+      "case_id": "edge-short-query-raw-passthrough",
+      "episode_id": "pmb-seed-corpus",
+      "category": "Alias resolution",
+      "cluster_id": "pmb-seed-corpus",
+      "timings": {
+        "reset_ms": 0.0003000000106112566,
+        "ingest_ms": 0.28600099994946504,
+        "ready_ms": 0.0001399998836859595,
+        "query_ms": 0.007421000191243365
+      },
+      "budget": {
+        "top_k": 10,
+        "max_context_chars": 100000
+      },
+      "cutoff": 35,
+      "failures": [
+        "relevantBeliefs exact-set mismatch"
+      ],
+      "metrics": {
+        "hit": 0.0,
+        "recall": 0.0,
+        "mrr": 0.0,
+        "all_evidence": 0.0,
+        "ndcg": 0.0,
+        "precision": 0.0,
+        "empty_result_correct": null,
+        "empty_expected": false,
+        "pinned_coverage": null
+      },
+      "passed": false,
+      "public_input_sha256": "5cdbd53b046c3d3e1a4640a817ffce82583f8ed8b312140f074e34681ce6b95a",
+      "returned_chars": 0,
+      "retrieved_source_ids": [],
+      "diagnostics": {
+        "cross_user_source_count": 0,
+        "duplicate_source_occurrences": 0
+      },
+      "status": "scored",
+      "assertions": 1,
+      "assertions_passed": 0,
+      "note": null
+    },
+    {
+      "case_id": "isolation-user-scoping",
+      "episode_id": "pmb-seed-corpus",
+      "category": "Cross-user isolation",
+      "cluster_id": "pmb-seed-corpus",
+      "timings": {
+        "reset_ms": 0.00028999966161791235,
+        "ingest_ms": 0.29088800010868,
+        "ready_ms": 0.0001399998836859595,
+        "query_ms": 0.0076020000960852485
+      },
+      "budget": {
+        "top_k": 10,
+        "max_context_chars": 100000
+      },
+      "cutoff": 35,
+      "failures": [],
+      "metrics": {
+        "precision": null,
+        "recall": null,
+        "hit": null,
+        "mrr": null,
+        "all_evidence": null,
+        "ndcg": null,
+        "pinned_coverage": null
+      },
+      "passed": true,
+      "public_input_sha256": "9175582ea510bbfbbd59bef5e944d1d59558a277325d161dbb59752617b8e37b",
+      "returned_chars": 0,
+      "retrieved_source_ids": [],
+      "diagnostics": {
+        "cross_user_source_count": 0,
+        "duplicate_source_occurrences": 0
+      },
+      "status": "scored",
+      "assertions": 3,
+      "assertions_passed": 3,
+      "note": null
+    },
+    {
+      "case_id": "questions-pinned-active-only",
+      "episode_id": "pmb-seed-corpus",
+      "category": "Type routing and open questions",
+      "cluster_id": "pmb-seed-corpus",
+      "timings": {
+        "reset_ms": 0.0003410000317671802,
+        "ingest_ms": 0.32506899970030645,
+        "ready_ms": 0.00017999991541728377,
+        "query_ms": 0.007840999842301244
+      },
+      "budget": {
+        "top_k": 10,
+        "max_context_chars": 100000
+      },
+      "cutoff": 35,
+      "failures": [
+        "openQuestions: missing b-auth-open-q"
+      ],
+      "metrics": {
+        "hit": null,
+        "recall": null,
+        "mrr": null,
+        "all_evidence": null,
+        "ndcg": null,
+        "precision": null,
+        "empty_result_correct": 1.0,
+        "empty_expected": true,
+        "pinned_coverage": null
+      },
+      "passed": false,
+      "public_input_sha256": "ea05e93f12b226fcbdccdcd9ccda64beb25754e1e0a5463086f866befa781044",
+      "returned_chars": 0,
+      "retrieved_source_ids": [],
+      "diagnostics": {
+        "cross_user_source_count": 0,
+        "duplicate_source_occurrences": 0
+      },
+      "status": "scored",
+      "assertions": 4,
+      "assertions_passed": 3,
+      "note": null
+    },
+    {
+      "case_id": "alias-ts-resolves",
+      "episode_id": "pmb-seed-corpus",
+      "category": "Alias resolution",
+      "cluster_id": "pmb-seed-corpus",
+      "timings": {
+        "reset_ms": 0.00034000004234258085,
+        "ingest_ms": 0.293433000024379,
+        "ready_ms": 0.00017100001059588976,
+        "query_ms": 0.009184000191453379
+      },
+      "budget": {
+        "top_k": 10,
+        "max_context_chars": 100000
+      },
+      "cutoff": 35,
+      "failures": [
+        "relevantBeliefs exact-set mismatch"
+      ],
+      "metrics": {
+        "hit": 0.0,
+        "recall": 0.0,
+        "mrr": 0.0,
+        "all_evidence": 0.0,
+        "ndcg": 0.0,
+        "precision": 0.0,
+        "empty_result_correct": null,
+        "empty_expected": false,
+        "pinned_coverage": null
+      },
+      "passed": false,
+      "public_input_sha256": "539f5f06a8b53455f1686364f250db30bb257dfce10167aa7cf4982b17432478",
+      "returned_chars": 0,
+      "retrieved_source_ids": [],
+      "diagnostics": {
+        "cross_user_source_count": 0,
+        "duplicate_source_occurrences": 0
+      },
+      "status": "scored",
+      "assertions": 1,
+      "assertions_passed": 0,
+      "note": null
+    },
+    {
+      "case_id": "alias-mongo-resolves",
+      "episode_id": "pmb-seed-corpus",
+      "category": "Alias resolution",
+      "cluster_id": "pmb-seed-corpus",
+      "timings": {
+        "reset_ms": 0.00030999990485724993,
+        "ingest_ms": 0.29112900028849253,
+        "ready_ms": 0.00018999980966327712,
+        "query_ms": 0.007842000286473194
+      },
+      "budget": {
+        "top_k": 10,
+        "max_context_chars": 100000
+      },
+      "cutoff": 35,
+      "failures": [
+        "relevantBeliefs exact-set mismatch"
+      ],
+      "metrics": {
+        "hit": 0.0,
+        "recall": 0.0,
+        "mrr": 0.0,
+        "all_evidence": 0.0,
+        "ndcg": 0.0,
+        "precision": 0.0,
+        "empty_result_correct": null,
+        "empty_expected": false,
+        "pinned_coverage": null
+      },
+      "passed": false,
+      "public_input_sha256": "dd5b1b9504b04ebe8189f78eac586ddc7c8243c28be8ec32a3c7964e87b23fe1",
+      "returned_chars": 0,
+      "retrieved_source_ids": [],
+      "diagnostics": {
+        "cross_user_source_count": 0,
+        "duplicate_source_occurrences": 0
+      },
+      "status": "scored",
+      "assertions": 1,
+      "assertions_passed": 0,
+      "note": null
+    },
+    {
+      "case_id": "alias-reactjs-resolves",
+      "episode_id": "pmb-seed-corpus",
+      "category": "Alias resolution",
+      "cluster_id": "pmb-seed-corpus",
+      "timings": {
+        "reset_ms": 0.0003209997885278426,
+        "ingest_ms": 0.2971280000565457,
+        "ready_ms": 0.00017000002117129043,
+        "query_ms": 0.007471000117220683
+      },
+      "budget": {
+        "top_k": 10,
+        "max_context_chars": 100000
+      },
+      "cutoff": 35,
+      "failures": [
+        "relevantBeliefs exact-set mismatch"
+      ],
+      "metrics": {
+        "hit": 0.0,
+        "recall": 0.0,
+        "mrr": 0.0,
+        "all_evidence": 0.0,
+        "ndcg": 0.0,
+        "precision": 0.0,
+        "empty_result_correct": null,
+        "empty_expected": false,
+        "pinned_coverage": null
+      },
+      "passed": false,
+      "public_input_sha256": "464c91c8c3e42c4e9a6d78a5da3f8633dc1f69d8a22e353dda52bc9a6f1d5651",
+      "returned_chars": 0,
+      "retrieved_source_ids": [],
+      "diagnostics": {
+        "cross_user_source_count": 0,
+        "duplicate_source_occurrences": 0
+      },
+      "status": "scored",
+      "assertions": 1,
+      "assertions_passed": 0,
+      "note": null
+    },
+    {
+      "case_id": "alias-protagonist-resolves",
+      "episode_id": "pmb-seed-corpus",
+      "category": "Alias resolution",
+      "cluster_id": "pmb-seed-corpus",
+      "timings": {
+        "reset_ms": 0.00026099996830453165,
+        "ingest_ms": 0.3011640001204796,
+        "ready_ms": 0.00012999998943996616,
+        "query_ms": 0.00738099970476469
+      },
+      "budget": {
+        "top_k": 10,
+        "max_context_chars": 100000
+      },
+      "cutoff": 35,
+      "failures": [
+        "relevantBeliefs exact-set mismatch",
+        "pinnedFacts: missing b-protagonist-entity"
+      ],
+      "metrics": {
+        "hit": 0.0,
+        "recall": 0.0,
+        "mrr": 0.0,
+        "all_evidence": 0.0,
+        "ndcg": 0.0,
+        "precision": 0.0,
+        "empty_result_correct": null,
+        "empty_expected": false,
+        "pinned_coverage": 0.0
+      },
+      "passed": false,
+      "public_input_sha256": "04ab50587a017943918277e0674eb5ae972aca710e7bc291d31206e168fe8d2d",
+      "returned_chars": 0,
+      "retrieved_source_ids": [],
+      "diagnostics": {
+        "cross_user_source_count": 0,
+        "duplicate_source_occurrences": 0
+      },
+      "status": "scored",
+      "assertions": 2,
+      "assertions_passed": 0,
+      "note": null
+    },
+    {
+      "case_id": "canonical-name-match-mara",
+      "episode_id": "pmb-seed-corpus",
+      "category": "Alias resolution",
+      "cluster_id": "pmb-seed-corpus",
+      "timings": {
+        "reset_ms": 0.00031099989428184927,
+        "ingest_ms": 0.32656099983796594,
+        "ready_ms": 0.000190000264410628,
+        "query_ms": 0.00735100002202671
+      },
+      "budget": {
+        "top_k": 10,
+        "max_context_chars": 100000
+      },
+      "cutoff": 35,
+      "failures": [
+        "pinnedFacts: missing b-protagonist-entity"
+      ],
+      "metrics": {
+        "hit": null,
+        "recall": null,
+        "mrr": null,
+        "all_evidence": null,
+        "ndcg": null,
+        "precision": null,
+        "empty_result_correct": 1.0,
+        "empty_expected": true,
+        "pinned_coverage": 0.0
+      },
+      "passed": false,
+      "public_input_sha256": "afb331cc9dfb0b532eb7fe0ddad53b52a6c924f824c962544ec0243ca3ed8e97",
+      "returned_chars": 0,
+      "retrieved_source_ids": [],
+      "diagnostics": {
+        "cross_user_source_count": 0,
+        "duplicate_source_occurrences": 0
+      },
+      "status": "scored",
+      "assertions": 2,
+      "assertions_passed": 1,
+      "note": null
+    },
+    {
+      "case_id": "alias-pov-shift-resolves",
+      "episode_id": "pmb-seed-corpus",
+      "category": "Alias resolution",
+      "cluster_id": "pmb-seed-corpus",
+      "timings": {
+        "reset_ms": 0.00034000004234258085,
+        "ingest_ms": 0.2901969996855769,
+        "ready_ms": 0.00020000015865662135,
+        "query_ms": 0.007982000170159154
+      },
+      "budget": {
+        "top_k": 10,
+        "max_context_chars": 100000
+      },
+      "cutoff": 35,
+      "failures": [
+        "relevantBeliefs exact-set mismatch"
+      ],
+      "metrics": {
+        "hit": 0.0,
+        "recall": 0.0,
+        "mrr": 0.0,
+        "all_evidence": 0.0,
+        "ndcg": 0.0,
+        "precision": 0.0,
+        "empty_result_correct": null,
+        "empty_expected": false,
+        "pinned_coverage": null
+      },
+      "passed": false,
+      "public_input_sha256": "862fc08af0c405787fd32d7befab46d04bf3639d8075313a7e3cee667eefb5d1",
+      "returned_chars": 0,
+      "retrieved_source_ids": [],
+      "diagnostics": {
+        "cross_user_source_count": 0,
+        "duplicate_source_occurrences": 0
+      },
+      "status": "scored",
+      "assertions": 1,
+      "assertions_passed": 0,
+      "note": null
+    },
+    {
+      "case_id": "alias-base-class-retrieves-composition",
+      "episode_id": "pmb-seed-corpus",
+      "category": "Alias resolution",
+      "cluster_id": "pmb-seed-corpus",
+      "timings": {
+        "reset_ms": 0.0007310000000870787,
+        "ingest_ms": 0.29064899990771664,
+        "ready_ms": 0.00016000012692529708,
+        "query_ms": 0.0073609999162727036
+      },
+      "budget": {
+        "top_k": 10,
+        "max_context_chars": 100000
+      },
+      "cutoff": 35,
+      "failures": [
+        "relevantBeliefs exact-set mismatch"
+      ],
+      "metrics": {
+        "hit": 0.0,
+        "recall": 0.0,
+        "mrr": 0.0,
+        "all_evidence": 0.0,
+        "ndcg": 0.0,
+        "precision": 0.0,
+        "empty_result_correct": null,
+        "empty_expected": false,
+        "pinned_coverage": null
+      },
+      "passed": false,
+      "public_input_sha256": "d2ecfe0d5f02602cb1636beb09d05c2b84f00b1bbbab26670bc8ed9305d99e28",
+      "returned_chars": 0,
+      "retrieved_source_ids": [],
+      "diagnostics": {
+        "cross_user_source_count": 0,
+        "duplicate_source_occurrences": 0
+      },
+      "status": "scored",
+      "assertions": 1,
+      "assertions_passed": 0,
+      "note": null
+    },
+    {
+      "case_id": "alias-exceptions-retrieves-error-handling",
+      "episode_id": "pmb-seed-corpus",
+      "category": "Alias resolution",
+      "cluster_id": "pmb-seed-corpus",
+      "timings": {
+        "reset_ms": 0.00028100021154386923,
+        "ingest_ms": 0.3073530001529434,
+        "ready_ms": 0.00018999980966327712,
+        "query_ms": 0.007411000296997372
+      },
+      "budget": {
+        "top_k": 10,
+        "max_context_chars": 100000
+      },
+      "cutoff": 35,
+      "failures": [
+        "relevantBeliefs exact-set mismatch"
+      ],
+      "metrics": {
+        "hit": 0.0,
+        "recall": 0.0,
+        "mrr": 0.0,
+        "all_evidence": 0.0,
+        "ndcg": 0.0,
+        "precision": 0.0,
+        "empty_result_correct": null,
+        "empty_expected": false,
+        "pinned_coverage": null
+      },
+      "passed": false,
+      "public_input_sha256": "10c074480e0b13c5946d78f38a4edfffcf8b5bd0e82fa61fed130b537d57c5d1",
+      "returned_chars": 0,
+      "retrieved_source_ids": [],
+      "diagnostics": {
+        "cross_user_source_count": 0,
+        "duplicate_source_occurrences": 0
+      },
+      "status": "scored",
+      "assertions": 1,
+      "assertions_passed": 0,
+      "note": null
+    },
+    {
+      "case_id": "filter-resolved-at-excluded",
+      "episode_id": "pmb-seed-corpus",
+      "category": "Type routing and open questions",
+      "cluster_id": "pmb-seed-corpus",
+      "timings": {
+        "reset_ms": 0.0002299998413946014,
+        "ingest_ms": 0.29527500009862706,
+        "ready_ms": 0.00018999980966327712,
+        "query_ms": 0.007471000117220683
+      },
+      "budget": {
+        "top_k": 10,
+        "max_context_chars": 100000
+      },
+      "cutoff": 35,
+      "failures": [],
+      "metrics": {
+        "hit": null,
+        "recall": null,
+        "mrr": null,
+        "all_evidence": null,
+        "ndcg": null,
+        "precision": null,
+        "empty_result_correct": 1.0,
+        "empty_expected": true,
+        "pinned_coverage": null
+      },
+      "passed": true,
+      "public_input_sha256": "65c129c341638ea54a98775cb742a3abd650c6616a5cc3fa006765b6287fabe2",
+      "returned_chars": 0,
+      "retrieved_source_ids": [],
+      "diagnostics": {
+        "cross_user_source_count": 0,
+        "duplicate_source_occurrences": 0
+      },
+      "status": "scored",
+      "assertions": 2,
+      "assertions_passed": 2,
+      "note": null
+    },
+    {
+      "case_id": "scope-bleed-questions-code-excludes-writing",
+      "episode_id": "pmb-seed-corpus",
+      "category": "Scope disambiguation",
+      "cluster_id": "pmb-seed-corpus",
+      "timings": {
+        "reset_ms": 0.00036000028558191843,
+        "ingest_ms": 0.29333300017242436,
+        "ready_ms": 0.00016999956642393954,
+        "query_ms": 0.007029999778751517
+      },
+      "budget": {
+        "top_k": 10,
+        "max_context_chars": 100000
+      },
+      "cutoff": 35,
+      "failures": [
+        "openQuestions: missing b-auth-open-q"
+      ],
+      "metrics": {
+        "hit": null,
+        "recall": null,
+        "mrr": null,
+        "all_evidence": null,
+        "ndcg": null,
+        "precision": null,
+        "empty_result_correct": 1.0,
+        "empty_expected": true,
+        "pinned_coverage": null
+      },
+      "passed": false,
+      "public_input_sha256": "c0f3673af26648eff016ca482c0c6a159e8659d9dba61faed8df0af9acd991c0",
+      "returned_chars": 0,
+      "retrieved_source_ids": [],
+      "diagnostics": {
+        "cross_user_source_count": 0,
+        "duplicate_source_occurrences": 0
+      },
+      "status": "scored",
+      "assertions": 3,
+      "assertions_passed": 2,
+      "note": null
+    },
+    {
+      "case_id": "persona-prelude-content-present",
+      "episode_id": "pmb-seed-corpus",
+      "category": "Persona prelude content",
+      "cluster_id": "pmb-seed-corpus",
+      "timings": {
+        "reset_ms": 0.00030999990485724993,
+        "ingest_ms": 0.2914800002145057,
+        "ready_ms": 0.00017100001059588976,
+        "query_ms": 0.007400999948004028
+      },
+      "budget": {
+        "top_k": 10,
+        "max_context_chars": 100000
+      },
+      "cutoff": 35,
+      "failures": [
+        "personaPrelude empty",
+        "personaPrelude missing substring 'direct'",
+        "personaPrelude missing substring 'preamble'"
+      ],
+      "metrics": {
+        "hit": null,
+        "recall": null,
+        "mrr": null,
+        "all_evidence": null,
+        "ndcg": null,
+        "precision": null,
+        "empty_result_correct": 1.0,
+        "empty_expected": true,
+        "pinned_coverage": null
+      },
+      "passed": false,
+      "public_input_sha256": "16ce4ada52512caececc8f9661faf6bb572231145c03fe7e572519099217b7bf",
+      "returned_chars": 0,
+      "retrieved_source_ids": [],
+      "diagnostics": {
+        "cross_user_source_count": 0,
+        "duplicate_source_occurrences": 0
+      },
+      "status": "scored",
+      "assertions": 4,
+      "assertions_passed": 1,
+      "note": null
+    },
+    {
+      "case_id": "edge-short-query-score-clears",
+      "episode_id": "pmb-seed-corpus",
+      "category": "Alias resolution",
+      "cluster_id": "pmb-seed-corpus",
+      "timings": {
+        "reset_ms": 0.00022099993657320738,
+        "ingest_ms": 0.31238000019584433,
+        "ready_ms": 0.000190000264410628,
+        "query_ms": 0.007451000328728696
+      },
+      "budget": {
+        "top_k": 10,
+        "max_context_chars": 100000
+      },
+      "cutoff": 35,
+      "failures": [
+        "relevantBeliefs exact-set mismatch"
+      ],
+      "metrics": {
+        "hit": 0.0,
+        "recall": 0.0,
+        "mrr": 0.0,
+        "all_evidence": 0.0,
+        "ndcg": 0.0,
+        "precision": 0.0,
+        "empty_result_correct": null,
+        "empty_expected": false,
+        "pinned_coverage": null
+      },
+      "passed": false,
+      "public_input_sha256": "cda9eecfdc8ca63a71c6bb03221981cfbb3f657c46b9125af376faa56874c479",
+      "returned_chars": 0,
+      "retrieved_source_ids": [],
+      "diagnostics": {
+        "cross_user_source_count": 0,
+        "duplicate_source_occurrences": 0
+      },
+      "status": "scored",
+      "assertions": 1,
+      "assertions_passed": 0,
+      "note": null
+    },
+    {
+      "case_id": "edge-whitespace-query",
+      "episode_id": "pmb-seed-corpus",
+      "category": "Design boundary cases",
+      "cluster_id": "pmb-seed-corpus",
+      "timings": {
+        "reset_ms": 0.0002499996298865881,
+        "ingest_ms": 0.2940939998552494,
+        "ready_ms": 0.0001399998836859595,
+        "query_ms": 0.007071000254654791
+      },
+      "budget": {
+        "top_k": 10,
+        "max_context_chars": 100000
+      },
+      "cutoff": 35,
+      "failures": [
+        "personaPrelude empty"
+      ],
+      "metrics": {
+        "hit": null,
+        "recall": null,
+        "mrr": null,
+        "all_evidence": null,
+        "ndcg": null,
+        "precision": null,
+        "empty_result_correct": 1.0,
+        "empty_expected": true,
+        "pinned_coverage": null
+      },
+      "passed": false,
+      "public_input_sha256": "38b1f4e93aa6bb69a05bac53834ba81a44e7b318082019922b1ed1290d1791e0",
+      "returned_chars": 0,
+      "retrieved_source_ids": [],
+      "diagnostics": {
+        "cross_user_source_count": 0,
+        "duplicate_source_occurrences": 0
+      },
+      "status": "scored",
+      "assertions": 2,
+      "assertions_passed": 1,
+      "note": null
+    },
+    {
+      "case_id": "score-boundary-weak-match-filtered",
+      "episode_id": "pmb-seed-corpus",
+      "category": "Design boundary cases",
+      "cluster_id": "pmb-seed-corpus",
+      "timings": {
+        "reset_ms": 0.00021999994714860804,
+        "ingest_ms": 0.28991699991820497,
+        "ready_ms": 0.00014099987311055884,
+        "query_ms": 0.007061000360408798
+      },
+      "budget": {
+        "top_k": 10,
+        "max_context_chars": 100000
+      },
+      "cutoff": 35,
+      "failures": [],
+      "metrics": {
+        "hit": null,
+        "recall": null,
+        "mrr": null,
+        "all_evidence": null,
+        "ndcg": null,
+        "precision": null,
+        "empty_result_correct": 1.0,
+        "empty_expected": true,
+        "pinned_coverage": null
+      },
+      "passed": true,
+      "public_input_sha256": "a11f395aca80982e3d46f3ce6817b3944f00add534574213082f9b7beb7c2068",
+      "returned_chars": 0,
+      "retrieved_source_ids": [],
+      "diagnostics": {
+        "cross_user_source_count": 0,
+        "duplicate_source_occurrences": 0
+      },
+      "status": "scored",
+      "assertions": 1,
+      "assertions_passed": 1,
+      "note": null
+    },
+    {
+      "case_id": "user-edited-cross-scope-surfaces",
+      "episode_id": "pmb-seed-corpus",
+      "category": "Scope disambiguation",
+      "cluster_id": "pmb-seed-corpus",
+      "timings": {
+        "reset_ms": 0.0002100000529026147,
+        "ingest_ms": 0.2911389997279912,
+        "ready_ms": 0.00017999991541728377,
+        "query_ms": 0.007070000265230192
+      },
+      "budget": {
+        "top_k": 10,
+        "max_context_chars": 100000
+      },
+      "cutoff": 35,
+      "failures": [],
+      "metrics": {
+        "hit": null,
+        "recall": null,
+        "mrr": null,
+        "all_evidence": null,
+        "ndcg": null,
+        "precision": null,
+        "empty_result_correct": 1.0,
+        "empty_expected": true,
+        "pinned_coverage": null
+      },
+      "passed": true,
+      "public_input_sha256": "d6b4951ba23cc79f9d45148e4f035ebcf590b20780ee6ae5824a5be88dc8a207",
+      "returned_chars": 0,
+      "retrieved_source_ids": [],
+      "diagnostics": {
+        "cross_user_source_count": 0,
+        "duplicate_source_occurrences": 0
+      },
+      "status": "scored",
+      "assertions": 2,
+      "assertions_passed": 2,
+      "note": null
+    },
+    {
+      "case_id": "user-edited-absent-without-flag",
+      "episode_id": "pmb-seed-corpus",
+      "category": "Scope disambiguation",
+      "cluster_id": "pmb-seed-corpus",
+      "timings": {
+        "reset_ms": 0.00023099983081920072,
+        "ingest_ms": 0.3047690001949377,
+        "ready_ms": 0.00016100011634989642,
+        "query_ms": 0.0075510001806833316
+      },
+      "budget": {
+        "top_k": 10,
+        "max_context_chars": 100000
+      },
+      "cutoff": 35,
+      "failures": [],
+      "metrics": {
+        "hit": null,
+        "recall": null,
+        "mrr": null,
+        "all_evidence": null,
+        "ndcg": null,
+        "precision": null,
+        "empty_result_correct": 1.0,
+        "empty_expected": true,
+        "pinned_coverage": null
+      },
+      "passed": true,
+      "public_input_sha256": "cc496ffed015380fe86c8751587e96b2ea1a64e6b45409db19578a46e5125a2c",
+      "returned_chars": 0,
+      "retrieved_source_ids": [],
+      "diagnostics": {
+        "cross_user_source_count": 0,
+        "duplicate_source_occurrences": 0
+      },
+      "status": "scored",
+      "assertions": 2,
+      "assertions_passed": 2,
+      "note": null
+    },
+    {
+      "case_id": "ranking-canonical-name-over-content",
+      "episode_id": "pmb-seed-corpus",
+      "category": "Ranking stability",
+      "cluster_id": "pmb-seed-corpus",
+      "timings": {
+        "reset_ms": 0.00025000008463393897,
+        "ingest_ms": 0.2959270000246761,
+        "ready_ms": 0.0001399998836859595,
+        "query_ms": 0.007561000074929325
+      },
+      "budget": {
+        "top_k": 10,
+        "max_context_chars": 100000
+      },
+      "cutoff": 35,
+      "failures": [
+        "relevantBeliefs exact-set mismatch"
+      ],
+      "metrics": {
+        "hit": 0.0,
+        "recall": 0.0,
+        "mrr": 0.0,
+        "all_evidence": 0.0,
+        "ndcg": 0.0,
+        "precision": 0.0,
+        "empty_result_correct": null,
+        "empty_expected": false,
+        "pinned_coverage": null
+      },
+      "passed": false,
+      "public_input_sha256": "ca12b994a00271a68fd553ce35b4927c45bf06eb6df83845c665abfb0531da94",
+      "returned_chars": 0,
+      "retrieved_source_ids": [],
+      "diagnostics": {
+        "cross_user_source_count": 0,
+        "duplicate_source_occurrences": 0
+      },
+      "status": "scored",
+      "assertions": 1,
+      "assertions_passed": 0,
+      "note": null
+    },
+    {
+      "case_id": "messy-typo-blind-spot",
+      "episode_id": "pmb-seed-corpus",
+      "category": "Fuzzy matching and prefix guards",
+      "cluster_id": "pmb-seed-corpus",
+      "timings": {
+        "reset_ms": 0.00021999994714860804,
+        "ingest_ms": 0.38402600011977484,
+        "ready_ms": 0.0002100000529026147,
+        "query_ms": 0.00879299977896153
+      },
+      "budget": {
+        "top_k": 10,
+        "max_context_chars": 100000
+      },
+      "cutoff": 35,
+      "failures": [
+        "relevantBeliefs exact-set mismatch"
+      ],
+      "metrics": {
+        "hit": 0.0,
+        "recall": 0.0,
+        "mrr": 0.0,
+        "all_evidence": 0.0,
+        "ndcg": 0.0,
+        "precision": 0.0,
+        "empty_result_correct": null,
+        "empty_expected": false,
+        "pinned_coverage": null
+      },
+      "passed": false,
+      "public_input_sha256": "d8bf841840aa1349735a0bc214bbc584e6dfa3e1549c01ba5172151c3c516b62",
+      "returned_chars": 0,
+      "retrieved_source_ids": [],
+      "diagnostics": {
+        "cross_user_source_count": 0,
+        "duplicate_source_occurrences": 0
+      },
+      "status": "scored",
+      "assertions": 1,
+      "assertions_passed": 0,
+      "note": null
+    },
+    {
+      "case_id": "messy-all-caps-case-insensitive",
+      "episode_id": "pmb-seed-corpus",
+      "category": "Alias resolution",
+      "cluster_id": "pmb-seed-corpus",
+      "timings": {
+        "reset_ms": 0.00040100030673784204,
+        "ingest_ms": 0.3783779998229875,
+        "ready_ms": 0.00023099983081920072,
+        "query_ms": 0.008153000180755043
+      },
+      "budget": {
+        "top_k": 10,
+        "max_context_chars": 100000
+      },
+      "cutoff": 35,
+      "failures": [
+        "relevantBeliefs exact-set mismatch"
+      ],
+      "metrics": {
+        "hit": 0.0,
+        "recall": 0.0,
+        "mrr": 0.0,
+        "all_evidence": 0.0,
+        "ndcg": 0.0,
+        "precision": 0.0,
+        "empty_result_correct": null,
+        "empty_expected": false,
+        "pinned_coverage": null
+      },
+      "passed": false,
+      "public_input_sha256": "6051cde4b3140ba270a00be28fee0aea2955230d52452dfa2a20fe19bbef7144",
+      "returned_chars": 0,
+      "retrieved_source_ids": [],
+      "diagnostics": {
+        "cross_user_source_count": 0,
+        "duplicate_source_occurrences": 0
+      },
+      "status": "scored",
+      "assertions": 1,
+      "assertions_passed": 0,
+      "note": null
+    },
+    {
+      "case_id": "messy-filler-heavy-extraction",
+      "episode_id": "pmb-seed-corpus",
+      "category": "Alias resolution",
+      "cluster_id": "pmb-seed-corpus",
+      "timings": {
+        "reset_ms": 0.0005100000635138713,
+        "ingest_ms": 0.2940140002465341,
+        "ready_ms": 0.00017999991541728377,
+        "query_ms": 0.008041999990382465
+      },
+      "budget": {
+        "top_k": 10,
+        "max_context_chars": 100000
+      },
+      "cutoff": 35,
+      "failures": [
+        "relevantBeliefs exact-set mismatch"
+      ],
+      "metrics": {
+        "hit": 0.0,
+        "recall": 0.0,
+        "mrr": 0.0,
+        "all_evidence": 0.0,
+        "ndcg": 0.0,
+        "precision": 0.0,
+        "empty_result_correct": null,
+        "empty_expected": false,
+        "pinned_coverage": null
+      },
+      "passed": false,
+      "public_input_sha256": "06b2ec68df0c5de94ce07010b6e8ba67f7584db9b7f95c1fa90d25b4824bb606",
+      "returned_chars": 0,
+      "retrieved_source_ids": [],
+      "diagnostics": {
+        "cross_user_source_count": 0,
+        "duplicate_source_occurrences": 0
+      },
+      "status": "scored",
+      "assertions": 1,
+      "assertions_passed": 0,
+      "note": null
+    },
+    {
+      "case_id": "messy-negation-surfaces-topic",
+      "episode_id": "pmb-seed-corpus",
+      "category": "Alias resolution",
+      "cluster_id": "pmb-seed-corpus",
+      "timings": {
+        "reset_ms": 0.0003710001692525111,
+        "ingest_ms": 0.3086649999204383,
+        "ready_ms": 0.00019999970390927047,
+        "query_ms": 0.007601000106660649
+      },
+      "budget": {
+        "top_k": 10,
+        "max_context_chars": 100000
+      },
+      "cutoff": 35,
+      "failures": [
+        "relevantBeliefs exact-set mismatch"
+      ],
+      "metrics": {
+        "hit": 0.0,
+        "recall": 0.0,
+        "mrr": 0.0,
+        "all_evidence": 0.0,
+        "ndcg": 0.0,
+        "precision": 0.0,
+        "empty_result_correct": null,
+        "empty_expected": false,
+        "pinned_coverage": null
+      },
+      "passed": false,
+      "public_input_sha256": "0842ddeddd4035e97928b0d0989243ed5a5bcf6b79d4643c44abf8130b471e95",
+      "returned_chars": 0,
+      "retrieved_source_ids": [],
+      "diagnostics": {
+        "cross_user_source_count": 0,
+        "duplicate_source_occurrences": 0
+      },
+      "status": "scored",
+      "assertions": 1,
+      "assertions_passed": 0,
+      "note": null
+    },
+    {
+      "case_id": "messy-compound-surfaces-two-beliefs",
+      "episode_id": "pmb-seed-corpus",
+      "category": "Alias resolution",
+      "cluster_id": "pmb-seed-corpus",
+      "timings": {
+        "reset_ms": 0.00033099968277383596,
+        "ingest_ms": 0.30567000021619606,
+        "ready_ms": 0.000190000264410628,
+        "query_ms": 0.007701999948039884
+      },
+      "budget": {
+        "top_k": 10,
+        "max_context_chars": 100000
+      },
+      "cutoff": 35,
+      "failures": [
+        "relevantBeliefs exact-set mismatch"
+      ],
+      "metrics": {
+        "hit": 0.0,
+        "recall": 0.0,
+        "mrr": 0.0,
+        "all_evidence": 0.0,
+        "ndcg": 0.0,
+        "precision": 0.0,
+        "empty_result_correct": null,
+        "empty_expected": false,
+        "pinned_coverage": null
+      },
+      "passed": false,
+      "public_input_sha256": "d51d9db621fff47ee828fc599ab974475b24afba60253637ad4bb7d747a79464",
+      "returned_chars": 0,
+      "retrieved_source_ids": [],
+      "diagnostics": {
+        "cross_user_source_count": 0,
+        "duplicate_source_occurrences": 0
+      },
+      "status": "scored",
+      "assertions": 1,
+      "assertions_passed": 0,
+      "note": null
+    },
+    {
+      "case_id": "cap-stress-compound-six-entities",
+      "episode_id": "pmb-seed-corpus",
+      "category": "Alias resolution",
+      "cluster_id": "pmb-seed-corpus",
+      "timings": {
+        "reset_ms": 0.0002910001057898626,
+        "ingest_ms": 0.294433999897592,
+        "ready_ms": 0.00019099979908787645,
+        "query_ms": 0.0075510001806833316
+      },
+      "budget": {
+        "top_k": 10,
+        "max_context_chars": 100000
+      },
+      "cutoff": 35,
+      "failures": [
+        "relevantBeliefs exact-set mismatch"
+      ],
+      "metrics": {
+        "hit": 0.0,
+        "recall": 0.0,
+        "mrr": 0.0,
+        "all_evidence": 0.0,
+        "ndcg": 0.0,
+        "precision": 0.0,
+        "empty_result_correct": null,
+        "empty_expected": false,
+        "pinned_coverage": null
+      },
+      "passed": false,
+      "public_input_sha256": "8dc9d1f307135a1d35200d3d962041b1dc5f934987fe9e0cccb0fc2f7f50efcf",
+      "returned_chars": 0,
+      "retrieved_source_ids": [],
+      "diagnostics": {
+        "cross_user_source_count": 0,
+        "duplicate_source_occurrences": 0
+      },
+      "status": "scored",
+      "assertions": 1,
+      "assertions_passed": 0,
+      "note": null
+    },
+    {
+      "case_id": "cap-stress-kitchen-sink-exceeds-twelve",
+      "episode_id": "pmb-seed-corpus",
+      "category": "Alias resolution",
+      "cluster_id": "pmb-seed-corpus",
+      "timings": {
+        "reset_ms": 0.0003710001692525111,
+        "ingest_ms": 0.289767000140273,
+        "ready_ms": 0.00017999991541728377,
+        "query_ms": 0.0078010002653172705
+      },
+      "budget": {
+        "top_k": 10,
+        "max_context_chars": 100000
+      },
+      "cutoff": 35,
+      "failures": [
+        "relevantBeliefs exact-set mismatch"
+      ],
+      "metrics": {
+        "hit": 0.0,
+        "recall": 0.0,
+        "mrr": 0.0,
+        "all_evidence": 0.0,
+        "ndcg": 0.0,
+        "precision": 0.0,
+        "empty_result_correct": null,
+        "empty_expected": false,
+        "pinned_coverage": null
+      },
+      "passed": false,
+      "public_input_sha256": "5a4b13e993b175cfd09bea4a9b2ef44d3fb3190f1dfa0b783e7ed8fa0f3807a5",
+      "returned_chars": 0,
+      "retrieved_source_ids": [],
+      "diagnostics": {
+        "cross_user_source_count": 0,
+        "duplicate_source_occurrences": 0
+      },
+      "status": "scored",
+      "assertions": 1,
+      "assertions_passed": 0,
+      "note": null
+    },
+    {
+      "case_id": "cap-stress-late-position-entity-at-risk",
+      "episode_id": "pmb-seed-corpus",
+      "category": "Alias resolution",
+      "cluster_id": "pmb-seed-corpus",
+      "timings": {
+        "reset_ms": 0.0005210004019318148,
+        "ingest_ms": 0.31438299993169494,
+        "ready_ms": 0.0002100000529026147,
+        "query_ms": 0.00859300007505226
+      },
+      "budget": {
+        "top_k": 10,
+        "max_context_chars": 100000
+      },
+      "cutoff": 35,
+      "failures": [
+        "relevantBeliefs exact-set mismatch"
+      ],
+      "metrics": {
+        "hit": 0.0,
+        "recall": 0.0,
+        "mrr": 0.0,
+        "all_evidence": 0.0,
+        "ndcg": 0.0,
+        "precision": 0.0,
+        "empty_result_correct": null,
+        "empty_expected": false,
+        "pinned_coverage": null
+      },
+      "passed": false,
+      "public_input_sha256": "853d8447d67b24cc64015d94e0861cd8596884de38af4bd0679d25617b5d1e1f",
+      "returned_chars": 0,
+      "retrieved_source_ids": [],
+      "diagnostics": {
+        "cross_user_source_count": 0,
+        "duplicate_source_occurrences": 0
+      },
+      "status": "scored",
+      "assertions": 1,
+      "assertions_passed": 0,
+      "note": null
+    },
+    {
+      "case_id": "fuzzy-single-edit-fires-non-pinned",
+      "episode_id": "pmb-seed-corpus",
+      "category": "Fuzzy matching and prefix guards",
+      "cluster_id": "pmb-seed-corpus",
+      "timings": {
+        "reset_ms": 0.0007009998626017477,
+        "ingest_ms": 0.3323299997646245,
+        "ready_ms": 0.00020100014808122069,
+        "query_ms": 0.00893300011739484
+      },
+      "budget": {
+        "top_k": 10,
+        "max_context_chars": 100000
+      },
+      "cutoff": 35,
+      "failures": [
+        "relevantBeliefs exact-set mismatch"
+      ],
+      "metrics": {
+        "hit": 0.0,
+        "recall": 0.0,
+        "mrr": 0.0,
+        "all_evidence": 0.0,
+        "ndcg": 0.0,
+        "precision": 0.0,
+        "empty_result_correct": null,
+        "empty_expected": false,
+        "pinned_coverage": null
+      },
+      "passed": false,
+      "public_input_sha256": "20eed9a85e145b516ada6a5542679f40ec6184a4f7f56794b118fac0c65a808b",
+      "returned_chars": 0,
+      "retrieved_source_ids": [],
+      "diagnostics": {
+        "cross_user_source_count": 0,
+        "duplicate_source_occurrences": 0
+      },
+      "status": "scored",
+      "assertions": 1,
+      "assertions_passed": 0,
+      "note": null
+    },
+    {
+      "case_id": "fuzzy-scope-filter-discriminates-after-fuzzy-fires",
+      "episode_id": "pmb-seed-corpus",
+      "category": "Fuzzy matching and prefix guards",
+      "cluster_id": "pmb-seed-corpus",
+      "timings": {
+        "reset_ms": 0.0003909999577444978,
+        "ingest_ms": 0.2901580000980175,
+        "ready_ms": 0.00017999991541728377,
+        "query_ms": 0.007750999884592602
+      },
+      "budget": {
+        "top_k": 10,
+        "max_context_chars": 100000
+      },
+      "cutoff": 35,
+      "failures": [
+        "relevantBeliefs exact-set mismatch"
+      ],
+      "metrics": {
+        "hit": 0.0,
+        "recall": 0.0,
+        "mrr": 0.0,
+        "all_evidence": 0.0,
+        "ndcg": 0.0,
+        "precision": 0.0,
+        "empty_result_correct": null,
+        "empty_expected": false,
+        "pinned_coverage": null
+      },
+      "passed": false,
+      "public_input_sha256": "05fbc02da0eb8a7f64dfc18d322d2837156523c43c42f264446534f31b0d75bc",
+      "returned_chars": 0,
+      "retrieved_source_ids": [],
+      "diagnostics": {
+        "cross_user_source_count": 0,
+        "duplicate_source_occurrences": 0
+      },
+      "status": "scored",
+      "assertions": 1,
+      "assertions_passed": 0,
+      "note": null
+    },
+    {
+      "case_id": "fuzzy-prefix-blocks-transitive-match",
+      "episode_id": "pmb-seed-corpus",
+      "category": "Fuzzy matching and prefix guards",
+      "cluster_id": "pmb-seed-corpus",
+      "timings": {
+        "reset_ms": 0.0012519999472715426,
+        "ingest_ms": 0.2897270001085417,
+        "ready_ms": 0.00017999991541728377,
+        "query_ms": 0.007410999842250021
+      },
+      "budget": {
+        "top_k": 10,
+        "max_context_chars": 100000
+      },
+      "cutoff": 35,
+      "failures": [],
+      "metrics": {
+        "hit": null,
+        "recall": null,
+        "mrr": null,
+        "all_evidence": null,
+        "ndcg": null,
+        "precision": null,
+        "empty_result_correct": 1.0,
+        "empty_expected": true,
+        "pinned_coverage": null
+      },
+      "passed": true,
+      "public_input_sha256": "d3b333078288521114944ce281160e061a6da185089d16575348270e9843bde4",
+      "returned_chars": 0,
+      "retrieved_source_ids": [],
+      "diagnostics": {
+        "cross_user_source_count": 0,
+        "duplicate_source_occurrences": 0
+      },
+      "status": "scored",
+      "assertions": 1,
+      "assertions_passed": 1,
+      "note": null
+    },
+    {
+      "case_id": "fuzzy-abbreviation-prefix-blind-spot",
+      "episode_id": "pmb-seed-corpus",
+      "category": "Fuzzy matching and prefix guards",
+      "cluster_id": "pmb-seed-corpus",
+      "timings": {
+        "reset_ms": 0.0003010000000358559,
+        "ingest_ms": 0.2872529998967366,
+        "ready_ms": 0.00017000002117129043,
+        "query_ms": 0.0074509998739813454
+      },
+      "budget": {
+        "top_k": 10,
+        "max_context_chars": 100000
+      },
+      "cutoff": 35,
+      "failures": [],
+      "metrics": {
+        "hit": null,
+        "recall": null,
+        "mrr": null,
+        "all_evidence": null,
+        "ndcg": null,
+        "precision": null,
+        "empty_result_correct": 1.0,
+        "empty_expected": true,
+        "pinned_coverage": null
+      },
+      "passed": true,
+      "public_input_sha256": "438028fc9a4effadcb1a0fa0d26989cd2ec6002ce88d95255ba28597385f424b",
+      "returned_chars": 0,
+      "retrieved_source_ids": [],
+      "diagnostics": {
+        "cross_user_source_count": 0,
+        "duplicate_source_occurrences": 0
+      },
+      "status": "scored",
+      "assertions": 1,
+      "assertions_passed": 1,
+      "note": null
+    },
+    {
+      "case_id": "fuzzy-two-edit-transposition-blocked",
+      "episode_id": "pmb-seed-corpus",
+      "category": "Fuzzy matching and prefix guards",
+      "cluster_id": "pmb-seed-corpus",
+      "timings": {
+        "reset_ms": 0.00025000008463393897,
+        "ingest_ms": 0.30236600014177384,
+        "ready_ms": 0.00017100001059588976,
+        "query_ms": 0.0071710001066094264
+      },
+      "budget": {
+        "top_k": 10,
+        "max_context_chars": 100000
+      },
+      "cutoff": 35,
+      "failures": [
+        "relevantBeliefs exact-set mismatch"
+      ],
+      "metrics": {
+        "hit": 0.0,
+        "recall": 0.0,
+        "mrr": 0.0,
+        "all_evidence": 0.0,
+        "ndcg": 0.0,
+        "precision": 0.0,
+        "empty_result_correct": null,
+        "empty_expected": false,
+        "pinned_coverage": null
+      },
+      "passed": false,
+      "public_input_sha256": "ffe564c38b17d7a319d9d2e0790180133f8ebde2a7607b681dff9c2b4202b8b4",
+      "returned_chars": 0,
+      "retrieved_source_ids": [],
+      "diagnostics": {
+        "cross_user_source_count": 0,
+        "duplicate_source_occurrences": 0
+      },
+      "status": "scored",
+      "assertions": 1,
+      "assertions_passed": 0,
+      "note": null
+    },
+    {
+      "case_id": "fuzzy-single-term-only-signal",
+      "episode_id": "pmb-seed-corpus",
+      "category": "Fuzzy matching and prefix guards",
+      "cluster_id": "pmb-seed-corpus",
+      "timings": {
+        "reset_ms": 0.0003000000106112566,
+        "ingest_ms": 0.31610599990017363,
+        "ready_ms": 0.0002100000529026147,
+        "query_ms": 0.007510999694204656
+      },
+      "budget": {
+        "top_k": 10,
+        "max_context_chars": 100000
+      },
+      "cutoff": 35,
+      "failures": [
+        "relevantBeliefs exact-set mismatch"
+      ],
+      "metrics": {
+        "hit": 0.0,
+        "recall": 0.0,
+        "mrr": 0.0,
+        "all_evidence": 0.0,
+        "ndcg": 0.0,
+        "precision": 0.0,
+        "empty_result_correct": null,
+        "empty_expected": false,
+        "pinned_coverage": null
+      },
+      "passed": false,
+      "public_input_sha256": "08e99adf30b9790e1ba7e0b297e3ec05e698499c6548b41b9d457cdc304eca71",
+      "returned_chars": 0,
+      "retrieved_source_ids": [],
+      "diagnostics": {
+        "cross_user_source_count": 0,
+        "duplicate_source_occurrences": 0
+      },
+      "status": "scored",
+      "assertions": 1,
+      "assertions_passed": 0,
+      "note": null
+    },
+    {
+      "case_id": "universal-scope-belief-content-in-persona-prelude",
+      "episode_id": "pmb-seed-corpus",
+      "category": "Persona prelude content",
+      "cluster_id": "pmb-seed-corpus",
+      "timings": {
+        "reset_ms": 0.00026999987312592566,
+        "ingest_ms": 0.29084900006637326,
+        "ready_ms": 0.00017100001059588976,
+        "query_ms": 0.0074509998739813454
+      },
+      "budget": {
+        "top_k": 10,
+        "max_context_chars": 100000
+      },
+      "cutoff": 35,
+      "failures": [
+        "personaPrelude empty",
+        "personaPrelude missing substring 'direct'",
+        "personaPrelude missing substring 'preamble'"
+      ],
+      "metrics": {
+        "hit": null,
+        "recall": null,
+        "mrr": null,
+        "all_evidence": null,
+        "ndcg": null,
+        "precision": null,
+        "empty_result_correct": 1.0,
+        "empty_expected": true,
+        "pinned_coverage": null
+      },
+      "passed": false,
+      "public_input_sha256": "aa4a753a6f961c047db75f37cd92e19954d5c1a4e54b5511e46de8fa15744029",
+      "returned_chars": 0,
+      "retrieved_source_ids": [],
+      "diagnostics": {
+        "cross_user_source_count": 0,
+        "duplicate_source_occurrences": 0
+      },
+      "status": "scored",
+      "assertions": 4,
+      "assertions_passed": 1,
+      "note": null
+    },
+    {
+      "case_id": "type-isolation-open-question-not-in-relevant",
+      "episode_id": "pmb-seed-corpus",
+      "category": "Type routing and open questions",
+      "cluster_id": "pmb-seed-corpus",
+      "timings": {
+        "reset_ms": 0.00028099975679651834,
+        "ingest_ms": 0.29085899996061926,
+        "ready_ms": 0.00017000002117129043,
+        "query_ms": 0.007320999884541379
+      },
+      "budget": {
+        "top_k": 10,
+        "max_context_chars": 100000
+      },
+      "cutoff": 35,
+      "failures": [
+        "openQuestions: missing b-auth-open-q"
+      ],
+      "metrics": {
+        "hit": null,
+        "recall": null,
+        "mrr": null,
+        "all_evidence": null,
+        "ndcg": null,
+        "precision": null,
+        "empty_result_correct": 1.0,
+        "empty_expected": true,
+        "pinned_coverage": null
+      },
+      "passed": false,
+      "public_input_sha256": "e2dc1bb0f49c050a2dfcb6b8e5ad3da0eb09c92bae5f51a56e4ac33406fc39cd",
+      "returned_chars": 0,
+      "retrieved_source_ids": [],
+      "diagnostics": {
+        "cross_user_source_count": 0,
+        "duplicate_source_occurrences": 0
+      },
+      "status": "scored",
+      "assertions": 3,
+      "assertions_passed": 2,
+      "note": null
+    },
+    {
+      "case_id": "multi-hop-supersession-chain-all-excluded",
+      "episode_id": "pmb-seed-corpus",
+      "category": "Supersession chain exclusion",
+      "cluster_id": "pmb-seed-corpus",
+      "timings": {
+        "reset_ms": 0.0003300001480965875,
+        "ingest_ms": 0.3004930003953632,
+        "ready_ms": 0.00017999991541728377,
+        "query_ms": 0.0076619999163085595
+      },
+      "budget": {
+        "top_k": 10,
+        "max_context_chars": 100000
+      },
+      "cutoff": 35,
+      "failures": [
+        "pinnedFacts: missing b-linting-current"
+      ],
+      "metrics": {
+        "hit": null,
+        "recall": null,
+        "mrr": null,
+        "all_evidence": null,
+        "ndcg": null,
+        "precision": null,
+        "empty_result_correct": 1.0,
+        "empty_expected": true,
+        "pinned_coverage": 0.0
+      },
+      "passed": false,
+      "public_input_sha256": "055ebd2a3840ef85854e7302235624ed6025aaa236022dd745c817e6bf9b0fed",
+      "returned_chars": 0,
+      "retrieved_source_ids": [],
+      "diagnostics": {
+        "cross_user_source_count": 0,
+        "duplicate_source_occurrences": 0
+      },
+      "status": "scored",
+      "assertions": 2,
+      "assertions_passed": 1,
+      "note": null
+    },
+    {
+      "case_id": "cross-scope-one-empty-domain-does-not-degrade",
+      "episode_id": "pmb-seed-corpus",
+      "category": "Scope disambiguation",
+      "cluster_id": "pmb-seed-corpus",
+      "timings": {
+        "reset_ms": 0.00036100027500651777,
+        "ingest_ms": 0.2839690000655537,
+        "ready_ms": 0.0001399998836859595,
+        "query_ms": 0.007249999725900125
+      },
+      "budget": {
+        "top_k": 10,
+        "max_context_chars": 100000
+      },
+      "cutoff": 35,
+      "failures": [
+        "relevantBeliefs exact-set mismatch"
+      ],
+      "metrics": {
+        "hit": 0.0,
+        "recall": 0.0,
+        "mrr": 0.0,
+        "all_evidence": 0.0,
+        "ndcg": 0.0,
+        "precision": 0.0,
+        "empty_result_correct": null,
+        "empty_expected": false,
+        "pinned_coverage": null
+      },
+      "passed": false,
+      "public_input_sha256": "6d6d3d654e86cde4231ad82610ded67ce62fd0d61869958edc6259a7ab44c93d",
+      "returned_chars": 0,
+      "retrieved_source_ids": [],
+      "diagnostics": {
+        "cross_user_source_count": 0,
+        "duplicate_source_occurrences": 0
+      },
+      "status": "scored",
+      "assertions": 1,
+      "assertions_passed": 0,
+      "note": null
+    },
+    {
+      "case_id": "ranking-orderedbefore-alias-beats-content",
+      "episode_id": "pmb-seed-corpus",
+      "category": "Ranking stability",
+      "cluster_id": "pmb-seed-corpus",
+      "timings": {
+        "reset_ms": 0.00023000029614195228,
+        "ingest_ms": 0.28684299968517735,
+        "ready_ms": 0.00012999998943996616,
+        "query_ms": 0.007471000117220683
+      },
+      "budget": {
+        "top_k": 10,
+        "max_context_chars": 100000
+      },
+      "cutoff": 35,
+      "failures": [
+        "relevantBeliefs exact-set mismatch"
+      ],
+      "metrics": {
+        "hit": 0.0,
+        "recall": 0.0,
+        "mrr": 0.0,
+        "all_evidence": 0.0,
+        "ndcg": 0.0,
+        "precision": 0.0,
+        "empty_result_correct": null,
+        "empty_expected": false,
+        "pinned_coverage": null
+      },
+      "passed": false,
+      "public_input_sha256": "5f201917d2f01459cd2262f8856c70b1e0837ac8f2efca5b8ca9ed1d546af85e",
+      "returned_chars": 0,
+      "retrieved_source_ids": [],
+      "diagnostics": {
+        "cross_user_source_count": 0,
+        "duplicate_source_occurrences": 0
+      },
+      "status": "scored",
+      "assertions": 1,
+      "assertions_passed": 0,
+      "note": null
+    },
+    {
+      "case_id": "cold-start-user-no-beliefs",
+      "episode_id": "pmb-seed-corpus",
+      "category": "Cold start behavior",
+      "cluster_id": "pmb-seed-corpus",
+      "timings": {
+        "reset_ms": 0.0002800002221192699,
+        "ingest_ms": 0.3125210000689549,
+        "ready_ms": 0.00015000023267930374,
+        "query_ms": 0.006820000180596253
+      },
+      "budget": {
+        "top_k": 10,
+        "max_context_chars": 100000
+      },
+      "cutoff": 35,
+      "failures": [],
+      "metrics": {
+        "hit": null,
+        "recall": null,
+        "mrr": null,
+        "all_evidence": null,
+        "ndcg": null,
+        "precision": null,
+        "empty_result_correct": 1.0,
+        "empty_expected": true,
+        "pinned_coverage": null
+      },
+      "passed": true,
+      "public_input_sha256": "beebf9bea3ecbfd6ea34ccc8dad6844624750b67672d8265f4d701a1fe322897",
+      "returned_chars": 0,
+      "retrieved_source_ids": [],
+      "diagnostics": {
+        "cross_user_source_count": 0,
+        "duplicate_source_occurrences": 0
+      },
+      "status": "scored",
+      "assertions": 2,
+      "assertions_passed": 2,
+      "note": null
+    },
+    {
+      "case_id": "narrator-voice-pinned-in-own-scope",
+      "episode_id": "pmb-seed-corpus",
+      "category": "Persona prelude content",
+      "cluster_id": "pmb-seed-corpus",
+      "timings": {
+        "reset_ms": 0.00026099996830453165,
+        "ingest_ms": 0.3214439998373564,
+        "ready_ms": 0.00030999990485724993,
+        "query_ms": 0.009012999726110138
+      },
+      "budget": {
+        "top_k": 10,
+        "max_context_chars": 100000
+      },
+      "cutoff": 35,
+      "failures": [
+        "pinnedFacts: missing b-narrator-voice",
+        "pinnedFacts: missing b-protagonist-entity",
+        "pinnedFacts: missing b-prose-style-user-edited",
+        "openQuestions: missing b-chapter-structure-q",
+        "personaPrelude empty"
+      ],
+      "metrics": {
+        "hit": null,
+        "recall": null,
+        "mrr": null,
+        "all_evidence": null,
+        "ndcg": null,
+        "precision": null,
+        "empty_result_correct": 1.0,
+        "empty_expected": true,
+        "pinned_coverage": 0.0
+      },
+      "passed": false,
+      "public_input_sha256": "ae9dcf9548737b7fff9e415b094298b8582f7a1f3f657c3fd0b319c91fe28ccb",
+      "returned_chars": 0,
+      "retrieved_source_ids": [],
+      "diagnostics": {
+        "cross_user_source_count": 0,
+        "duplicate_source_occurrences": 0
+      },
+      "status": "scored",
+      "assertions": 6,
+      "assertions_passed": 1,
+      "note": null
+    },
+    {
+      "case_id": "multi-scope-prelude-uses-primary-scope-only",
+      "episode_id": "pmb-seed-corpus",
+      "category": "Persona prelude content",
+      "cluster_id": "pmb-seed-corpus",
+      "timings": {
+        "reset_ms": 0.0007610001375724096,
+        "ingest_ms": 0.31358200021713856,
+        "ready_ms": 0.0002100000529026147,
+        "query_ms": 0.008102000265353126
+      },
+      "budget": {
+        "top_k": 10,
+        "max_context_chars": 100000
+      },
+      "cutoff": 35,
+      "failures": [
+        "personaPrelude empty"
+      ],
+      "metrics": {
+        "hit": null,
+        "recall": null,
+        "mrr": null,
+        "all_evidence": null,
+        "ndcg": null,
+        "precision": null,
+        "empty_result_correct": 1.0,
+        "empty_expected": true,
+        "pinned_coverage": null
+      },
+      "passed": false,
+      "public_input_sha256": "1c33e89c78c354843674bc208bbce8721fdd77b5af8642a2009f785d0807f533",
+      "returned_chars": 0,
+      "retrieved_source_ids": [],
+      "diagnostics": {
+        "cross_user_source_count": 0,
+        "duplicate_source_occurrences": 0
+      },
+      "status": "scored",
+      "assertions": 2,
+      "assertions_passed": 1,
+      "note": null
+    },
+    {
+      "case_id": "why-it-matters-not-indexed-blind-spot",
+      "episode_id": "pmb-seed-corpus",
+      "category": "Design boundary cases",
+      "cluster_id": "pmb-seed-corpus",
+      "timings": {
+        "reset_ms": 0.00038999996831989847,
+        "ingest_ms": 0.2859609999177337,
+        "ready_ms": 0.00017000002117129043,
+        "query_ms": 0.007270999958564062
+      },
+      "budget": {
+        "top_k": 10,
+        "max_context_chars": 100000
+      },
+      "cutoff": 35,
+      "failures": [],
+      "metrics": {
+        "hit": null,
+        "recall": null,
+        "mrr": null,
+        "all_evidence": null,
+        "ndcg": null,
+        "precision": null,
+        "empty_result_correct": 1.0,
+        "empty_expected": true,
+        "pinned_coverage": null
+      },
+      "passed": true,
+      "public_input_sha256": "176c4a99e0942fe311d7049d203872e74785d662cf598e9309ac0dd3a80e139f",
+      "returned_chars": 0,
+      "retrieved_source_ids": [],
+      "diagnostics": {
+        "cross_user_source_count": 0,
+        "duplicate_source_occurrences": 0
+      },
+      "status": "scored",
+      "assertions": 1,
+      "assertions_passed": 1,
+      "note": null
+    },
+    {
+      "case_id": "budget-ceiling-evicts-relevant-beliefs",
+      "episode_id": "pmb-seed-corpus",
+      "category": "Budget eviction and capacity",
+      "cluster_id": "pmb-seed-corpus",
+      "timings": {
+        "reset_ms": 0.00031100034902920015,
+        "ingest_ms": 0.28949699981239974,
+        "ready_ms": 0.00015000023267930374,
+        "query_ms": 0.007671999810554553
+      },
+      "budget": {
+        "top_k": 10,
+        "max_context_chars": 100000,
+        "maxBeliefs": 2
+      },
+      "cutoff": 35,
+      "failures": [],
+      "metrics": {
+        "hit": null,
+        "recall": null,
+        "mrr": null,
+        "all_evidence": null,
+        "ndcg": null,
+        "precision": null,
+        "empty_result_correct": 1.0,
+        "empty_expected": true,
+        "pinned_coverage": null
+      },
+      "passed": true,
+      "public_input_sha256": "080a7b164834096cf778a7145f584a154e0aa56c409e7ae9f03733ab7f6bd97a",
+      "returned_chars": 0,
+      "retrieved_source_ids": [],
+      "diagnostics": {
+        "cross_user_source_count": 0,
+        "duplicate_source_occurrences": 0
+      },
+      "status": "scored",
+      "assertions": 1,
+      "assertions_passed": 1,
+      "note": null
+    },
+    {
+      "case_id": "negative-guidance-mongoose",
+      "episode_id": "pmb-seed-corpus",
+      "category": "Counter-signal retrieval",
+      "cluster_id": "pmb-seed-corpus",
+      "timings": {
+        "reset_ms": 0.00025000008463393897,
+        "ingest_ms": 0.3285340003458259,
+        "ready_ms": 0.00030999990485724993,
+        "query_ms": 0.007711000307608629
+      },
+      "budget": {
+        "top_k": 10,
+        "max_context_chars": 100000
+      },
+      "cutoff": 35,
+      "failures": [
+        "relevantBeliefs exact-set mismatch"
+      ],
+      "metrics": {
+        "hit": 0.0,
+        "recall": 0.0,
+        "mrr": 0.0,
+        "all_evidence": 0.0,
+        "ndcg": 0.0,
+        "precision": 0.0,
+        "empty_result_correct": null,
+        "empty_expected": false,
+        "pinned_coverage": null
+      },
+      "passed": false,
+      "public_input_sha256": "d10a7f15c314e2acd284cdabc3f1d5194938af4519fb44c6d72b349311cdccc4",
+      "returned_chars": 0,
+      "retrieved_source_ids": [],
+      "diagnostics": {
+        "cross_user_source_count": 0,
+        "duplicate_source_occurrences": 0
+      },
+      "status": "scored",
+      "assertions": 1,
+      "assertions_passed": 0,
+      "note": null
+    },
+    {
+      "case_id": "recency-tiebreak-reinforcement",
+      "episode_id": "pmb-seed-corpus",
+      "category": "Ranking stability",
+      "cluster_id": "pmb-seed-corpus",
+      "timings": {
+        "reset_ms": 0.0005710003279091325,
+        "ingest_ms": 0.30966600024839863,
+        "ready_ms": 0.00020000015865662135,
+        "query_ms": 0.00848199988467968
+      },
+      "budget": {
+        "top_k": 10,
+        "max_context_chars": 100000
+      },
+      "cutoff": 35,
+      "failures": [],
+      "metrics": {
+        "precision": null,
+        "recall": null,
+        "hit": null,
+        "mrr": null,
+        "all_evidence": null,
+        "ndcg": null,
+        "pinned_coverage": null
+      },
+      "passed": null,
+      "public_input_sha256": "9431c289cb29d55df3ccd81a31444d968602778c7897ca05d31e1884933cb87a",
+      "returned_chars": 0,
+      "retrieved_source_ids": [],
+      "diagnostics": {
+        "cross_user_source_count": 0,
+        "duplicate_source_occurrences": 0
+      },
+      "status": "unscored",
+      "assertions": 0,
+      "assertions_passed": 0,
+      "note": "No effective source assertions; not a free pass"
+    },
+    {
+      "case_id": "preference-flood-relevant-entity-survives",
+      "episode_id": "pmb-seed-corpus",
+      "category": "Budget eviction and capacity",
+      "cluster_id": "pmb-seed-corpus",
+      "timings": {
+        "reset_ms": 0.0005910001164011192,
+        "ingest_ms": 0.2904079997279041,
+        "ready_ms": 0.0001809999048418831,
+        "query_ms": 0.008271999831777066
+      },
+      "budget": {
+        "top_k": 10,
+        "max_context_chars": 100000,
+        "maxBeliefs": 8
+      },
+      "cutoff": 35,
+      "failures": [
+        "relevantBeliefs exact-set mismatch"
+      ],
+      "metrics": {
+        "hit": 0.0,
+        "recall": 0.0,
+        "mrr": 0.0,
+        "all_evidence": 0.0,
+        "ndcg": 0.0,
+        "precision": 0.0,
+        "empty_result_correct": null,
+        "empty_expected": false,
+        "pinned_coverage": null
+      },
+      "passed": false,
+      "public_input_sha256": "5262d7986d35861f1180b2799720154f22d5a287182c3cae9dcfe8c6bb6b0e0e",
+      "returned_chars": 0,
+      "retrieved_source_ids": [],
+      "diagnostics": {
+        "cross_user_source_count": 0,
+        "duplicate_source_occurrences": 0
+      },
+      "status": "scored",
+      "assertions": 1,
+      "assertions_passed": 0,
+      "note": null
+    },
+    {
+      "case_id": "cross-scope-non-user-edited-blocked",
+      "episode_id": "pmb-seed-corpus",
+      "category": "Scope disambiguation",
+      "cluster_id": "pmb-seed-corpus",
+      "timings": {
+        "reset_ms": 0.0003800000740739051,
+        "ingest_ms": 0.2926110000771587,
+        "ready_ms": 0.000190000264410628,
+        "query_ms": 0.007751999874017201
+      },
+      "budget": {
+        "top_k": 10,
+        "max_context_chars": 100000
+      },
+      "cutoff": 35,
+      "failures": [],
+      "metrics": {
+        "hit": null,
+        "recall": null,
+        "mrr": null,
+        "all_evidence": null,
+        "ndcg": null,
+        "precision": null,
+        "empty_result_correct": 1.0,
+        "empty_expected": true,
+        "pinned_coverage": null
+      },
+      "passed": true,
+      "public_input_sha256": "553c46a405de1cd93c9e01d2d0f2aac02b279335f8aaa697f9ae035d0341cb9e",
+      "returned_chars": 0,
+      "retrieved_source_ids": [],
+      "diagnostics": {
+        "cross_user_source_count": 0,
+        "duplicate_source_occurrences": 0
+      },
+      "status": "scored",
+      "assertions": 3,
+      "assertions_passed": 3,
+      "note": null
+    },
+    {
+      "case_id": "alias-two-word-shingle-dead-letter",
+      "episode_id": "pmb-seed-corpus",
+      "category": "Alias resolution",
+      "cluster_id": "pmb-seed-corpus",
+      "timings": {
+        "reset_ms": 0.00033099968277383596,
+        "ingest_ms": 0.29078900024614995,
+        "ready_ms": 0.00016000012692529708,
+        "query_ms": 0.007781000022077933
+      },
+      "budget": {
+        "top_k": 10,
+        "max_context_chars": 100000
+      },
+      "cutoff": 35,
+      "failures": [
+        "relevantBeliefs exact-set mismatch"
+      ],
+      "metrics": {
+        "hit": 0.0,
+        "recall": 0.0,
+        "mrr": 0.0,
+        "all_evidence": 0.0,
+        "ndcg": 0.0,
+        "precision": 0.0,
+        "empty_result_correct": null,
+        "empty_expected": false,
+        "pinned_coverage": null
+      },
+      "passed": false,
+      "public_input_sha256": "47615181459e325beee8f7fd161743780237acae574b121eed38ef1c0e0ffa78",
+      "returned_chars": 0,
+      "retrieved_source_ids": [],
+      "diagnostics": {
+        "cross_user_source_count": 0,
+        "duplicate_source_occurrences": 0
+      },
+      "status": "scored",
+      "assertions": 1,
+      "assertions_passed": 0,
+      "note": null
+    },
+    {
+      "case_id": "alias-dlq-abbreviation-resolves",
+      "episode_id": "pmb-seed-corpus",
+      "category": "Alias resolution",
+      "cluster_id": "pmb-seed-corpus",
+      "timings": {
+        "reset_ms": 0.0003800000740739051,
+        "ingest_ms": 0.30585000013161334,
+        "ready_ms": 0.00020000015865662135,
+        "query_ms": 0.00780099981056992
+      },
+      "budget": {
+        "top_k": 10,
+        "max_context_chars": 100000
+      },
+      "cutoff": 35,
+      "failures": [
+        "relevantBeliefs exact-set mismatch"
+      ],
+      "metrics": {
+        "hit": 0.0,
+        "recall": 0.0,
+        "mrr": 0.0,
+        "all_evidence": 0.0,
+        "ndcg": 0.0,
+        "precision": 0.0,
+        "empty_result_correct": null,
+        "empty_expected": false,
+        "pinned_coverage": null
+      },
+      "passed": false,
+      "public_input_sha256": "269d4c606d9c5f2d5972cd7bee45deef11cb16957b8322c89d4816f0b89643e0",
+      "returned_chars": 0,
+      "retrieved_source_ids": [],
+      "diagnostics": {
+        "cross_user_source_count": 0,
+        "duplicate_source_occurrences": 0
+      },
+      "status": "scored",
+      "assertions": 1,
+      "assertions_passed": 0,
+      "note": null
+    },
+    {
+      "case_id": "counter-signal-jest-surfaces-vitest",
+      "episode_id": "pmb-seed-corpus",
+      "category": "Counter-signal retrieval",
+      "cluster_id": "pmb-seed-corpus",
+      "timings": {
+        "reset_ms": 0.00029000011636526324,
+        "ingest_ms": 0.2886649999709334,
+        "ready_ms": 0.0001399998836859595,
+        "query_ms": 0.007812000148987863
+      },
+      "budget": {
+        "top_k": 10,
+        "max_context_chars": 100000
+      },
+      "cutoff": 35,
+      "failures": [
+        "relevantBeliefs exact-set mismatch"
+      ],
+      "metrics": {
+        "hit": 0.0,
+        "recall": 0.0,
+        "mrr": 0.0,
+        "all_evidence": 0.0,
+        "ndcg": 0.0,
+        "precision": 0.0,
+        "empty_result_correct": null,
+        "empty_expected": false,
+        "pinned_coverage": null
+      },
+      "passed": false,
+      "public_input_sha256": "9ef86ca284fee43eb66ededa67ca3bb5e094cd55edfeb1a6ccc7e6f1d95383ba",
+      "returned_chars": 0,
+      "retrieved_source_ids": [],
+      "diagnostics": {
+        "cross_user_source_count": 0,
+        "duplicate_source_occurrences": 0
+      },
+      "status": "scored",
+      "assertions": 1,
+      "assertions_passed": 0,
+      "note": null
+    },
+    {
+      "case_id": "relation-type-expands-participants",
+      "episode_id": "pmb-seed-corpus",
+      "category": "Relation expansion",
+      "cluster_id": "pmb-seed-corpus",
+      "timings": {
+        "reset_ms": 0.0004309999894758221,
+        "ingest_ms": 0.32869400001800386,
+        "ready_ms": 0.00018999980966327712,
+        "query_ms": 0.008131999948091106
+      },
+      "budget": {
+        "top_k": 10,
+        "max_context_chars": 100000
+      },
+      "cutoff": 35,
+      "failures": [
+        "relevantBeliefs exact-set mismatch",
+        "openQuestions: missing b-auth-open-q"
+      ],
+      "metrics": {
+        "hit": 0.0,
+        "recall": 0.0,
+        "mrr": 0.0,
+        "all_evidence": 0.0,
+        "ndcg": 0.0,
+        "precision": 0.0,
+        "empty_result_correct": null,
+        "empty_expected": false,
+        "pinned_coverage": null
+      },
+      "passed": false,
+      "public_input_sha256": "205640468a1d9459d348ccb1db974517d92f7d8f1b04f37269fb7d0ded991e9a",
+      "returned_chars": 0,
+      "retrieved_source_ids": [],
+      "diagnostics": {
+        "cross_user_source_count": 0,
+        "duplicate_source_occurrences": 0
+      },
+      "status": "scored",
+      "assertions": 2,
+      "assertions_passed": 0,
+      "note": null
+    },
+    {
+      "case_id": "relation-participant-open-question-routes-correctly",
+      "episode_id": "pmb-seed-corpus",
+      "category": "Relation expansion",
+      "cluster_id": "pmb-seed-corpus",
+      "timings": {
+        "reset_ms": 0.0003199997991032433,
+        "ingest_ms": 0.2867419998437981,
+        "ready_ms": 0.00017000002117129043,
+        "query_ms": 0.007691000064369291
+      },
+      "budget": {
+        "top_k": 10,
+        "max_context_chars": 100000
+      },
+      "cutoff": 35,
+      "failures": [
+        "relevantBeliefs exact-set mismatch",
+        "openQuestions: missing b-auth-open-q"
+      ],
+      "metrics": {
+        "hit": 0.0,
+        "recall": 0.0,
+        "mrr": 0.0,
+        "all_evidence": 0.0,
+        "ndcg": 0.0,
+        "precision": 0.0,
+        "empty_result_correct": null,
+        "empty_expected": false,
+        "pinned_coverage": null
+      },
+      "passed": false,
+      "public_input_sha256": "605195e7d3dc80f9fd00844f174ac12d28372ae744eaaa753f906a612662f6cb",
+      "returned_chars": 0,
+      "retrieved_source_ids": [],
+      "diagnostics": {
+        "cross_user_source_count": 0,
+        "duplicate_source_occurrences": 0
+      },
+      "status": "scored",
+      "assertions": 3,
+      "assertions_passed": 1,
+      "note": null
+    },
+    {
+      "case_id": "relation-expansion-respects-scope-filter",
+      "episode_id": "pmb-seed-corpus",
+      "category": "Relation expansion",
+      "cluster_id": "pmb-seed-corpus",
+      "timings": {
+        "reset_ms": 0.0002800002221192699,
+        "ingest_ms": 0.28885600022476865,
+        "ready_ms": 0.00012000009519397281,
+        "query_ms": 0.00735100002202671
+      },
+      "budget": {
+        "top_k": 10,
+        "max_context_chars": 100000
+      },
+      "cutoff": 35,
+      "failures": [
+        "relevantBeliefs exact-set mismatch"
+      ],
+      "metrics": {
+        "hit": 0.0,
+        "recall": 0.0,
+        "mrr": 0.0,
+        "all_evidence": 0.0,
+        "ndcg": 0.0,
+        "precision": 0.0,
+        "empty_result_correct": null,
+        "empty_expected": false,
+        "pinned_coverage": null
+      },
+      "passed": false,
+      "public_input_sha256": "23133422835f33db28022d0c613c3f158a86df2763b7ce20f9b710002dc4cded",
+      "returned_chars": 0,
+      "retrieved_source_ids": [],
+      "diagnostics": {
+        "cross_user_source_count": 0,
+        "duplicate_source_occurrences": 0
+      },
+      "status": "scored",
+      "assertions": 2,
+      "assertions_passed": 1,
+      "note": null
+    },
+    {
+      "case_id": "subtype-expertise-retrieval",
+      "episode_id": "pmb-seed-corpus",
+      "category": "Type routing and open questions",
+      "cluster_id": "pmb-seed-corpus",
+      "timings": {
+        "reset_ms": 0.00026099996830453165,
+        "ingest_ms": 0.3053899999940768,
+        "ready_ms": 0.0001809999048418831,
+        "query_ms": 0.007401000402751379
+      },
+      "budget": {
+        "top_k": 10,
+        "max_context_chars": 100000
+      },
+      "cutoff": 35,
+      "failures": [
+        "relevantBeliefs exact-set mismatch"
+      ],
+      "metrics": {
+        "hit": 0.0,
+        "recall": 0.0,
+        "mrr": 0.0,
+        "all_evidence": 0.0,
+        "ndcg": 0.0,
+        "precision": 0.0,
+        "empty_result_correct": null,
+        "empty_expected": false,
+        "pinned_coverage": null
+      },
+      "passed": false,
+      "public_input_sha256": "9043cfb54662b71fcb6e4874c5b24002243fddf514fbeb9c5351a1889f042156",
+      "returned_chars": 0,
+      "retrieved_source_ids": [],
+      "diagnostics": {
+        "cross_user_source_count": 0,
+        "duplicate_source_occurrences": 0
+      },
+      "status": "scored",
+      "assertions": 1,
+      "assertions_passed": 0,
+      "note": null
+    },
+    {
+      "case_id": "pinned-plus-resolved-excluded-from-questions",
+      "episode_id": "pmb-seed-corpus",
+      "category": "Type routing and open questions",
+      "cluster_id": "pmb-seed-corpus",
+      "timings": {
+        "reset_ms": 0.0002800002221192699,
+        "ingest_ms": 0.2906980002990167,
+        "ready_ms": 0.00014999977793195285,
+        "query_ms": 0.00749099990571267
+      },
+      "budget": {
+        "top_k": 10,
+        "max_context_chars": 100000
+      },
+      "cutoff": 35,
+      "failures": [],
+      "metrics": {
+        "hit": null,
+        "recall": null,
+        "mrr": null,
+        "all_evidence": null,
+        "ndcg": null,
+        "precision": null,
+        "empty_result_correct": 1.0,
+        "empty_expected": true,
+        "pinned_coverage": null
+      },
+      "passed": true,
+      "public_input_sha256": "e4404f875eda461588dcb59819f49d06ab1e6d9721424546864e8639be35c2cc",
+      "returned_chars": 0,
+      "retrieved_source_ids": [],
+      "diagnostics": {
+        "cross_user_source_count": 0,
+        "duplicate_source_occurrences": 0
+      },
+      "status": "scored",
+      "assertions": 3,
+      "assertions_passed": 3,
+      "note": null
+    },
+    {
+      "case_id": "zero-reinforcement-fresh-belief-surfaces",
+      "episode_id": "pmb-seed-corpus",
+      "category": "Budget eviction and capacity",
+      "cluster_id": "pmb-seed-corpus",
+      "timings": {
+        "reset_ms": 0.00023999973564059474,
+        "ingest_ms": 0.28913599999214057,
+        "ready_ms": 0.00017000002117129043,
+        "query_ms": 0.007241000275826082
+      },
+      "budget": {
+        "top_k": 10,
+        "max_context_chars": 100000
+      },
+      "cutoff": 35,
+      "failures": [
+        "relevantBeliefs exact-set mismatch"
+      ],
+      "metrics": {
+        "hit": 0.0,
+        "recall": 0.0,
+        "mrr": 0.0,
+        "all_evidence": 0.0,
+        "ndcg": 0.0,
+        "precision": 0.0,
+        "empty_result_correct": null,
+        "empty_expected": false,
+        "pinned_coverage": null
+      },
+      "passed": false,
+      "public_input_sha256": "81f29a40643d8ea4cabb99eed5c61ee8e71913819a3bcb1492d39c1ad0e1efe1",
+      "returned_chars": 0,
+      "retrieved_source_ids": [],
+      "diagnostics": {
+        "cross_user_source_count": 0,
+        "duplicate_source_occurrences": 0
+      },
+      "status": "scored",
+      "assertions": 1,
+      "assertions_passed": 0,
+      "note": null
+    },
+    {
+      "case_id": "budget-zero-graceful-empty",
+      "episode_id": "pmb-seed-corpus",
+      "category": "Budget eviction and capacity",
+      "cluster_id": "pmb-seed-corpus",
+      "timings": {
+        "reset_ms": 0.00040099985199049115,
+        "ingest_ms": 0.30355800026882207,
+        "ready_ms": 0.00023999973564059474,
+        "query_ms": 0.007912000000942498
+      },
+      "budget": {
+        "top_k": 10,
+        "max_context_chars": 100000,
+        "maxBeliefs": 0
+      },
+      "cutoff": 35,
+      "failures": [],
+      "metrics": {
+        "hit": null,
+        "recall": null,
+        "mrr": null,
+        "all_evidence": null,
+        "ndcg": null,
+        "precision": null,
+        "empty_result_correct": 1.0,
+        "empty_expected": true,
+        "pinned_coverage": null
+      },
+      "passed": true,
+      "public_input_sha256": "c06bdf1f802e81699eebbc8dc06c298da2bd1db6395a6e9af9788e63e34837eb",
+      "returned_chars": 0,
+      "retrieved_source_ids": [],
+      "diagnostics": {
+        "cross_user_source_count": 0,
+        "duplicate_source_occurrences": 0
+      },
+      "status": "scored",
+      "assertions": 1,
+      "assertions_passed": 1,
+      "note": null
+    },
+    {
+      "case_id": "budget-one-pinned-wins-over-relevant",
+      "episode_id": "pmb-seed-corpus",
+      "category": "Budget eviction and capacity",
+      "cluster_id": "pmb-seed-corpus",
+      "timings": {
+        "reset_ms": 0.0002599999788799323,
+        "ingest_ms": 0.31144900003710063,
+        "ready_ms": 0.00018000037016463466,
+        "query_ms": 0.007871999969211174
+      },
+      "budget": {
+        "top_k": 10,
+        "max_context_chars": 100000,
+        "maxBeliefs": 1
+      },
+      "cutoff": 35,
+      "failures": [
+        "pinnedFacts: missing b-db-decision"
+      ],
+      "metrics": {
+        "hit": null,
+        "recall": null,
+        "mrr": null,
+        "all_evidence": null,
+        "ndcg": null,
+        "precision": null,
+        "empty_result_correct": 1.0,
+        "empty_expected": true,
+        "pinned_coverage": 0.0
+      },
+      "passed": false,
+      "public_input_sha256": "5f7298057ce8a3deeabb2d51d7e90456534ae1450c4517aa4f2eee6834bf803f",
+      "returned_chars": 0,
+      "retrieved_source_ids": [],
+      "diagnostics": {
+        "cross_user_source_count": 0,
+        "duplicate_source_occurrences": 0
+      },
+      "status": "scored",
+      "assertions": 2,
+      "assertions_passed": 1,
+      "note": null
+    },
+    {
+      "case_id": "multi-scope-code-writing-dedup-no-double-surface",
+      "episode_id": "pmb-seed-corpus",
+      "category": "Scope disambiguation",
+      "cluster_id": "pmb-seed-corpus",
+      "timings": {
+        "reset_ms": 0.0002499996298865881,
+        "ingest_ms": 0.2886349998334481,
+        "ready_ms": 0.00016100011634989642,
+        "query_ms": 0.007530999937443994
+      },
+      "budget": {
+        "top_k": 10,
+        "max_context_chars": 100000
+      },
+      "cutoff": 35,
+      "failures": [],
+      "metrics": {
+        "hit": null,
+        "recall": null,
+        "mrr": null,
+        "all_evidence": null,
+        "ndcg": null,
+        "precision": null,
+        "empty_result_correct": 1.0,
+        "empty_expected": true,
+        "pinned_coverage": null
+      },
+      "passed": true,
+      "public_input_sha256": "e6833a93179ec58a2be58e6f816bc032a90e3477c879e46d92f5a66a5f3120c1",
+      "returned_chars": 0,
+      "retrieved_source_ids": [],
+      "diagnostics": {
+        "cross_user_source_count": 0,
+        "duplicate_source_occurrences": 0
+      },
+      "status": "scored",
+      "assertions": 1,
+      "assertions_passed": 1,
+      "note": null
+    },
+    {
+      "case_id": "empty-alias-belief-content-path-only",
+      "episode_id": "pmb-seed-corpus",
+      "category": "Design boundary cases",
+      "cluster_id": "pmb-seed-corpus",
+      "timings": {
+        "reset_ms": 0.0004609996722138021,
+        "ingest_ms": 0.2984299999297946,
+        "ready_ms": 0.0001809999048418831,
+        "query_ms": 0.00876300009622355
+      },
+      "budget": {
+        "top_k": 10,
+        "max_context_chars": 100000
+      },
+      "cutoff": 35,
+      "failures": [],
+      "metrics": {
+        "hit": null,
+        "recall": null,
+        "mrr": null,
+        "all_evidence": null,
+        "ndcg": null,
+        "precision": null,
+        "empty_result_correct": 1.0,
+        "empty_expected": true,
+        "pinned_coverage": null
+      },
+      "passed": true,
+      "public_input_sha256": "31cd96f52bbd323541dba7116c75c820b4b12b0c52d27a3a42b67c2b87b23f2b",
+      "returned_chars": 0,
+      "retrieved_source_ids": [],
+      "diagnostics": {
+        "cross_user_source_count": 0,
+        "duplicate_source_occurrences": 0
+      },
+      "status": "scored",
+      "assertions": 1,
+      "assertions_passed": 1,
+      "note": null
+    },
+    {
+      "case_id": "universal-scope-explicit-query-no-relevant",
+      "episode_id": "pmb-seed-corpus",
+      "category": "Scope disambiguation",
+      "cluster_id": "pmb-seed-corpus",
+      "timings": {
+        "reset_ms": 0.00024100017981254496,
+        "ingest_ms": 0.3227460001653526,
+        "ready_ms": 0.000279999767371919,
+        "query_ms": 0.007791999905748526
+      },
+      "budget": {
+        "top_k": 10,
+        "max_context_chars": 100000
+      },
+      "cutoff": 35,
+      "failures": [
+        "personaPrelude empty",
+        "personaPrelude missing substring 'direct'"
+      ],
+      "metrics": {
+        "hit": null,
+        "recall": null,
+        "mrr": null,
+        "all_evidence": null,
+        "ndcg": null,
+        "precision": null,
+        "empty_result_correct": 1.0,
+        "empty_expected": true,
+        "pinned_coverage": null
+      },
+      "passed": false,
+      "public_input_sha256": "53d69ae8a10b9a8381eac5ef0701a0b16bd5623c63d347477bbc4361ab541dbc",
+      "returned_chars": 0,
+      "retrieved_source_ids": [],
+      "diagnostics": {
+        "cross_user_source_count": 0,
+        "duplicate_source_occurrences": 0
+      },
+      "status": "scored",
+      "assertions": 3,
+      "assertions_passed": 1,
+      "note": null
+    },
+    {
+      "case_id": "negation-query-still-surfaces-rejected-tool",
+      "episode_id": "pmb-seed-corpus",
+      "category": "Design boundary cases",
+      "cluster_id": "pmb-seed-corpus",
+      "timings": {
+        "reset_ms": 0.0015020000319054816,
+        "ingest_ms": 0.30288699963421095,
+        "ready_ms": 0.0003499999365885742,
+        "query_ms": 0.009593999948265264
+      },
+      "budget": {
+        "top_k": 10,
+        "max_context_chars": 100000
+      },
+      "cutoff": 35,
+      "failures": [
+        "relevantBeliefs exact-set mismatch"
+      ],
+      "metrics": {
+        "hit": 0.0,
+        "recall": 0.0,
+        "mrr": 0.0,
+        "all_evidence": 0.0,
+        "ndcg": 0.0,
+        "precision": 0.0,
+        "empty_result_correct": null,
+        "empty_expected": false,
+        "pinned_coverage": null
+      },
+      "passed": false,
+      "public_input_sha256": "fe967a3c8254247c041ba3f1b162e2565b02d6889faeeee0bcad2461351ab934",
+      "returned_chars": 0,
+      "retrieved_source_ids": [],
+      "diagnostics": {
+        "cross_user_source_count": 0,
+        "duplicate_source_occurrences": 0
+      },
+      "status": "scored",
+      "assertions": 1,
+      "assertions_passed": 0,
+      "note": null
+    },
+    {
+      "case_id": "superseded-chain-query-terminal-only",
+      "episode_id": "pmb-seed-corpus",
+      "category": "Supersession chain exclusion",
+      "cluster_id": "pmb-seed-corpus",
+      "timings": {
+        "reset_ms": 0.00047999992602854036,
+        "ingest_ms": 0.3136820000690932,
+        "ready_ms": 0.0002299998413946014,
+        "query_ms": 0.008152000191330444
+      },
+      "budget": {
+        "top_k": 10,
+        "max_context_chars": 100000
+      },
+      "cutoff": 35,
+      "failures": [
+        "pinnedFacts: missing b-linting-current"
+      ],
+      "metrics": {
+        "hit": null,
+        "recall": null,
+        "mrr": null,
+        "all_evidence": null,
+        "ndcg": null,
+        "precision": null,
+        "empty_result_correct": 1.0,
+        "empty_expected": true,
+        "pinned_coverage": 0.0
+      },
+      "passed": false,
+      "public_input_sha256": "c1916be3c3620c89c6137cf22099469077dce3913f71587d3df040a3e8bc7da6",
+      "returned_chars": 0,
+      "retrieved_source_ids": [],
+      "diagnostics": {
+        "cross_user_source_count": 0,
+        "duplicate_source_occurrences": 0
+      },
+      "status": "scored",
+      "assertions": 2,
+      "assertions_passed": 1,
+      "note": null
+    },
+    {
+      "case_id": "relation-does-not-appear-as-entity",
+      "episode_id": "pmb-seed-corpus",
+      "category": "Relation expansion",
+      "cluster_id": "pmb-seed-corpus",
+      "timings": {
+        "reset_ms": 0.00048000038077589124,
+        "ingest_ms": 0.28870500000266475,
+        "ready_ms": 0.00017000002117129043,
+        "query_ms": 0.022904000161361182
+      },
+      "budget": {
+        "top_k": 10,
+        "max_context_chars": 100000
+      },
+      "cutoff": 35,
+      "failures": [
+        "relevantBeliefs exact-set mismatch",
+        "openQuestions: missing b-auth-open-q"
+      ],
+      "metrics": {
+        "hit": 0.0,
+        "recall": 0.0,
+        "mrr": 0.0,
+        "all_evidence": 0.0,
+        "ndcg": 0.0,
+        "precision": 0.0,
+        "empty_result_correct": null,
+        "empty_expected": false,
+        "pinned_coverage": null
+      },
+      "passed": false,
+      "public_input_sha256": "5a46e62288adb6b188bf7b861ba07d8bb7c651a97aac5ef2126bae18eb865219",
+      "returned_chars": 0,
+      "retrieved_source_ids": [],
+      "diagnostics": {
+        "cross_user_source_count": 0,
+        "duplicate_source_occurrences": 0
+      },
+      "status": "scored",
+      "assertions": 2,
+      "assertions_passed": 0,
+      "note": null
+    }
+  ],
+  "warnings": [
+    "This run is not an official upstream leaderboard submission",
+    "Synthetic source fixtures are not real-user logs",
+    "Scores on partial coverage are not comparable to complete supported runs",
+    "Single-corpus diagnostics do not support population-level confidence intervals"
+  ]
+}

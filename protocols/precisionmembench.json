@@ -1,0 +1,55 @@
+{
+  "protocol_id": "precisionmembench",
+  "version": "1",
+  "upstream": {
+    "repo": "https://github.com/tenurehq/precisionMemBench",
+    "commit": "61a712a1754e7d27b6dee42da32a2c214b003ece",
+    "files": []
+  },
+  "variants": {
+    "typed_context": {
+      "description": "Source-specific typed assertions on the manually transcribed PMB projection",
+      "suite_id_patterns": [
+        "precisionmembench-projection-v1"
+      ],
+      "params": {
+        "primary": "assertions",
+        "seed_blob_sha": "2d9c9daf55c075f0f64a9a9f71db61feda7ad4c2",
+        "cases_blob_sha": "dd0ee63d91b9b19f4c891463ab104bb2ec0485bd"
+      }
+    },
+    "retrieval": {
+      "description": "75-case diagnostic retrieval projection; explicit empty shouldOnlyInclude is exhaustive",
+      "suite_id_patterns": [
+        "pmb-retrieval"
+      ],
+      "params": {
+        "primary": "retrieval"
+      }
+    }
+  },
+  "scoring": {
+    "primary": "assertions",
+    "answer_parsing": "typed assertions; variant.params.primary declares retrieval projection",
+    "denominators": {
+      "exclude": [
+        "vacuous assertions have no pass judgment"
+      ],
+      "per_type_report": true
+    },
+    "secondary": [
+      "recall",
+      "mrr",
+      "ndcg",
+      "empty_result_correct"
+    ]
+  },
+  "fidelity_rules": {
+    "full": [
+      "full upstream service and complete assertion set"
+    ],
+    "equivalent": [],
+    "else": "partial"
+  },
+  "cluster_basis": "episode"
+}

@@ -1,0 +1,256 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$ref": "#/$defs/BundleHeader",
+  "$defs": {
+    "BundleHeader": {
+      "properties": {
+        "schema_version": {
+          "type": "string",
+          "enum": [
+            "2.0",
+            "3.0"
+          ]
+        },
+        "suite_id": {
+          "type": "string"
+        },
+        "track": {
+          "type": "string"
+        },
+        "provenance": {
+          "type": "object"
+        },
+        "limitations": {
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        },
+        "protocol": {
+          "$ref": "#/$defs/SuiteProtocol"
+        },
+        "protocol_ref": {
+          "type": "string"
+        },
+        "license": {
+          "$ref": "#/$defs/License"
+        },
+        "data_nature": {
+          "type": "string"
+        },
+        "taxonomy": {
+          "$ref": "#/$defs/Taxonomy"
+        },
+        "splits": {
+          "additionalProperties": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array"
+          },
+          "type": "object"
+        },
+        "container": {
+          "$ref": "#/$defs/ContainerInfo"
+        }
+      },
+      "additionalProperties": false,
+      "type": "object",
+      "required": [
+        "schema_version",
+        "suite_id",
+        "track",
+        "provenance",
+        "limitations",
+        "protocol",
+        "container"
+      ]
+    },
+    "ContainerInfo": {
+      "properties": {
+        "format": {
+          "type": "string",
+          "enum": [
+            "bundle"
+          ]
+        },
+        "version": {
+          "type": "string",
+          "enum": [
+            "1"
+          ]
+        },
+        "episodes_file": {
+          "type": "string",
+          "enum": [
+            "episodes.jsonl"
+          ]
+        },
+        "index_file": {
+          "type": "string",
+          "enum": [
+            "episodes.index.jsonl"
+          ]
+        },
+        "index_sha256": {
+          "type": "string"
+        },
+        "episodes": {
+          "type": "integer"
+        },
+        "events": {
+          "type": "integer"
+        },
+        "cases": {
+          "type": "integer"
+        }
+      },
+      "additionalProperties": false,
+      "type": "object",
+      "required": [
+        "format",
+        "version",
+        "episodes_file",
+        "index_file",
+        "index_sha256",
+        "episodes",
+        "events",
+        "cases"
+      ]
+    },
+    "Haystack": {
+      "properties": {
+        "filler_source": {
+          "type": "string"
+        },
+        "context_ladder": {
+          "items": {
+            "type": "integer"
+          },
+          "type": "array"
+        }
+      },
+      "additionalProperties": false,
+      "type": "object"
+    },
+    "License": {
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "noncommercial": {
+          "type": "boolean"
+        },
+        "no_derivatives": {
+          "type": "boolean"
+        },
+        "share_alike": {
+          "type": "boolean"
+        },
+        "redistribute_normalized": {
+          "type": "boolean"
+        },
+        "source": {
+          "type": "string"
+        }
+      },
+      "additionalProperties": false,
+      "type": "object",
+      "required": [
+        "id",
+        "noncommercial",
+        "no_derivatives",
+        "share_alike",
+        "redistribute_normalized",
+        "source"
+      ]
+    },
+    "SuiteProtocol": {
+      "properties": {
+        "ingestion": {
+          "type": "string"
+        },
+        "query_time_policy": {
+          "type": "string",
+          "enum": [
+            "",
+            "reference_only",
+            "as_of"
+          ]
+        },
+        "retrieval_metrics": {
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        },
+        "reset_policy_allowed": {
+          "items": {
+            "type": "string",
+            "enum": [
+              "fresh_per_case",
+              "incremental_per_episode",
+              "per_cluster",
+              "shared_haystack"
+            ]
+          },
+          "type": "array"
+        },
+        "time_exposure": {
+          "type": "string",
+          "enum": [
+            "",
+            "none",
+            "session",
+            "turn"
+          ]
+        },
+        "inject_current_date": {
+          "type": "boolean"
+        },
+        "speaker_mapping": {
+          "additionalProperties": {
+            "type": "string"
+          },
+          "type": "object"
+        },
+        "text_only": {
+          "type": "boolean"
+        },
+        "haystack": {
+          "$ref": "#/$defs/Haystack"
+        }
+      },
+      "additionalProperties": false,
+      "type": "object",
+      "required": [
+        "ingestion"
+      ]
+    },
+    "Taxonomy": {
+      "properties": {
+        "original_field": {
+          "type": "string"
+        },
+        "labels": {
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        },
+        "canonical_map": {
+          "additionalProperties": {
+            "type": "string"
+          },
+          "type": "object"
+        }
+      },
+      "additionalProperties": false,
+      "type": "object",
+      "required": [
+        "original_field",
+        "labels"
+      ]
+    }
+  }
+}

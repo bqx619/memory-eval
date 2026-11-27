@@ -1,0 +1,6 @@
+# LongMemEval importer fixture
+
+1. Source: `data/upstream/longmemeval-s/longmemeval_s_cleaned.json`, revision `98d7416c24c778c2fee6e6f3006e7a073259d48f`, source SHA-256 `d6f21ea9d60a0d56f34a05b609c79c88a451d2ae03597821ea3d5a9678c3a442`. License: MIT, as recorded in the source lock and dataset protocol; upstream notice is preserved in `design/upstream/longmemeval/LICENSE`.
+2. Run `python3 -B scripts/make_longmemeval_fixture.py` from the repository root. Selection is deterministic: first ordinary question, first `_abs` question, then first ordinary question of another question type. Only the three parallel haystack arrays are subsetted, retaining every answer-bearing/referenced session and two fillers; all selected original text and other fields remain unchanged.
+3. Selected IDs: `e47becba`, `0862e8bf_abs`, `0a995998`; 3 questions, 11 session occurrences, 120 events. The fixture is a derived test subset, not a new benchmark split.
+4. After reviewing an intentional converter change, regenerate with `GOPROXY=off go test ./internal/importers/longmemeval -run TestConformance -update`. Goldens are canonical JSON with one final LF. They include the fixture's own input hash, not the full source hash.

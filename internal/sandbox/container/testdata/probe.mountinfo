@@ -1,0 +1,12 @@
+21 0 0:1 / / ro,relatime - overlay overlay rw
+22 21 0:2 / /proc rw,nosuid,nodev,noexec,relatime - proc proc rw
+23 21 0:3 / /sys ro,nosuid,nodev,noexec,relatime - sysfs sysfs ro
+24 21 0:4 / /dev rw,nosuid - tmpfs tmpfs rw
+25 21 0:5 / /tmp rw,nosuid,nodev - tmpfs tmpfs rw
+26 24 0:6 / /dev/shm rw,nosuid,nodev,noexec - tmpfs shm rw
+27 21 0:42 /containers/hostname /etc/hostname ro,relatime - btrfs /dev/vda rw
+28 21 0:42 /containers/hosts /etc/hosts ro,relatime - btrfs /dev/vda rw
+29 21 0:42 /containers/resolv.conf /etc/resolv.conf ro,relatime - btrfs /dev/vda rw
+30 21 0:42 /usr/libexec/docker-init /usr/sbin/docker-init ro,relatime - btrfs /dev/vda rw
+31 21 0:43 {ep} {ep} rw,relatime - virtiofs shared rw
+32 21 0:43 {binary} /memeval ro,relatime - virtiofs shared rw

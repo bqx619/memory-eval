@@ -1,0 +1,959 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title> memeval case review </title>
+<style>
+/* Tokens shared with docs-site/index.html and design/report-ui/report.css */
+:root{
+  --page:#f9f9f7; --surface:#fcfcfb; --surface-2:#f3f3f0;
+  --ink:#0b0b0b; --ink-2:#52514e; --muted:#898781;
+  --grid:#e1e0d9; --axis:#c3c2b7; --ring:rgba(11,11,11,.10);
+  --accent:#2a78d6; --accent-ink:#184f95; --warm:#eb6834;
+  --good:#0ca30c; --good-text:#006300; --good-bg:#e7f6e7;
+  --warn:#fab219; --warn-text:#7a4f00; --warn-bg:#fdf3dc;
+  --critical:#d03b3b; --critical-text:#8c1d1d; --critical-bg:#fbe6e6;
+  --warm-text:#8a3a14; --warm-bg:#fdebe2;
+  --neutral-bg:#ecebe6;
+  --radius:10px;
+  --font:system-ui,-apple-system,"Segoe UI","PingFang SC","Hiragino Sans GB","Microsoft YaHei",sans-serif;
+  --mono:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
+}
+@media (prefers-color-scheme:dark){
+  :root:not([data-theme="light"]){
+    color-scheme:dark;
+    --page:#0d0d0d; --surface:#1a1a19; --surface-2:#232321;
+    --ink:#f0efec; --ink-2:#c3c2b7; --muted:#898781;
+    --grid:#2c2c2a; --axis:#383835; --ring:rgba(255,255,255,.10);
+    --accent:#3987e5; --accent-ink:#86b6ef; --warm:#d95926;
+    --good-text:#5fd45f; --good-bg:#15301a; --warn-text:#f2c35c; --warn-bg:#3a2d0f;
+    --critical-text:#f08a8a; --critical-bg:#3b1717; --warm-text:#f0a37d; --warm-bg:#3a2214; --neutral-bg:#2a2a28;
+  }
+}
+:root[data-theme="dark"]{
+  color-scheme:dark;
+  --page:#0d0d0d; --surface:#1a1a19; --surface-2:#232321;
+  --ink:#f0efec; --ink-2:#c3c2b7; --muted:#898781;
+  --grid:#2c2c2a; --axis:#383835; --ring:rgba(255,255,255,.10);
+  --accent:#3987e5; --accent-ink:#86b6ef; --warm:#d95926;
+  --good-text:#5fd45f; --good-bg:#15301a; --warn-text:#f2c35c; --warn-bg:#3a2d0f;
+  --critical-text:#f08a8a; --critical-bg:#3b1717; --warm-text:#f0a37d; --warm-bg:#3a2214; --neutral-bg:#2a2a28;
+}
+*{box-sizing:border-box}
+html{background:var(--page)}
+body{margin:0;background:var(--page);color:var(--ink);font:14px/1.55 var(--font)}
+.wrap{max-width:1180px;margin:0 auto;padding-block:24px 64px;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+header.top{display:flex;justify-content:space-between;gap:12px 24px;align-items:flex-start;flex-wrap:wrap;margin-bottom:20px}
+header.top > div:first-child{flex:1 1 560px;min-width:0}
+header.top nav{font-size:13px;color:var(--ink-2);padding-top:6px;white-space:nowrap;margin-left:auto}
+.eyebrow{margin:0 0 4px;font-size:12px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted)}
+h1{margin:0 0 8px;font-size:24px;line-height:1.25;text-wrap:balance}
+h2{font-size:17px;margin:0 0 10px}
+h3{font-size:14px;margin:18px 0 6px;color:var(--ink-2);letter-spacing:.02em}
+.lede{margin:0 0 12px;color:var(--ink-2);max-width:72ch}
+a{color:var(--accent-ink)}
+code,.mono{font-family:var(--mono);font-size:12.5px}
+section{background:var(--surface);border:1px solid var(--grid);border-radius:var(--radius);padding:16px 18px;margin-bottom:16px}
+.bar{display:flex;flex-wrap:wrap;gap:10px 16px;align-items:flex-end}
+.bar label{display:flex;flex-direction:column;gap:4px;font-size:12px;color:var(--ink-2)}
+select,input[type=search]{font:13px var(--font);color:var(--ink);background:var(--surface-2);border:1px solid var(--grid);border-radius:7px;padding:6px 8px;min-width:150px}
+.meta{display:flex;flex-wrap:wrap;gap:6px;margin-top:10px}
+.chip{display:inline-block;font-size:12px;padding:2px 8px;border-radius:999px;background:var(--surface-2);border:1px solid var(--grid);color:var(--ink-2)}
+.tiles{display:grid;grid-template-columns:repeat(auto-fit,minmax(118px,1fr));gap:10px;margin:8px 0 14px}
+.tile{background:var(--surface-2);border-radius:8px;padding:10px 12px;min-width:0}
+.tile .k{font-size:12px;color:var(--ink-2)}
+.tile .v{font-size:22px;font-variant-numeric:tabular-nums;line-height:1.2;margin-top:2px}
+.tile .s{font-size:11.5px;color:var(--muted)}
+.tiles.m{grid-template-columns:repeat(auto-fit,minmax(172px,1fr))}
+.tile.m .k{display:flex;justify-content:space-between;gap:6px;align-items:baseline} .tile.m .k .id{color:var(--muted);font-size:11px}
+.tile .d{font-size:11.5px;color:var(--ink-2);margin-top:6px;line-height:1.4} .tile .f{font-size:11px;color:var(--muted);margin-top:2px;word-break:break-all}
+.dist{margin:4px 0 14px} .dist .k{font-size:12px;color:var(--ink-2);margin-bottom:4px} .stack.big{height:20px}
+td.up{color:var(--good-text)} td.down{color:var(--critical-text)}
+details.gloss{margin:10px 0 4px} details.gloss summary{font-size:12.5px} details.gloss table{margin-top:6px;font-size:12.5px} details.gloss .cap{font-size:12px;color:var(--muted);margin:6px 0 0}
+/* coglet tree */
+.cg-wrap{position:relative;background:var(--surface);border-radius:8px;border:1px solid var(--grid);padding:6px;overflow-x:auto}
+.cg{display:block;font-family:var(--font);overflow:visible;max-width:none} .cg.fit{width:100%;height:auto}
+.cg-band{fill:var(--surface-2);opacity:.5} .cg-band.q{fill:var(--accent);opacity:.08}
+.cg-tedge{fill:none;stroke:var(--axis);stroke-width:1.3}
+.cg-tedge.scope{stroke:var(--ink-2);stroke-width:1.6} .cg-tedge.to-selected{stroke:var(--accent)} .cg-tedge.to-absent{stroke-dasharray:3 3}
+.cg-tedge.sum,.cg-tedge.leaf{stroke:var(--accent-ink)} .cg-tedge.ek-ContextFallback{stroke-dasharray:4 3;stroke:var(--warm)}
+.cg-box rect{fill:var(--surface-2);stroke:var(--axis);stroke-width:1} .cg-box text{font-size:11px;fill:var(--ink-2)}
+.cg-box.query rect{fill:var(--ink);stroke:var(--ink)} .cg-box.query text{fill:var(--page);font-weight:600} .cg-box.query .cg-qscope{font-size:9.5px;font-weight:400;fill:var(--muted)}
+.cg-box.scope rect{stroke:var(--ink-2)} .cg-box.scope.q rect{fill:var(--accent);fill-opacity:.12;stroke:var(--accent)} .cg-box.scope.q text{fill:var(--accent-ink);font-weight:600}
+.cg-box.group.o-selected rect{stroke:var(--accent)} .cg-box.group.o-selected text{fill:var(--accent-ink)}
+.cg-box.group.o-absent rect{stroke-dasharray:3 3}
+.cg-box.group.o-result_limit rect{stroke:var(--warm)} .cg-box.group.o-result_limit text{fill:var(--warm-text)}
+.cg-p{font-size:9px;fill:var(--muted);font-variant-numeric:tabular-nums}
+.cg-rank{font-size:9.5px;font-weight:700;fill:#fff}
+.cg-goldring{fill:none;stroke:var(--good);stroke-width:2.5}
+.cg-shape{stroke-width:1.5}
+.o-selected .cg-shape{fill:var(--accent);stroke:var(--accent-ink)}
+.o-jev_below_threshold .cg-shape{fill:var(--neutral-bg);stroke:var(--axis)}
+.o-result_limit .cg-shape{fill:var(--warm);stroke:var(--warm-text)}
+.o-absent .cg-shape{fill:var(--surface);stroke:var(--axis);stroke-dasharray:2 2}
+.cg-sum .cg-shape{fill:var(--surface-2);stroke:var(--accent)} .cg-sum text{font-size:8px;fill:var(--accent-ink);font-weight:600}
+.cg-arc{fill:none;stroke:var(--ink-2);stroke-width:1.4} .cg-arc.superseded{stroke:var(--warm);stroke-dasharray:5 3}
+.cg-arrowhead{fill:var(--ink-2)}
+.cg-elabel{font-size:10px;fill:var(--ink-2);paint-order:stroke;stroke:var(--surface);stroke-width:3px;text-anchor:middle}
+.cg-label{font-size:10.5px;fill:var(--ink-2);font-family:var(--mono);paint-order:stroke;stroke:var(--surface);stroke-width:3px}
+.cg-label.gold{fill:var(--good-text);font-weight:600} .cg-label .mention{fill:var(--accent-ink);font-weight:400} .cg-label .p{fill:var(--muted);font-weight:400}
+.cg-node:hover .cg-shape{stroke:var(--ink);stroke-width:2.5}
+.cg-tip{position:absolute;max-width:300px;background:var(--surface);color:var(--ink);border:1px solid var(--grid);border-radius:8px;padding:8px 10px;font-size:12px;box-shadow:0 6px 24px var(--ring);pointer-events:none;z-index:5}
+.cg-tip .tx{margin:4px 0;color:var(--ink-2)}
+.cg-legend{display:flex;flex-wrap:wrap;gap:6px 14px;font-size:12px;color:var(--ink-2);margin:8px 0 2px;align-items:center}
+.cg-legend .sw{display:inline-block;width:12px;height:12px;border-radius:50%;vertical-align:-2px;margin-right:5px;border:1.5px solid var(--axis);background:var(--neutral-bg)}
+.cg-legend .sw.o-selected{background:var(--accent);border-color:var(--accent-ink)} .cg-legend .sw.o-result_limit{background:var(--warm);border-color:var(--warm-text)} .cg-legend .sw.o-absent{background:var(--surface);border-style:dashed}
+.cg-legend .sw.gold{background:transparent;border:2.5px solid var(--good)}
+.cg-legend .sw.shape{background:var(--surface-2)} .cg-legend .sw.shape.square{border-radius:2px} .cg-legend .sw.shape.diamond{border-radius:2px;transform:rotate(45deg) scale(.85)} .cg-legend .sw.shape.triangle{clip-path:polygon(50% 0,100% 100%,0 100%);border:0;background:var(--axis)} .cg-legend .sw.shape.hexagon{clip-path:polygon(25% 5%,75% 5%,100% 50%,75% 95%,25% 95%,0 50%);border:0;background:var(--axis)}
+.cg-legend .ln{display:inline-block;width:22px;height:0;border-top:2px solid var(--ink-2);vertical-align:3px;margin-right:5px}
+.cg-legend .ln.superseded{border-top-style:dashed;border-color:var(--warm)} .cg-legend .ln.tree{border-color:var(--axis)} .cg-legend .ln.mention{border-top-style:dotted;border-color:var(--accent)}
+.cg-guide{margin:6px 0 0;max-width:none}
+.cg-vbtns{display:inline-flex;border:1px solid var(--axis);border-radius:999px;overflow:hidden;vertical-align:middle;margin:0 4px 0 2px}
+.cg-vbtn{font:inherit;font-size:11.5px;line-height:1;padding:4px 10px;border:0;background:var(--surface);color:var(--ink-2);cursor:pointer} .cg-vbtn.on{background:var(--ink);color:var(--page)} .cg-vbtn:hover:not(.on){background:var(--neutral-bg)}
+.cg-bandhdr{font-size:11.5px;font-weight:600;fill:var(--ink-2)} .cg-bandhdr.q{fill:var(--accent-ink)} .cg-bandhdr .gl{font-weight:400;fill:var(--muted)}
+.cg-empty{font-size:11px;fill:var(--muted);font-style:italic}
+.cg-card .bg{fill:var(--surface);stroke:var(--grid);stroke-width:1} .cg-card:hover .bg{stroke:var(--ink)} .cg-card.gold .bg{stroke:var(--good);stroke-width:1.5} .cg-card.other .bg{stroke-dasharray:4 3;stroke:var(--axis)}
+.cg-card .id{font-family:var(--mono);font-size:10.5px;fill:var(--ink)} .cg-card .id.tight{font-size:9.6px} .cg-card .nm{font-size:9.5px;fill:var(--muted)} .cg-card .nm .mention{fill:var(--accent-ink)}
+.cg-mini line{stroke:var(--accent-ink);stroke-width:1} .cg-mini line.ek-ContextFallback{stroke:var(--warm);stroke-dasharray:3 2} .cg-mini .more{font-size:8px;fill:var(--muted)}
+.cg-legend .sw.card{border-radius:3px;background:var(--surface);border-color:var(--grid)} .cg-legend .sw.card.other{border-style:dashed;border-color:var(--axis)} .cg-legend .sw.p{border:0;background:transparent;width:auto;height:auto;font-size:10px;color:var(--muted);font-family:var(--mono)} .cg-legend .sw.p::before{content:".69"}
+.badge{display:inline-flex;align-items:center;gap:4px;font-size:12px;padding:1px 8px;border-radius:999px;white-space:nowrap;border:1px solid transparent}
+.b-hit_all{background:var(--good-bg);color:var(--good-text)}
+.b-hit_partial{background:var(--warn-bg);color:var(--warn-text)}
+.b-miss{background:var(--critical-bg);color:var(--critical-text)}
+.b-empty_correct{background:var(--good-bg);color:var(--good-text)}
+.b-empty_wrong{background:var(--warm-bg);color:var(--warm-text)}
+.b-error{background:var(--neutral-bg);color:var(--ink-2);border-color:var(--axis)}
+.b-stage{background:var(--surface-2);color:var(--ink-2);border-color:var(--grid)}
+.b-gold{background:var(--good-bg);color:var(--good-text)}
+.b-sup{background:var(--warn-bg);color:var(--warn-text)}
+.b-scope{background:var(--neutral-bg);color:var(--ink-2)}
+.b-unrel{background:var(--surface-2);color:var(--muted);border-color:var(--grid)}
+.b-missed{background:var(--critical-bg);color:var(--critical-text)}
+table{width:100%;border-collapse:collapse;font-size:13px}
+th,td{text-align:left;padding:6px 8px;border-bottom:1px solid var(--grid);vertical-align:top}
+th{font-weight:600;color:var(--ink-2);font-size:12px;white-space:nowrap}
+td.num,th.num{text-align:right;font-variant-numeric:tabular-nums}
+.tbl{overflow-x:auto}
+.cats{display:grid;grid-template-columns:minmax(140px,220px) 1fr auto;gap:6px 12px;align-items:center;font-size:12.5px}
+.cats .name{color:var(--ink-2);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.stack{display:flex;height:16px;border-radius:4px;overflow:hidden;background:var(--surface-2);min-width:0}
+.stack span{display:block;height:100%;border-right:2px solid var(--surface)}
+.stack span:last-child{border-right:0}
+.s-hit_all{background:var(--good)} .s-hit_partial{background:var(--warn)} .s-miss{background:var(--critical)} .s-empty_correct{background:#5fb85f} .s-empty_wrong{background:var(--warm)} .s-error{background:var(--axis)}
+.legend{display:flex;flex-wrap:wrap;gap:6px 14px;font-size:12px;color:var(--ink-2);margin:8px 0 0}
+.legend .sw{display:inline-block;width:11px;height:11px;border-radius:3px;vertical-align:-1px;margin-right:5px}
+.cnt{color:var(--muted);font-size:12.5px;margin:6px 0 10px}
+tr.row{cursor:pointer}
+tr.row:hover td{background:var(--surface-2)}
+tr.row.open td{background:var(--surface-2)}
+tr.detail td{background:var(--surface);padding:12px 10px 18px;border-bottom:2px solid var(--axis)}
+.det{display:grid;grid-template-columns:1fr 1fr;gap:14px 22px}
+.det .full{grid-column:1 / -1}
+.box{background:var(--surface-2);border-radius:8px;padding:10px 12px;min-width:0}
+.box h3{margin:0 0 8px;font-size:13px}
+.q{font-size:15px;margin:0 0 6px}
+.kv{display:grid;grid-template-columns:auto 1fr;gap:3px 12px;font-size:12.5px}
+.kv dt{color:var(--muted)} .kv dd{margin:0;word-break:break-word}
+ol.items{margin:0;padding-left:22px}
+ol.items li{margin:0 0 8px;word-break:break-word}
+ol.items .txt{color:var(--ink-2);font-size:12.5px;display:block;margin-top:2px}
+ul.plain{margin:0;padding-left:18px}
+ul.plain li{margin:2px 0}
+details summary{cursor:pointer;color:var(--accent-ink);font-size:12.5px}
+.ev{font-size:12.5px;margin:6px 0;padding:6px 8px;border-left:3px solid var(--grid);background:var(--surface)}
+.ev.gold{border-left-color:var(--good)}
+.ev .id{color:var(--ink-2)}
+.ev .attrs{color:var(--muted);font-size:11.5px}
+pre{white-space:pre-wrap;word-break:break-word;background:var(--surface);border:1px solid var(--grid);border-radius:6px;padding:8px;font-size:12px;margin:6px 0;max-height:220px;overflow:auto}
+.note{font-size:12.5px;color:var(--ink-2)}
+.note.warn{color:var(--warn-text);background:var(--warn-bg);padding:8px 10px;border-radius:6px}
+.manual{background:var(--surface);border-left:3px solid var(--accent);padding:8px 10px;border-radius:0 6px 6px 0;margin-top:6px;white-space:pre-wrap}
+.node{font-size:12.5px;margin:4px 0;padding:6px 8px;border-left:3px solid var(--axis);background:var(--surface);border-radius:0 6px 6px 0}
+.node.l0{border-left-color:var(--grid)} .node.l1{border-left-color:var(--accent)} .node.l2{border-left-color:var(--warm)} .node.l3{border-left-color:var(--critical)}
+.hd{display:flex;flex-wrap:wrap;gap:4px 8px;align-items:center;color:var(--ink-2);font-size:11.5px}
+.node .tx{margin-top:3px;white-space:pre-wrap;word-break:break-word}
+.b-lvl{background:var(--surface-2);color:var(--ink-2);border-color:var(--grid)}
+.b-ok{background:var(--good-bg);color:var(--good-text)} .b-no{background:var(--critical-bg);color:var(--critical-text)} .b-dim{background:var(--neutral-bg);color:var(--muted)}
+.evt{margin:6px 0 10px}
+.evt > summary{font-size:12.5px;color:var(--ink)}
+.evt > summary .mono{color:var(--ink-2)}
+.path{margin:4px 0 8px 0;padding-left:0;list-style:none}
+.path li{position:relative;padding:4px 0 4px 18px;font-size:12.5px;border-left:2px solid var(--grid);margin-left:6px}
+.path li::before{content:"";position:absolute;left:-5px;top:11px;width:8px;height:8px;border-radius:50%;background:var(--axis)}
+.path li.cov::before{background:var(--good)}
+tr.gold td{background:var(--good-bg)}
+.sub{font-size:12px;color:var(--muted)}
+.empty{color:var(--muted);font-style:italic}
+@media (max-width:720px){
+  h1{font-size:20px}
+  .det{grid-template-columns:1fr}
+  .col-sec{display:none}
+  .cats{grid-template-columns:minmax(90px,130px) 1fr auto}
+  select,input[type=search]{min-width:120px}
+}
+
+/* English labels may be longer than the original interface text. */
+h1,h2,h3,button,label,summary,.chip,.badge,.k,.kv dt{overflow-wrap:anywhere}
+button,.chip,.badge{max-width:100%;white-space:normal}
+.original-record{max-width:100%;min-width:0}.original-record pre{white-space:pre-wrap;overflow-wrap:anywhere;max-height:24rem;overflow:auto}
+@media(max-width:600px){.kv{grid-template-columns:1fr}.kv dt{white-space:normal}.kv dd{margin-bottom:.5rem}select{max-width:100%}}
+
+code{overflow-wrap:anywhere} pre code{overflow-wrap:normal}
+@media(max-width:600px){label{max-width:100%;min-width:0;flex-wrap:wrap}select{min-width:0!important;max-width:calc(100vw - 40px)!important}label select{flex-shrink:1}}
+
+.tbl .badge{white-space:nowrap;overflow-wrap:normal;max-width:none}
+</style>
+</head>
+<body>
+<div class="wrap">
+<header class="top">
+  <div>
+    <p class="eyebrow"> memeval · Case review </p>
+    <h1> Question inputs, outputs, decisions, and failures </h1>
+    <p class="lede"> Review each question's ingested memories, query, returned items, scoring rules, and same-question comparisons. Failed cases include failure stages, native details, and available analysis. Adapter traces appear only when available; common review does not depend on any particular system structure. Data is extracted by <code>scripts/build_case_review.py</code> from <code>reports/&lt;run&gt;/</code> and dataset files into <code>docs-site/cases/</code>. Page source and review data are supplied separately. Check the relevant licenses and content scope before sharing questions, answers, or traces. </p>
+    <div class="bar">
+      <label> Run <select id="run"></select></label>
+      <div id="runmeta" class="meta"></div>
+      <div id="runnote"></div>
+    </div>
+  </div>
+  <nav><a href="index.html"> ← Documentation </a> · <a href="results.html"> Result cards </a> · <a href="beam.html"> BEAM 100K overview </a></nav>
+</header>
+<p class="note">Question text, answers, traces, and historical metadata are original recorded content and retain their source language. Interface labels are English; source records are not rewritten.</p>
+<main>
+<section id="overview">
+  <h2> Decision overview </h2>
+  <p class="note" id="ovsum"></p>
+  <div class="tiles m" id="tiles"></div>
+  <div class="dist" id="dist"></div>
+  <div class="tbl"><table id="metrics"></table></div>
+  <details class="gloss" id="gloss"><summary></summary><p class="cap"> Notation: P = returned top-k evidence IDs, deduplicated in first-seen order; G = gold evidence IDs; k = top-k; I(·) = 1 if true, otherwise 0. </p><div class="tbl"><table></table></div></details>
+  <h3> Decision distribution by category </h3>
+  <div class="cats" id="cats"></div>
+  <div class="legend" id="legend"></div>
+  <p class="note" id="stages"></p>
+</section>
+<section id="cases">
+  <h2> Question list </h2>
+  <div class="bar">
+    <label> Decision <select id="f-verdict"><option value=""> All </option></select></label>
+    <label> Category <select id="f-cat"><option value=""> All </option></select></label>
+    <label> Failure stage <select id="f-stage"><option value=""> All </option></select></label>
+    <label> Search <input type="search" id="f-q" placeholder="Question ID, text, returned ID…"></label>
+    <label> Sort <select id="f-sort"><option value="suite"> Dataset order </option><option value="verdict"> Decision (worst first) </option><option value="category"> Category </option><option value="recall"> Recall ascending </option></select></label>
+  </div>
+  <p class="cnt" id="cnt"></p>
+  <div class="tbl"><table id="list"><thead><tr><th> questions </th><th class="col-sec"> Category </th><th> Decision </th><th class="num">recall</th><th class="num col-sec">MRR</th><th class="num col-sec"> Returned </th><th class="col-sec"> Failure stage </th></tr></thead><tbody></tbody></table></div>
+</section>
+</main>
+</div>
+<script src="cases/index.js"></script>
+<script>
+(function(){
+"use strict";
+const VERDICTS = ["hit_all","hit_partial","miss","empty_correct","empty_wrong","error"];
+const VLABEL = {hit_all:"✓ All evidence hit", hit_partial:"◐ Partial evidence", miss:"✗ No evidence hit", empty_correct:"✓ Correct empty result", empty_wrong:"! Unexpected return", error:"⚠ Execution failure"};
+const VSHORT = {hit_all:"All evidence hit", hit_partial:"Partial evidence", miss:"No evidence hit", empty_correct:"Correct empty result", empty_wrong:"Unexpected return", error:"Execution failure"};
+const VRANK = {error:0, miss:1, empty_wrong:2, hit_partial:3, empty_correct:4, hit_all:5};
+const STAGE = {ingest:"Ingest", retrieve:"Retrieval", bridge:"Bridge / transport", evaluator:"Evaluator", unclassified:"Unclassified"};
+const METRIC_ORDER = ["recall","mrr","ndcg","precision","hit","all_evidence","empty_result_correct"];
+const MSHORT = {recall:"recall", mrr:"MRR", ndcg:"nDCG", precision:"precision", hit:"hit", all_evidence:"all_evidence", empty_result_correct:"Correct empty result"};
+const ORIGIN_ZH = {VectorHit:"Vector match", AncestorExpansion:"Ancestor expansion", EvidenceExpansion:"Evidence expansion"};
+const OUTCOME_ZH = {selected:"Selected and returned", jev_below_threshold:"Below JEV threshold", result_limit:"Admitted but limit exceeded", candidate_cap:"Candidate cap", evidence_cap:"Evidence expansion cap", CONTEXT_BUNDLE_TOO_LARGE:"Context budget exceeded", unselected:"Not selected"};
+/* Built-in copy of the memory-only retrieval glossary (internal/scoring/glossary.go via `memeval results glossary`); used only when the run data carries no `glossary`. */
+const GLOSSARY_BUILTIN = [
+ {id:"hit",group:"Memory-only retrieval",name_zh:"Evidence hit rate",definition_zh:"At least one gold evidence item appears in top-k.",formula:"I(|P∩G|>0)",range:"[0,1]",higher_is_better:true,aggregation:"Mean over scored cases with nonempty gold; n counts non-null observations",caveats:["Sources are deduplicated in first-seen order, then limited to top-k. Evidence units are event/session as declared by the suite. Missing values are not zero."]},
+ {id:"recall",group:"Memory-only retrieval",name_zh:"Evidence recall",definition_zh:"Fraction of all gold evidence found in top-k.",formula:"|P∩G|/|G|",range:"[0,1]",higher_is_better:true,aggregation:"Mean over scored cases with nonempty gold; n counts non-null observations",caveats:["Sources are deduplicated in first-seen order, then limited to top-k. Evidence units are event/session as declared by the suite. Missing values are not zero."]},
+ {id:"mrr",group:"Memory-only retrieval",name_zh:"Reciprocal rank of first evidence",definition_zh:"Reciprocal rank of the first gold hit; zero if no hit.",formula:"1/first_hit_rank (zero if no hit)",range:"[0,1]",higher_is_better:true,aggregation:"Mean over scored cases with nonempty gold; n counts non-null observations",caveats:["Sources are deduplicated in first-seen order, then limited to top-k. Evidence units are event/session as declared by the suite. Missing values are not zero."]},
+ {id:"ndcg",group:"Memory-only retrieval",name_zh:"Normalized discounted cumulative gain",definition_zh:"Discounted gain of hits relative to the ideal ranking.",formula:"Σ I(hit_i)/log2(i+1) / Σ(j=1…min(|G|,k)) 1/log2(j+1)",range:"[0,1]",higher_is_better:true,aggregation:"Mean over scored cases with nonempty gold; n counts non-null observations",caveats:["Sources are deduplicated in first-seen order, then limited to top-k. Evidence units are event/session as declared by the suite. Missing values are not zero."]},
+ {id:"all_evidence",group:"Memory-only retrieval",name_zh:"Complete evidence rate",definition_zh:"Whether top-k contains all gold evidence.",formula:"I(G⊆P)",range:"[0,1]",higher_is_better:true,aggregation:"Mean over scored cases with nonempty gold; n counts non-null observations",caveats:["Sources are deduplicated in first-seen order, then limited to top-k. Evidence units are event/session as declared by the suite. Missing values are not zero."]},
+ {id:"precision",group:"Memory-only retrieval",name_zh:"Evidence precision",definition_zh:"Gold hits divided by returned count, computed only for exhaustive gold.",formula:"|P∩G|/|P|; zero when gold is nonempty and nothing is returned",range:"[0,1]",higher_is_better:true,aggregation:"Mean over exhaustive cases with a non-null metric",caveats:["Sources are deduplicated in first-seen order, then limited to top-k. Evidence units are event/session as declared by the suite. Missing values are not zero.","Compatibility rule: precision is null when both gold and returned sets are empty; zero when gold is empty but items are returned. Do not assume n equals planned."]},
+ {id:"empty_result_correct",group:"Memory-only retrieval",name_zh:"Correct empty-result rate",definition_zh:"Returns nothing when gold is empty and exhaustive.",formula:"I(|P|=0)",range:"[0,1]",higher_is_better:true,aggregation:"Mean only over cases with empty, exhaustive gold",caveats:["Sources are deduplicated in first-seen order, then limited to top-k. Evidence units are event/session as declared by the suite. Missing values are not zero."]},
+];
+
+// English presentation for legacy glossary records; source records remain intact.
+const hasLegacyText = value => /[\u3400-\u9fff]/.test(JSON.stringify(value||""));
+const metricDisplay = (g, fallback) => {
+  if (!hasLegacyText(g)) return g;
+  const f = fallback.find(x=>x.id===g.id);
+  const rangeLabels = {"\u5e03\u5c14\u503c":"boolean","\u975e\u8d1f\u6574\u6570":"nonnegative integer","\u975e\u8d1f\u6574\u6570\u6620\u5c04":"map of nonnegative integers"};
+  return {...g, range:rangeLabels[g.range]||String(g.range||"").replace(/\u6216/g,"or"), group:f?.group||(!hasLegacyText(g.group)?g.group:"Recorded metric"), name_zh:f?.name_zh||g.id,
+    definition_zh:f?.definition_zh||"See Original recorded content for the source definition.",
+    formula:!hasLegacyText(g.formula)?g.formula:(f?.formula||"See Original recorded content"),
+    aggregation:f?.aggregation||(!hasLegacyText(g.aggregation)?g.aggregation:"See Original recorded content"),
+    caveats:f?.caveats||((g.caveats||[]).filter(x=>!hasLegacyText(x))), _original:g};
+};
+const originalMetric = g => g?._original ? el("details",{class:"original-record"}, el("summary",{text:"Original recorded content"}), el("pre",{text:JSON.stringify(g._original,null,2)})) : null;
+
+const glossary = () => (DATA && Array.isArray(DATA.glossary) && DATA.glossary.length) ? DATA.glossary.map(g=>metricDisplay(g, GLOSSARY_BUILTIN)) : GLOSSARY_BUILTIN;
+const defOf = id => glossary().find(g => g.id === id) || null;
+const $ = (s, r) => (r||document).querySelector(s);
+function el(tag, attrs, ...kids){
+  const n = document.createElement(tag);
+  for (const [k,v] of Object.entries(attrs||{})){
+    if (v === null || v === undefined || v === false) continue;
+    if (k === "class") n.className = v; else if (k === "text") n.textContent = v; else if (k === "html") n.innerHTML = v; else n.setAttribute(k, v);
+  }
+  for (const k of kids.flat()){ if (k === null || k === undefined || k === false) continue; n.append(k.nodeType ? k : document.createTextNode(String(k))); }
+  return n;
+}
+const fmt = (v, d=3) => (v === null || v === undefined || Number.isNaN(v)) ? "—" : (typeof v === "number" ? (Number.isInteger(v) && d>0 && Math.abs(v)>=1 && !(v>=0&&v<=1) ? String(v) : Number(v).toFixed(d)) : String(v));
+const pct = (a,b) => b ? (100*a/b).toFixed(0)+"%" : "—";
+const dt = s => s ? String(s).replace("T"," ").replace(/\.\d+Z$/,"Z") : "—";
+const dur = s => (s===null||s===undefined) ? "—" : (s>=3600 ? (s/3600).toFixed(1)+" h" : s>=60 ? (s/60).toFixed(0)+" min" : s.toFixed(0)+" s");
+const ms = v => (v===null||v===undefined) ? "—" : (v>=1000 ? (v/1000).toFixed(1)+" s" : Math.round(v)+" ms");
+function badge(v){ return el("span",{class:"badge b-"+(v||"error"), text: VLABEL[v] || (v ? v : "— Not evaluated")}); }
+
+let DATA = null, EV = {};
+
+/* ---------- run selection ---------- */
+const runs = (window.MEMEVAL_CASE_RUNS||[]);
+const sel = $("#run");
+if (!runs.length && !window.MEMEVAL_CASES){ $("#tiles").append(el("div",{class:"note warn",text:"No run data (docs-site/cases/index.js is missing or empty). Generate it with scripts/build_case_review.py."})); }
+const sutLabel = r => typeof r.sut === "string" ? r.sut : [r.sut?.name, r.sut?.variant].filter(Boolean).join(" / ");
+/* A run entry carries `file` (cases/<file>, loaded in-page) and/or `url` (a page that holds that run). */
+const runKey = r => r.file || ("url:"+r.name);
+for (const r of runs){ sel.append(el("option",{value:runKey(r), text:`${r.name} · ${sutLabel(r)} · ${r.generated_at? r.generated_at.slice(0,10):""}`})); }
+sel.addEventListener("change", () => loadRun(sel.value));
+function currentEntry(){ const d = window.MEMEVAL_CASES; return d && d.run ? runs.find(r=>r.name===d.run.name) : null; }
+function runFailed(entry, why){
+  const cur = currentEntry(); if (cur) sel.value = runKey(cur);
+  const note = el("div",{class:"note warn"}, `Run ${entry.name}: ${why}.`);
+  if (entry.url) note.append(" This run is available on another page:", el("a",{href:entry.url, target:"_blank", rel:"noopener", text:"Open "+entry.name+" ↗"}));
+  $("#runnote").replaceChildren(note);
+}
+function loadRun(key){
+  const entry = runs.find(r=>runKey(r)===key); if (!entry) return;
+  const d = window.MEMEVAL_CASES;
+  if (d && d.run && d.run.name === entry.name){ render(d); return; }
+  if (!entry.file){ runFailed(entry, "Data is not embedded here"); return; }
+  const s = document.createElement("script"); s.src = "cases/"+entry.file;
+  s.onload = () => { const got = window.MEMEVAL_CASES; if (got && got.run && got.run.name === entry.name) render(got); else runFailed(entry, "cases/"+entry.file+" Loaded data is "+(got && got.run ? got.run.name : "empty")); };
+  s.onerror = () => runFailed(entry, "cases/"+entry.file+" Loading failed");
+  document.head.append(s);
+}
+if (window.MEMEVAL_CASES){ render(window.MEMEVAL_CASES); const r = currentEntry(); if (r) sel.value = runKey(r); }
+else if (runs.length){ loadRun(runKey(runs[0])); }
+
+/* ---------- rendering ---------- */
+function render(d){
+  DATA = d; EV = d.events || {}; $("#runnote").replaceChildren();
+  const run = d.run || {}, sm = d.summary || {};
+  $("#runmeta").replaceChildren(...[
+    el("span",{class:"chip",text:`${run.sut?.name||"?"} / ${run.sut?.variant||"—"}`}),
+    el("span",{class:"chip",text:`Dataset ${run.suite?.path?.split("/").pop()||run.suite?.id||"—"}`}),
+    el("span",{class:"chip",text:`${run.mode||"—"} · ${run.reset_policy||"—"} · top-k ${run.top_k??"—"}`}),
+    el("span",{class:"chip",text:`seed ${String(run.run_seed||"").slice(0,8)}…`}),
+    el("span",{class:"chip",text:`Started ${dt(run.started_at_utc)} · Wall time ${dur(run.wall_seconds)}`}),
+    run.resume_count ? el("span",{class:"chip",text:`resume ×${run.resume_count}(failed cases rerun)`}) : null,
+    run.trace_text ? null : el("span",{class:"chip",text:"Returned text unavailable (--trace-text was not enabled)"}),
+    run.sut_usage ? el("span",{class:"chip",text:`Native calls ${run.sut_usage.calls} · Input ${(run.sut_usage.input_tokens||0).toLocaleString()} tokens`}) : null,
+    el("span",{class:"chip mono",text: run.report_path||""})].filter(Boolean));
+  // overview: one line of counts, then the metric values (with their definitions), then the verdict distribution
+  const bv = sm.by_verdict||{}, total = sm.total||d.cases.length;
+  const scored = (sm.by_status||{}).scored ?? d.cases.filter(c=>c.status==="scored").length;
+  const nGold = d.cases.filter(c=>c.status==="scored" && (c.gold?.evidence_ids||[]).length).length, nEmpty = d.cases.filter(c=>c.status==="scored" && !(c.gold?.evidence_ids||[]).length).length;
+  $("#ovsum").textContent = `${total} questions, ${scored} questions scored ${bv.error ? `, ${bv.error} execution failures` : ""}. Of these, ${nGold} have nonempty gold (recall / MRR / nDCG / hit / all_evidence),${nEmpty} have empty gold (correct empty-result rate); precision covers both groups.`;
+  const ctrls = d.controls||[];
+  const cName = c => c.sut?.name ? c.sut.name + (c.sut.variant && c.sut.variant!==c.sut.name ? " "+c.sut.variant : "") : (c.name||"Comparison");
+  const have = METRIC_ORDER.filter(k => { const m=(sm.metrics||{})[k]; return m && m.mean!=null && (m.n??1)>0; });
+  $("#tiles").replaceChildren(...have.map(k => { const m = sm.metrics[k], g = defOf(k)||{};
+    const ctrlTxt = ctrls.map(c => { const cm=(c.metrics||{})[k]; return cm && cm.mean!=null ? `${cName(c)} ${fmt(cm.mean)}` : null; }).filter(Boolean).join(" · ");
+    return el("div",{class:"tile m", title: [g.aggregation, ...(g.caveats||[])].filter(Boolean).join("\n")},
+      el("div",{class:"k"}, el("span",{text:g.name_zh||k}), el("span",{class:"mono id",text:MSHORT[k]||k})),
+      el("div",{class:"v",text:fmt(m.mean)}),
+      el("div",{class:"s",text:`n = ${m.n??"—"}${ctrlTxt ? " · Comparison "+ctrlTxt : ""}`}),
+      g.definition_zh ? el("div",{class:"d",text:g.definition_zh}) : null,
+      g.formula ? el("div",{class:"f mono",text:g.formula}) : null);
+  }));
+  const dist = $("#dist"); dist.replaceChildren();
+  const vs = VERDICTS.filter(v => bv[v]);
+  if (vs.length){
+    const bar = el("div",{class:"stack big"}); for (const v of vs) bar.append(el("span",{class:"s-"+v, style:`width:${100*bv[v]/total}%`, title:`${VSHORT[v]} ${bv[v]}`}));
+    dist.append(el("div",{class:"k",text:`Decision distribution (${total} questions)`}), bar, el("div",{class:"legend"}, ...vs.map(v=>el("span",{}, el("span",{class:"sw s-"+v}), `${VSHORT[v]} ${bv[v]}(${pct(bv[v],total)})`))));
+  }
+  // comparison with controls (only when there is a control run)
+  const mt = $("#metrics"); mt.replaceChildren();
+  if (ctrls.length && have.length){
+    mt.append(el("thead",{}, el("tr",{}, el("th",{text:"Same-question comparison"}), el("th",{class:"num",text: run.sut?.name||"This run"}), ...ctrls.map(c=>el("th",{class:"num",text:cName(c)})), ...ctrls.map(c=>el("th",{class:"num",text:"Δ vs. "+cName(c)})), el("th",{class:"num",text:"n"}))));
+    const tb = el("tbody");
+    for (const k of have){ const m = sm.metrics[k], g = defOf(k)||{};
+      tb.append(el("tr",{}, el("td",{}, el("span",{text:g.name_zh||k}), el("span",{class:"sub mono",style:"margin-left:6px",text:MSHORT[k]||k})), el("td",{class:"num",text:fmt(m.mean)}),
+        ...ctrls.map(c=>el("td",{class:"num",text:fmt((c.metrics||{})[k]?.mean)})),
+        ...ctrls.map(c=>{ const cm=(c.metrics||{})[k]; const dl = cm && cm.mean!=null ? m.mean-cm.mean : null; return el("td",{class:"num "+(dl==null?"":dl>=0?"up":"down"), text: dl==null ? "—" : (dl>=0?"+":"")+dl.toFixed(3)}); }),
+        el("td",{class:"num",text:String(m.n??"—")})));
+    }
+    mt.append(tb);
+  }
+  // glossary of the metrics actually shown
+  const gl = $("#gloss"), gt = gl.querySelector("table"); gt.replaceChildren();
+  if (have.length){
+    gl.hidden = false;
+    gl.querySelector("summary").textContent = `How metrics are computed: ${have.length} metric definitions, formulas, and aggregation rules (${DATA.glossary && DATA.glossary.length ? "from memeval results glossary" : "Built-in copy matching internal/scoring/glossary.go"})`;
+    gt.append(el("thead",{}, el("tr",{}, ...["Metric","Definition","Formula","Aggregation","Notes"].map(h=>el("th",{text:h})))),
+      el("tbody",{}, ...have.map(k=>{ const g = defOf(k)||{id:k}; return el("tr",{}, el("td",{}, el("div",{text:g.name_zh||k}), el("div",{class:"sub mono",text:k})), el("td",{}, g.definition_zh||"—", originalMetric(g)), el("td",{class:"mono",text:g.formula||"—"}), el("td",{text:g.aggregation||"—"}), el("td",{text:(g.caveats||[]).join("; ")||"—"})); })));
+  } else gl.hidden = true;
+  // categories
+  const cats = $("#cats"); cats.replaceChildren();
+  const bc = sm.by_category||{};
+  for (const name of Object.keys(bc).sort()){
+    const c = bc[name], n = c.total||0;
+    const stack = el("div",{class:"stack",title:name});
+    for (const v of VERDICTS){ const k = (c.verdicts||{})[v]||0; if (k) stack.append(el("span",{class:"s-"+v, style:`width:${100*k/n}%`, title:`${VSHORT[v]} ${k}`})); }
+    cats.append(el("div",{class:"name",title:name,text:name}), stack, el("div",{class:"mono",text:`${n} questions · recall ${fmt(c.recall_mean)}`}));
+  }
+  $("#legend").replaceChildren(...VERDICTS.map(v=>el("span",{}, el("span",{class:"sw s-"+v}), VSHORT[v])));
+  const st = Object.fromEntries(Object.entries(sm.error_stages||{}).filter(([,v])=>v)); let stText = Object.keys(st).length ? "Failure stage:" + Object.entries(st).map(([k,v])=>`${STAGE[k]||k} ${v}`).join(", ") : "";
+  if (sm.work_mapping_mismatches) stText += `　Work trace contains ${sm.work_mapping_mismatches} ingested items unmatched to dataset events by either order or text hash.`;
+  $("#stages").textContent = stText; $("#stages").hidden = !stText;
+  // filters
+  const fv = $("#f-verdict"), fc = $("#f-cat"), fs = $("#f-stage");
+  fv.replaceChildren(el("option",{value:"",text:"All"}), ...VERDICTS.filter(v=>bv[v]).map(v=>el("option",{value:v,text:`${VSHORT[v]} (${bv[v]})`})));
+  fc.replaceChildren(el("option",{value:"",text:"All"}), ...Object.keys(bc).sort().map(k=>el("option",{value:k,text:`${k} (${bc[k].total})`})));
+  fs.replaceChildren(el("option",{value:"",text:"All"}), ...Object.keys(st).map(k=>el("option",{value:k,text:`${STAGE[k]||k} (${st[k]})`}))); fs.closest("label").hidden = !Object.keys(st).length;
+  for (const id of ["#f-verdict","#f-cat","#f-stage","#f-sort"]) $(id).onchange = list;
+  $("#f-q").oninput = list;
+  list();
+  const h = location.hash.replace(/^#case-/,""); if (h && location.hash.startsWith("#case-")) setTimeout(() => { const row = document.getElementById("case-"+h); if (row){ openRow(row); row.scrollIntoView({block:"start"}); } }, 0); // deferred: runs after the helpers below are initialized
+}
+
+function list(){
+  const d = DATA; if (!d) return;
+  const v = $("#f-verdict").value, c = $("#f-cat").value, s = $("#f-stage").value, q = $("#f-q").value.trim().toLowerCase(), sort = $("#f-sort").value;
+  let rows = d.cases.map((x,i)=>({x,i})).filter(({x}) => (!v || x.verdict===v) && (!c || x.category===c) && (!s || (x.error&&x.error.stage===s)) &&
+    (!q || x.case_id.toLowerCase().includes(q) || (x.input?.query||"").toLowerCase().includes(q) || (x.output?.retrieved_source_ids||[]).some(id=>id.toLowerCase().includes(q)) || (x.gold?.evidence_ids||[]).some(id=>id.toLowerCase().includes(q))));
+  if (sort==="verdict") rows.sort((a,b)=> (VRANK[a.x.verdict]-VRANK[b.x.verdict]) || (a.i-b.i));
+  else if (sort==="category") rows.sort((a,b)=> a.x.category.localeCompare(b.x.category) || (a.i-b.i));
+  else if (sort==="recall") rows.sort((a,b)=> ((a.x.metrics?.recall ?? 9) - (b.x.metrics?.recall ?? 9)) || (a.i-b.i));
+  $("#cnt").textContent = `${rows.length} / ${d.cases.length} questions`;
+  const tb = $("#list tbody"); tb.replaceChildren();
+  for (const {x} of rows){
+    const tr = el("tr",{class:"row", id:"case-"+x.case_id},
+      el("td",{}, el("div",{class:"mono",text:x.case_id}), el("div",{class:"note",text: (x.input?.query||"").slice(0,90)+((x.input?.query||"").length>90?"…":"")})),
+      el("td",{class:"col-sec note",text:x.category}),
+      el("td",{}, badge(x.verdict)),
+      el("td",{class:"num",text: x.gold?.evidence_ids?.length ? fmt(x.metrics?.recall,2) : "Empty gold"}),
+      el("td",{class:"num col-sec",text: fmt(x.metrics?.mrr,2)}),
+      el("td",{class:"num col-sec",text: x.status==="scored" ? String((x.output?.retrieved_source_ids||[]).length) : "—"}),
+      el("td",{class:"col-sec"}, x.error ? el("span",{class:"badge b-stage",text:STAGE[x.error.stage]||x.error.stage}) : ""));
+    tr.dataset.case = x.case_id;
+    tr.addEventListener("click", () => toggleRow(tr));
+    tb.append(tr);
+  }
+}
+function toggleRow(tr){ if (tr.classList.contains("open")) closeRow(tr); else openRow(tr); }
+function closeRow(tr){ tr.classList.remove("open"); const n = tr.nextElementSibling; if (n && n.classList.contains("detail")) n.remove(); }
+function openRow(tr){
+  const x = DATA.cases.find(c=>c.case_id===tr.dataset.case); if (!x) return;
+  tr.classList.add("open");
+  const det = el("tr",{class:"detail"}, el("td",{colspan:"7"}, detail(x)));
+  tr.after(det);
+  history.replaceState(null, "", "#case-"+x.case_id);
+}
+
+/* ---------- detail ---------- */
+function evAttrs(id){ const e = EV[id]; if (!e) return null; const a = e.attributes||{}; return {type:a.type, scope:a.scope||[], status:a.epistemic_status, sup:a.superseded_by, aliases:a.aliases||[], name:a.canonical_name}; }
+function classify(id, x){
+  const gold = new Set(x.gold?.evidence_ids||[]);
+  if (gold.has(id)) return ["gold","gold ✓","b-gold"];
+  const a = evAttrs(id); if (!a) return ["unknown","Unknown event","b-unrel"];
+  if (a.sup || (a.status && a.status!=="active")) return ["sup","Superseded","b-sup"];
+  const cs = x.input?.scope||[]; if (a.scope.length && !a.scope.some(s=>s.startsWith("user:universal")) && cs.length && !a.scope.some(s=>cs.includes(s))) return ["scope","Outside scope","b-scope"];
+  return ["unrel","Irrelevant","b-unrel"];
+}
+function eventLine(id, isGold){
+  const e = EV[id]; const a = evAttrs(id)||{};
+  return el("div",{class:"ev"+(isGold?" gold":"")},
+    el("div",{}, el("span",{class:"mono id",text:id}), isGold ? el("span",{class:"badge b-gold",style:"margin-left:6px",text:"gold"}) : null),
+    el("div",{text: e ? e.content : "(event absent from dataset)"}),
+    el("div",{class:"attrs",text: [a.type, (a.scope||[]).join(","), a.status, a.sup?("superseded_by "+a.sup):null, a.aliases?.length?("Alias "+a.aliases.join("/")):null].filter(Boolean).join(" · ")}));
+}
+function detail(x){
+  const gold = x.gold?.evidence_ids||[], ret = x.output?.retrieved_source_ids||[], items = x.output?.items;
+  const wrap = el("div",{class:"det"});
+  // input
+  const inp = el("div",{class:"box"}, el("h3",{text:"Inputs"}), el("p",{class:"q",text:x.input?.query||"—"}),
+    el("dl",{class:"kv"}, el("dt",{text:"user"}), el("dd",{text:x.input?.user||"—"}), el("dt",{text:"scope"}), el("dd",{text:(x.input?.scope||[]).join(", ")||"—"}), el("dt",{text:"Category"}), el("dd",{text:x.category}), el("dt",{text:"gold"}), el("dd",{}, gold.length ? el("span",{class:"mono",text:gold.join(", ")}) : el("span",{text:`Empty (exhaustive=${x.gold?.exhaustive}): no memory should be returned`})), el("dt",{text:"episode"}), el("dd",{class:"mono",text:`${x.episode_id} · cutoff ${x.cutoff}`})));
+  const written = x.input?.events_written||[];
+  const dts = el("details",{}, el("summary",{text:`Ingested memories: ${written.length} events (gold highlighted)`}));
+  const gset = new Set(gold);
+  for (const id of written) dts.append(eventLine(id, gset.has(id)));
+  inp.append(dts);
+  wrap.append(inp);
+  // output
+  const out = el("div",{class:"box"}, el("h3",{text:"Output"}));
+  if (x.status!=="scored"){ out.append(el("p",{class:"empty",text:"No output: execution failed (see failure details below)."})); }
+  else if (!ret.length && !(items&&items.length)){
+    out.append(el("p",{class:"note", text: gold.length ? "Empty return with nonempty gold." : "Empty return matches empty gold."}));
+    if (gold.length){ out.append(el("h3",{text:"Missing gold"})); for (const g of gold) out.append(eventLine(g,true)); }
+  }
+  else {
+    const ol = el("ol",{class:"items"});
+    const rows = (items && items.length) ? items.map((it,i)=>({rank:it.rank||i+1, id:it.id, text:it.text, score:it.score, sids:it.source_ids||[]})) : ret.map((id,i)=>({rank:i+1, id, text: EV[id]?.content, score:null, sids:[id]}));
+    for (const it of rows){
+      const ids = it.sids.length ? it.sids : [it.id];
+      const marks = ids.map(id=>{ const [k,l,cls]=classify(id,x); return el("span",{class:"badge "+cls,style:"margin-left:6px",text:l}); });
+      ol.append(el("li",{}, el("span",{class:"mono",text: ids.join(", ")}), ...marks, it.score!=null ? el("span",{class:"note",text:` · score ${fmt(it.score,3)}`}) : null, it.text ? el("span",{class:"txt",text: it.text.length>400 ? it.text.slice(0,400)+"…" : it.text}) : null));
+    }
+    out.append(ol);
+    if (!(items&&items.length)) out.append(el("p",{class:"note",text:"Displayed text is the original dataset event. This run did not enable --trace-text, so actual SUT-returned text was not recorded."}));
+    const missed = gold.filter(g=>!ret.includes(g));
+    if (missed.length){ out.append(el("h3",{text:"Missing gold"})); for (const g of missed) out.append(eventLine(g,true)); }
+    out.append(el("p",{class:"note",text:`Returned ${ret.length} items · ${x.output?.returned_chars??"—"} characters`}));
+  }
+  wrap.append(out);
+  wrap.append(cogletGraph(x));
+  // metrics + timings: only the metrics that apply to this case (gold non-empty vs empty), nothing that is null
+  const m = x.metrics||{}, t = x.timings||{}, hasGold = (x.gold?.evidence_ids||[]).length>0;
+  const mrows = [["Decision", badge(x.verdict)]]; if (x.status!=="scored") mrows.push(["State", x.status]);
+  for (const k of (hasGold ? ["recall","mrr","ndcg","precision","hit","all_evidence"] : ["empty_result_correct","precision"])){
+    if (m[k]==null) continue; const g = defOf(k)||{};
+    mrows.push([`${g.name_zh||k} ${MSHORT[k]||k}`, el("span",{title:[g.definition_zh,g.formula].filter(Boolean).join("　"), text: ["hit","all_evidence","empty_result_correct"].includes(k) ? (m[k] ? "1 · Yes" : "0 · No") : fmt(m[k])})]);
+  }
+  if (!hasGold) mrows.push(["recall / MRR / nDCG", el("span",{class:"empty",text:"Not applicable: gold is empty"})]);
+  for (const [k,v] of [["Ingest",t.ingest_ms],["Ready",t.ready_ms],["Query",t.query_ms],["Reset",t.reset_ms]]) if (v!=null) mrows.push([k, ms(v)]);
+  wrap.append(el("div",{class:"box"}, el("h3",{text:"Metrics and latency"}), el("dl",{class:"kv"}, ...mrows.map(([k,v])=>[el("dt",{text:k}), el("dd",{}, v)]).flat())));
+  // controls
+  const ctrls = x.controls||{};
+  const cb = el("div",{class:"box"}, el("h3",{text:"Same-question comparison"}));
+  if (!Object.keys(ctrls).length) cb.append(el("p",{class:"empty",text:"No comparison run with matching conditions."}));
+  for (const [name,c] of Object.entries(ctrls)){
+    const ids = c.retrieved_source_ids||[];
+    cb.append(el("div",{}, el("strong",{text:name}), " ", badge(c.verdict), el("span",{class:"note",text:` recall ${fmt(c.metrics?.recall,2)} · MRR ${fmt(c.metrics?.mrr,2)} · Returned ${ids.length}`})),
+      el("div",{class:"note mono",style:"margin:2px 0 8px"}, ...(ids.length ? ids.map(id=>{ const [k,l,cls]=classify(id,x); return el("span",{class:"badge "+cls,style:"margin:2px 4px 2px 0",text:id}); }) : [el("span",{class:"empty",text:"Empty return"})])));
+  }
+  wrap.append(cb);
+  // error
+  if (x.error){
+    const e = x.error, eb = el("div",{class:"box full"}, el("h3",{}, "Failure · Stage:", el("span",{class:"badge b-stage",text:STAGE[e.stage]||e.stage}), e.rpc_method ? el("span",{class:"note",text:` · RPC ${e.rpc_method}`}) : null),
+      el("dl",{class:"kv"}, el("dt",{text:"error_type"}), el("dd",{class:"mono",text:e.type||"—"})), e.detail ? el("pre",{text:e.detail}) : null);
+    const nat = e.native;
+    if (nat){
+      if (nat.batch_states) eb.append(el("p",{class:"note",text:"Event states within batch:" + Object.entries(nat.batch_states).map(([k,v])=>`${k} ${v}`).join(", ")}));
+      for (const f of nat.failed_events||[]){
+        eb.append(el("div",{class:"ev"}, el("div",{}, el("strong",{text:`Failed event #${(f.index??"?")+1}`}), " ", f.source_id ? el("span",{class:"mono",text:f.source_id}) : el("span",{class:"empty",text:"(cannot map to source_id)"}), " ", el("span",{class:"badge b-error",text:f.state||"Failed"}), " ", el("span",{class:"badge b-missed",text:f.kind||"?"})),
+          el("div",{text:f.message||""}), f.source_id && EV[f.source_id] ? el("div",{class:"attrs",text:"Original event text:"+EV[f.source_id].content}) : null,
+          el("div",{class:"attrs mono",text:`operation ${f.operation_id||"—"} · event ${f.event_id||"—"}`})));
+        const sf = f.summary_failure;
+        if (sf){
+          const tbl = el("table",{}, el("thead",{}, el("tr",{}, ...["Attempt","Candidate type","Stage","Output tokens","Output bytes","error_code","reason_hash"].map(h=>el("th",{text:h})))));
+          const tb = el("tbody");
+          for (const a of sf.attempts||[]) tb.append(el("tr",{}, el("td",{text:String(a.ordinal)}), el("td",{text:a.candidate_kind||"—"}), el("td",{text:a.stage||"—"}), el("td",{class:"num",text:fmt(a.output_tokens,0)}), el("td",{class:"num",text:fmt(a.output_bytes,0)}), el("td",{class:"mono",text:a.error_code||"—"}), el("td",{class:"mono",text:(a.reason_hash||"—").slice(0,12)})));
+          tbl.append(tb);
+          eb.append(el("p",{class:"note",text:`Summary failed: all ${sf.max_tokens} tokens${sf.max_bytes?` / ${sf.max_bytes} bytes`:""}, ${(sf.attempts||[]).length} candidate attempts failed. ExactCopy/Whitespace use local proof; ExtractivePrefix/Model require independent verification. Only reason hashes are included here, not original audit text.`}), el("div",{class:"tbl"},tbl));
+        }
+        const bf = f.budget_failure;
+        if (bf) eb.append(el("p",{class:"note",text:`Budget failed: ${bf.role} / ${bf.model} · Stage ${bf.phase} · Input ${bf.input} ${bf.unit} + reserved output ${bf.reserved_output} > limit ${bf.limit}`}));
+      }
+    }
+    wrap.append(eb);
+  }
+  // coglet work trace
+  wrap.append(workBuild(x), workSearch(x));
+  // attempts
+  const at = x.attempts||[];
+  if (at.length>1){
+    const tbl = el("table",{}, el("thead",{}, el("tr",{}, el("th",{text:"Attempt"}), el("th",{text:"Source"}), el("th",{text:"State"}), el("th",{text:"Error"}))), el("tbody",{}, ...at.map(a=>el("tr",{}, el("td",{text:a.pass===0?"Initial attempt":`resume ${a.pass}`}), el("td",{class:"mono",text:a.source}), el("td",{text:a.status}), el("td",{class:"mono",text:(a.error_type?a.error_type+" · ":"")+(a.error_detail||"").slice(0,160)})))));
+    wrap.append(el("div",{class:"box full"}, el("h3",{text:"Attempt history"}), el("div",{class:"tbl"},tbl)));
+  }
+  // analysis
+  const an = x.analysis||{};
+  const ab = el("div",{class:"box full"}, el("h3",{text:"Original recorded content: analysis"}));
+  if ((an.auto||[]).length) ab.append(el("ul",{class:"plain"}, ...an.auto.map(s=>el("li",{text:s}))));
+  if (an.manual) ab.append(el("div",{class:"manual",text:an.manual})); else ab.append(el("p",{class:"empty",text:"No manual per-case analysis yet."}));
+  wrap.append(ab);
+  return wrap;
+}
+
+/*  */
+const TYPE_SHAPE = {entity:"circle", preference:"square", decision:"diamond", open_question:"triangle", relation:"hexagon"};
+const TYPE_ZH = {entity:"Entity", preference:"Preference", decision:"Decision", open_question:"Open question", relation:"Relationship", fact:"Fact", summary:"Summary node"};
+const STATUS_ZH = {active:"", superseded:"Superseded", inferred:"Inference", exploratory:"Exploring", archived:"Archived", resolved:"Resolved"};
+const SCOPE_GLOSS = sc => { const i = String(sc).indexOf(":"), kind = i < 0 ? String(sc) : sc.slice(0, i), name = i < 0 ? "" : sc.slice(i+1);
+  if (kind === "user" && name === "universal") return "User scope, all domains"; if (kind === "domain") return name ? `Domain ${name}` : "Domain"; if (kind === "user") return `User ${name}`; return name ? `${kind} ${name}` : ""; };
+function shapePath(shape, r){
+  switch(shape){
+    case "square": return `M${-r},${-r}h${2*r}v${2*r}h${-2*r}z`;
+    case "diamond": return `M0,${-r*1.3}L${r*1.3},0L0,${r*1.3}L${-r*1.3},0z`;
+    case "triangle": return `M0,${-r*1.3}L${r*1.25},${r*0.95}L${-r*1.25},${r*0.95}z`;
+    case "hexagon": { const p=[]; for (let i=0;i<6;i++){ const a=Math.PI/3*i-Math.PI/6; p.push(`${(r*1.12*Math.cos(a)).toFixed(2)},${(r*1.12*Math.sin(a)).toFixed(2)}`); } return "M"+p.join("L")+"z"; }
+    default: return `M${-r},0a${r},${r} 0 1,0 ${2*r},0a${r},${r} 0 1,0 ${-2*r},0z`;
+  }
+}
+const svgEl = (tag, attrs, ...kids) => { const n = document.createElementNS("http://www.w3.org/2000/svg", tag); for (const [k,v] of Object.entries(attrs||{})){ if (v===null||v===undefined||v===false) continue; if (k==="text") n.textContent = v; else n.setAttribute(k, v); } for (const k of kids.flat()) if (k) n.append(k); return n; };
+function aliasMentions(query, id){
+  const a = evAttrs(id); if (!a) return [];
+  const q = " " + String(query||"").toLowerCase().replace(/[^\p{L}\p{N}]+/gu, " ") + " ";
+  const names = [a.name, ...(a.aliases||[])].filter(Boolean).map(v=>String(v).toLowerCase().replace(/[_\s]+/g," ").trim()).filter(v=>v.length>=3);
+  return [...new Set(names.filter(n => q.includes(" "+n+" ")))];
+}
+const textW = (t, lat=6.3, cjk=11) => [...String(t)].reduce((a,ch)=>a+(ch.charCodeAt(0)>255?cjk:lat),0);
+const fitStr = (t, maxPx, lat=6.3, cjk=11) => { let w = 0, out = ""; for (const ch of String(t)){ const cw = ch.charCodeAt(0)>255 ? cjk : lat; if (w + cw > maxPx - lat) return out + "…"; w += cw; out += ch; } return out; };
+// the glyph every view draws for one coglet: type shape, outcome fill (via the parent's o-* class), gold ring, rank
+function eventGlyph(n, r){ const shape = TYPE_SHAPE[n.type]||"circle", g = svgEl("g",{class:"cg-glyph"});
+  if (n.gold) g.append(svgEl("path",{class:"cg-goldring", d:shapePath(shape, r+3.5)}));
+  g.append(svgEl("path",{class:"cg-shape", d:shapePath(shape, r)}));
+  if (n.c && n.c.rank!=null) g.append(svgEl("text",{class:"cg-rank", "text-anchor":"middle", y:"3.3", text:String(n.c.rank)}));
+  return g; }
+
+function cogletModel(x){
+  const s = (x.work && x.work.search) || null, written = x.input?.events_written || [];
+  const gold = new Set(x.gold?.evidence_ids||[]), qScope = x.input?.scope || [], user = x.input?.user || null;
+  const thr = s ? (s.jev_threshold ?? s.settings?.jev_threshold ?? null) : null;
+  const candByNode = new Map(), candBySrc = new Map();
+  for (const c of (s?.candidates||[])){ if (c.node && !candByNode.has(c.node)) candByNode.set(c.node, c); if (c.source_id && !candBySrc.has(c.source_id)) candBySrc.set(c.source_id, c); }
+  // CogletNet nodes per written event (build trace): leaves at level 0, summaries above them
+  const tn = new Map();
+  for (const b of (x.work?.build||[])) for (const n of (b.nodes||[])) tn.set(n.node, {id:n.node, level:n.level??0, source_id:b.source_id||null, parent:n.edge?.parent||null, edgeKind:n.edge?.kind||null, inputs:n.inputs||[], span:n.span||null, text_hash:n.text_hash||null, kind:n.kind||"", children:[]});
+  for (const n of tn.values()) for (const ch of n.inputs){ const c = tn.get(ch); if (c && !c.parent) c.parent = n.id; }
+  for (const n of tn.values()) if (n.parent && tn.has(n.parent)) tn.get(n.parent).children.push(n);
+  const bySrc = new Map(); for (const n of tn.values()) if (n.source_id){ if (!bySrc.has(n.source_id)) bySrc.set(n.source_id, []); bySrc.get(n.source_id).push(n); }
+  const OUT_ORDER = ["selected","result_limit","jev_below_threshold","candidate_cap","evidence_cap","CONTEXT_BUNDLE_TOO_LARGE","unselected","absent"];
+  const pol = s?.settings?.selection_policy, polKind = pol ? (typeof pol === "string" ? pol : pol.kind) : null;
+  const rejected = polKind === "relative_maximum" || polKind === "relative-maximum" ? "JEV below relative cutoff" : polKind === "top_k" || polKind === "top-k" ? "Outside JEV top-k" : (thr!=null ? `JEV<${thr}` : "JEV rejected");
+  const OUT_SHORT = {selected:"Selected", result_limit:"Limit exceeded", jev_below_threshold: rejected, candidate_cap:"Candidate cap", evidence_cap:"Expansion cap", CONTEXT_BUNDLE_TOO_LARGE:"Context budget exceeded", unselected:"Not selected", absent: s ? "Not a candidate" : "Ingest"};
+  const wrapSub = r => ({kind: r.level>0 ? "sum" : "leaf", n:r, children: r.children.map(wrapSub)});
+  const events = written.map(id => { const a = evAttrs(id)||{}, ev = EV[id]||{}, own = bySrc.get(id)||[]; const c = own.map(n=>candByNode.get(n.id)).find(Boolean) || candBySrc.get(id) || null;
+    const roots = own.filter(n => !n.parent || !own.some(m=>m.id===n.parent));
+    return {kind:"event", id, a, ev, own, c, out: c ? c.outcome : "absent", p: c ? c.p_use : null, gold:gold.has(id), type:a.type||"other", scope:(a.scope||[])[0]||"(no scope)", mentions:aliasMentions(x.input?.query, id), children: own.length > 1 ? roots.map(wrapSub) : [], label:id, other: !!(user && ev.owner && ev.owner !== user), pinned: !!(ev.attributes||{}).pinned}; });
+  const byId = new Map(events.map(e=>[e.id,e])), rels = [];
+  for (const e of events){ const at = EV[e.id]?.attributes||{};
+    for (const p of (at.participants||[])) if (byId.has(p)) rels.push({from:e, to:byId.get(p), kind:"participant", label:"Participant"});
+    if (at.superseded_by && byId.has(at.superseded_by)) rels.push({from:e, to:byId.get(at.superseded_by), kind:"superseded", label:"Superseded"}); }
+  const scopes = [...new Set(events.map(e=>e.scope))].sort((a,b)=> ((qScope.includes(b)?1:0)-(qScope.includes(a)?1:0)) || a.localeCompare(b));
+  const nSum = [...tn.values()].filter(n=>n.level>0).length, nEdge = [...tn.values()].filter(n=>n.parent && tn.has(n.parent)).length;
+  return {x, s, written, gold, qScope, user, thr, tn, bySrc, OUT_ORDER, OUT_SHORT, events, byId, rels, scopes, nSum, nEdge};
+}
+
+// hover card shared by both views
+function cgTip(m, wrap){
+  const tip = el("div",{class:"cg-tip"}); tip.hidden = true; wrap.append(tip);
+  const ROLE_ZH = {selected_target:"Selected target", ancestor_context:"Ancestor context", support:"Supporting context", context:"Context"};
+  function show(ev, n){ const e = EV[n.id], a = n.a||{}, c = n.c, own = n.own||[], s = m.s;
+    const roles = [...new Set((s?.context_view?.visible||[]).filter(v => v.source_id===n.id || own.some(o=>o.id===v.node)).map(v => ROLE_ZH[v.role]||v.role||"Visible"))];
+    tip.replaceChildren(el("div",{class:"mono",text:n.id}),
+      el("div",{class:"sub",text:[TYPE_ZH[n.type]||n.type, (a.scope||[]).join(","), a.status, n.pinned ? "pinned" : null, a.aliases?.length ? "Alias "+a.aliases.join("/") : null, n.other ? `Belongs to another user ${n.ev.owner}` : null, own.length ? `CogletNet nodes ${own.length}(max L ${Math.max(...own.map(o=>o.level))})` : "No build trace", n.gold ? "Gold evidence" : null].filter(Boolean).join(" · ")}),
+      e ? el("div",{class:"tx",text: e.content.length>220 ? e.content.slice(0,220)+"…" : e.content}) : null,
+      el("div",{class:"sub",text: c ? `Similarity ${fmt(c.similarity,3)} · Vector rank ${c.vector_rank??"—"} · Candidate origin ${ORIGIN_ZH[c.origin]||c.origin||"—"} · p_use ${fmt(c.p_use,2)} · ${OUTCOME_ZH[c.outcome]||c.outcome}${c.rank!=null?` · Returned rank ${c.rank} rank`:""}` : (s ? "Not a candidate (no vector match)" : "No search trace for this question")}),
+      roles.length ? el("div",{class:"sub",text:"Included in reader context:"+roles.join(", ")}) : null);
+    tip.hidden = false; move(ev); }
+  function move(ev){ const b = wrap.getBoundingClientRect(); let lx = ev.clientX-b.left+wrap.scrollLeft+14, ly = ev.clientY-b.top+14; if (ev.clientX-b.left+310 > b.width) lx -= 330; if (ly+150 > b.height) ly -= 160; tip.style.left = lx+"px"; tip.style.top = ly+"px"; }
+  return { bind(g, n){ g.addEventListener("mouseenter", ev => show(ev, n)); g.addEventListener("mousemove", move); g.addEventListener("mouseleave", () => { tip.hidden = true; }); } };
+}
+const outcomeLegend = (m, evs) => { const cnt = o => evs.filter(e=>e.out===o).length; return [
+  el("span",{}, el("i",{class:"sw o-selected"}), `Selected and returned ${cnt("selected")}(number inside = rank)`), el("span",{}, el("i",{class:"sw"}), `Below JEV threshold ${cnt("jev_below_threshold")}`),
+  cnt("result_limit") ? el("span",{}, el("i",{class:"sw o-result_limit"}), `Admitted but limit exceeded ${cnt("result_limit")}`) : null,
+  cnt("absent") ? el("span",{}, el("i",{class:"sw o-absent"}), `${m.s ? "Not a candidate" : "No search trace"} ${cnt("absent")}`) : null,
+  m.gold.size ? el("span",{}, el("i",{class:"sw gold"}), "Gold evidence (green outer ring)") : null,
+  ...Object.entries(TYPE_SHAPE).filter(([ty])=>evs.some(e=>e.type===ty)).map(([ty,sh])=>el("span",{}, el("i",{class:"sw shape "+sh}), TYPE_ZH[ty]||ty))]; };
+
+/* Retrieval view */
+function cogletTree(m){
+  const {x, s, written, gold, qScope, thr, tn, OUT_ORDER, OUT_SHORT, events, rels, scopes, nSum} = m;
+  const rankOf = e => e.c && e.c.rank!=null ? e.c.rank : 1e9;
+  const root = {kind:"query", label:"Query", children: scopes.map(sc => { const es = events.filter(e=>e.scope===sc);
+    const groups = OUT_ORDER.filter(o => es.some(e=>e.out===o)).map(o => ({kind:"group", out:o, label:`${OUT_SHORT[o]||o} ${es.filter(e=>e.out===o).length}`, children: es.filter(e=>e.out===o).sort((a,b)=> (rankOf(a)-rankOf(b)) || ((b.p??-1)-(a.p??-1)) || (written.indexOf(a.id)-written.indexOf(b.id)))}));
+    for (const o of [...new Set(es.map(e=>e.out))]) if (!OUT_ORDER.includes(o)) groups.push({kind:"group", out:o, label:`${o} ${es.filter(e=>e.out===o).length}`, children: es.filter(e=>e.out===o)});
+    return {kind:"scope", sc, q:qScope.includes(sc), label:`${sc}${qScope.includes(sc)?"(query scope)":""} · ${es.length}`, children: groups}; })};
+  // tidy layout: one column per leaf of the whole tree, parents centred over their children
+  const COL = 24, GAP = {scope:18, group:6}, TOP = 28, ROW = 74, SUBROW = 50, ML = 20, MR = 20;
+  let col = 0, maxDepth = 0; const all = [];
+  const boxW = t => Math.min(360, 16 + textW(t));
+  function place(n, depth, isLast){ n.depth = depth; maxDepth = Math.max(maxDepth, depth); all.push(n);
+    if (n.children.length){
+      const leaves = (function cnt(m){ return m.children.length ? m.children.reduce((a,c)=>a+cnt(c),0) : 1; })(n);
+      const pad = (n.kind==="scope" || n.kind==="group") ? Math.max(0, (boxW(n.label)+10)/COL - leaves)/2 : 0;
+      col += pad; n.children.forEach((c,i) => place(c, depth+1, i===n.children.length-1)); col += pad;
+      n.x = (n.children[0].x + n.children[n.children.length-1].x)/2; }
+    else { n.x = ML + COL*(col+0.5); col += 1; }
+    if (!isLast && GAP[n.kind]) col += GAP[n.kind]/COL; }
+  place(root, 0, true);
+  const yOf = n => n.depth <= 3 ? TOP + n.depth*ROW : TOP + 3*ROW + (n.depth-3)*SUBROW;
+  for (const n of all) n.y = yOf(n);
+  const deepest = n => n.children.length ? Math.max(...n.children.map(deepest)) : n.y;
+  const evs = all.filter(n=>n.kind==="event"); for (const e of evs) e.yLabel = deepest(e) + 10;
+  const labelLen = Math.max(8, ...evs.map(e => e.label.length + 4 + (e.mentions.length ? e.mentions.join("/").length + 4 : 0)));
+  const LBL = 20 + Math.ceil(labelLen*6.4*0.89);
+  const yLeafMax = Math.max(...evs.map(e=>e.yLabel)), W = ML + COL*col + MR + Math.ceil(labelLen*6.4*0.47), H = yLeafMax + LBL;
+  // draw
+  const svg = svgEl("svg",{viewBox:`0 0 ${W} ${H}`, width:W, height:H, class:"cg"+(W <= 1400 ? " fit" : ""), role:"img", "aria-label":"Coglet retrieval tree"});
+  svg.append(svgEl("defs",{}, svgEl("marker",{id:"cg-arrow", viewBox:"0 0 10 10", refX:"9", refY:"5", markerWidth:"7", markerHeight:"7", orient:"auto-start-reverse"}, svgEl("path",{d:"M0,0L10,5L0,10z", class:"cg-arrowhead"}))));
+  for (const sc of root.children){ const xs = all.filter(n => n.kind==="event" && n.scope===sc.sc).map(n=>n.x); svg.append(svgEl("rect",{class:"cg-band"+(sc.q?" q":""), x:(Math.min(...xs)-COL/2-2).toFixed(1), y:sc.y-16, width:(Math.max(...xs)-Math.min(...xs)+COL+4).toFixed(1), height:H-sc.y+10, rx:6})); }
+  const eg = svgEl("g",{class:"cg-edges"});
+  const link = (a,b,cls) => { const my = (a.y+b.y)/2; return svgEl("path",{class:"cg-tedge "+cls, d:`M${a.x.toFixed(1)},${(a.y+10).toFixed(1)}C${a.x.toFixed(1)},${my.toFixed(1)} ${b.x.toFixed(1)},${my.toFixed(1)} ${b.x.toFixed(1)},${(b.y-10).toFixed(1)}`}); };
+  for (const n of all) for (const c of n.children) eg.append(link(n, c, c.kind==="group" ? "to-"+c.out : c.kind + (c.n && c.n.edgeKind ? " ek-"+c.n.edgeKind : "")));
+  const bez = (p0,p1,p2,p3,t) => { const u = 1-t; return u*u*u*p0 + 3*u*u*t*p1 + 3*u*t*t*p2 + t*t*t*p3; };
+  const seen = new Map();
+  for (const r of rels){ const y0 = Math.min(r.from.y, r.to.y)-10, dx = Math.abs(r.to.x-r.from.x), h = Math.min(36, 14 + dx*0.18), ya = y0-h, cx1 = r.from.x+(r.to.x-r.from.x)*0.25, cx2 = r.from.x+(r.to.x-r.from.x)*0.75;
+    const key = r.from.id+"|"+r.kind, k = seen.get(key)||0; seen.set(key, k+1);
+    eg.append(svgEl("path",{class:"cg-arc "+r.kind, d:`M${r.from.x.toFixed(1)},${y0}C${cx1.toFixed(1)},${ya.toFixed(1)} ${cx2.toFixed(1)},${ya.toFixed(1)} ${r.to.x.toFixed(1)},${y0}`, "marker-end":"url(#cg-arrow)"}),
+      svgEl("text",{class:"cg-elabel", x:bez(r.from.x,cx1,cx2,r.to.x,0.8).toFixed(1), y:(bez(y0,ya,ya,y0,0.8)-6-10*k).toFixed(1), text:r.label})); }
+  svg.append(eg);
+  const wrap = el("div",{class:"cg-wrap"}, svg), tipc = cgTip(m, wrap), ng = svgEl("g",{class:"cg-nodes"});
+  const boxNode = (n, cls, text, w) => { const g = svgEl("g",{class:"cg-box "+cls, transform:`translate(${n.x.toFixed(1)},${n.y.toFixed(1)})`}); g.append(svgEl("rect",{x:-w/2, y:-11, width:w, height:22, rx:6}), svgEl("text",{"text-anchor":"middle", y:"4", text})); return g; };
+  for (const n of all){
+    if (n.kind==="query"){ const q = String(x.input?.query||"").trim(); const t = q.length > 56 ? q.slice(0,56)+"…" : q; ng.append(boxNode(n, "query", `Query: ${t}`, boxW(`Query: ${t}`))); ng.lastChild.append(svgEl("title",{text:q})); ng.lastChild.append(svgEl("text",{class:"cg-qscope", "text-anchor":"middle", y:"24", text:`scope ${qScope.join(", ")||"—"}`})); }
+    else if (n.kind==="scope") ng.append(boxNode(n, "scope"+(n.q?" q":""), n.label, boxW(n.label)));
+    else if (n.kind==="group") ng.append(boxNode(n, "group o-"+n.out, n.label, boxW(n.label)));
+    else if (n.kind==="event"){
+      const g = svgEl("g",{class:`cg-node o-${n.out}${n.gold?" gold":""}`, "data-id":n.id, transform:`translate(${n.x.toFixed(1)},${n.y.toFixed(1)})`}, eventGlyph(n, 7));
+      tipc.bind(g, n); ng.append(g);
+      const tx = svgEl("text",{class:"cg-label"+(n.gold?" gold":""), transform:`translate(${n.x.toFixed(1)},${n.yLabel.toFixed(1)}) rotate(62)`, "text-anchor":"start"});
+      if (n.p!=null) tx.append(svgEl("tspan",{class:"p", text:fmt(n.p,2).replace(/^0\./,".")+" "}));
+      tx.append(svgEl("tspan",{text:n.label})); if (n.mentions.length) tx.append(svgEl("tspan",{class:"mention", text:` ←“${n.mentions.join("/")}”`}));
+      ng.append(tx);
+    }
+    else { // CogletNet summary / leaf inside a multi-node event
+      const g = svgEl("g",{class:"cg-node cg-sum", transform:`translate(${n.x.toFixed(1)},${n.y.toFixed(1)})`});
+      g.append(svgEl("path",{class:"cg-shape", d:shapePath(n.kind==="sum" ? "circle" : "square", 6)}), svgEl("text",{"text-anchor":"middle", y:"3", text: n.kind==="sum" ? `L${n.n.level}` : ""}));
+      g.append(svgEl("title",{text:`${n.kind==="sum" ? "Summary L"+n.n.level : "Leaf"} ${shortId(n.n.id)}${n.n.span ? " span "+n.n.span[0]+"–"+n.n.span[1] : ""}${n.n.edgeKind ? " · Edges "+n.n.edgeKind : ""}`}));
+      ng.append(g);
+    }
+  }
+  svg.append(ng);
+  const legend = el("div",{class:"cg-legend"}, ...outcomeLegend(m, evs),
+    el("span",{}, el("i",{class:"sw p"}), "Number before label = p_use"),
+    nSum ? el("span",{}, el("i",{class:"ln tree"}), "CogletNet summary levels and leaves beneath each memory") : null,
+    rels.some(r=>r.kind==="participant") ? el("span",{}, el("i",{class:"ln participant"}), "Relationship → participant") : null,
+    rels.some(r=>r.kind==="superseded") ? el("span",{}, el("i",{class:"ln superseded"}), "Previous version → replacement") : null,
+    evs.some(e=>e.mentions.length) ? el("span",{}, el("i",{class:"ln mention"}), "Blue text after labels = aliases / names mentioned by the query") : null);
+  const guide = el("p",{class:"note cg-guide",text:`The root is the query entry point, not a CogletNet node. The first level branches by scope, highlighting the query scope; the second by retrieval outcome derived from native items / omitted. Leaves are ingested memories, ordered by return rank when selected and otherwise by p_use. Shape indicates memory type; a green ring marks gold; the prefix is JEV p_use ${thr!=null?`(threshold ${thr})`:""}. Arcs represent dataset-declared relationships; blue labels show alias mentions inferred by word boundaries. Neither represents an actual retrieval traversal edge or JEV decision input.${nSum ? "CogletNet summary levels and leaves are shown beneath each memory." : "Each memory has only one leaf and no summary level, so no further branching is shown."} Hover for original text and values.${s ? "" : "No search trace is available; branches use scope only."} Switch to Structure view for scopes, relationships, and CogletNet hierarchy.`});
+  return {sub:`${evs.length} memories · ${scopes.length} scopes · ${tn.size||evs.length} CogletNet nodes (summaries ${nSum}) · ${rels.length} relationships · ${evs.filter(e=>e.mentions.length).length} mentioned by query ${thr!=null?` · JEV threshold ${thr}`:""}`, parts:[wrap, legend, guide]};
+}
+
+/* Structure view */
+function cogletStructure(m){
+  const {x, s, events, rels, gold, qScope, thr, byId, nSum, nEdge} = m;
+  const scopeIds = [...qScope.filter((q,i)=>qScope.indexOf(q)===i), ...m.scopes.filter(sc => !qScope.includes(sc))]; // query scopes first, even when the store has nothing in them
+  const W = 1100, PX = 12, CW = 271, GAPX = 20, CARD = CW-GAPX, CH = 46, HDR = 28, ROWGAP = 10, ARCH = 30, BANDGAP = 12, COLS = Math.max(1, Math.floor((W-2*PX+GAPX)/CW));
+  // connected components over the declared relations, so related coglets sit next to each other
+  const adj = new Map(events.map(e=>[e.id,new Set()]));
+  for (const r of rels){ adj.get(r.from.id).add(r.to.id); adj.get(r.to.id).add(r.from.id); }
+  const compOf = new Map(); let nc = 0;
+  for (const e of events){ if (compOf.has(e.id)) continue; const st = [e.id]; compOf.set(e.id, nc); while (st.length){ const v = st.pop(); for (const w of adj.get(v)) if (!compOf.has(w)){ compOf.set(w, nc); st.push(w); } } nc++; }
+  const TYPE_ORDER = ["entity","decision","preference","open_question","relation"], tOrd = t => { const i = TYPE_ORDER.indexOf(t); return i < 0 ? 9 : i; };
+  const outOf = id => rels.filter(r=>r.from.id===id).sort((a,b)=>a.to.id.localeCompare(b.to.id));
+  function orderComp(ids){ const set = new Set(ids), incoming = new Set(rels.filter(r=>set.has(r.from.id)&&set.has(r.to.id)).map(r=>r.to.id)), seen = new Set(), out = [];
+    const visit = id => { if (seen.has(id) || !set.has(id)) return; seen.add(id); out.push(id); for (const r of outOf(id)) visit(r.to.id); };
+    for (const id of ids.filter(i=>!incoming.has(i)).sort()) visit(id); for (const id of [...ids].sort()) visit(id); return out; }
+  const cardH = e => e.own.length > 1 ? CH + 6 + (Math.max(...e.own.map(n=>n.level))+1)*16 : CH;
+  const bands = [], cards = []; let y = 6;
+  for (const sc of scopeIds){
+    const es = events.filter(e=>e.scope===sc), comps = new Map();
+    for (const e of es){ const k = compOf.get(e.id); if (!comps.has(k)) comps.set(k, []); comps.get(k).push(e.id); }
+    const units = [...comps.values()].map(ids => ids.length > 1 ? orderComp(ids) : ids)
+      .sort((a,b) => (Math.min(b.length,2)-Math.min(a.length,2)) || (b.length-a.length) || (a.length===1 ? tOrd(byId.get(a[0]).type)-tOrd(byId.get(b[0]).type) : 0) || a[0].localeCompare(b[0]));
+    const band = {sc, q:qScope.includes(sc), y0:y, es, rows:[]};
+    for (const u of units){ // first fit: a related group stays together in one row; singletons fill the gaps
+      if (u.length > COLS){ for (const id of u){ let r = band.rows[band.rows.length-1]; if (!r || r.length >= COLS){ r = []; band.rows.push(r); } r.push(byId.get(id)); } continue; }
+      let r = band.rows.find(r => r.length + u.length <= COLS); if (!r){ r = []; band.rows.push(r); } for (const id of u) r.push(byId.get(id)); }
+    let yy = y + HDR;
+    band.rows.forEach((r, ri) => { const ids = new Set(r.map(e=>e.id)); if (rels.some(x => ids.has(x.from.id) && ids.has(x.to.id))) yy += ARCH; const h = Math.max(CH, ...r.map(cardH)); r.forEach((e,i) => { e.x = PX + i*CW; e.y = yy; e.w = CARD; e.h = h; e.ri = ri; e.band = band; cards.push(e); }); yy += h + ROWGAP; });
+    if (!band.rows.length) yy += 24;
+    band.y1 = yy; y = yy + BANDGAP; bands.push(band);
+  }
+  const H = y;
+  const svg = svgEl("svg",{viewBox:`0 0 ${W} ${H}`, width:W, height:H, class:"cg fit", role:"img", "aria-label":"Coglet structure"});
+  svg.append(svgEl("defs",{}, svgEl("marker",{id:"cg-arrow", viewBox:"0 0 10 10", refX:"9", refY:"5", markerWidth:"7", markerHeight:"7", orient:"auto-start-reverse"}, svgEl("path",{d:"M0,0L10,5L0,10z", class:"cg-arrowhead"}))));
+  for (const b of bands){
+    svg.append(svgEl("rect",{class:"cg-band"+(b.q?" q":""), x:4, y:b.y0, width:W-8, height:b.y1-b.y0, rx:8}));
+    const t = svgEl("text",{class:"cg-bandhdr"+(b.q?" q":""), x:PX, y:b.y0+19}); t.append(svgEl("tspan",{text:b.sc}), svgEl("tspan",{class:"gl", text:`　${SCOPE_GLOSS(b.sc)}${b.q ? " · Query scope" : ""} · ${b.es.length} memories`})); svg.append(t);
+    if (!b.rows.length) svg.append(svgEl("text",{class:"cg-empty", x:PX, y:b.y0+HDR+12, text:"The query requests this scope, but the store has no memories in it"}));
+  }
+  const eg = svgEl("g",{class:"cg-edges"}), labels = [];
+  for (const r of rels){ const a = r.from, b = r.to; if (a.x==null || b.x==null) continue; const ax = a.x+a.w/2, bx = b.x+b.w/2; let d, lx, ly;
+    if (a.band===b.band && a.ri===b.ri){ const h = Math.min(ARCH-6, 12 + Math.abs(bx-ax)*0.05), ya = a.y-h; d = `M${ax.toFixed(1)},${a.y}C${(ax+(bx-ax)*0.25).toFixed(1)},${ya.toFixed(1)} ${(ax+(bx-ax)*0.75).toFixed(1)},${ya.toFixed(1)} ${bx.toFixed(1)},${b.y}`; lx = (ax+bx)/2; ly = a.y - h*0.75 - 5; }
+    else { const down = b.y > a.y, y0 = down ? a.y+a.h : a.y, y1 = down ? b.y : b.y+b.h, my = (y0+y1)/2; d = `M${ax.toFixed(1)},${y0}C${ax.toFixed(1)},${my.toFixed(1)} ${bx.toFixed(1)},${my.toFixed(1)} ${bx.toFixed(1)},${y1}`; lx = (ax+bx)/2; ly = my - 4; }
+    while (labels.some(l => Math.abs(l.x-lx) < 44 && Math.abs(l.y-ly) < 11)) ly -= 11; labels.push({x:lx, y:ly});
+    eg.append(svgEl("path",{class:"cg-arc "+r.kind, d, "marker-end":"url(#cg-arrow)"}), svgEl("text",{class:"cg-elabel", x:lx.toFixed(1), y:ly.toFixed(1), text:r.label})); }
+  svg.append(eg);
+  const wrap = el("div",{class:"cg-wrap"}, svg), tipc = cgTip(m, wrap), ng = svgEl("g",{class:"cg-nodes"});
+  function miniForest(e, x0, y0, wmax){ // CogletNet nodes of this Source, levels top-down, capped per level
+    const own = e.own, maxL = Math.max(...own.map(n=>n.level)), g = svgEl("g",{class:"cg-mini"}), pos = new Map(), CAP = Math.max(1, Math.floor((wmax-24)/14));
+    for (let L = maxL; L >= 0; L--){ const ns = own.filter(n=>n.level===L), yy = y0 + (maxL-L)*16; ns.slice(0, CAP).forEach((n,i) => pos.set(n.id, {x:x0+8+i*14, y:yy})); if (ns.length > CAP) g.append(svgEl("text",{class:"more", x:x0+8+CAP*14-4, y:yy+3, text:`+${ns.length-CAP}`})); }
+    for (const n of own){ const p = pos.get(n.id), q = n.parent ? pos.get(n.parent) : null; if (p && q) g.append(svgEl("line",{class:n.edgeKind ? "ek-"+n.edgeKind : "", x1:p.x, y1:p.y-5, x2:q.x, y2:q.y+5})); }
+    for (const n of own){ const p = pos.get(n.id); if (!p) continue; const nn = svgEl("g",{class:"cg-sum", transform:`translate(${p.x},${p.y})`}, svgEl("path",{class:"cg-shape", d:shapePath(n.level>0 ? "circle" : "square", 5)}), svgEl("title",{text:`${n.level>0 ? "Summary L"+n.level : "Leaf"} ${shortId(n.id)}${n.span ? " span "+n.span[0]+"–"+n.span[1] : ""}${n.edgeKind ? " · Edges "+n.edgeKind : ""}`})); g.append(nn); }
+    return g; }
+  for (const e of cards){
+    const g = svgEl("g",{class:`cg-card o-${e.out}${e.gold?" gold":""}${e.other?" other":""}`, "data-id":e.id, transform:`translate(${e.x},${e.y})`});
+    g.append(svgEl("rect",{class:"bg", width:e.w, height:e.h, rx:7}));
+    const gl = eventGlyph(e, 7); gl.setAttribute("transform", `translate(17,${CH/2})`); g.append(gl);
+    const tw = e.w - 32 - 8, pTxt = e.p!=null ? fmt(e.p,2).replace(/^0\./,".") : "";
+    const idW = tw - (pTxt ? textW(pTxt, 5.4)+6 : 0), tight = textW(e.id, 6.3, 11) > idW - 6.3;
+    g.append(svgEl("text",{class:"id"+(tight ? " tight" : ""), x:32, y:18, text:fitStr(e.id, idW, tight ? 5.8 : 6.3, 11)}));
+    if (pTxt) g.append(svgEl("text",{class:"cg-p", x:e.w-7, y:18, "text-anchor":"end", text:pTxt}));
+    const nm = svgEl("text",{class:"nm", x:32, y:33});
+    const bits = [e.a.name, TYPE_ZH[e.type]||e.type, e.a.status ? (STATUS_ZH[e.a.status] ?? e.a.status) : null, e.pinned ? "pinned" : null, e.other ? "Other users" : null].filter(Boolean).join(" · ");
+    const ment = e.mentions.length ? ` ←“${e.mentions.join("/")}”` : "";
+    const main = fitStr(bits, tw - textW(ment, 5.4, 9.5), 5.4, 9.5);
+    nm.append(svgEl("tspan",{text:main})); if (ment) nm.append(svgEl("tspan",{class:"mention", text:ment}));
+    g.append(nm);
+    if (e.own.length > 1) g.append(miniForest(e, 10, CH+8, e.w-20));
+    tipc.bind(g, e); ng.append(g);
+  }
+  svg.append(ng);
+  const emptyQ = scopeIds.filter(sc => !events.some(e=>e.scope===sc)).length;
+  const legend = el("div",{class:"cg-legend"}, el("span",{}, el("i",{class:"sw card"}), "One card = one memory = one CogletNet Source"), ...outcomeLegend(m, events),
+    rels.some(r=>r.kind==="participant") ? el("span",{}, el("i",{class:"ln participant"}), "Relationship → participant") : null,
+    rels.some(r=>r.kind==="superseded") ? el("span",{}, el("i",{class:"ln superseded"}), "Previous version → replacement") : null,
+    events.some(e=>e.other) ? el("span",{}, el("i",{class:"sw card other"}), "Dashed outline = another user") : null,
+    nSum ? el("span",{}, el("i",{class:"ln tree"}), "Tree inside card = hierarchy built for that Source") : null,
+    events.some(e=>e.mentions.length) ? el("span",{}, el("i",{class:"ln mention"}), "Blue text = aliases / names mentioned by the query") : null);
+  const guide = el("p",{class:"note cg-guide",text:`This view shows the ingested memory store, not a query-rooted tree. Each scope has a band; requested scopes absent from the store appear empty. Cards are memories / Sources. Related memories are adjacent, with dataset-declared relationship arrows; others sort by type then ID. Layout stays fixed across questions in a run. Fill shows retrieval outcome, green rings mark gold, shape numbers show return rank, and corner decimals show JEV p_use ${thr!=null?`(threshold ${thr})`:""}.${nSum ? `The small tree within each card is its Source hierarchy (solid = summary parent, orange dashed = fallback), with ${nEdge} structural edges.` : "No Source in this run contains a hierarchy: each event is a separate single-leaf source. All shown edges come from dataset relationships, not CogletNet structure."} Dataset relationships and alias annotations are not JEV decision inputs. Hover for original text and values.${s ? "" : "No search trace is available; cards are not colored by outcome."}`});
+  return {sub:`${events.length} memories · ${scopeIds.length} scopes ${emptyQ ? `(${emptyQ} requested scopes absent from store)` : ""} · ${rels.length} dataset relationships · ${nEdge} CogletNet structural edges ${thr!=null?` · JEV threshold ${thr}`:""}`, parts:[wrap, legend, guide]};
+}
+
+let cgView = (() => { try { return localStorage.getItem("memeval.cgView") === "structure" ? "structure" : "tree"; } catch (e) { return "tree"; } })();
+function cogletGraph(x){
+  if (!(x.input?.events_written||[]).length) return noTrace("Memory graph", "No memories were ingested for this question.");
+  const sub = el("span",{class:"sub"}), body = el("div",{class:"cg-body"});
+  const btns = [["tree","Retrieval view"],["structure","Structure view"]].map(([v,t]) => el("button",{type:"button", class:"cg-vbtn", "data-v":v, title: v==="tree" ? "Query view: query → scope → retrieval outcome → memory" : "Store view: scope → memories (Sources) and relationships", text:t}));
+  const draw = () => { const m = cogletModel(x), r = cgView==="structure" ? cogletStructure(m) : cogletTree(m); sub.textContent = r.sub; body.replaceChildren(...r.parts); for (const b of btns) b.classList.toggle("on", b.dataset.v===cgView); };
+  for (const b of btns) b.addEventListener("click", () => { if (cgView === b.dataset.v) return; cgView = b.dataset.v; try { localStorage.setItem("memeval.cgView", cgView); } catch (e) {} draw(); });
+  draw();
+  return el("div",{class:"box full cg-box-root"}, el("h3",{}, "Memory graph ", el("span",{class:"cg-vbtns", role:"group", "aria-label":"Memory graph view"}, ...btns), " ", sub), body);
+}
+
+/* ---------- coglet work trace (CogletNet) ---------- */
+const T = h => (h && DATA.texts && DATA.texts[h] !== undefined) ? DATA.texts[h] : null;
+const shortId = id => id ? String(id).slice(0, 8) : "—";
+function textBlock(hash, limit){
+  const t = T(hash);
+  if (t === null) return el("span",{class:"empty",text: hash ? `(text not exported · ${shortId(hash)})` : "(no text)"});
+  if (limit && t.length > limit) return el("details",{}, el("summary",{text: t.slice(0, limit).replace(/\s+/g," ") + "…"}), el("div",{class:"tx",text:t}));
+  return el("div",{class:"tx",text:t});
+}
+function noTrace(title, why){ return el("div",{class:"box full"}, el("h3",{text:title}), el("p",{class:"empty",text:why})); }
+function workBuild(x){
+  const w = x.work;
+  if (!w || !Array.isArray(w.build) || !w.build.length) return noTrace("Coglet construction", w && w.trace === "off" ? "Work tracing was disabled (COGLETNET_WORK_TRACE=off)." : "No build trace was collected (older run or missing sut_trace).");
+  const gold = new Set(x.gold?.evidence_ids||[]);
+  const box = el("div",{class:"box full"}, el("h3",{}, "Coglet construction ", el("span",{class:"sub",text:`${w.build.length} events ingested · One source per event; leaves follow source order and summary edges extend upward`})));
+  for (const b of w.build){
+    const isGold = b.source_id && gold.has(b.source_id);
+    const nodes = b.nodes||[], sums = b.summaries||[], calls = b.calls||[];
+    const okState = b.state === "Ready";
+    const d = el("details",{class:"evt", open: (isGold || !okState) ? "" : null});
+    d.append(el("summary",{}, el("span",{class:"mono",text:`#${(b.seq??0)+1} `}), el("span",{class:"mono",text:b.source_id || b.event_id || "?"}), " ",
+      isGold ? el("span",{class:"badge b-gold",text:"gold"}) : null, " ", el("span",{class:"badge "+(okState?"b-ok":"b-no"),text:b.state||"?"}),
+      el("span",{class:"sub",text:` · ${nodes.length} nodes · ${sums.length} summary candidates · ${calls.reduce((a,c)=>a+(c.dispatches||0),0)} model dispatches`})));
+    if (b.audit_error) d.append(el("p",{class:"note warn",text:"Audit read failed:"+b.audit_error}));
+    // nodes by level
+    const byLevel = new Map();
+    for (const n of nodes){ const l = n.level ?? 0; if (!byLevel.has(l)) byLevel.set(l, []); byLevel.get(l).push(n); }
+    const levels = [...byLevel.keys()].sort((a,b)=>a-b);
+    for (const l of levels){
+      d.append(el("div",{class:"sub",style:"margin:6px 0 2px",text: l===0 ? "Level 0 · Leaves (original text chunks)" : `Level ${l} · Summary nodes`}));
+      for (const n of byLevel.get(l).sort((a,b)=>(a.ordinal??0)-(b.ordinal??0))){
+        const s = n.summary;
+        d.append(el("div",{class:"node l"+Math.min(l,3)},
+          el("div",{class:"hd"}, el("span",{class:"badge b-lvl",text:`L${l}·${n.ordinal??"?"}`}), el("span",{class:"mono",text:shortId(n.node)}), el("span",{text:n.kind||""}),
+            n.span ? el("span",{class:"mono",text:`span ${n.span[0]}–${n.span[1]}`}) : null,
+            n.inputs && n.inputs.length ? el("span",{text:`Inputs ${n.inputs.length} child nodes`}) : null,
+            n.edge ? el("span",{text:`→ Parent ${shortId(n.edge.parent)}(${n.edge.kind})`}) : (l>0 || levels.length>1 ? el("span",{class:"sub",text:"Root"}) : null),
+            n.underfill ? el("span",{class:"badge b-dim",text:"underfill"}) : null,
+            s ? el("span",{class:"badge "+(s.faithful?"b-ok":"b-no"),text:`Summarization ${s.faithful?"Verification passed":"Verification failed"} · ${s.model||"?"} · ${s.attempts??"?"} times`}) : null),
+          textBlock(n.text_hash, 600),
+          s && s.reason_hash ? el("div",{class:"sub"}, "Verification reason:", T(s.reason_hash) ?? "(not exported)") : null));
+      }
+    }
+    if (sums.length){
+      const tbl = el("table",{}, el("thead",{}, el("tr",{}, ...["node","times","Candidate type","Stage","Accepted","Verification","Reason / error","Candidate text"].map(h=>el("th",{text:h})))));
+      const tb = el("tbody");
+      for (const a of sums){
+        const v = a.verdict;
+        tb.append(el("tr",{}, el("td",{class:"mono",text:shortId(a.body)}), el("td",{text:String(a.ordinal??"")}), el("td",{text:a.candidate_kind||"—"}), el("td",{text:a.stage||"—"}),
+          el("td",{}, el("span",{class:"badge "+(a.accepted?"b-ok":"b-dim"),text:a.accepted?"✓":"—"})),
+          el("td",{}, v ? el("span",{class:"badge "+(v.faithful?"b-ok":"b-no"),text:(v.faithful?"Faithful":"Unfaithful")+(v.model?" · "+v.model:"")}) : el("span",{class:"empty",text:"Not verified"})),
+          el("td",{}, v && v.reason_hash ? (T(v.reason_hash) ?? el("span",{class:"empty",text:"Reason not exported"})) : (a.error_code ? el("span",{class:"mono",text:a.error_code}) : "")),
+          el("td",{}, a.output_hash ? textBlock(a.output_hash, 120) : el("span",{class:"empty",text:"—"}))));
+      }
+      tbl.append(tb);
+      d.append(el("details",{open: okState ? null : ""}, el("summary",{text:`Summary candidates and verification (${sums.length})`}), el("div",{class:"tbl"},tbl)));
+    }
+    if (calls.length) d.append(el("p",{class:"sub",text:"Model calls:" + calls.map(c=>`${c.role}/${c.model} Dispatched ${c.dispatches}${c.failed?`(failed ${c.failed})`:""}${c.terminal_error?` Terminal state ${c.terminal_error}`:""}`).join("; ")}));
+    box.append(d);
+  }
+  return box;
+}
+function workSearch(x){
+  const s = x.work && x.work.search;
+  if (!s) return noTrace("Search process", x.work && x.work.trace === "off" ? "Work tracing was disabled for this run." : (x.status==="scored" ? "No search trace was collected for this run." : "No search was performed for this question."));
+  const gold = new Set(x.gold?.evidence_ids||[]);
+  const st = s.settings||null;
+  const polText = p => !p ? "—" : (typeof p === "string" ? p : (p.kind ?? "?") + Object.entries(p).filter(([k]) => k !== "kind").map(([k, v]) => ` ${k}=${v}`).join(""));
+  const setText = st ? ` · leaf_k ${st.leaf_k??"—"} · upper_k ${st.upper_k??"—"} · Candidate cap ${st.candidate_cap??"—"} · Evidence expansion ${st.evidence_max_rounds??"—"} rounds (pool cap ${st.evidence_candidate_cap??"—"}) · memory_tokens ${st.memory_tokens??"—"} · Representation ${st.representation??"—"}` + (st.jev_prompt_profile || st.selection_policy ? ` · JEV question ${st.jev_prompt_profile??"—"}${st.jev_input_format ? "(" + st.jev_input_format + ")" : ""} · Selection policy ${polText(st.selection_policy)}` : "") : "";
+  const box = el("div",{class:"box full"}, el("h3",{}, "Search process ", el("span",{class:"sub",text:`Mode ${s.mode||"—"} · limit ${s.limit??"—"} · JEV threshold ${s.jev_threshold??"—"}${s.degraded?" · Fallback active":""}${setText}`})));
+  box.append(el("p",{class:"q",style:"font-size:13.5px",text:s.query||x.input?.query||""}));
+  if (s.warnings && s.warnings.length) box.append(el("p",{class:"note warn",text:"Warning:"+s.warnings.join("; ")}));
+  if (s.error){
+    const e = s.error, inner = (e && typeof e==="object" && e.error && typeof e.error==="object") ? e.error : (e||{});
+    const mf = inner && typeof inner==="object" ? inner.model_failure : null;
+    const kv = (o, keys) => el("table",{}, el("tbody",{}, ...keys.filter(k=>o && o[k]!==undefined && o[k]!==null && typeof o[k]!=="object").map(k=>el("tr",{}, el("th",{text:k}), el("td",{class:"mono",text:String(o[k])})))));
+    const panel = el("div",{style:"border-left:3px solid var(--no, var(--bad, #c0392b));padding:6px 10px;margin:8px 0"}, el("h4",{style:"margin:0 0 6px",text:"Search failed: native error"}));
+    panel.append(typeof inner==="string" ? el("p",{class:"mono",text:inner}) : kv(inner, ["kind","code","message","operation","retryable"]));
+    if (mf) panel.append(el("p",{class:"sub",style:"margin:6px 0 2px",text:"Model-call failures (upstream ModelFailure)"}), kv(mf, ["role","model","service","phase","status","elapsed_ms","retryable","retry_after_ms","request_id","outcome_unknown"]));
+    if (e && typeof e==="object" && e.state) panel.append(el("p",{class:"sub",text:`Event state ${e.state}${e.operation_id?" · Operation "+shortId(e.operation_id):""}`}));
+    box.append(panel);
+  }
+  const cands = (s.candidates||[]).slice().sort((a,b)=> ((b.p_use??-1)-(a.p_use??-1)) || ((b.similarity??0)-(a.similarity??0)));
+  const OUT = {selected:["b-ok","Selected"], jev_below_threshold:["b-dim","Below JEV threshold"], result_limit:["b-sup","Limit exceeded"], candidate_cap:["b-dim","Candidate cap"], evidence_cap:["b-dim","Evidence expansion cap"], CONTEXT_BUNDLE_TOO_LARGE:["b-no","Context budget exceeded"], unselected:["b-dim","Not selected"]};
+  if (cands.length){
+    const ORIGIN = {VectorHit:"Vector match", AncestorExpansion:"Ancestor expansion", EvidenceExpansion:"Evidence expansion"};
+    const tbl = el("table",{}, el("thead",{}, el("tr",{}, ...["#","node","Source event","Level","Source","Vector rank","Similarity","p_use","Outcome","Rank"].map(h=>el("th",{text:h})))));
+    const tb = el("tbody");
+    cands.forEach((c,i)=>{ const o = OUT[c.outcome]||["b-dim",c.outcome||"—"]; tb.append(el("tr",{class: c.source_id && gold.has(c.source_id) ? "gold" : null},
+      el("td",{text:String(i+1)}), el("td",{class:"mono",text:shortId(c.node)}), el("td",{}, el("span",{class:"mono",text:c.source_id||"?"}), c.source_id && gold.has(c.source_id) ? el("span",{class:"badge b-gold",style:"margin-left:4px",text:"gold"}) : null),
+      el("td",{text:String(c.level??"")}), el("td",{text: ORIGIN[c.origin] || (c.origin && c.origin!=="Unknown" ? c.origin : "—")}), el("td",{class:"num",text: c.vector_rank!=null ? String(c.vector_rank) : "—"}),
+      el("td",{class:"num",text:fmt(c.similarity,3)}), el("td",{class:"num",text:fmt(c.p_use,3)}), el("td",{}, el("span",{class:"badge "+o[0],text:o[1]})), el("td",{class:"num",text: c.rank!=null ? String(c.rank) : "—"}))); });
+    tbl.append(tb);
+    const nSel = cands.filter(c=>c.outcome==="selected").length, nLow = cands.filter(c=>c.outcome==="jev_below_threshold").length;
+    box.append(el("details",{open:""}, el("summary",{text:`Candidate set R: ${cands.length} nodes (selected ${nSel}, below JEV threshold ${nLow})`}), el("div",{class:"tbl"},tbl)));
+  } else box.append(el("p",{class:"empty",text:"Candidate set is empty."}));
+  const jt = s.jev_trace;
+  if (Array.isArray(jt) && jt.length){
+    const wrapJ = el("details",{}, el("summary",{text:`JEV debug: ${jt.length} batches,${jt.reduce((a,b)=>a+((b.targets||[]).length),0)} targets with raw probabilities (before thresholding and ranking)`}));
+    jt.forEach((b,i)=>{
+      const tgs = (b.targets||[]).slice().sort((p,q)=>((q.probability??-1)-(p.probability??-1)));
+      const tbl = el("table",{}, el("thead",{}, el("tr",{}, ...["Target node","Source event","Raw probability","Target body","Full path"].map(h=>el("th",{text:h})))));
+      const tb = el("tbody");
+      for (const t of tgs) tb.append(el("tr",{class: t.source_id && gold.has(t.source_id) ? "gold" : null}, el("td",{class:"mono",text:shortId(t.node)}),
+        el("td",{}, el("span",{class:"mono",text:t.source_id||"?"}), t.source_id && gold.has(t.source_id) ? el("span",{class:"badge b-gold",style:"margin-left:4px",text:"gold"}) : null),
+        el("td",{class:"num",text:fmt(t.probability,3)}), el("td",{}, textBlock(t.target_text_hash,160)), el("td",{}, textBlock(t.path_text_hash,160))));
+      tbl.append(tb);
+      wrapJ.append(el("div",{class:"sub",style:"margin-top:6px",text:`batches ${(b.batch??i)+1} · Model ${b.model||"?"}${b.error_code?` · Error ${b.error_code}`:""}`}), el("div",{class:"tbl"},tbl));
+    });
+    box.append(wrapJ);
+  }
+  const items = s.items||[];
+  if (items.length){
+    const list = el("div",{});
+    for (const it of items){
+      const d = el("details",{class:"evt", open: it.rank<=3 ? "" : null});
+      d.append(el("summary",{}, el("span",{class:"mono",text:`Level ${it.rank} rank `}), el("span",{class:"mono",text:it.source_id||"?"}), " ", it.source_id && gold.has(it.source_id) ? el("span",{class:"badge b-gold",text:"gold"}) : null,
+        el("span",{class:"sub",text:` · Node ${shortId(it.node)} · Similarity ${fmt(it.similarity,3)} · p_use ${fmt(it.p_use,3)} · utility ${fmt(it.rank_utility,3)} · Path ${(it.path||[]).length} segments`})));
+      const ol = el("ol",{class:"path"});
+      for (const p of it.path||[]) ol.append(el("li",{class: p.coverage ? "cov" : null}, el("div",{class:"hd sub"}, el("span",{class:"mono",text:shortId(p.node)}), el("span",{text: p.edge ? `via ${p.edge} edge` : "Target node"}), el("span",{text: p.coverage ? "Covers evidence" : "Background"})), textBlock(p.text_hash, 300)));
+      d.append(ol, el("div",{class:"sub",text:"Full-path text returned to the reader:"}), textBlock(it.text_hash, 400));
+      list.append(d);
+    }
+    box.append(el("h3",{text:`Selected items and full paths (${items.length})`}), list);
+  }
+  const cv = s.context_view;
+  if (cv){
+    const vis = cv.visible||[];
+    box.append(el("details",{}, el("summary",{text:`ContextView: ${cv.tokens??"—"} tokens(${cv.tokenizer||"?"}), visible bodies ${vis.length} segments`}),
+      el("ul",{class:"plain"}, ...vis.map(v=>el("li",{}, el("span",{class:"mono",text:`${shortId(v.node)} · ${v.source_id||"?"} · ${v.role||""}`}), textBlock(v.text_hash, 200)))),
+      el("div",{class:"sub",text:"Rendered context:"}), textBlock(cv.rendered_hash, 300)));
+  }
+  const om = s.omitted||{};
+  const reasons = {};
+  for (const r of Object.values(om)) reasons[r] = (reasons[r]||0)+1;
+  if (Object.keys(reasons).length) box.append(el("p",{class:"sub",text:"Omitted nodes:" + Object.entries(reasons).map(([k,v])=>`${(OUT[k]||[0,k])[1]} ${v}`).join(", ")}));
+  return box;
+}
+})();
+</script>
+</body>
+</html>

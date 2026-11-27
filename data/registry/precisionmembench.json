@@ -1,0 +1,52 @@
+{
+  "id": "precisionmembench",
+  "name": "PrecisionMemBench",
+  "repository": "https://github.com/tenurehq/precisionMemBench",
+  "dataset_url": "https://github.com/tenurehq/precisionMemBench",
+  "data_nature": "structured-diagnostic",
+  "task_kinds": [
+    "typed_context",
+    "retrieval"
+  ],
+  "protocol_id": "precisionmembench",
+  "variants": [
+    "typed_context",
+    "retrieval"
+  ],
+  "reported_scale": {
+    "seeds": 35,
+    "cases": 77,
+    "session_assertions_catalogued": 12
+  },
+  "license": {
+    "id": "MIT",
+    "noncommercial": false,
+    "no_derivatives": false,
+    "share_alike": false,
+    "redistribute_normalized": true,
+    "source": "https://github.com/tenurehq/precisionMemBench"
+  },
+  "pinned_revision": "61a712a1754e7d27b6dee42da32a2c214b003ece",
+  "implementation_status": "run",
+  "importer": "memeval import pmb --as typed_context|retrieval",
+  "suites": [
+    {
+      "suite_id": "precisionmembench-projection-v1",
+      "path": "data/normalized/pmb.json",
+      "protocol_ref": "protocols/precisionmembench.json#typed_context"
+    },
+    {
+      "suite_id": "pmb-retrieval",
+      "path": "data/normalized/pmb-retrieval.json",
+      "protocol_ref": "protocols/precisionmembench.json#retrieval"
+    }
+  ],
+  "overlaps": [],
+  "notes": [
+    "lock: 字段投影自 GitHub connector 手工转录，无 fetch 锁；不能声称已经校验上游原始字节。",
+    "scale: retrieval projection retains 75 of 77 cases; 2 lack relevantBeliefs inclusion labels. Twelve upstream session assertions are catalogued, not bundled.",
+    "Upstream blob SHA-1 values are preserved in protocol variant params, not mislabeled as SHA-256."
+  ],
+  "verification_date": "2026-10-17",
+  "lock_path": ""
+}

@@ -1,0 +1,165 @@
+{
+  "persona": "academic_researcher",
+  "date_range": {
+    "start_date": "2025-06-01",
+    "end_date": "2025-06-07"
+  },
+  "questions": {
+    "remembering": [
+      {
+        "question_id": "activity_todos_158",
+        "question": "What tasks remain on my todo list this week?",
+        "question_date": "2025-06-07",
+        "memory_evidence": {
+          "remaining_tasks": [
+            {
+              "value": "Plan field work schedule",
+              "session_id": 100
+            },
+            {
+              "value": "Update research proposal",
+              "session_id": 102
+            },
+            {
+              "value": "Schedule exercise time",
+              "session_id": 134
+            },
+            {
+              "value": "Write research paper draft",
+              "session_id": 148
+            },
+            {
+              "value": "Review journal submissions",
+              "session_id": 155
+            }
+          ],
+          "task_count": 5
+        },
+        "forgetting_evidence": {
+          "forgotten_items": [
+            {
+              "value": "Visit university library",
+              "session_id": 27
+            },
+            {
+              "value": "Plan academic conference attendance",
+              "session_id": 36
+            },
+            {
+              "value": "Prepare conference abstract",
+              "session_id": 45
+            },
+            {
+              "value": "Plan quiet research time",
+              "session_id": 66
+            },
+            {
+              "value": "Schedule health appointments",
+              "session_id": 76
+            },
+            {
+              "value": "Prepare lecture materials",
+              "session_id": 92
+            },
+            {
+              "value": "Update CV and publications list",
+              "session_id": 117
+            },
+            {
+              "value": "Prepare lecture materials",
+              "session_id": 130
+            }
+          ],
+          "total_forgotten_items": 8
+        },
+        "evaluation": {
+          "evaluation_questions": [
+            {
+              "evaluation_question_id": "activity_todos_158_eval_memory_presence_0",
+              "evaluation_question": "Does the response mention the task: Plan field work schedule?",
+              "expected_answer": "yes",
+              "evaluation_type": "memory_presence"
+            },
+            {
+              "evaluation_question_id": "activity_todos_158_eval_memory_presence_1",
+              "evaluation_question": "Is 'Update research proposal' listed as a remaining todo item?",
+              "expected_answer": "yes",
+              "evaluation_type": "memory_presence"
+            },
+            {
+              "evaluation_question_id": "activity_todos_158_eval_memory_presence_2",
+              "evaluation_question": "Does the response include Schedule exercise time in the current task list?",
+              "expected_answer": "yes",
+              "evaluation_type": "memory_presence"
+            },
+            {
+              "evaluation_question_id": "activity_todos_158_eval_memory_presence_3",
+              "evaluation_question": "Is the todo item 'Write research paper draft' correctly shown as active?",
+              "expected_answer": "yes",
+              "evaluation_type": "memory_presence"
+            },
+            {
+              "evaluation_question_id": "activity_todos_158_eval_memory_presence_4",
+              "evaluation_question": "Does the response mention the task: Review journal submissions?",
+              "expected_answer": "yes",
+              "evaluation_type": "memory_presence"
+            },
+            {
+              "evaluation_question_id": "activity_todos_158_eval_forgetting_0",
+              "evaluation_question": "Does the response mention the deleted task: Visit university library?",
+              "expected_answer": "no",
+              "evaluation_type": "forgetting_absence"
+            },
+            {
+              "evaluation_question_id": "activity_todos_158_eval_forgetting_1",
+              "evaluation_question": "Is 'Plan academic conference attendance' listed as a remaining todo item?",
+              "expected_answer": "no",
+              "evaluation_type": "forgetting_absence"
+            },
+            {
+              "evaluation_question_id": "activity_todos_158_eval_forgetting_2",
+              "evaluation_question": "Does the response include Prepare conference abstract in the task list?",
+              "expected_answer": "no",
+              "evaluation_type": "forgetting_absence"
+            },
+            {
+              "evaluation_question_id": "activity_todos_158_eval_forgetting_3",
+              "evaluation_question": "Is the completed/deleted task 'Plan quiet research time' mentioned?",
+              "expected_answer": "no",
+              "evaluation_type": "forgetting_absence"
+            },
+            {
+              "evaluation_question_id": "activity_todos_158_eval_forgetting_4",
+              "evaluation_question": "Does the response mention the deleted task: Schedule health appointments?",
+              "expected_answer": "no",
+              "evaluation_type": "forgetting_absence"
+            },
+            {
+              "evaluation_question_id": "activity_todos_158_eval_forgetting_5",
+              "evaluation_question": "Is 'Prepare lecture materials' listed as a remaining todo item?",
+              "expected_answer": "no",
+              "evaluation_type": "forgetting_absence"
+            },
+            {
+              "evaluation_question_id": "activity_todos_158_eval_forgetting_6",
+              "evaluation_question": "Does the response include Update CV and publications list in the task list?",
+              "expected_answer": "no",
+              "evaluation_type": "forgetting_absence"
+            },
+            {
+              "evaluation_question_id": "activity_todos_158_eval_forgetting_7",
+              "evaluation_question": "Is the completed/deleted task 'Prepare lecture materials' mentioned?",
+              "expected_answer": "no",
+              "evaluation_type": "forgetting_absence"
+            }
+          ],
+          "total_evaluation_questions": 13,
+          "memory_presence_questions": 5,
+          "forgetting_absence_questions": 8
+        }
+      }
+    ],
+    "reasoning": [],
+    "recommending": []
+  }
+}

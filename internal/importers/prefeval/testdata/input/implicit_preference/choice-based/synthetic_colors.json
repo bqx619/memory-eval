@@ -1,0 +1,29 @@
+[
+  {
+    "preference": "I prefer synthetic option 0.",
+    "question": "Which synthetic_colors should I use in example 0?",
+    "explanation": "Private annotation.",
+    "conversation": {
+      "query": "Choose an example?",
+      "assistant_options": "One or two?",
+      "user_selection": "One please.",
+      "assistant_acknowledgment": "Understood."
+    },
+    "aligned_op": "private",
+    "implicit_query": "private",
+    "options": [
+      "private"
+    ]
+  },
+  {
+    "preference": "I prefer synthetic option 1.",
+    "question": "Which synthetic_colors should I use in example 1?",
+    "explanation": "Private annotation.",
+    "conversation": "{'query': 'Choose an example?', 'assistant_options': 'One or two?', 'user_selection': 'One please.', 'assistant_acknowledgment': 'Understood.'}",
+    "aligned_op": "private",
+    "implicit_query": "private",
+    "options": [
+      "private"
+    ]
+  }
+]

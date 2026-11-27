@@ -1,0 +1,55 @@
+{
+  "id": "personamem",
+  "name": "PersonaMem v1",
+  "repository": "https://github.com/bowen-upenn/PersonaMem",
+  "dataset_url": "https://huggingface.co/datasets/bowen-upenn/PersonaMem-v1",
+  "data_nature": "model-generated",
+  "task_kinds": [
+    "mcq"
+  ],
+  "protocol_id": "personamem",
+  "variants": [
+    "32k"
+  ],
+  "reported_scale": {
+    "questions_32k": 589,
+    "personas": 20,
+    "contexts": 37
+  },
+  "license": {
+    "id": "MIT",
+    "noncommercial": false,
+    "no_derivatives": false,
+    "share_alike": false,
+    "redistribute_normalized": true,
+    "source": "https://huggingface.co/datasets/bowen-upenn/PersonaMem-v1"
+  },
+  "pinned_revision": "a8076d5608c93ba2a28983cd78aa99b01a163ae7",
+  "implementation_status": "imported",
+  "importer": "memeval import personamem",
+  "suites": [
+    {
+      "suite_id": "personamem-v1-32k@a8076d5608c9",
+      "path": "data/normalized/personamem-v1-32k@a8076d5608c9",
+      "protocol_ref": "protocols/personamem.json#official",
+      "import_stats_path": "data/normalized/personamem-v1-32k@a8076d5608c9/import.json",
+      "suite_sha256": "d92edc568cc34830779f430d7605ebfc2198b14d5367a6aa47a4208544885db1"
+    },
+    {
+      "suite_id": "personamem-v1-32k@a8076d5608c9-nopersona",
+      "path": "data/normalized/personamem-v1-32k@a8076d5608c9-nopersona",
+      "protocol_ref": "protocols/personamem.json#memory_only",
+      "import_stats_path": "data/normalized/personamem-v1-32k@a8076d5608c9-nopersona/import.json",
+      "suite_sha256": "67673f85bc91eae59ac96f203bd6a11fda8472cf73cd878bd99809c22eb24c5f"
+    }
+  ],
+  "overlaps": [],
+  "notes": [
+    "Facts: design/p2-locomo-personamem.md; local verified source.lock.json and official vendored code.",
+    "Offline synthetic reader acceptance only; no live model score claimed.",
+    "128k/1M not fetched, see source.lock.json not_fetched. Dataset variant 32k differs from protocol variants official/memory_only; protocol params.dataset_variants declares the mapping.",
+    "Seven observed question types; next-message equality is 0 verbatim and 139 only after removing User: for this diagnostic; previous-message exact equality is 64."
+  ],
+  "verification_date": "2026-10-17",
+  "lock_path": "data/upstream/personamem-v1/source.lock.json"
+}

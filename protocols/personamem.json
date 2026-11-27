@@ -1,0 +1,66 @@
+{
+  "protocol_id": "personamem",
+  "version": "1",
+  "upstream": {
+    "repo": "https://github.com/bowen-upenn/PersonaMem",
+    "commit": "d07e6ade22e85e0e5d562247323a9c3e07553226",
+    "files": [
+      {
+        "path": "design/upstream/personamem/inference.py",
+        "sha256": "9b77115a0d92d255c4c6ef6a710f8975e178d7f0c902739a1538411e06b8a71a"
+      },
+      {
+        "path": "design/upstream/personamem/inference_standalone_openai.py",
+        "sha256": "7ef9efca3bed32052a014efceb4daffad181ea4c3bad4bbbcb8ffbe386a9a472"
+      },
+      {
+        "path": "design/upstream/personamem/prompts.py",
+        "sha256": "a190fa7c9c29f73756300e253703e5c726896b84c34198030d766dd4946ee1cc"
+      }
+    ]
+  },
+  "variants": {
+    "official": {
+      "description": "Original system persona messages visible, 32k long-context setting",
+      "params": {
+        "dataset_variants": [
+          "32k"
+        ]
+      }
+    },
+    "memory_only": {
+      "description": "All system persona messages excluded; not comparable to official long-context setting",
+      "params": {
+        "dataset_variants": [
+          "32k"
+        ]
+      }
+    }
+  },
+  "scoring": {
+    "primary": "mcq",
+    "reader": {
+      "file": "design/upstream/personamem/inference.py",
+      "sha256": "9b77115a0d92d255c4c6ef6a710f8975e178d7f0c902739a1538411e06b8a71a",
+      "input_mode_default": "sources"
+    },
+    "answer_parsing": "personamem_final_answer",
+    "denominators": {
+      "exclude": [],
+      "per_type_report": true
+    },
+    "secondary": []
+  },
+  "fidelity_rules": {
+    "full": [
+      "reader.template==official",
+      "question_set complete (589 @32k)",
+      "variant==official",
+      "no truncation"
+    ],
+    "equivalent": [],
+    "else": "partial"
+  },
+  "cluster_basis": "persona",
+  "overlaps": []
+}

@@ -1,0 +1,256 @@
+{
+  "run_id": "hindsight-lme",
+  "run_seed": "fixed-seed",
+  "started_at_utc": "2026-10-19T11:30:00Z",
+  "wall_seconds": 0.060506083,
+  "framework_version": "0.4.0-m2a",
+  "suite_id": "longmemeval-s",
+  "suite_sha256": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+  "source": {
+    "license": "MIT"
+  },
+  "mode": "retrieval",
+  "repeats": 1,
+  "sut": {
+    "name": "hindsight",
+    "variant": "synthetic",
+    "describe": {
+      "config": {
+        "api_key": "FAKE_SECRET"
+      }
+    },
+    "declared": {
+      "embedding": {
+        "local": true,
+        "provider": "fastembed"
+      }
+    },
+    "manifest_sha256": "mmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmm",
+    "env_lock_sha256": "eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee",
+    "lock": {
+      "image": {
+        "id": "sha256:image"
+      },
+      "env_dir": "PRIVATE_PATH"
+    }
+  },
+  "protocol": {
+    "version": "paeval-v2",
+    "budget": {
+      "top_k": 10,
+      "max_context_chars": 100000
+    },
+    "reset_policy": "fresh_per_case",
+    "case_limit": null,
+    "retrieval_metrics": [
+      "longmemeval_official"
+    ],
+    "benchmark": {
+      "protocol_id": "longmemeval",
+      "variant": "s",
+      "ref": "protocols/longmemeval.json#s",
+      "sha256": "llllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllll"
+    }
+  },
+  "summary": {
+    "planned": 75,
+    "status_counts": {
+      "scored": 75
+    },
+    "scoring_coverage": 1,
+    "execution_errors": 0,
+    "unsupported": 0,
+    "metrics": {
+      "longmemeval_official.turn.recall_any@10": {
+        "mean": 0.8,
+        "n": 50
+      },
+      "longmemeval_official.turn.ndcg_any@10": {
+        "mean": 0.6,
+        "n": 50
+      }
+    },
+    "timings": {
+      "query_ms": {
+        "p50": 0.1165,
+        "p95": 0.2116786,
+        "total": 987654321, "discarded": "discarded_timing",
+        "n": 75
+      }
+    }
+  },
+  "by_category": {
+    "synthetic": {
+      "planned": 75,
+      "status_counts": {
+        "scored": 75
+      },
+      "metrics": {
+        "recall": {
+          "mean": 0.9186046511627907,
+          "n": 43
+        },
+        "ndcg": {
+          "mean": 0.8603585084090906,
+          "n": 43
+        },
+        "precision": {
+          "mean": 0.3763856362217018,
+          "n": 61
+        }
+      },
+      "failures": [
+        "PRIVATE_LOG"
+      ]
+    }
+  },
+  "scores": {
+    "official": null,
+    "memory_only": {
+      "longmemeval_official": {
+        "turn": {
+          "recall_any@10": {
+            "mean": 0.8,
+            "n": 50
+          },
+          "ndcg_any@10": {
+            "mean": 0.6,
+            "n": 50
+          }
+        }
+      }
+    }
+  },
+  "billing": {
+    "sut": {
+      "calls": 80,
+      "prompt_tokens": 9007199254740993,
+      "cached_tokens": 20,
+      "completion_tokens": 30,
+      "reasoning_tokens": 7,
+      "retries": 5,
+      "rate_limited_responses": 4,
+      "unmetered_calls": 2,
+      "client_disconnects": 1,
+      "circuit_opens": 0,
+      "queue_wait_p95_ms": 0.1234567890123456789,
+      "previously_consumed_tokens": 999,
+      "by_episode": [{"ns": "PRIVATE_EPISODE", "calls": 80}]
+    },
+    "evaluator": {
+      "calls": 4,
+      "prompt_tokens": 9007199254740993,
+      "completion_tokens": 5,
+      "cost_usd_new": 0.000000000000123456789,
+      "cost_usd_original": null,
+      "by_purpose": {"reader": {"calls": 4}},
+      "by_episode": [{"ns": "PRIVATE_EPISODE", "calls": 4}]
+    }
+  },
+  "warnings": [],
+  "environment": {
+    "private": "PRIVATE_PATH"
+  },
+  "parallel": 4,
+  "resume_count": 0,
+  "suite_schema_version": "3.0",
+  "memeval_commit": "recorded-commit",
+  "isolation": {
+    "tier": "D",
+    "backend": "container/docker",
+    "network_mode": "none",
+    "network_enforced": true,
+    "container": {
+      "residue": {
+        "run_clean": true
+      }
+    },
+    "selftest": {
+      "checks": {
+        "gold_absent": {
+          "passed": true
+        },
+        "tcp4_control": {
+          "passed": true
+        }
+      }
+    }
+  },
+  "cases": [
+    {"case_id":"0","kind":"retrieval","metrics":{"recall":0},"query":"PRIVATE_QUESTION","qa":{"hypothesis":"PRIVATE_RESPONSE"}},
+    {"case_id":"1","kind":"retrieval","metrics":{"recall":0},"query":"PRIVATE_QUESTION","qa":{"hypothesis":"PRIVATE_RESPONSE"}},
+    {"case_id":"2","kind":"retrieval","metrics":{"recall":0},"query":"PRIVATE_QUESTION","qa":{"hypothesis":"PRIVATE_RESPONSE"}},
+    {"case_id":"3","kind":"retrieval","metrics":{"recall":0},"query":"PRIVATE_QUESTION","qa":{"hypothesis":"PRIVATE_RESPONSE"}},
+    {"case_id":"4","kind":"retrieval","metrics":{"recall":0},"query":"PRIVATE_QUESTION","qa":{"hypothesis":"PRIVATE_RESPONSE"}},
+    {"case_id":"5","kind":"retrieval","metrics":{"recall":0},"query":"PRIVATE_QUESTION","qa":{"hypothesis":"PRIVATE_RESPONSE"}},
+    {"case_id":"6","kind":"retrieval","metrics":{"recall":0},"query":"PRIVATE_QUESTION","qa":{"hypothesis":"PRIVATE_RESPONSE"}},
+    {"case_id":"7","kind":"retrieval","metrics":{"recall":0},"query":"PRIVATE_QUESTION","qa":{"hypothesis":"PRIVATE_RESPONSE"}},
+    {"case_id":"8","kind":"retrieval","metrics":{"recall":0},"query":"PRIVATE_QUESTION","qa":{"hypothesis":"PRIVATE_RESPONSE"}},
+    {"case_id":"9","kind":"retrieval","metrics":{"recall":0},"query":"PRIVATE_QUESTION","qa":{"hypothesis":"PRIVATE_RESPONSE"}},
+    {"case_id":"10","kind":"retrieval","metrics":{"recall":0},"query":"PRIVATE_QUESTION","qa":{"hypothesis":"PRIVATE_RESPONSE"}},
+    {"case_id":"11","kind":"retrieval","metrics":{"recall":0},"query":"PRIVATE_QUESTION","qa":{"hypothesis":"PRIVATE_RESPONSE"}},
+    {"case_id":"12","kind":"retrieval","metrics":{"recall":0},"query":"PRIVATE_QUESTION","qa":{"hypothesis":"PRIVATE_RESPONSE"}},
+    {"case_id":"13","kind":"retrieval","metrics":{"recall":0},"query":"PRIVATE_QUESTION","qa":{"hypothesis":"PRIVATE_RESPONSE"}},
+    {"case_id":"14","kind":"retrieval","metrics":{"recall":0},"query":"PRIVATE_QUESTION","qa":{"hypothesis":"PRIVATE_RESPONSE"}},
+    {"case_id":"15","kind":"retrieval","metrics":{"recall":0},"query":"PRIVATE_QUESTION","qa":{"hypothesis":"PRIVATE_RESPONSE"}},
+    {"case_id":"16","kind":"retrieval","metrics":{"recall":0},"query":"PRIVATE_QUESTION","qa":{"hypothesis":"PRIVATE_RESPONSE"}},
+    {"case_id":"17","kind":"retrieval","metrics":{"recall":0},"query":"PRIVATE_QUESTION","qa":{"hypothesis":"PRIVATE_RESPONSE"}},
+    {"case_id":"18","kind":"retrieval","metrics":{"recall":0},"query":"PRIVATE_QUESTION","qa":{"hypothesis":"PRIVATE_RESPONSE"}},
+    {"case_id":"19","kind":"retrieval","metrics":{"recall":0},"query":"PRIVATE_QUESTION","qa":{"hypothesis":"PRIVATE_RESPONSE"}},
+    {"case_id":"20","kind":"retrieval","metrics":{"recall":0},"query":"PRIVATE_QUESTION","qa":{"hypothesis":"PRIVATE_RESPONSE"}},
+    {"case_id":"21","kind":"retrieval","metrics":{"recall":0},"query":"PRIVATE_QUESTION","qa":{"hypothesis":"PRIVATE_RESPONSE"}},
+    {"case_id":"22","kind":"retrieval","metrics":{"recall":0},"query":"PRIVATE_QUESTION","qa":{"hypothesis":"PRIVATE_RESPONSE"}},
+    {"case_id":"23","kind":"retrieval","metrics":{"recall":0},"query":"PRIVATE_QUESTION","qa":{"hypothesis":"PRIVATE_RESPONSE"}},
+    {"case_id":"24","kind":"retrieval","metrics":{"recall":0},"query":"PRIVATE_QUESTION","qa":{"hypothesis":"PRIVATE_RESPONSE"}},
+    {"case_id":"25","kind":"retrieval","metrics":{"recall":0},"query":"PRIVATE_QUESTION","qa":{"hypothesis":"PRIVATE_RESPONSE"}},
+    {"case_id":"26","kind":"retrieval","metrics":{"recall":0},"query":"PRIVATE_QUESTION","qa":{"hypothesis":"PRIVATE_RESPONSE"}},
+    {"case_id":"27","kind":"retrieval","metrics":{"recall":0},"query":"PRIVATE_QUESTION","qa":{"hypothesis":"PRIVATE_RESPONSE"}},
+    {"case_id":"28","kind":"retrieval","metrics":{"recall":0},"query":"PRIVATE_QUESTION","qa":{"hypothesis":"PRIVATE_RESPONSE"}},
+    {"case_id":"29","kind":"retrieval","metrics":{"recall":0},"query":"PRIVATE_QUESTION","qa":{"hypothesis":"PRIVATE_RESPONSE"}},
+    {"case_id":"30","kind":"retrieval","metrics":{"recall":0},"query":"PRIVATE_QUESTION","qa":{"hypothesis":"PRIVATE_RESPONSE"}},
+    {"case_id":"31","kind":"retrieval","metrics":{"recall":0},"query":"PRIVATE_QUESTION","qa":{"hypothesis":"PRIVATE_RESPONSE"}},
+    {"case_id":"32","kind":"retrieval","metrics":{"recall":0},"query":"PRIVATE_QUESTION","qa":{"hypothesis":"PRIVATE_RESPONSE"}},
+    {"case_id":"33","kind":"retrieval","metrics":{"recall":0},"query":"PRIVATE_QUESTION","qa":{"hypothesis":"PRIVATE_RESPONSE"}},
+    {"case_id":"34","kind":"retrieval","metrics":{"recall":0},"query":"PRIVATE_QUESTION","qa":{"hypothesis":"PRIVATE_RESPONSE"}},
+    {"case_id":"35","kind":"retrieval","metrics":{"recall":0},"query":"PRIVATE_QUESTION","qa":{"hypothesis":"PRIVATE_RESPONSE"}},
+    {"case_id":"36","kind":"retrieval","metrics":{"recall":0},"query":"PRIVATE_QUESTION","qa":{"hypothesis":"PRIVATE_RESPONSE"}},
+    {"case_id":"37","kind":"retrieval","metrics":{"recall":0},"query":"PRIVATE_QUESTION","qa":{"hypothesis":"PRIVATE_RESPONSE"}},
+    {"case_id":"38","kind":"retrieval","metrics":{"recall":0},"query":"PRIVATE_QUESTION","qa":{"hypothesis":"PRIVATE_RESPONSE"}},
+    {"case_id":"39","kind":"retrieval","metrics":{"recall":0},"query":"PRIVATE_QUESTION","qa":{"hypothesis":"PRIVATE_RESPONSE"}},
+    {"case_id":"40","kind":"retrieval","metrics":{"recall":0},"query":"PRIVATE_QUESTION","qa":{"hypothesis":"PRIVATE_RESPONSE"}},
+    {"case_id":"41","kind":"retrieval","metrics":{"recall":0},"query":"PRIVATE_QUESTION","qa":{"hypothesis":"PRIVATE_RESPONSE"}},
+    {"case_id":"42","kind":"retrieval","metrics":{"recall":0},"query":"PRIVATE_QUESTION","qa":{"hypothesis":"PRIVATE_RESPONSE"}},
+    {"case_id":"43","kind":"retrieval","metrics":{"recall":null},"query":"PRIVATE_QUESTION","qa":{"hypothesis":"PRIVATE_RESPONSE"}},
+    {"case_id":"44","kind":"retrieval","metrics":{"recall":null},"query":"PRIVATE_QUESTION","qa":{"hypothesis":"PRIVATE_RESPONSE"}},
+    {"case_id":"45","kind":"retrieval","metrics":{"recall":null},"query":"PRIVATE_QUESTION","qa":{"hypothesis":"PRIVATE_RESPONSE"}},
+    {"case_id":"46","kind":"retrieval","metrics":{"recall":null},"query":"PRIVATE_QUESTION","qa":{"hypothesis":"PRIVATE_RESPONSE"}},
+    {"case_id":"47","kind":"retrieval","metrics":{"recall":null},"query":"PRIVATE_QUESTION","qa":{"hypothesis":"PRIVATE_RESPONSE"}},
+    {"case_id":"48","kind":"retrieval","metrics":{"recall":null},"query":"PRIVATE_QUESTION","qa":{"hypothesis":"PRIVATE_RESPONSE"}},
+    {"case_id":"49","kind":"retrieval","metrics":{"recall":null},"query":"PRIVATE_QUESTION","qa":{"hypothesis":"PRIVATE_RESPONSE"}},
+    {"case_id":"50","kind":"retrieval","metrics":{"recall":null},"query":"PRIVATE_QUESTION","qa":{"hypothesis":"PRIVATE_RESPONSE"}},
+    {"case_id":"51","kind":"retrieval","metrics":{"recall":null},"query":"PRIVATE_QUESTION","qa":{"hypothesis":"PRIVATE_RESPONSE"}},
+    {"case_id":"52","kind":"retrieval","metrics":{"recall":null},"query":"PRIVATE_QUESTION","qa":{"hypothesis":"PRIVATE_RESPONSE"}},
+    {"case_id":"53","kind":"retrieval","metrics":{"recall":null},"query":"PRIVATE_QUESTION","qa":{"hypothesis":"PRIVATE_RESPONSE"}},
+    {"case_id":"54","kind":"retrieval","metrics":{"recall":null},"query":"PRIVATE_QUESTION","qa":{"hypothesis":"PRIVATE_RESPONSE"}},
+    {"case_id":"55","kind":"retrieval","metrics":{"recall":null},"query":"PRIVATE_QUESTION","qa":{"hypothesis":"PRIVATE_RESPONSE"}},
+    {"case_id":"56","kind":"retrieval","metrics":{"recall":null},"query":"PRIVATE_QUESTION","qa":{"hypothesis":"PRIVATE_RESPONSE"}},
+    {"case_id":"57","kind":"retrieval","metrics":{"recall":null},"query":"PRIVATE_QUESTION","qa":{"hypothesis":"PRIVATE_RESPONSE"}},
+    {"case_id":"58","kind":"retrieval","metrics":{"recall":null},"query":"PRIVATE_QUESTION","qa":{"hypothesis":"PRIVATE_RESPONSE"}},
+    {"case_id":"59","kind":"retrieval","metrics":{"recall":null},"query":"PRIVATE_QUESTION","qa":{"hypothesis":"PRIVATE_RESPONSE"}},
+    {"case_id":"60","kind":"retrieval","metrics":{"recall":null},"query":"PRIVATE_QUESTION","qa":{"hypothesis":"PRIVATE_RESPONSE"}},
+    {"case_id":"61","kind":"retrieval","metrics":{"recall":null},"query":"PRIVATE_QUESTION","qa":{"hypothesis":"PRIVATE_RESPONSE"}},
+    {"case_id":"62","kind":"retrieval","metrics":{"recall":null},"query":"PRIVATE_QUESTION","qa":{"hypothesis":"PRIVATE_RESPONSE"}},
+    {"case_id":"63","kind":"retrieval","metrics":{"recall":null},"query":"PRIVATE_QUESTION","qa":{"hypothesis":"PRIVATE_RESPONSE"}},
+    {"case_id":"64","kind":"retrieval","metrics":{"recall":null},"query":"PRIVATE_QUESTION","qa":{"hypothesis":"PRIVATE_RESPONSE"}},
+    {"case_id":"65","kind":"retrieval","metrics":{"recall":null},"query":"PRIVATE_QUESTION","qa":{"hypothesis":"PRIVATE_RESPONSE"}},
+    {"case_id":"66","kind":"retrieval","metrics":{"recall":null},"query":"PRIVATE_QUESTION","qa":{"hypothesis":"PRIVATE_RESPONSE"}},
+    {"case_id":"67","kind":"retrieval","metrics":{"recall":null},"query":"PRIVATE_QUESTION","qa":{"hypothesis":"PRIVATE_RESPONSE"}},
+    {"case_id":"68","kind":"retrieval","metrics":{"recall":null},"query":"PRIVATE_QUESTION","qa":{"hypothesis":"PRIVATE_RESPONSE"}},
+    {"case_id":"69","kind":"retrieval","metrics":{"recall":null},"query":"PRIVATE_QUESTION","qa":{"hypothesis":"PRIVATE_RESPONSE"}},
+    {"case_id":"70","kind":"retrieval","metrics":{"recall":null},"query":"PRIVATE_QUESTION","qa":{"hypothesis":"PRIVATE_RESPONSE"}},
+    {"case_id":"71","kind":"retrieval","metrics":{"recall":null},"query":"PRIVATE_QUESTION","qa":{"hypothesis":"PRIVATE_RESPONSE"}},
+    {"case_id":"72","kind":"retrieval","metrics":{"recall":null},"query":"PRIVATE_QUESTION","qa":{"hypothesis":"PRIVATE_RESPONSE"}},
+    {"case_id":"73","kind":"retrieval","metrics":{"recall":null},"query":"PRIVATE_QUESTION","qa":{"hypothesis":"PRIVATE_RESPONSE"}},
+    {"case_id":"74","kind":"retrieval","metrics":{"recall":null},"query":"PRIVATE_QUESTION","qa":{"hypothesis":"PRIVATE_RESPONSE"}}
+  ]
+}

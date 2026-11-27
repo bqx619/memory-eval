@@ -1,0 +1,513 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$ref": "#/$defs/Manifest",
+  "$defs": {
+    "Artifact": {
+      "properties": {
+        "url": {
+          "type": "string"
+        },
+        "sha256": {
+          "type": "string"
+        }
+      },
+      "additionalProperties": false,
+      "type": "object",
+      "required": [
+        "url",
+        "sha256"
+      ]
+    },
+    "Bridge": {
+      "properties": {
+        "base_url": {
+          "type": "string"
+        },
+        "routes": {
+          "type": "string"
+        },
+        "headers_env": {
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        },
+        "module": {
+          "type": "string"
+        },
+        "class": {
+          "type": "string"
+        },
+        "config": {
+          "type": "object"
+        }
+      },
+      "additionalProperties": false,
+      "type": "object"
+    },
+    "HTTPReady": {
+      "properties": {
+        "url": {
+          "type": "string"
+        },
+        "status": {
+          "type": "integer"
+        }
+      },
+      "additionalProperties": false,
+      "type": "object",
+      "required": [
+        "url",
+        "status"
+      ]
+    },
+    "LLM": {
+      "properties": {
+        "concurrency": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "required": {
+          "type": "boolean"
+        },
+        "model": {
+          "type": "string"
+        },
+        "reasoning_effort": {
+          "type": "string"
+        },
+        "env": {
+          "additionalProperties": {
+            "type": "string"
+          },
+          "type": "object"
+        }
+      },
+      "additionalProperties": false,
+      "type": "object",
+      "required": [
+        "required"
+      ]
+    },
+    "Manifest": {
+      "properties": {
+        "llm": {
+          "$ref": "#/$defs/LLM"
+        },
+        "status": {
+          "type": "string",
+          "enum": [
+            "active",
+            "deferred"
+          ]
+        },
+        "deferred_reason": {
+          "type": "string"
+        },
+        "sidecars": {
+          "items": {
+            "$ref": "#/$defs/Sidecar"
+          },
+          "type": "array"
+        },
+        "schema_version": {
+          "type": "string",
+          "enum": [
+            "3"
+          ]
+        },
+        "name": {
+          "type": "string"
+        },
+        "variant": {
+          "type": "string"
+        },
+        "notes": {
+          "type": "string"
+        },
+        "adapter": {
+          "properties": {
+            "kind": {
+              "type": "string"
+            },
+            "name": {
+              "type": "string"
+            },
+            "transport": {
+              "type": "string"
+            },
+            "max_frame_bytes": {
+              "type": "integer"
+            },
+            "request_timeout_s": {
+              "type": "number"
+            }
+          },
+          "additionalProperties": false,
+          "type": "object",
+          "required": [
+            "kind",
+            "name",
+            "transport",
+            "max_frame_bytes",
+            "request_timeout_s"
+          ]
+        },
+        "runtime": {
+          "$ref": "#/$defs/Runtime"
+        },
+        "bridge": {
+          "$ref": "#/$defs/Bridge"
+        },
+        "telemetry_env": {
+          "additionalProperties": {
+            "type": "string"
+          },
+          "type": "object"
+        },
+        "process": {
+          "properties": {
+            "command": {
+              "items": {
+                "type": "string"
+              },
+              "type": "array"
+            },
+            "cwd": {
+              "type": "string"
+            },
+            "env": {
+              "additionalProperties": {
+                "type": "string"
+              },
+              "type": "object"
+            },
+            "env_file": {
+              "type": "string"
+            },
+            "env_passthrough": {
+              "items": {
+                "type": "string"
+              },
+              "type": "array"
+            },
+            "secret_env": {
+              "items": {
+                "type": "string"
+              },
+              "type": "array"
+            }
+          },
+          "additionalProperties": false,
+          "type": "object",
+          "required": [
+            "command",
+            "cwd",
+            "env",
+            "env_file",
+            "env_passthrough"
+          ]
+        },
+        "config": {
+          "type": "object"
+        },
+        "sandbox": {
+          "properties": {
+            "backend": {
+              "type": "string",
+              "enum": [
+                "container",
+                "none"
+              ]
+            },
+            "container": {
+              "properties": {
+                "writable_tmpfs": {
+                  "items": {
+                    "type": "string"
+                  },
+                  "type": "array"
+                }
+              },
+              "additionalProperties": false,
+              "type": "object"
+            },
+            "network": {
+              "type": "string"
+            },
+            "limits": {
+              "properties": {
+                "cpus": {
+                  "type": "number",
+                  "exclusiveMinimum": 0
+                },
+                "timeout_s": {
+                  "type": "number"
+                },
+                "max_rss": {
+                  "type": "integer"
+                },
+                "pids_max": {
+                  "type": "integer"
+                }
+              },
+              "additionalProperties": false,
+              "type": "object",
+              "required": [
+                "timeout_s",
+                "max_rss",
+                "pids_max"
+              ]
+            }
+          },
+          "additionalProperties": false,
+          "type": "object",
+          "required": [
+            "network",
+            "limits"
+          ]
+        },
+        "ready": {
+          "properties": {
+            "strategy": {
+              "type": "string"
+            }
+          },
+          "additionalProperties": false,
+          "type": "object",
+          "required": [
+            "strategy"
+          ]
+        },
+        "declared": {
+          "type": "object"
+        }
+      },
+      "additionalProperties": false,
+      "type": "object",
+      "required": [
+        "schema_version",
+        "name",
+        "variant",
+        "notes",
+        "adapter",
+        "runtime",
+        "process",
+        "config",
+        "sandbox",
+        "ready",
+        "declared"
+      ]
+    },
+    "Runtime": {
+      "properties": {
+        "cache_links": {
+          "additionalProperties": {
+            "type": "string"
+          },
+          "type": "object"
+        },
+        "base": {
+          "type": "string",
+          "enum": [
+            "uv-python",
+            "uv-python-trixie",
+            "node"
+          ]
+        },
+        "apt": {
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        },
+        "indexes": {
+          "items": {
+            "$ref": "#/$defs/RuntimeIndex"
+          },
+          "type": "array"
+        },
+        "constraints": {
+          "type": "string"
+        },
+        "assets": {
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        },
+        "probe_env": {
+          "additionalProperties": {
+            "type": "string"
+          },
+          "type": "object"
+        },
+        "requirements_lock": {
+          "type": "string"
+        },
+        "kind": {
+          "type": "string",
+          "enum": [
+            "uv-python",
+            "node",
+            "binary"
+          ]
+        },
+        "python": {
+          "type": "string"
+        },
+        "requirements": {
+          "type": "string"
+        },
+        "version": {
+          "type": "string"
+        },
+        "sources": {
+          "additionalProperties": {
+            "$ref": "#/$defs/Artifact"
+          },
+          "type": "object"
+        },
+        "executable": {
+          "type": "string"
+        },
+        "package_lock": {
+          "type": "string"
+        },
+        "prepare": {
+          "items": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array"
+          },
+          "type": "array"
+        }
+      },
+      "additionalProperties": false,
+      "type": "object",
+      "required": [
+        "kind"
+      ]
+    },
+    "RuntimeIndex": {
+      "properties": {
+        "url": {
+          "type": "string"
+        },
+        "strategy": {
+          "type": "string"
+        }
+      },
+      "additionalProperties": false,
+      "type": "object",
+      "required": [
+        "url"
+      ]
+    },
+    "ServiceReady": {
+      "properties": {
+        "exec": {
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        },
+        "tcp": {
+          "type": "string"
+        },
+        "http": {
+          "$ref": "#/$defs/HTTPReady"
+        },
+        "timeout_s": {
+          "type": "number"
+        }
+      },
+      "additionalProperties": false,
+      "type": "object"
+    },
+    "Sidecar": {
+      "properties": {
+        "name": {
+          "type": "string"
+        },
+        "kind": {
+          "type": "string",
+          "enum": [
+            "postgres",
+            "qdrant",
+            "generic"
+          ]
+        },
+        "preset": {
+          "type": "string"
+        },
+        "image": {
+          "type": "string"
+        },
+        "port": {
+          "type": "integer"
+        },
+        "user": {
+          "type": "string"
+        },
+        "tmpfs": {
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        },
+        "shm_size": {
+          "type": "string"
+        },
+        "init": {
+          "items": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array"
+          },
+          "type": "array"
+        },
+        "command": {
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        },
+        "ready": {
+          "$ref": "#/$defs/ServiceReady"
+        },
+        "env": {
+          "additionalProperties": {
+            "type": "string"
+          },
+          "type": "object"
+        },
+        "secret_env": {
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        },
+        "exports": {
+          "additionalProperties": {
+            "type": "string"
+          },
+          "type": "object"
+        },
+        "stop": {
+          "type": "string"
+        }
+      },
+      "additionalProperties": false,
+      "type": "object",
+      "required": [
+        "name",
+        "kind",
+        "port",
+        "ready"
+      ]
+    }
+  }
+}

@@ -1,0 +1,13 @@
+{
+  "left": "null",
+  "right": "bm25",
+  "metric": "pass",
+  "delta_right_minus_left": 0.4342105263157895,
+  "paired_cases": 76,
+  "clusters": 1,
+  "excluded_cases": [
+    "recency-tiebreak-reinforcement"
+  ],
+  "ci95": null,
+  "note": "One shared source corpus: no population-level confidence interval is reported"
+}

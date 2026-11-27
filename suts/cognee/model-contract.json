@@ -1,0 +1,8 @@
+{
+  "gliner_model": "fastino/gliner2.5-base-v1",
+  "revision": null,
+  "observed_main_sha_prefix": "54785d51",
+  "embedding_model": "BAAI/bge-small-en-v1.5",
+  "embedding_repository": "Qdrant/bge-small-en-v1.5-onnx-Q",
+  "snapshot_policy": "resolve main at install, require observed prefix, record full resolved snapshot and file hashes in model-assets.json/env.lock.json"
+}

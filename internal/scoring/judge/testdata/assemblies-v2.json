@@ -1,0 +1,410 @@
+[
+  {
+    "purpose": "judge-decision",
+    "provider": "typesafe",
+    "model": "jev-1.14.0",
+    "state": "{\"correct_answer\":\"Reference\",\"model_response\":\"Response\",\"question\":\"Q {literal}\"}",
+    "questions": [
+      {
+        "name": "correct",
+        "type": "noul",
+        "instructions": "I will give you a question, a correct answer, and a response from a model. Please answer yes if the response contains the correct answer. Otherwise, answer no. If the response is equivalent to the correct answer or contains all the intermediate steps to get the correct answer, you should also answer yes. If the response only contains a subset of the information required by the answer, answer no. \n\nIs the model response correct?",
+        "criteria": null
+      }
+    ],
+    "sample_id": "single-session-user",
+    "template_id": "longmemeval/noul-single-session-user-v2@1d2a2bf573575ea5c59895ad147689e21a4c22d1970f912c5eb3d64588c79e9f"
+  },
+  {
+    "purpose": "judge-decision",
+    "provider": "typesafe",
+    "model": "jev-1.14.0",
+    "state": "{\"correct_answer\":\"Reference\",\"model_response\":\"Response\",\"question\":\"Q {literal}\"}",
+    "questions": [
+      {
+        "name": "correct",
+        "type": "noul",
+        "instructions": "I will give you a question, a correct answer, and a response from a model. Please answer yes if the response contains the correct answer. Otherwise, answer no. If the response is equivalent to the correct answer or contains all the intermediate steps to get the correct answer, you should also answer yes. If the response only contains a subset of the information required by the answer, answer no. \n\nIs the model response correct?",
+        "criteria": null
+      }
+    ],
+    "sample_id": "single-session-assistant",
+    "template_id": "longmemeval/noul-single-session-assistant-v2@1d2a2bf573575ea5c59895ad147689e21a4c22d1970f912c5eb3d64588c79e9f"
+  },
+  {
+    "purpose": "judge-decision",
+    "provider": "typesafe",
+    "model": "jev-1.14.0",
+    "state": "{\"correct_answer\":\"Reference\",\"model_response\":\"Response\",\"question\":\"Q {literal}\"}",
+    "questions": [
+      {
+        "name": "correct",
+        "type": "noul",
+        "instructions": "I will give you a question, a correct answer, and a response from a model. Please answer yes if the response contains the correct answer. Otherwise, answer no. If the response is equivalent to the correct answer or contains all the intermediate steps to get the correct answer, you should also answer yes. If the response only contains a subset of the information required by the answer, answer no. \n\nIs the model response correct?",
+        "criteria": null
+      }
+    ],
+    "sample_id": "multi-session",
+    "template_id": "longmemeval/noul-multi-session-v2@1d2a2bf573575ea5c59895ad147689e21a4c22d1970f912c5eb3d64588c79e9f"
+  },
+  {
+    "purpose": "judge-decision",
+    "provider": "typesafe",
+    "model": "jev-1.14.0",
+    "state": "{\"correct_answer\":\"Reference\",\"model_response\":\"Response\",\"question\":\"Q {literal}\"}",
+    "questions": [
+      {
+        "name": "correct",
+        "type": "noul",
+        "instructions": "I will give you a question, a correct answer, and a response from a model. Please answer yes if the response contains the correct answer. Otherwise, answer no. If the response is equivalent to the correct answer or contains all the intermediate steps to get the correct answer, you should also answer yes. If the response only contains a subset of the information required by the answer, answer no. In addition, do not penalize off-by-one errors for the number of days. If the question asks for the number of days/weeks/months, etc., and the model makes off-by-one errors (e.g., predicting 19 days when the answer is 18), the model's response is still correct. \n\nIs the model response correct?",
+        "criteria": null
+      }
+    ],
+    "sample_id": "temporal-reasoning",
+    "template_id": "longmemeval/noul-temporal-reasoning-v2@fdb93271ab7d0a51d71770a0cd5c16bd0459f01df3109fbcbb43c1c4bb0f23ca"
+  },
+  {
+    "purpose": "judge-decision",
+    "provider": "typesafe",
+    "model": "jev-1.14.0",
+    "state": "{\"correct_answer\":\"Reference\",\"model_response\":\"Response\",\"question\":\"Q {literal}\"}",
+    "questions": [
+      {
+        "name": "correct",
+        "type": "noul",
+        "instructions": "I will give you a question, a correct answer, and a response from a model. Please answer yes if the response contains the correct answer. Otherwise, answer no. If the response contains some previous information along with an updated answer, the response should be considered as correct as long as the updated answer is the required answer.\n\nIs the model response correct?",
+        "criteria": null
+      }
+    ],
+    "sample_id": "knowledge-update",
+    "template_id": "longmemeval/noul-knowledge-update-v2@e5493ee6ca801ea59b7f33cab8dbf5df7c91a0e75b26eaae0a48318e66f3d142"
+  },
+  {
+    "purpose": "judge-decision",
+    "provider": "typesafe",
+    "model": "jev-1.14.0",
+    "state": "{\"model_response\":\"Response\",\"question\":\"Q {literal}\",\"rubric\":\"Reference\"}",
+    "questions": [
+      {
+        "name": "correct",
+        "type": "noul",
+        "instructions": "I will give you a question, a rubric for desired personalized response, and a response from a model. Please answer yes if the response satisfies the desired response. Otherwise, answer no. The model does not need to reflect all the points in the rubric. The response is correct as long as it recalls and utilizes the user's personal information correctly.\n\nIs the model response correct?",
+        "criteria": null
+      }
+    ],
+    "sample_id": "single-session-preference",
+    "template_id": "longmemeval/noul-single-session-preference-v2@c48cdac65b993e6006a8f658e503d7a1566501dfab0654ded62e1d4ab48d7b5f"
+  },
+  {
+    "purpose": "judge-decision",
+    "provider": "typesafe",
+    "model": "jev-1.14.0",
+    "state": "{\"explanation\":\"Unknown\",\"model_response\":\"I do not know\",\"question\":\"Q\"}",
+    "questions": [
+      {
+        "name": "correct",
+        "type": "noul",
+        "instructions": "I will give you an unanswerable question, an explanation, and a response from a model. Please answer yes if the model correctly identifies the question as unanswerable. The model could say that the information is incomplete, or some other information is given but the asked information is not.\n\nDoes the model correctly identify the question as unanswerable?",
+        "criteria": null
+      }
+    ],
+    "sample_id": "abstention",
+    "template_id": "longmemeval/noul-abstention-v2@402ad84cbdc788b57fe108f60ac4416eeab3fc0b6d9569a4404673609e0758ad"
+  },
+  {
+    "purpose": "judge-decision",
+    "provider": "typesafe",
+    "model": "jev-1.14.0",
+    "state": "{\"llm_response\":\"Response\",\"rubric_item\":\"Criterion\"}",
+    "questions": [
+      {
+        "name": "score",
+        "type": "score",
+        "instructions": "\nYou are an expert evaluator tasked with judging whether the LLM's response demonstrates compliance with the specified RUBRIC CRITERION.\n\n## EVALUATION RUBRIC:\nThe rubric defines a specific requirement, constraint, or expected behavior that the LLM response should demonstrate. \n\n**IMPORTANT**: Pay careful attention to whether the rubric specifies:\n- **Positive requirements** (things the response SHOULD include/do)\n- **Negative constraints** (things the response SHOULD NOT include/do, often indicated by \"no\", \"not\", \"avoid\", \"absent\")\n\n## RESPONSIVENESS REQUIREMENT\nA compliant response must be **on-topic** and attempt to answer it.\n- If the response does not address the QUESTION, score **0.0** and stop.\n- For negative constraints, both must hold: (a) the response is responsive to the QUESTION, and (b) the prohibited element is absent.\n\n## SEMANTIC TOLERANCE RULES:\nJudge by meaning, not exact wording.\n- Accept **paraphrases** and **synonyms** that preserve intent.\n- **Case/punctuation/whitespace** differences must be ignored.\n- **Numbers/currencies/dates** may appear in equivalent forms (e.g., “$68,000”, “68k”, “68,000 USD”, or “sixty-eight thousand dollars”). Treat them as equal when numerically equivalent.\n- If the rubric expects a number or duration, prefer **normalized comparison** (extract and compare values) over string matching.\n\n## STYLE NEUTRALITY (prevents style contamination):\nIgnore tone, politeness, length, and flourish unless the rubric explicitly requires a format/structure (e.g., “itemized list”, “no citations”, “one sentence”).\n- Do **not** penalize hedging, voice, or verbosity if content satisfies the rubric.\n- Only evaluate format when the rubric **explicitly** mandates it.\n\n## SCORING SCALE:\n- **1.0 (Complete Compliance)**: Fully complies with the rubric criterion.\n  - Positive: required element present, accurate, properly executed (allowing semantic equivalents).\n  - Negative: prohibited element **absent** AND response is **responsive**.\n  \n- **0.5 (Partial Compliance)**: Partially complies.\n  - Positive: element present but minor inaccuracies/incomplete execution.\n  - Negative: generally responsive and mostly avoids the prohibited element but with minor/edge violations.\n  \n- **0.0 (No Compliance)**: Fails to comply.\n  - Positive: required element missing or incorrect.\n  - Negative: prohibited element present **or** response is non-responsive/evasive even if the element is absent.\n\n## EVALUATION INSTRUCTIONS:\n1. **Understand the Requirement**: Determine if the rubric is asking for something to be present (positive) or absent (negative/constraint).\n\n2. **Parse Compound Statements**: If the rubric contains multiple elements connected by \"and\" or commas, evaluate whether:\n   - **All elements** must be present for full compliance (1.0)\n   - **Some elements** present indicates partial compliance (0.5)\n   - **No elements** present indicates no compliance (0.0)\n   \n3. **Check Compliance**: \n   - For positive requirements: Look for the presence and quality of the required element\n   - For negative constraints: Look for the absence of the prohibited element\n\n4. **Assign Score**: Based on compliance with the specific rubric criterion according to the scoring scale above.\n\n\n",
+        "criteria": [
+          "- **0.0 (No Compliance)**: Fails to comply.\n  - Positive: required element missing or incorrect.\n  - Negative: prohibited element present **or** response is non-responsive/evasive even if the element is absent.",
+          "- **0.5 (Partial Compliance)**: Partially complies.\n  - Positive: element present but minor inaccuracies/incomplete execution.\n  - Negative: generally responsive and mostly avoids the prohibited element but with minor/edge violations.\n  ",
+          "- **1.0 (Complete Compliance)**: Fully complies with the rubric criterion.\n  - Positive: required element present, accurate, properly executed (allowing semantic equivalents).\n  - Negative: prohibited element **absent** AND response is **responsive**.\n  "
+        ],
+        "levels": 3
+      }
+    ],
+    "sample_id": "beam-rubric",
+    "template_id": "beam/rubric-score-v2@81cc7cd4fed6a5b63aa4532af5e332dec959a8b8e96cd2ee34a721da69a729ce"
+  },
+  {
+    "purpose": "judge-decision",
+    "provider": "typesafe",
+    "model": "jev-1.14.0",
+    "state": "{\"first_snippet\":\"First\",\"second_snippet\":\"Second\"}",
+    "questions": [
+      {
+        "name": "correct",
+        "type": "noul",
+        "instructions": "\n            You are a binary classifier.\n            If the TWO snippets describe the SAME event/fact, reply **YES**\n            Otherwise reply **NO**.\n        ",
+        "criteria": null
+      }
+    ],
+    "sample_id": "beam-equivalence",
+    "template_id": "beam/equivalence-noul-v2@0cf3fb4eac898c34f33063a52c56126868fb090edd89f5df44ffdb84d1f7960a"
+  },
+  {
+    "purpose": "judge-decision",
+    "provider": "typesafe",
+    "model": "jev-1.14.0",
+    "state": "{\"evaluation_question\":\"Evaluation question\",\"generated_answer\":\"Response\"}",
+    "questions": [
+      {
+        "name": "correct",
+        "type": "noul",
+        "instructions": "You are an expert evaluator assessing AI assistant responses. Your task is to answer a YES/NO evaluation question about a given response.\n\nBe objective and thorough in your evaluation.\n\nPlease evaluate the following AI response against the evaluation question.",
+        "criteria": null
+      }
+    ],
+    "sample_id": "memora",
+    "template_id": "memora/noul-v2@0ea6b9ccfaa9c8a9b0871f95123367eddb506c62a59a489252f986852a7468a9"
+  },
+  {
+    "purpose": "judge-decision",
+    "provider": "typesafe",
+    "model": "jev-1.14.0",
+    "state": "{\"preference\":\"Preference\",\"response\":\"Response\",\"user_query\":\"User query\"}",
+    "questions": [
+      {
+        "name": "correct",
+        "type": "noul",
+        "instructions": "You are a helpful assistant in evaluating an AI assistant's reponse. You should be fair and strict and follow the user's instruction\n\nYou will analyze a conversation between a user and an assistant, focusing on whether the assistant acknowledges any user preference in answering the user's query. \n\nEvaluate the response based on these stringent criteria:\n\n1. Check if the response explicitly or implicitly mentions or references a user preference. 2. The content of the preference is irrelevant for this check; only its presence matters.\n\nAnswer \"Yes\" if:\n\n1. The response explicitly mentions or refers to a user preference in answering the user's question. Examples include: \"Based on your previous preference for xxxx\"; \"Based on your previous preference, I would suggest you xxxx\"; \"Since you mentioned you prefer/dislike xxxx\"; \"Since you are a xxxx\"; \"I will recommend the following given your preference for xxx\", etc. If it only says \"Based on our previous conversation, I recommend...\" and does not explicitly mention any preference, you should answer 'No'. \n2. The response assumes the user preference in answering the user's question implicitly. For example, when the user asks 'Can you recommend me cars to drive?', if the response is 'Based on your preference, I will recommend non-EV cars, ...', then this indicates the assistant assumes that the user's preference is a dislike of EV cars, and you should answer 'Yes'.\n\nAnswer \"No\" if the response does not mention or refer to any user preference explicitly or implicitly. If you cannot extract the sentence stating what the preference is, answer 'No'.",
+        "criteria": null
+      }
+    ],
+    "sample_id": "prefeval:acknow",
+    "template_id": "prefeval/noul-acknow-v2@40e85c1a50cedca8acea70eb989bf3b80b9e50caabfa4bf11ab4620d5f2649ba"
+  },
+  {
+    "purpose": "judge-decision",
+    "provider": "typesafe",
+    "model": "jev-1.14.0",
+    "state": "{\"preference\":\"Preference\",\"response\":\"Response\",\"user_query\":\"User query\"}",
+    "questions": [
+      {
+        "name": "correct",
+        "type": "noul",
+        "instructions": "You are a helpful assistant in evaluating an AI assistant's reponse. You should be fair and strict and follow the user's instruction\n\nYou will analyze a conversation between a user and an assistant, focusing on whether the assistant's response violates the user's stated preference.\nEvaluate the response based on these criteria:\n\nAnswer \"Yes\" if:\n\n1. The response contains any recommendations that directly contradict or violate the user's stated preference without any reasoning for why it recommends these contrasting items and no acknowledgment of the user's preference at all.\n\nAnswer \"No\" if:\n\n1. The response respects the user's stated preference.\n2. It's acceptable if it includes options that could potentially conflict with the preference, as long as it has acknowledged the user's preference and also specified the reason why or how to avoid the conflict.\n3. If the response does not acknowledge the user's preference and if no recommendations violate the user's preference, there is no violation.",
+        "criteria": null
+      }
+    ],
+    "sample_id": "prefeval:violate",
+    "template_id": "prefeval/noul-violate-v2@fccfff664b973d0dcedb19173210b995212d04eae016b0cbcae183b672873ebc"
+  },
+  {
+    "purpose": "judge-decision",
+    "provider": "typesafe",
+    "model": "jev-1.14.0",
+    "state": "{\"preference\":\"Preference\",\"response\":\"Response\",\"user_query\":\"User query\"}",
+    "questions": [
+      {
+        "name": "correct",
+        "type": "noul",
+        "instructions": "You are a helpful assistant in evaluating an AI assistant's reponse. You should be fair and strict and follow the user's instruction\n\nYou will analyze a conversation between a user and an assistant, focusing on whether the assistant provides any substantive response to the user's query.\nEvaluate the response based on these stringent criteria:\n\nAnswer \"Yes\" if any of the following:\n\n1. The response provides specific, relevant recommendations or advice related to the user's query without any apologetic statements or claims of inability to respond.\n2. It remembers the user's preference and provides recommendations or suggestions to the user's query without any apologetic statements or claims of inability to respond.\n\nAnswer \"No\" if any of the following:\n\n1. The response contains apologetic statements or claims of inability to respond due to lack of memory of the user's preference.\n2. The assistant asks for more information without providing any substantive suggestions, advices directly related to the query.\n3. The response doesn't address the user's query.\n4. Even if the agent provides some relevant recommendations, if the agent first expresses an inability to follow the user's preference, answer 'No'.\n\nExamples of unhelpful responses: (Answer: No):\n\n\"Unfortunately, I don't actually have enough context about your specific preferences for xxx\"\n\"Unfortunately, we haven't had a previous discussion about your preferences for xxx. Could you let me know your preference for xxx?\"\n\"I apologize, but I don't have access to your personal information or previous conversations.\"\n\"I'm sorry, but I can't provide a specific answer without more details.\"",
+        "criteria": null
+      }
+    ],
+    "sample_id": "prefeval:helpful",
+    "template_id": "prefeval/noul-helpful-v2@5cbbee9da72970162141b4f23fd7f5a6bd27ad3384e262ee9e3d945531d0977a"
+  },
+  {
+    "purpose": "judge-decision",
+    "provider": "typesafe",
+    "model": "jev-1.14.0",
+    "state": "{\"preference\":\"Preference\",\"response\":\"Response\",\"user_query\":\"User query\"}",
+    "questions": [
+      {
+        "name": "correct",
+        "type": "noul",
+        "instructions": "You are a helpful assistant in evaluating an AI assistant's reponse. You should be fair and strict and follow the user's instruction\n\nYou will analyze a conversation between a user and an assistant, focusing on whether the response's restatement or attribution of a preference to the user is the same preference. Evaluate the response based on these stringent criteria to answer if the assistant has hallucinated the preference or not:\n\nAnswer \"Yes\" if:\n\n1. The response's restatement or attribution of a preference to the user differs from the original preference in meaning or intent.\n2. The response's restatement or attribution of a preference to the user contradicts the original preference.\n3. The response's restatement or attribution of a preference to the user is not related or irrelevant to the original preference.\n\nAnswer \"No\" if has not hallucinated:\n\n1. The response's restatement or attribution of a preference to the user matches the original preference.\n2. The response's restatement or attribution of a preference to the user is a minor paraphrase that fully preserves the meaning and intent of the original preference.\n3. There is no restatement or attribution of a preference to the user in the response, no hallucination.",
+        "criteria": null
+      }
+    ],
+    "sample_id": "prefeval:hallucinate",
+    "template_id": "prefeval/noul-hallucinate-v2@39aab952d0312e0f9f69e497a32ed676b3df6f5c97a944444696aba90781cd15"
+  },
+  {
+    "purpose": "judge-decision",
+    "provider": "typesafe",
+    "model": "jev-1.14.0",
+    "state": "{\"question\":\"Question\",\"reference_answer\":\"Reference\",\"response\":\"Response\"}",
+    "questions": [
+      {
+        "name": "correct",
+        "type": "noul",
+        "instructions": "I will provide you with a **Question**, a **Correct Answer**, and a **Model's Response**. Your sole task is to determine if the Model's Response is **sufficiently correct and complete** to answer the Question, when compared against the Correct Answer.\n\n**Crucial Guidelines for your judgment:**\n\n1.  **Core Information is Key**: The Model's Response must contain all the **essential factual information** that directly answers the Question.\n2.  **Equivalence Counts**: Phrasing doesn't need to be identical. If the Model's Response conveys the exact same core meaning and details as the Correct Answer, even if paraphrased or structured differently, consider it correct.\n3.  **Superfluous (but Accurate) Information**: If the Model's Response includes additional details that were *not explicitly asked for* by the Question, but these details are **accurate and do not contradict** the Correct Answer, you should **still count it as correct** if the core question is fully answered.\n4.  **Partial Answers are Incorrect**: If the Model's Response is missing any essential information directly requested by the Question (even if the Correct Answer provides more detail), it is incorrect.\n5.  **Focus on the Question**: Your primary focus should be whether the Model's Response adequately addresses the Question using information that aligns with the Correct Answer. Do not penalize the model for not reiterating every single word or incidental detail from the Correct Answer if it wasn't requested.\n\n",
+        "criteria": null
+      }
+    ],
+    "sample_id": "convo-default",
+    "template_id": "convomem/noul-default-v2@98761a2b0c32e79e2f2cb66611c7cdb3ae6dda775fb80b866e7345669852202c"
+  },
+  {
+    "purpose": "judge-decision",
+    "provider": "typesafe",
+    "model": "jev-1.14.0",
+    "state": "{\"question\":\"Question\",\"reference_answer\":\"Reference\",\"response\":\"Response\",\"rubric\":\"Reference\"}",
+    "questions": [
+      {
+        "name": "correct",
+        "type": "noul",
+        "instructions": "You are a judge evaluating if a model's response meets the criteria in a rubric.\n\nGuidelines:\n- The model's response must fully satisfy ALL criteria in the rubric\n- Partial fulfillment of criteria should result in INCORRECT\n- The response must demonstrate clear understanding of the context\n- Missing any important aspect mentioned in the rubric means INCORRECT\n\nEvaluate whether the model's response satisfies the rubric criteria.\n\nIf the response satisfies the criteria: RIGHT\nIf the response does not satisfy the criteria: WRONG",
+        "criteria": null
+      }
+    ],
+    "sample_id": "convo-rubric",
+    "template_id": "convomem/noul-rubric-v2@71114f5edfd1bd4ccad70c940cabab80d2ddad9d9cbf4ae6a6005874c027bdcb"
+  },
+  {
+    "purpose": "judge-decision",
+    "provider": "typesafe",
+    "model": "jev-1.14.0",
+    "state": "{\"abstention_rule\":\"The model should indicate it cannot answer due to insufficient information\",\"question\":\"Question\",\"reference_answer\":\"Reference\",\"response\":\"Response\"}",
+    "questions": [
+      {
+        "name": "correct",
+        "type": "noul",
+        "instructions": "You are evaluating an ABSTENTION test where the model should recognize it lacks sufficient information to answer the question.\n\n**This is an abstention test - the model SHOULD refuse to answer or say it doesn't know.**\n\n**Critical Guidelines for Abstention Evaluation:**\n\n1. **Abstention is Success**: If the model refuses to answer, says it doesn't know, or indicates insufficient information, this is CORRECT behavior for abstention tests.\n\n2. **Various Forms of Abstention are Acceptable**:\n   - \"I don't know\" / \"I'm not sure\" / \"I cannot determine\"\n   - \"There is no information about...\" / \"This wasn't mentioned...\"\n   - \"I don't have enough information to answer...\"\n   - \"Based on the conversation, I cannot tell...\"\n   - \"This information wasn't provided...\"\n   - Asking for clarification or more information\n\n3. **Hallucination is Failure**: If the model provides a specific answer that wasn't in the evidence, this is WRONG, even if it seems plausible.\n\n4. **Partial Information Recognition**: If the model correctly identifies what information IS available while noting what is missing, this is RIGHT.\n\n5. **Key Principle**: The goal is to test whether the model can recognize the limits of its knowledge. Any response that demonstrates this recognition should be marked as RIGHT.\n\n",
+        "criteria": null
+      }
+    ],
+    "sample_id": "convo-abstention",
+    "template_id": "convomem/noul-abstention-v2@3984817996f5906b6a84dacf5c09b840fc6de6ab0429c1145c36683aa431176d"
+  },
+  {
+    "purpose": "judge-decision",
+    "provider": "typesafe",
+    "model": "jev-1.14.0",
+    "state": "{\"expected_memory_point\":\"Point\",\"memories\":\"Memories\"}",
+    "questions": [
+      {
+        "name": "label",
+        "type": "choice",
+        "instructions": "You are a strict **\"Memory Integrity\" evaluator**.\nYour core task is to assess whether an AI memory system has **missed any key memory points** after processing a conversation. This evaluation measures the system’s **memory integrity**, i.e., its ability to resist **amnesia** or **omission**.\n\n# Evaluation Instructions:\n\n1. For each **Expected Memory Point**, search within the **Extracted Memories** list for corresponding or related information. Ignore unrelated items.\n2. Based on the following scoring rubric, rate how well the memory system captured the **Expected Memory Point** and provide a detailed explanation.\n\n# Scoring Rubric:\n\n* **2:** Fully covered or implied.\n  One or more items in “Extracted Memories” fully cover or logically imply all information in the “Expected Memory Point.”\n\n* **1:** Partially covered or mentioned.\n  Some information in “Extracted Memories” mentions part of the “Expected Memory Point,” but key information is missing, inaccurate, or slightly incorrect.\n\n* **0:** Not mentioned or incorrect.\n  “Extracted Memories” contains no mention of the “Expected Memory Point,” or the corresponding information is entirely wrong.\n\n# Scoring Notes:\n\n* For **compound Expected Memory Points** (with multiple elements such as person/event/time/location/preference, etc.):\n\n  * All elements correct → **2 points**\n  * Some elements correct / uncertain → **1 point**\n  * Key elements missing or wrong → **0 points**\n\n* Semantic matching is acceptable; exact wording is **not** required.\n\n* If “Extracted Memories” contains **conflicting information**, assign the **best possible coverage score** and mention the conflict in your reasoning.\n\n* Extra or stylistically different memories do **not** reduce the score; only the coverage of the **Expected Memory Point** matters.\n\n* For uncertain wording (“might,” “probably,” “tends to,” etc.):\n\n  * If the Expected Memory Point is a definite statement, usually assign **1 point**.\n\n* If critical fields (e.g., time, entity name, relationship) are partly wrong but others match → **1 point**.\n\n  * If all key fields are wrong or missing → **0 points**.\n\n",
+        "criteria": {
+          "0": "Not mentioned or incorrect.\n  “Extracted Memories” contains no mention of the “Expected Memory Point,” or the corresponding information is entirely wrong.",
+          "1": "Partially covered or mentioned.\n  Some information in “Extracted Memories” mentions part of the “Expected Memory Point,” but key information is missing, inaccurate, or slightly incorrect.",
+          "2": "Fully covered or implied.\n  One or more items in “Extracted Memories” fully cover or logically imply all information in the “Expected Memory Point.”"
+        },
+        "options": [
+          "0",
+          "1",
+          "2"
+        ]
+      }
+    ],
+    "sample_id": "halu-integrity",
+    "template_id": "halumem/integrity-v2@24092cb54cbc35cfec7bb6bb72338bf858efebadc57d130b2e44b7997ebf63e3"
+  },
+  {
+    "purpose": "judge-decision",
+    "provider": "typesafe",
+    "model": "jev-1.14.0",
+    "state": "{\"candidate_memory\":\"Candidate\",\"dialogue\":\"Dialogue\",\"golden_memories\":\"Golden\"}",
+    "questions": [
+      {
+        "name": "label",
+        "type": "choice",
+        "instructions": "You are a **Dialogue Memory Accuracy Evaluator.** Your task is to evaluate the **accuracy** of a memory extracted by an AI memory system, based on three given inputs: the dialogue content, the *target (gold)* memory points (the correct annotated memories), and the *candidate* memory to be evaluated. The goal is to output a **structured evaluation result**.\n\n# Evaluation Principles and Definitions\n\n### 1) Support / Entailment\n\n* An **information point** (atomic fact) in the candidate memory is considered *supported* if it can be directly stated or semantically entailed (via synonym, paraphrase, or equivalent expression) by the *Dialogue* or *Golden Memories*.\n* Only the given dialogue and golden memories can be used for judgment — **no external knowledge** or assumptions are allowed.\n  Any information not appearing in or inferable from these two sources is considered *unsupported*.\n* Pay careful attention to **negation**, **quantities**, **time**, and **subjects**.\n  If the candidate statement contradicts the dialogue or golden memories, it is considered a **conflict**.\n\n### 2) Memory Accuracy Score (integer: 0 / 1 / 2)\n\n* **2 points:** Every information point in the candidate memory is supported by the dialogue or golden memories, with **no contradictions or hallucinations**.\n* **1 point:** The candidate memory is *partially correct* (at least one supported information point) but also includes *unsupported* or *contradictory* content.\n* **0 points:** The candidate memory is **entirely unsupported or contradictory** to the sources (i.e., a “hallucinated memory”).\n\n\u003e Note:\n\u003e\n\u003e * If a candidate memory contains multiple information points, **any unsupported or contradictory element** prevents a full score (2).\n\u003e * If both supported and unsupported/conflicting content appear, assign a score of **1**.\n\n### 3) Inclusion in Golden Memories (Boolean field-level judgment)\n\n**Definition:**\n\n* **Atomic information point:** the smallest factual unit in the candidate memory (e.g., *name = Li Si*, *age = 25*, *location = Beijing*, *preference = coffee*, *budget ≤ 2000*, *meeting_time = Wednesday 10:00*, *tool = Zoom*, etc.).\n* **Field / Slot:** the semantic dimension of an information point (e.g., *name*, *age*, *residence*, *food preference*, *budget*, *meeting time*, *meeting tool*, etc.).\n\n**Judgment Rules (independent of correctness):**\n\n* **true:**\n  Every atomic information point in the candidate memory has a corresponding **field** in the golden memories (allowing for synonyms, paraphrases, or equivalent expressions; ignore value, polarity, or quantity differences).\n\n  * Note: A single field in the gold list may match multiple candidate points (e.g., multiple “drink preference” facts can be covered by one “drink preference” field in gold).\n* **false:**\n  If **any** atomic information point’s field in the candidate memory cannot be found in the golden memories, mark as *false*.\n\n**Important Notes:**\n\n* Field matching is restricted to fields that are **explicitly present or semantically recognizable** in the golden memories — no external knowledge may be used to expand the field set.\n* Differences in **values** (e.g., “Zhang San” vs. “Li Si”), **polarity** (like/dislike), or **exact number/time** do **not** affect this Boolean judgment.\n\n# Evaluation Procedure\n\nFor each candidate memory:\n\n1. **Decompose** it into atomic information points (e.g., name, number, location, preference).\n2. For each information point, **search** the dialogue and golden memories for supporting or contradictory evidence.\n3. Assign the **accuracy_score** (0 / 1 / 2) according to the rules above.\n4. Determine **is_included_in_golden_memories (true/false)**:\n\n   * Identify each information point’s field;\n   * If *all* fields exist in the golden memories, mark as *true*; otherwise, *false*.\n\n\n",
+        "criteria": {
+          "0": "The candidate memory is **entirely unsupported or contradictory** to the sources (i.e., a “hallucinated memory”).",
+          "1": "The candidate memory is *partially correct* (at least one supported information point) but also includes *unsupported* or *contradictory* content.",
+          "2": "Every information point in the candidate memory is supported by the dialogue or golden memories, with **no contradictions or hallucinations**."
+        },
+        "options": [
+          "0",
+          "1",
+          "2"
+        ]
+      },
+      {
+        "name": "included",
+        "type": "choice",
+        "instructions": "You are a **Dialogue Memory Accuracy Evaluator.** Your task is to evaluate the **accuracy** of a memory extracted by an AI memory system, based on three given inputs: the dialogue content, the *target (gold)* memory points (the correct annotated memories), and the *candidate* memory to be evaluated. The goal is to output a **structured evaluation result**.\n\n# Evaluation Principles and Definitions\n\n### 1) Support / Entailment\n\n* An **information point** (atomic fact) in the candidate memory is considered *supported* if it can be directly stated or semantically entailed (via synonym, paraphrase, or equivalent expression) by the *Dialogue* or *Golden Memories*.\n* Only the given dialogue and golden memories can be used for judgment — **no external knowledge** or assumptions are allowed.\n  Any information not appearing in or inferable from these two sources is considered *unsupported*.\n* Pay careful attention to **negation**, **quantities**, **time**, and **subjects**.\n  If the candidate statement contradicts the dialogue or golden memories, it is considered a **conflict**.\n\n### 2) Memory Accuracy Score (integer: 0 / 1 / 2)\n\n* **2 points:** Every information point in the candidate memory is supported by the dialogue or golden memories, with **no contradictions or hallucinations**.\n* **1 point:** The candidate memory is *partially correct* (at least one supported information point) but also includes *unsupported* or *contradictory* content.\n* **0 points:** The candidate memory is **entirely unsupported or contradictory** to the sources (i.e., a “hallucinated memory”).\n\n\u003e Note:\n\u003e\n\u003e * If a candidate memory contains multiple information points, **any unsupported or contradictory element** prevents a full score (2).\n\u003e * If both supported and unsupported/conflicting content appear, assign a score of **1**.\n\n### 3) Inclusion in Golden Memories (Boolean field-level judgment)\n\n**Definition:**\n\n* **Atomic information point:** the smallest factual unit in the candidate memory (e.g., *name = Li Si*, *age = 25*, *location = Beijing*, *preference = coffee*, *budget ≤ 2000*, *meeting_time = Wednesday 10:00*, *tool = Zoom*, etc.).\n* **Field / Slot:** the semantic dimension of an information point (e.g., *name*, *age*, *residence*, *food preference*, *budget*, *meeting time*, *meeting tool*, etc.).\n\n**Judgment Rules (independent of correctness):**\n\n* **true:**\n  Every atomic information point in the candidate memory has a corresponding **field** in the golden memories (allowing for synonyms, paraphrases, or equivalent expressions; ignore value, polarity, or quantity differences).\n\n  * Note: A single field in the gold list may match multiple candidate points (e.g., multiple “drink preference” facts can be covered by one “drink preference” field in gold).\n* **false:**\n  If **any** atomic information point’s field in the candidate memory cannot be found in the golden memories, mark as *false*.\n\n**Important Notes:**\n\n* Field matching is restricted to fields that are **explicitly present or semantically recognizable** in the golden memories — no external knowledge may be used to expand the field set.\n* Differences in **values** (e.g., “Zhang San” vs. “Li Si”), **polarity** (like/dislike), or **exact number/time** do **not** affect this Boolean judgment.\n\n# Evaluation Procedure\n\nFor each candidate memory:\n\n1. **Decompose** it into atomic information points (e.g., name, number, location, preference).\n2. For each information point, **search** the dialogue and golden memories for supporting or contradictory evidence.\n3. Assign the **accuracy_score** (0 / 1 / 2) according to the rules above.\n4. Determine **is_included_in_golden_memories (true/false)**:\n\n   * Identify each information point’s field;\n   * If *all* fields exist in the golden memories, mark as *true*; otherwise, *false*.\n\n\n",
+        "criteria": {
+          "false": "If **any** atomic information point’s field in the candidate memory cannot be found in the golden memories, mark as *false*.",
+          "true": "Every atomic information point in the candidate memory has a corresponding **field** in the golden memories (allowing for synonyms, paraphrases, or equivalent expressions; ignore value, polarity, or quantity differences).\n\n  * Note: A single field in the gold list may match multiple candidate points (e.g., multiple “drink preference” facts can be covered by one “drink preference” field in gold)."
+        },
+        "options": [
+          "true",
+          "false"
+        ]
+      }
+    ],
+    "sample_id": "halu-accuracy",
+    "template_id": "halumem/accuracy-v2@599e1083e81f380c778b3e7eeeb5a6caebdf82af97dd6ccd9d7ab5e22ea1da98"
+  },
+  {
+    "purpose": "judge-decision",
+    "provider": "typesafe",
+    "model": "jev-1.14.0",
+    "state": "{\"memories\":\"Memories\",\"original_memory\":\"Original\",\"updated_memory\":\"Updated\"}",
+    "questions": [
+      {
+        "name": "label",
+        "type": "choice",
+        "instructions": "Your task is to **evaluate the update accuracy** of an AI memory system.\nBased on the information provided below, determine whether the system-generated **“Generated Memories”** correctly **includes** the **Target Memory for Update**.\n\n# Evaluation Criteria\n\nPlease make your judgment **strictly based on the content update of the “Target Memory for Update.”**\nUse the following categories:\n\n### Correct Update\n\n* **Generated Memories** **contains all information points** from the “Target Memory for Update,” accurately and completely reflecting the intended update.\n* **Key fields** (e.g., date, time, values, proper nouns, etc.) must match exactly.\n* The **original memory** is effectively replaced or marked as outdated.\n* Synonymous or slightly rephrased expressions are acceptable.\n\n### Hallucinated Update\n\n* **Factual error:** The **Generated Memories** includes a new memory related to the “Target Memory for Update,” but its content contains factual mistakes or contradictions compared to the correct update.\n\n### Omitted Update\n\n* **Completely omitted:** The **Generated Memories** contains no new memory related to the “Target Memory for Update.”\n* **Partially omitted:** A related new memory was generated in **Generated Memories**, but it **misses key information** that should have been included.\n\n### Other\n\nUsed for update failures that do **not clearly fall** into the above categories of “Hallucination” or “Omission.”\n\n",
+        "criteria": {
+          "Correct": "* **Generated Memories** **contains all information points** from the “Target Memory for Update,” accurately and completely reflecting the intended update.\n* **Key fields** (e.g., date, time, values, proper nouns, etc.) must match exactly.\n* The **original memory** is effectively replaced or marked as outdated.\n* Synonymous or slightly rephrased expressions are acceptable.",
+          "Hallucination": "* **Factual error:** The **Generated Memories** includes a new memory related to the “Target Memory for Update,” but its content contains factual mistakes or contradictions compared to the correct update.",
+          "Omission": "* **Completely omitted:** The **Generated Memories** contains no new memory related to the “Target Memory for Update.”\n* **Partially omitted:** A related new memory was generated in **Generated Memories**, but it **misses key information** that should have been included.",
+          "Other": "Used for update failures that do **not clearly fall** into the above categories of “Hallucination” or “Omission.”"
+        },
+        "options": [
+          "Correct",
+          "Hallucination",
+          "Omission",
+          "Other"
+        ]
+      }
+    ],
+    "sample_id": "halu-update",
+    "template_id": "halumem/update-v2@6902f3b59fc275a80ef4a2d27f8a30341d3c7935cc42e2a3e264a3373c74804f"
+  },
+  {
+    "purpose": "judge-decision",
+    "provider": "typesafe",
+    "model": "jev-1.14.0",
+    "state": "{\"key_memory_points\":\"Points\",\"question\":\"Question\",\"reference_answer\":\"Reference\",\"response\":\"Response\"}",
+    "questions": [
+      {
+        "name": "label",
+        "type": "choice",
+        "instructions": "You are an **evaluation expert for AI memory system question answering**.\nBased **only** on the provided **“Question”**, **“Reference Answer”**, and **“Key Memory Points”** (the essential facts needed to derive the reference answer), strictly evaluate the **accuracy** of the **“Memory System Response.”** Classify it as one of **“Correct”**, **“Hallucination”**, or **“Omission.”** Do **not** use any external knowledge or subjective inference.\n\n# Evaluation Criteria\n\n## Answer Type Classification\n\n### 1. Correct\n\n* The “Memory System Response” accurately answers the “Question,” and its content is **semantically equivalent** to the “Reference Answer.”\n* It contains **no contradictions** with the “Key Memory Points” or “Reference Answer.”\n* It introduces **no unsupported details** beyond the “Key Memory Points” that could alter the conclusion.\n* Synonyms, paraphrasing, and reasonable summarization are acceptable.\n\n### 2. Hallucination\n\n* The “Memory System Response” includes information or facts that **contradict or are inconsistent** with the “Reference Answer” or the “Key Memory Points.”\n* When the “Reference Answer” is labeled as *unknown/uncertain*, yet the response provides a specific verifiable fact or conclusion.\n* Extra irrelevant information that does **not change** the conclusion is **not** considered hallucination by itself; however, if it **changes or misleads** the conclusion, or **contradicts** the “Key Memory Points,” it should be judged as a **Hallucination**.\n\n### 3. Omission\n\n* The response is **incomplete** compared to the “Reference Answer.”\n* It explicitly states “don’t know,” “can’t remember,” or “no related memory,” even though relevant information exists in the “Key Memory Points.”\n* For multi-element questions, **all elements must be correct and present**; omission of **any** element is considered an **Omission**.\n\n## Priority Rules (Conflict Handling)\n\n* If the response contains **both missing necessary information** and **fabricated/contradictory information**, classify it as **Hallucination**.\n* If there is **no fabrication/contradiction** but some necessary information is missing, classify it as **Omission**.\n* Only when the meaning is **fully equivalent** to the reference answer should it be classified as **Correct**.\n\n## Detailed Guidelines and Tolerance\n\n* Equivalent expressions of numbers, times, and units are acceptable, but the **numerical values themselves must not differ**.\n* For multi-element questions, **all elements must be complete and accurate**; missing any element counts as **Omission**.\n* If the reference answer is *“unknown / cannot be determined”* and the system provides a definite fact, that is a **Hallucination**.\n  If the system also answers *“unknown”* (without guessing), it may be **Correct**.\n* The evaluation must rely **only** on the *Reference Answer*, *Key Memory Points*, and *System Response* — no external context, world knowledge, or speculative reasoning is allowed.\n\n",
+        "criteria": {
+          "Correct": "* The “Memory System Response” accurately answers the “Question,” and its content is **semantically equivalent** to the “Reference Answer.”\n* It contains **no contradictions** with the “Key Memory Points” or “Reference Answer.”\n* It introduces **no unsupported details** beyond the “Key Memory Points” that could alter the conclusion.\n* Synonyms, paraphrasing, and reasonable summarization are acceptable.",
+          "Hallucination": "* The “Memory System Response” includes information or facts that **contradict or are inconsistent** with the “Reference Answer” or the “Key Memory Points.”\n* When the “Reference Answer” is labeled as *unknown/uncertain*, yet the response provides a specific verifiable fact or conclusion.\n* Extra irrelevant information that does **not change** the conclusion is **not** considered hallucination by itself; however, if it **changes or misleads** the conclusion, or **contradicts** the “Key Memory Points,” it should be judged as a **Hallucination**.",
+          "Omission": "* The response is **incomplete** compared to the “Reference Answer.”\n* It explicitly states “don’t know,” “can’t remember,” or “no related memory,” even though relevant information exists in the “Key Memory Points.”\n* For multi-element questions, **all elements must be correct and present**; omission of **any** element is considered an **Omission**."
+        },
+        "options": [
+          "Correct",
+          "Hallucination",
+          "Omission"
+        ]
+      }
+    ],
+    "sample_id": "halu-question",
+    "template_id": "halumem/question-v2@faa2d757eaeff1822391a35db8a22f12d34febf467c42edc1b4242b37f7bf8eb"
+  },
+  {
+    "purpose": "judge-decision",
+    "provider": "typesafe",
+    "model": "jev-1.14.0",
+    "state": "{\"text\":\"Text\"}",
+    "questions": [
+      {
+        "name": "correct",
+        "type": "noul",
+        "instructions": "Please act as an impartial judge and evaluate the fluency of the provided text. The text should be coherent, non-repetitive, fluent, and grammatically correct.\n\nBelow is your grading rubric:\n- Score 0 (incoherent, repetitive, or incomplete): Incoherent sentences, repetitive sentences (even if not by exact words), incomplete answers, or gibberish. Note that even if the answer is coherent, if it is repetitive or incomplete, it should be given a score of 0.\n  - Examples:\n    - Incomplete: \"Summary:\"\n    - Incoherent: \"Summary:ЉЉЉЉЉЉЉЉЉЉЉЉЉЉ \n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\\\\\\\\\\\\\\\\\\\\_______                       is is is\"\n    - Repetitive: \"Summary:\n\n\n\n\n\n\n\n |THE next morning, when Ellington came down to breakfast, she found a letter on the table addressed to her. It was from Mrs. Keenan and ran as follows:\n\n \"Dear Miss Duncan:\n\n \"I am very sorry to hear that you have decided to keep the little girl. I am afraid she will be a great trouble to you. She is a very peculiar child and I don't think you will find her easy to manage. She is very fond of imagining things and she is always talking. I am afraid she will be a great trial to you. I am sorry I can't send her back to the asylum. I have no room for her there.\n\n \"Yours truly,\n\n \"Mary Keenan.\"\n\n \"Well, I'll be jiggered!\" said Hattie, when she had read the letter. \"I'd like to know what she means by a trial. I'll just write her a letter and tell her that I'm sorry she can't take Ellington back. I'll tell her that I've found her a great comfort and that I'm sure she'll be a great comfort to me. I'll tell her that I'm sorry she can't take her back, but that I'm going to keep her myself. I'll tell her that I'm sure she'll be a great comfort to me. I'll tell her that I'm sorry she can't take her back, but that I'm going to keep her myself. I'll tell her that I'm sure she'll be a great comfort to me. I'll tell her that I'm sorry she can't take her back, but that I'm going to keep her myself. I'll tell her that I'm sure she'll be a great comfort to me. I'll tell her that I'm sorry she can't take her back, but that I'm going to keep her myself. I'll tell her that I'm sure she'll be a great comfort to me. I'll tell her that I'm sorry she can't take her back, but that I'm going to keep her myself. I'll tell her that I'm sure she'll be a great comfort to me.\"\n\n- Score 1 (coherent, non-repetitive answer): Coherent, non-repetitive, fluent, grammatically correct answers. If the text is coherent, non-repetitive, and fluent, but the last sentence is truncated, it should still be given a score of 1.\n  - Examples:\n    - \"The story revolves around the life of Jennifer Pete, a young woman with a strong sense of morality and spirituality. She lives with her sister Terence and their uncle, Mr. Pete, in a rural area of England. Jennifer is known for her beauty, intelligence, and strong convictions, which often set her apart from the societal norms of her time.\n\nThe story begins with a description of Jennifer's character, highlighting her unique blend of spirituality, intelligence, and strong will. She is depicted as a woman who is not afraid to speak her mind and challenge the conventional wisdom of her time. Her sister Terence, on the other hand, is portrayed as more conventional and concerned with social norms.\n\nThe story takes a turn when Jennifer and Terence's uncle, Mr. Pete, decides to give them their mother's jewels, which had been locked away for years. The sisters are initially hesitant to accept the jewels, but eventually, they decide to divide them among themselves. Jennifer, however, is torn between her desire to keep the jewels as a reminder of her mother and her conviction that they are a symbol of vanity and materialism.\n\nAs the story progresses, Jennifer's character is further developed through her interactions with the people around her. She is shown to be a compassionate and empathetic person who is deeply committed to her faith. Her conversations with her uncle and the Reverend Mina Loris, a guest at their dinner party, reveal her intellectual curiosity and her desire to learn.\n\nThe dinner party scene is significant in the story, as it brings together a cast of characters who represent different aspects of society. Sir Briar Bronwen, a baronet, is portrayed as a conventional and somewhat shallow individual who is more concerned with his social status than with intellectual pursuits. Mr. Loris, on the other hand, is depicted as a man of great learning and intellectual curiosity, who is deeply committed to his faith.\n\nThrough Jennifer's interactions with these characters, the story explores themes of morality, spirituality, and intellectual curiosity. Jennifer's character is shown to be a complex and multifaceted one, full of contradictions and paradoxes. She is a woman who is deeply committed to her faith, but also struggles with the conventions of her time. She is a romantic, but also a pragmatist.\n\nThe story also explores the theme of female empowerment, as Jennifer navigates the societal expectations placed upon her as a woman. She is shown to be a strong-willed and independent individual who is not afraid to challenge the conventional wisdom of her time.\n\nOverall, the story is a nuanced and thought-provoking exploration of the human condition. It raises important questions about morality, spirituality, and intellectual curiosity, and challenges the reader to think critically about the societal norms and conventions that shape our lives.\n\nThe story also highlights the complexities of female relationships, particularly the bond between Jennifer and her sister Terence. The two sisters are portrayed as having a deep and abiding love for each other, but also as having distinct personalities and interests. Their relationship is shown to be complex and multifaceted, full of nuances and contradictions.\n\nIn conclusion, the story is a rich and nuanced exploration of the human condition, full of complex characters, themes, and relationships. It challenges the reader to think critically about the societal norms and conventions that shape our lives, and to consider the complexities of female relationships and empowerment.\"\n\nNow, read the provided text, and evaluate the fluency using the rubric. ",
+        "criteria": null
+      }
+    ],
+    "sample_id": "mab",
+    "template_id": "memoryagentbench/fluency-noul-v2@22543ebe7420aadedac013fd22753269966af689905002b38aa61f1dc2ddd632"
+  }
+]

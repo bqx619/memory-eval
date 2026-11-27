@@ -1,0 +1,60 @@
+{
+  "dataset_id": "ai-hyz/MemoryAgentBench",
+  "source_url": "https://huggingface.co/datasets/ai-hyz/MemoryAgentBench",
+  "revision": "7ea066982b140a19337e17e60d45d4076e042faf",
+  "license_ack": {
+    "id": "MIT",
+    "source": "dataset card (README.md front matter: license: mit)",
+    "acknowledged_by": "claude (manual review of data card)",
+    "note": "MIT; contains a longmemeval_s* subset that overlaps LongMemEval-S and must be deduplicated in the registry"
+  },
+  "files": [
+    {
+      "path": "README.md",
+      "bytes": 9883,
+      "sha256": "5a9fd0dc2fbab5beb081eae40f24964ad1e47da75b9a7a01f0007791845b1580",
+      "hash_authority": "HF tree API git blob oid 8c0fbca5f558 verified; sha256 local"
+    },
+    {
+      "path": "entity2id.json",
+      "bytes": 1758081,
+      "sha256": "63353aca481bc9558b502f91cb98f6fa26438796fdd7e0bc06b5a1532126e8b5",
+      "hash_authority": "HF tree API git blob oid e606112a0167 verified; sha256 local"
+    },
+    {
+      "path": "data/Accurate_Retrieval-00000-of-00001.parquet",
+      "bytes": 20024386,
+      "sha256": "56c3cd80fb6731a3e53cd1a6be3148f54df60ff2d290ee50e28f8acebf9655c1",
+      "expected_sha256": "56c3cd80fb6731a3e53cd1a6be3148f54df60ff2d290ee50e28f8acebf9655c1",
+      "verified": true,
+      "hash_authority": "HF tree API lfs.oid (sha256)"
+    },
+    {
+      "path": "data/Conflict_Resolution-00000-of-00001.parquet",
+      "bytes": 1491588,
+      "sha256": "24d5c3f09ce0ce15625cb9f8a98f44f0d864ca6c94d7b4ad04eb697ca3a5ff45",
+      "expected_sha256": "24d5c3f09ce0ce15625cb9f8a98f44f0d864ca6c94d7b4ad04eb697ca3a5ff45",
+      "verified": true,
+      "hash_authority": "HF tree API lfs.oid (sha256)"
+    },
+    {
+      "path": "data/Long_Range_Understanding-00000-of-00001.parquet",
+      "bytes": 49342452,
+      "sha256": "5ab175461954db67770d4a4cb69e569b513ebb96aceb9ee79b57f67488bcd539",
+      "expected_sha256": "5ab175461954db67770d4a4cb69e569b513ebb96aceb9ee79b57f67488bcd539",
+      "verified": true,
+      "hash_authority": "HF tree API lfs.oid (sha256)"
+    },
+    {
+      "path": "data/Test_Time_Learning-00000-of-00001.parquet",
+      "bytes": 3947476,
+      "sha256": "5338753be48f925d03318eed66117286e3489025fabe050a547bd086cd7d79c0",
+      "expected_sha256": "5338753be48f925d03318eed66117286e3489025fabe050a547bd086cd7d79c0",
+      "verified": true,
+      "hash_authority": "HF tree API lfs.oid (sha256)"
+    }
+  ],
+  "fetched_at": "2026-10-17T01:15:04Z",
+  "fetched_by": "curl (manual, pre-Go-fetch; Claude)",
+  "hash_authority": "parquet: HF tree API lfs.oid sha256; others: git blob sha1 oid then local sha256"
+}

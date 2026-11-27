@@ -1,0 +1,173 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$ref": "#/$defs/Entry",
+  "$defs": {
+    "Entry": {
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "name": {
+          "type": "string"
+        },
+        "repository": {
+          "type": "string"
+        },
+        "dataset_url": {
+          "type": "string"
+        },
+        "data_nature": {
+          "type": "string",
+          "enum": [
+            "",
+            "real-user-logs",
+            "real-derived",
+            "human-authored",
+            "model-generated",
+            "structured-diagnostic",
+            "agent-trajectory"
+          ]
+        },
+        "task_kinds": {
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        },
+        "protocol_id": {
+          "type": "string"
+        },
+        "variants": {
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        },
+        "reported_scale": {
+          "type": "object"
+        },
+        "license": {
+          "$ref": "#/$defs/License"
+        },
+        "pinned_revision": {
+          "type": "string"
+        },
+        "implementation_status": {
+          "type": "string",
+          "enum": [
+            "registered",
+            "importer",
+            "imported",
+            "run"
+          ]
+        },
+        "importer": {
+          "type": "string"
+        },
+        "lock_path": {
+          "type": "string"
+        },
+        "suites": {
+          "items": {
+            "$ref": "#/$defs/SuiteRef"
+          },
+          "type": "array"
+        },
+        "overlaps": {
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        },
+        "notes": {
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        },
+        "verification_date": {
+          "type": "string"
+        }
+      },
+      "additionalProperties": false,
+      "type": "object",
+      "required": [
+        "id",
+        "name",
+        "repository",
+        "dataset_url",
+        "data_nature",
+        "task_kinds",
+        "protocol_id",
+        "variants",
+        "reported_scale",
+        "license",
+        "pinned_revision",
+        "implementation_status",
+        "importer",
+        "suites",
+        "overlaps",
+        "notes",
+        "verification_date"
+      ]
+    },
+    "License": {
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "noncommercial": {
+          "type": "boolean"
+        },
+        "no_derivatives": {
+          "type": "boolean"
+        },
+        "share_alike": {
+          "type": "boolean"
+        },
+        "redistribute_normalized": {
+          "type": "boolean"
+        },
+        "source": {
+          "type": "string"
+        }
+      },
+      "additionalProperties": false,
+      "type": "object",
+      "required": [
+        "id",
+        "noncommercial",
+        "no_derivatives",
+        "share_alike",
+        "redistribute_normalized",
+        "source"
+      ]
+    },
+    "SuiteRef": {
+      "properties": {
+        "suite_id": {
+          "type": "string"
+        },
+        "path": {
+          "type": "string"
+        },
+        "protocol_ref": {
+          "type": "string"
+        },
+        "import_stats_path": {
+          "type": "string"
+        },
+        "suite_sha256": {
+          "type": "string"
+        }
+      },
+      "additionalProperties": false,
+      "type": "object",
+      "required": [
+        "suite_id",
+        "path",
+        "protocol_ref"
+      ]
+    }
+  }
+}

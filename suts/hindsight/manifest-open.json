@@ -1,0 +1,139 @@
+{
+  "schema_version": "3",
+  "name": "hindsight",
+  "variant": "llm-gateway",
+  "notes": "Hindsight LLM 配置（open 网络）：与 gateway 变体相同的记忆加工，但容器可直连 provider，不经 governor；只用于对照网关路径。",
+  "adapter": {
+    "kind": "http-bridge",
+    "transport": "jsonrpc-stdio",
+    "max_frame_bytes": 16777216,
+    "request_timeout_s": 300
+  },
+  "runtime": {
+    "kind": "uv-python",
+    "python": "3.12",
+    "requirements": "requirements.in",
+    "requirements_lock": "requirements.lock.txt",
+    "prepare": [
+      [
+        "{python}",
+        "{project}/prepare_models.py",
+        "{env}/models"
+      ]
+    ],
+    "probe_env": {
+      "HINDSIGHT_API_LLM_PROVIDER": "none"
+    },
+    "base": "uv-python",
+    "indexes": [
+      {
+        "url": "https://download.pytorch.org/whl/cpu",
+        "strategy": "unsafe-best-match"
+      }
+    ],
+    "constraints": "requirements.constraints.txt"
+  },
+  "bridge": {
+    "module": "adapter",
+    "class": "Adapter",
+    "config": {},
+    "base_url": "http://api:8888",
+    "routes": "routes.json",
+    "headers_env": []
+  },
+  "process": {
+    "command": [],
+    "cwd": "{ep}/work",
+    "env": {
+      "HINDSIGHT_API_LLM_PROVIDER": "openai",
+      "HINDSIGHT_API_EMBEDDINGS_PROVIDER": "local",
+      "HINDSIGHT_API_RERANKER_PROVIDER": "local",
+      "HF_HOME": "{env}/models/hf",
+      "HF_HUB_OFFLINE": "1",
+      "TRANSFORMERS_OFFLINE": "1"
+    },
+    "env_passthrough": []
+  },
+  "sandbox": {
+    "network": "gateway",
+    "limits": {
+      "timeout_s": 1800
+    },
+    "backend": "container"
+  },
+  "ready": {
+    "strategy": "sync"
+  },
+  "declared": {
+    "project_version": "1.0.0",
+    "llm": "injected OpenAI-compatible gateway; chat/completions; unmetered",
+    "embedding": "BAAI/bge-small-en-v1.5; local",
+    "reranker": "cross-encoder/ms-marco-MiniLM-L-6-v2; local",
+    "top_k": "budget low <=100 / mid <=300 / high; results truncated, not exact top-k",
+    "bridge_base_url_host": "api"
+  },
+  "sidecars": [
+    {
+      "name": "postgres",
+      "kind": "postgres",
+      "preset": "postgres-pgvector-18",
+      "port": 5432,
+      "env": {
+        "POSTGRES_USER": "hindsight",
+        "POSTGRES_DB": "postgres"
+      },
+      "exports": {
+        "HINDSIGHT_API_DATABASE_URL": "postgresql://hindsight@{sidecar.postgres.host}:{sidecar.postgres.port}/postgres"
+      },
+      "init": [
+        [
+          "psql",
+          "-U",
+          "hindsight",
+          "-d",
+          "postgres",
+          "-h",
+          "127.0.0.1",
+          "-v",
+          "ON_ERROR_STOP=1",
+          "-c",
+          "CREATE EXTENSION IF NOT EXISTS vector;"
+        ]
+      ],
+      "stop": "SIGTERM"
+    },
+    {
+      "name": "api",
+      "kind": "generic",
+      "port": 8888,
+      "command": [
+        "{venv}/bin/python",
+        "-c",
+        "import sys; from hindsight_api.main import main; sys.exit(main())",
+        "--host",
+        "0.0.0.0",
+        "--port",
+        "8888"
+      ],
+      "ready": {
+        "http": {
+          "url": "http://127.0.0.1:8888/health",
+          "status": 200
+        },
+        "timeout_s": 180
+      },
+      "stop": "SIGTERM"
+    }
+  ],
+  "llm": {
+    "required": true,
+    "concurrency": 32,
+    "env": {
+      "HINDSIGHT_API_LLM_PROVIDER": "openai",
+      "HINDSIGHT_API_LLM_BASE_URL": "{llm.base_url}",
+      "HINDSIGHT_API_LLM_API_KEY": "{llm.api_key}",
+      "HINDSIGHT_API_LLM_MODEL": "{llm.model}",
+      "HINDSIGHT_API_LLM_REASONING_EFFORT": "{llm.reasoning_effort}"
+    }
+  }
+}

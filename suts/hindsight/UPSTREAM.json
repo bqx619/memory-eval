@@ -1,0 +1,7 @@
+{
+  "project": "Hindsight",
+  "repo": "https://github.com/vectorize-io/hindsight",
+  "package": "hindsight-all",
+  "version": "1.0.0",
+  "license": "MIT"
+}

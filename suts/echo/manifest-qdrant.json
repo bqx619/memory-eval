@@ -1,0 +1,52 @@
+{
+  "schema_version": "3",
+  "name": "echo",
+  "variant": "qdrant",
+  "notes": "\u4ec5\u9a8c\u8bc1 stdio \u4f20\u8f93\u4e0e\u9694\u79bb\uff1b\u4e0d\u662f\u8bb0\u5fc6\u8d28\u91cf\u57fa\u7ebf\u3002",
+  "adapter": {
+    "kind": "generic",
+    "transport": "jsonrpc-stdio"
+  },
+  "runtime": {
+    "kind": "uv-python",
+    "python": "3.12",
+    "requirements": "requirements.in",
+    "base": "uv-python"
+  },
+  "process": {
+    "command": [
+      "{venv}/bin/python",
+      "{project}/echo_bridge.py"
+    ],
+    "cwd": "{ep}/work",
+    "env": {},
+    "env_passthrough": []
+  },
+  "config": {},
+  "sandbox": {
+    "network": "none",
+    "limits": {
+      "timeout_s": 600
+    },
+    "backend": "container"
+  },
+  "ready": {
+    "strategy": "sync"
+  },
+  "declared": {
+    "llm": null,
+    "embedding": null
+  },
+  "llm": {
+    "required": false
+  },
+  "sidecars": [
+    {
+      "name": "qdrant",
+      "kind": "qdrant",
+      "preset": "qdrant-1.19.2",
+      "port": 6333,
+      "stop": "SIGTERM"
+    }
+  ]
+}

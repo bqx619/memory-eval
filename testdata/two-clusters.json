@@ -1,0 +1,18 @@
+{
+  "schema_version": "2.0",
+  "suite_id": "software-unit-fixture-two-clusters",
+  "track": "history-qa",
+  "provenance": {"source_url": "unit-test://not-a-benchmark"},
+  "limitations": ["Artificial software fixture; never counted as benchmark data"],
+  "episodes": [
+    {"id": "a", "events": [{"source_id": "a1", "owner": "u", "content": "blue box"}],
+     "cases": [
+       {"id": "a-one", "kind": "retrieval", "query": "blue", "user": "u", "cutoff": 1, "gold": {"evidence_ids": ["a1"]}},
+       {"id": "a-two", "kind": "retrieval", "query": "box", "user": "u", "cutoff": 1, "gold": {"evidence_ids": ["a1"]}}
+     ]},
+    {"id": "b", "events": [{"source_id": "b1", "owner": "u", "content": "blue box"}],
+     "cases": [
+       {"id": "b-one", "kind": "retrieval", "query": "green", "user": "u", "cutoff": 1, "gold": {"evidence_ids": ["b1"]}}
+     ]}
+  ]
+}

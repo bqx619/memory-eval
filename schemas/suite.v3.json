@@ -1,0 +1,754 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$ref": "#/$defs/Suite",
+  "$defs": {
+    "Attachment": {
+      "properties": {
+        "kind": {
+          "type": "string"
+        },
+        "ref": {
+          "type": "string"
+        },
+        "caption": {
+          "type": "string"
+        }
+      },
+      "additionalProperties": false,
+      "type": "object",
+      "required": [
+        "kind",
+        "ref"
+      ]
+    },
+    "Budget": {
+      "properties": {
+        "top_k": {
+          "type": "integer"
+        },
+        "max_context_chars": {
+          "type": "integer"
+        },
+        "maxBeliefs": {
+          "type": "integer"
+        }
+      },
+      "additionalProperties": false,
+      "type": "object"
+    },
+    "Case": {
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "kind": {
+          "type": "string",
+          "enum": [
+            "typed_context",
+            "qa",
+            "mcq",
+            "retrieval",
+            "rubric",
+            "set_match",
+            "ordering",
+            "summary",
+            "memory_audit",
+            "recsys",
+            "agentic"
+          ]
+        },
+        "query": {
+          "type": "string"
+        },
+        "user": {
+          "type": "string"
+        },
+        "scope": {
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        },
+        "category": {
+          "type": "string"
+        },
+        "cluster_id": {
+          "type": "string"
+        },
+        "query_time": {
+          "type": "string"
+        },
+        "question_type": {
+          "type": "string"
+        },
+        "budget": {
+          "$ref": "#/$defs/Budget"
+        },
+        "options": {
+          "additionalProperties": {
+            "type": "string"
+          },
+          "type": "object"
+        },
+        "cutoff": {
+          "type": "integer"
+        },
+        "attributes": {
+          "type": "object"
+        },
+        "query_point": {
+          "type": "string",
+          "enum": [
+            "",
+            "end_of_history",
+            "at_index",
+            "after_session_k"
+          ]
+        },
+        "session_checkpoint": {
+          "type": "string"
+        },
+        "inject_current_date": {
+          "type": "boolean"
+        },
+        "difficulty": {
+          "type": "string"
+        },
+        "gold": {
+          "$ref": "#/$defs/Gold"
+        }
+      },
+      "additionalProperties": false,
+      "type": "object",
+      "required": [
+        "id",
+        "kind",
+        "query",
+        "scope",
+        "cluster_id",
+        "budget",
+        "cutoff",
+        "gold"
+      ]
+    },
+    "Checker": {
+      "properties": {
+        "type": {
+          "type": "string"
+        },
+        "params": true
+      },
+      "additionalProperties": false,
+      "type": "object",
+      "required": [
+        "type",
+        "params"
+      ]
+    },
+    "Disputed": {
+      "properties": {
+        "note": {
+          "type": "string"
+        },
+        "alt_answers": {
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        }
+      },
+      "additionalProperties": false,
+      "type": "object",
+      "required": [
+        "note"
+      ]
+    },
+    "Episode": {
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "cluster_id": {
+          "type": "string"
+        },
+        "events": {
+          "items": {
+            "$ref": "#/$defs/Event"
+          },
+          "type": "array"
+        },
+        "cases": {
+          "items": {
+            "$ref": "#/$defs/Case"
+          },
+          "type": "array"
+        }
+      },
+      "additionalProperties": false,
+      "type": "object",
+      "required": [
+        "id",
+        "cluster_id",
+        "events",
+        "cases"
+      ]
+    },
+    "Event": {
+      "properties": {
+        "source_id": {
+          "type": "string"
+        },
+        "owner": {
+          "type": "string"
+        },
+        "content": {
+          "type": "string"
+        },
+        "role": {
+          "type": "string",
+          "enum": [
+            "user",
+            "assistant",
+            "system",
+            "observation",
+            "fact",
+            "tool"
+          ]
+        },
+        "session": {
+          "type": "string"
+        },
+        "timestamp": {
+          "type": "string"
+        },
+        "time_raw": {
+          "type": "string"
+        },
+        "turn_group": {
+          "type": "string"
+        },
+        "modality": {
+          "type": "string",
+          "enum": [
+            "",
+            "text",
+            "image",
+            "screenshot",
+            "a11y_tree",
+            "tool_result"
+          ]
+        },
+        "attachments": {
+          "items": {
+            "$ref": "#/$defs/Attachment"
+          },
+          "type": "array"
+        },
+        "attributes": {
+          "type": "object"
+        }
+      },
+      "additionalProperties": false,
+      "type": "object",
+      "required": [
+        "source_id",
+        "owner",
+        "content",
+        "role",
+        "attributes"
+      ]
+    },
+    "EvidenceRef": {
+      "properties": {
+        "kind": {
+          "type": "string",
+          "enum": [
+            "event",
+            "session",
+            "text",
+            "trajectory"
+          ]
+        },
+        "ref": {
+          "type": "string"
+        }
+      },
+      "additionalProperties": false,
+      "type": "object",
+      "required": [
+        "kind",
+        "ref"
+      ]
+    },
+    "Gold": {
+      "properties": {
+        "evidence_refs": {
+          "items": {
+            "$ref": "#/$defs/EvidenceRef"
+          },
+          "type": "array"
+        },
+        "abstain_reference": {
+          "type": "string"
+        },
+        "mcq": {
+          "$ref": "#/$defs/MCQSpec"
+        },
+        "rubric": {
+          "$ref": "#/$defs/Rubric"
+        },
+        "phrase_set": {
+          "$ref": "#/$defs/PhraseSet"
+        },
+        "sequence": {
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        },
+        "reference": {
+          "type": "string"
+        },
+        "memory_points": {
+          "items": {
+            "$ref": "#/$defs/MemoryPoint"
+          },
+          "type": "array"
+        },
+        "item_ids": {
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        },
+        "checker": {
+          "$ref": "#/$defs/Checker"
+        },
+        "disputed": {
+          "$ref": "#/$defs/Disputed"
+        },
+        "answers": {
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        },
+        "abstain": {
+          "type": "boolean"
+        },
+        "evidence_session_ids": {
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        },
+        "evidence_ids": {
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        },
+        "evidence_unit": {
+          "type": "string"
+        },
+        "exhaustive": {
+          "type": "boolean"
+        },
+        "choice": {
+          "type": "string"
+        },
+        "expect": true
+      },
+      "additionalProperties": false,
+      "type": "object",
+      "required": [
+        "evidence_ids"
+      ]
+    },
+    "Haystack": {
+      "properties": {
+        "filler_source": {
+          "type": "string"
+        },
+        "context_ladder": {
+          "items": {
+            "type": "integer"
+          },
+          "type": "array"
+        }
+      },
+      "additionalProperties": false,
+      "type": "object"
+    },
+    "License": {
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "noncommercial": {
+          "type": "boolean"
+        },
+        "no_derivatives": {
+          "type": "boolean"
+        },
+        "share_alike": {
+          "type": "boolean"
+        },
+        "redistribute_normalized": {
+          "type": "boolean"
+        },
+        "source": {
+          "type": "string"
+        }
+      },
+      "additionalProperties": false,
+      "type": "object",
+      "required": [
+        "id",
+        "noncommercial",
+        "no_derivatives",
+        "share_alike",
+        "redistribute_normalized",
+        "source"
+      ]
+    },
+    "MCQSpec": {
+      "properties": {
+        "seed": {
+          "type": "integer"
+        },
+        "order": {
+          "items": {
+            "type": "integer"
+          },
+          "type": "array"
+        },
+        "shuffle": {
+          "type": "boolean"
+        },
+        "parse": {
+          "type": "string",
+          "enum": [
+            "exact_option",
+            "boxed",
+            "letter",
+            "personamem_final_answer",
+            "prefeval_choice_tag"
+          ]
+        }
+      },
+      "additionalProperties": false,
+      "type": "object",
+      "required": [
+        "shuffle",
+        "parse"
+      ]
+    },
+    "MemoryPoint": {
+      "properties": {
+        "is_update": {
+          "type": "boolean"
+        },
+        "id": {
+          "type": "string"
+        },
+        "content": {
+          "type": "string"
+        },
+        "type": {
+          "type": "string"
+        },
+        "polarity": {
+          "type": "string",
+          "enum": [
+            "should_exist",
+            "should_not_exist"
+          ]
+        },
+        "importance": {
+          "type": "string"
+        },
+        "update_of": {
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        }
+      },
+      "additionalProperties": false,
+      "type": "object",
+      "required": [
+        "id",
+        "content",
+        "type",
+        "polarity",
+        "importance"
+      ]
+    },
+    "PhraseNorm": {
+      "properties": {
+        "lower": {
+          "type": "boolean"
+        },
+        "strip_punct": {
+          "type": "boolean"
+        },
+        "separators": {
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        }
+      },
+      "additionalProperties": false,
+      "type": "object",
+      "required": [
+        "lower",
+        "strip_punct"
+      ]
+    },
+    "PhraseSet": {
+      "properties": {
+        "items": {
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        },
+        "ordered": {
+          "type": "boolean"
+        },
+        "norm": {
+          "$ref": "#/$defs/PhraseNorm"
+        }
+      },
+      "additionalProperties": false,
+      "type": "object",
+      "required": [
+        "items",
+        "ordered",
+        "norm"
+      ]
+    },
+    "Rubric": {
+      "properties": {
+        "items": {
+          "items": {
+            "$ref": "#/$defs/RubricItem"
+          },
+          "type": "array"
+        },
+        "aggregate": {
+          "type": "string",
+          "enum": [
+            "mean",
+            "majority",
+            "formula",
+            "fama",
+            "prefeval",
+            "convomem_rubric"
+          ]
+        },
+        "lambda": {
+          "type": "number"
+        }
+      },
+      "additionalProperties": false,
+      "type": "object",
+      "required": [
+        "items",
+        "aggregate"
+      ]
+    },
+    "RubricItem": {
+      "properties": {
+        "group": {
+          "type": "string"
+        },
+        "text": {
+          "type": "string"
+        },
+        "polarity": {
+          "type": "string",
+          "enum": [
+            "must_contain",
+            "must_not_contain",
+            "as_written"
+          ]
+        },
+        "weight": {
+          "type": "number"
+        }
+      },
+      "additionalProperties": false,
+      "type": "object",
+      "required": [
+        "text",
+        "polarity",
+        "weight"
+      ]
+    },
+    "Suite": {
+      "properties": {
+        "schema_version": {
+          "type": "string",
+          "enum": [
+            "3.0"
+          ]
+        },
+        "suite_id": {
+          "type": "string"
+        },
+        "track": {
+          "type": "string"
+        },
+        "provenance": {
+          "type": "object"
+        },
+        "limitations": {
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        },
+        "protocol": {
+          "$ref": "#/$defs/SuiteProtocol"
+        },
+        "protocol_ref": {
+          "type": "string"
+        },
+        "license": {
+          "$ref": "#/$defs/License"
+        },
+        "data_nature": {
+          "type": "string",
+          "enum": [
+            "",
+            "real-user-logs",
+            "real-derived",
+            "human-authored",
+            "model-generated",
+            "structured-diagnostic",
+            "agent-trajectory"
+          ]
+        },
+        "taxonomy": {
+          "$ref": "#/$defs/Taxonomy"
+        },
+        "splits": {
+          "additionalProperties": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array"
+          },
+          "type": "object"
+        },
+        "episodes": {
+          "items": {
+            "$ref": "#/$defs/Episode"
+          },
+          "type": "array"
+        }
+      },
+      "additionalProperties": false,
+      "type": "object",
+      "required": [
+        "schema_version",
+        "suite_id",
+        "track",
+        "provenance",
+        "limitations",
+        "protocol",
+        "episodes"
+      ]
+    },
+    "SuiteProtocol": {
+      "properties": {
+        "ingestion": {
+          "type": "string"
+        },
+        "query_time_policy": {
+          "type": "string",
+          "enum": [
+            "",
+            "reference_only",
+            "as_of"
+          ]
+        },
+        "retrieval_metrics": {
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        },
+        "reset_policy_allowed": {
+          "items": {
+            "type": "string",
+            "enum": [
+              "fresh_per_case",
+              "incremental_per_episode",
+              "per_cluster",
+              "shared_haystack"
+            ]
+          },
+          "type": "array"
+        },
+        "time_exposure": {
+          "type": "string",
+          "enum": [
+            "",
+            "none",
+            "session",
+            "turn"
+          ]
+        },
+        "inject_current_date": {
+          "type": "boolean"
+        },
+        "speaker_mapping": {
+          "additionalProperties": {
+            "type": "string"
+          },
+          "type": "object"
+        },
+        "text_only": {
+          "type": "boolean"
+        },
+        "haystack": {
+          "$ref": "#/$defs/Haystack"
+        }
+      },
+      "additionalProperties": false,
+      "type": "object",
+      "required": [
+        "ingestion"
+      ]
+    },
+    "Taxonomy": {
+      "properties": {
+        "original_field": {
+          "type": "string"
+        },
+        "labels": {
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        },
+        "canonical_map": {
+          "additionalProperties": {
+            "type": "string"
+          },
+          "type": "object"
+        }
+      },
+      "additionalProperties": false,
+      "type": "object",
+      "required": [
+        "original_field",
+        "labels"
+      ]
+    }
+  }
+}

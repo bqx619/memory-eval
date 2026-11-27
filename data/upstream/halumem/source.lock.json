@@ -1,0 +1,45 @@
+{
+  "dataset_id": "IAAR-Shanghai/HaluMem",
+  "source_url": "https://huggingface.co/datasets/IAAR-Shanghai/HaluMem",
+  "revision": "cb04336aa1b732d4b24f5186c552456b4099806e",
+  "license_ack": {
+    "id": "CC-BY-NC-ND-4.0",
+    "source": "dataset card (README.md front matter: license: cc-by-nc-nd-4.0)",
+    "acknowledged_by": "claude (manual review of data card)",
+    "noncommercial": true,
+    "no_derivatives": true,
+    "share_alike": false,
+    "redistribute_normalized": false,
+    "note": "NoDerivatives: normalized copies stay local (data/normalized/ is not distributed); reports reference hashes only; evaluation use only"
+  },
+  "files": [
+    {
+      "path": "README.md",
+      "bytes": 12136,
+      "sha256": "f079d020d55c744ec43992d15e48b4e03a75c7f7c9a3544a1f621d39e5fc3b84",
+      "git_blob_sha1": "cf8bade0aaca5fd9ec3897c7484ca4864340f926",
+      "expected_git_blob_sha1": "cf8bade0aaca5fd9ec3897c7484ca4864340f926",
+      "verified": true,
+      "hash_authority": "HF tree API git blob oid (sha1); sha256 local"
+    },
+    {
+      "path": "HaluMem-Medium.jsonl",
+      "bytes": 33511525,
+      "sha256": "486fbc130a5c8781a2af27ffa508a1d7855245137aa449c193ac4d29c45634e7",
+      "expected_sha256": "486fbc130a5c8781a2af27ffa508a1d7855245137aa449c193ac4d29c45634e7",
+      "verified": true,
+      "hash_authority": "HF tree API lfs.oid (sha256)"
+    },
+    {
+      "path": "HaluMem-Long.jsonl",
+      "bytes": 106535674,
+      "sha256": "dfdbed570b402b7b8c17e0d7808fc6f3ae7a53b6144f18feb16bbdd3f55cb0c9",
+      "expected_sha256": "dfdbed570b402b7b8c17e0d7808fc6f3ae7a53b6144f18feb16bbdd3f55cb0c9",
+      "verified": true,
+      "hash_authority": "HF tree API lfs.oid (sha256)"
+    }
+  ],
+  "fetched_at": "2026-10-17T01:38:26Z",
+  "fetched_by": "curl (manual, pre-Go-fetch; Claude)",
+  "hash_authority": "LFS files: HF tree API lfs.oid sha256; README: git blob sha1 oid then local sha256"
+}

@@ -1,0 +1,7 @@
+{
+  "project": "Octop Memory (TencentCloud Octop)",
+  "repo": "https://github.com/TencentCloud/Octop",
+  "package": "octop-memory",
+  "version": "1.0.1",
+  "license": "MIT"
+}

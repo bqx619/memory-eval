@@ -1,0 +1,30 @@
+{
+  "openai-compat/gpt-6-luna": {
+    "prompt_per_million": 0.1,
+    "completion_per_million": 0.5
+  },
+  "openai-compat/gpt-6.1-sol": {
+    "prompt_per_million": 2.0,
+    "completion_per_million": 10.0
+  },
+  "openai-compat/gpt-6-astra": {
+    "prompt_per_million": 10.0,
+    "completion_per_million": 50.0
+  },
+  "anthropic/claude-haiku-5-5": {
+    "prompt_per_million": 0.1,
+    "completion_per_million": 0.5
+  },
+  "anthropic/claude-sonnet-5-5": {
+    "prompt_per_million": 2.0,
+    "completion_per_million": 10.0
+  },
+  "typesafe/jev-1.14.0": {
+    "prompt_per_million": 0.042,
+    "completion_per_million": 0.0
+  },
+  "typesafe/jev-1.13.0": {
+    "prompt_per_million": 0.042,
+    "completion_per_million": 0.0
+  }
+}

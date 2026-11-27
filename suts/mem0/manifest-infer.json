@@ -1,0 +1,76 @@
+{
+  "schema_version": "3",
+  "name": "mem0-infer",
+  "variant": "infer-local",
+  "notes": "Mem0 抽取模式（infer）：infer=True，每条事件先经 LLM（经网关，缺省 gpt-6-luna / low）抽取、去重、改写成记忆条目再入库，嵌入仍用本地 fastembed。评的是 Mem0 的 LLM 记忆加工；改写后的条目可能丢失原始事件 id，memory-only 指标偏低属于口径不匹配。",
+  "adapter": {
+    "kind": "python-bridge",
+    "transport": "jsonrpc-stdio",
+    "max_frame_bytes": 16777216,
+    "request_timeout_s": 1800
+  },
+  "runtime": {
+    "kind": "uv-python",
+    "python": "3.12",
+    "requirements": "requirements.in",
+    "prepare": [
+      [
+        "{python}",
+        "{project}/prepare_models.py",
+        "{env}/models"
+      ]
+    ],
+    "base": "uv-python",
+    "constraints": "requirements.constraints.txt"
+  },
+  "bridge": {
+    "module": "adapter",
+    "class": "Adapter",
+    "config": {
+      "infer": true
+    }
+  },
+  "process": {
+    "command": [],
+    "cwd": "{ep}/work",
+    "env": {},
+    "env_passthrough": []
+  },
+  "sandbox": {
+    "network": "gateway",
+    "limits": {
+      "timeout_s": 3600
+    },
+    "backend": "container"
+  },
+  "ready": {
+    "strategy": "sync"
+  },
+  "telemetry_env": {
+    "MEM0_TELEMETRY": "false",
+    "MEM0_DIR": "{ep}",
+    "HF_HUB_OFFLINE": "1",
+    "TRANSFORMERS_OFFLINE": "1"
+  },
+  "declared": {
+    "llm": {
+      "provider": "openai-compatible gateway",
+      "model": "injected via llm.model",
+      "reasoning_effort": "injected via llm.reasoning_effort"
+    },
+    "embedding": {
+      "provider": "fastembed",
+      "model": "BAAI/bge-small-en-v1.5",
+      "local": true
+    }
+  },
+  "llm": {
+    "required": true,
+    "env": {
+      "OPENAI_BASE_URL": "{llm.base_url}",
+      "OPENAI_API_KEY": "{llm.api_key}",
+      "MEM0_LLM_MODEL": "{llm.model}",
+      "MEM0_LLM_REASONING_EFFORT": "{llm.reasoning_effort}"
+    }
+  }
+}

@@ -1,0 +1,118 @@
+{
+  "protocol_id": "memora",
+  "version": "1",
+  "upstream": {
+    "repo": "https://github.com/geniesinc/Memora",
+    "commit": "a6493188efc836d6511ed5e4163fe3ba87da30ff",
+    "files": [
+      {
+        "path": "design/upstream/memora/evals/agent_eval/base_evaluator.py",
+        "sha256": "2b0e510a227765a385cc514f29653d9149818f3cc71604c46fdfda101b0069f6"
+      },
+      {
+        "path": "design/upstream/memora/evals/agent_eval/conversation_to_memory.py",
+        "sha256": "502b21b4f230bd68cfa550a76c47a8a6e56f93fd2952e8f767c3dd8d7ff20abf"
+      },
+      {
+        "path": "design/upstream/memora/evals/agent_eval/memory_to_answer.py",
+        "sha256": "119adf7811c2fc92f4922b1a72c6989c0a5f83350e76366b88dff137e47b4c4f"
+      },
+      {
+        "path": "design/upstream/memora/evals/model_eval/aggregate_results.py",
+        "sha256": "64435c6c21f0df6f7629690e0600c94214c55197e3d537c356b59befd541c223"
+      },
+      {
+        "path": "design/upstream/memora/evals/model_eval/api_client.py",
+        "sha256": "f6571f53e06e601ce1a4fe64dd58f14918fa2b5f5489a0eb8f5170349e4e233f"
+      },
+      {
+        "path": "design/upstream/memora/evals/model_eval/config.py",
+        "sha256": "9322b21dd89848a93b002b04b8163120a2311d1a21dc5882b06f57305616c1ca"
+      },
+      {
+        "path": "design/upstream/memora/evals/model_eval/model_based_evaluator.py",
+        "sha256": "b4e37dd39c2c72b91743c42180f6b07b460e519358f33c6fc1511f575dbb1bfc"
+      }
+    ]
+  },
+  "variants": {
+    "weekly": {
+      "description": "Memora weekly, one persona per episode",
+      "suite_id_patterns": [
+        "memora-weekly@*"
+      ],
+      "params": {
+        "reset_policy_default": "incremental_per_episode",
+        "personas": 10,
+        "questions": 150,
+        "upstream_search_limit": 50
+      }
+    },
+    "monthly": {
+      "description": "Memora monthly, one persona per episode",
+      "suite_id_patterns": [
+        "memora-monthly@*"
+      ],
+      "params": {
+        "reset_policy_default": "incremental_per_episode",
+        "personas": 10,
+        "questions": 150,
+        "upstream_search_limit": 50
+      }
+    },
+    "quarterly": {
+      "description": "Memora quarterly, one persona per episode",
+      "suite_id_patterns": [
+        "memora-quarterly@*"
+      ],
+      "params": {
+        "reset_policy_default": "incremental_per_episode",
+        "personas": 10,
+        "questions": 300,
+        "upstream_search_limit": 50
+      }
+    }
+  },
+  "scoring": {
+    "primary": "judge",
+    "reader": {
+      "file": "design/upstream/memora/evals/agent_eval/memory_to_answer.py",
+      "sha256": "119adf7811c2fc92f4922b1a72c6989c0a5f83350e76366b88dff137e47b4c4f",
+      "input_mode_default": "sources"
+    },
+    "judge": {
+      "file": "design/upstream/memora/evals/agent_eval/memory_to_answer.py",
+      "sha256": "119adf7811c2fc92f4922b1a72c6989c0a5f83350e76366b88dff137e47b4c4f",
+      "model_official": "gpt-4.1 / claude-haiku-4.5 / gemini-2.5-flash (majority via OpenRouter)",
+      "params": {
+        "temperature": 0
+      },
+      "label_rule": "yes/no equality with expected_answer per rubric item; FAMA=max(0,MPA-lambda*(1-FAA))"
+    },
+    "answer_parsing": "JSON; exclusive yes/no in explanation for invalid answer; text fallback only on JSON decode error; unresolved is judge error",
+    "denominators": {
+      "exclude": [],
+      "per_type_report": true
+    },
+    "secondary": [
+      "memora.mpa",
+      "memora.faa",
+      "memora.fama",
+      "memora.question_correct"
+    ]
+  },
+  "fidelity_rules": {
+    "full": [],
+    "equivalent": [
+      "matching replacement judge agreement study"
+    ],
+    "else": "partial"
+  },
+  "cluster_basis": "persona_period",
+  "notes": [
+    "Official three-judge majority is declared only; no matching Memora agreement study; current fidelity partial.",
+    "Track 1 release speakers user_agent are normalized to user; upstream full-session renderer tests user and omits these turns. Normalized user turns are retained.",
+    "Track 2 memory text/score rendered directly; null score=0.00 disclosed. Temperature=0.7/max_tokens=500.",
+    "Track 1 token truncation mirrors upstream, including partial sessions; framework character budget is an additional disclosed limit."
+  ]
+}

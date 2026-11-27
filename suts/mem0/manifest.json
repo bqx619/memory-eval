@@ -1,0 +1,66 @@
+{
+  "schema_version": "3",
+  "name": "mem0",
+  "variant": "raw-local",
+  "notes": "Mem0 原文模式（raw）：infer=False，事件原文直接入库，本地 fastembed（bge-small）嵌入，向量库与历史库都在 episode 目录；不调用任何 LLM，零外发。评的是 Mem0 的存储与向量召回。",
+  "adapter": {
+    "kind": "python-bridge",
+    "transport": "jsonrpc-stdio",
+    "max_frame_bytes": 16777216,
+    "request_timeout_s": 120
+  },
+  "runtime": {
+    "kind": "uv-python",
+    "python": "3.12",
+    "requirements": "requirements.in",
+    "prepare": [
+      [
+        "{python}",
+        "{project}/prepare_models.py",
+        "{env}/models"
+      ]
+    ],
+    "base": "uv-python",
+    "constraints": "requirements.constraints.txt"
+  },
+  "bridge": {
+    "module": "adapter",
+    "class": "Adapter",
+    "config": {
+      "infer": false
+    }
+  },
+  "process": {
+    "command": [],
+    "cwd": "{ep}/work",
+    "env": {},
+    "env_passthrough": []
+  },
+  "sandbox": {
+    "network": "none",
+    "limits": {
+      "timeout_s": 600
+    },
+    "backend": "container"
+  },
+  "ready": {
+    "strategy": "sync"
+  },
+  "telemetry_env": {
+    "MEM0_TELEMETRY": "false",
+    "MEM0_DIR": "{ep}",
+    "HF_HUB_OFFLINE": "1",
+    "TRANSFORMERS_OFFLINE": "1"
+  },
+  "declared": {
+    "llm": "none (infer=False)",
+    "embedding": {
+      "provider": "fastembed",
+      "model": "BAAI/bge-small-en-v1.5",
+      "local": true
+    }
+  },
+  "llm": {
+    "required": false
+  }
+}

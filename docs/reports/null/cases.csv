@@ -1,0 +1,78 @@
+﻿case_id,category,status,passed,returned_chars,query_ms,failures
+happy-stack-repository-layer,Type routing and open questions,scored,False,0,0.009474000307818642,pinnedFacts: missing b-db-decision | openQuestions: missing b-auth-open-q | personaPrelude empty
+happy-alias-match-kubernetes,Alias resolution,scored,False,0,0.009123000381805468,relevantBeliefs exact-set mismatch
+alias-kube-resolves,Alias resolution,scored,False,0,0.008041999990382465,relevantBeliefs exact-set mismatch
+alias-gha-resolves,Alias resolution,scored,False,0,0.009513999884802615,relevantBeliefs exact-set mismatch
+long-query-rambling-kubernetes,Alias resolution,scored,False,0,0.007911000011517899,relevantBeliefs exact-set mismatch | openQuestions: missing b-auth-open-q | personaPrelude empty
+out-of-scope-coin-collecting,Scope disambiguation,scored,False,0,0.007620999895152636,personaPrelude empty
+happy-writing-scope,Scope disambiguation,scored,False,0,0.007630999789398629,pinnedFacts: missing b-protagonist-entity | personaPrelude empty
+conflict-scope-disambiguation-redis-writing,Scope disambiguation,scored,False,0,0.0084520002019417,relevantBeliefs exact-set mismatch
+conflict-scope-disambiguation-redis-code,Scope disambiguation,scored,False,0,0.007920999905763892,relevantBeliefs exact-set mismatch
+multi-scope-redis-both-surfaces,Scope disambiguation,scored,False,0,0.00828200018077041,relevantBeliefs exact-set mismatch
+conflict-mongodb-supersedes-sqlalchemy,Supersession chain exclusion,scored,False,0,0.008352000349987065,pinnedFacts: missing b-db-decision
+edge-empty-query,Design boundary cases,scored,False,0,0.02340499986530631,pinnedFacts: missing b-db-decision | personaPrelude empty
+edge-short-query-raw-passthrough,Alias resolution,scored,False,0,0.007421000191243365,relevantBeliefs exact-set mismatch
+isolation-user-scoping,Cross-user isolation,scored,True,0,0.0076020000960852485,
+questions-pinned-active-only,Type routing and open questions,scored,False,0,0.007840999842301244,openQuestions: missing b-auth-open-q
+alias-ts-resolves,Alias resolution,scored,False,0,0.009184000191453379,relevantBeliefs exact-set mismatch
+alias-mongo-resolves,Alias resolution,scored,False,0,0.007842000286473194,relevantBeliefs exact-set mismatch
+alias-reactjs-resolves,Alias resolution,scored,False,0,0.007471000117220683,relevantBeliefs exact-set mismatch
+alias-protagonist-resolves,Alias resolution,scored,False,0,0.00738099970476469,relevantBeliefs exact-set mismatch | pinnedFacts: missing b-protagonist-entity
+canonical-name-match-mara,Alias resolution,scored,False,0,0.00735100002202671,pinnedFacts: missing b-protagonist-entity
+alias-pov-shift-resolves,Alias resolution,scored,False,0,0.007982000170159154,relevantBeliefs exact-set mismatch
+alias-base-class-retrieves-composition,Alias resolution,scored,False,0,0.0073609999162727036,relevantBeliefs exact-set mismatch
+alias-exceptions-retrieves-error-handling,Alias resolution,scored,False,0,0.007411000296997372,relevantBeliefs exact-set mismatch
+filter-resolved-at-excluded,Type routing and open questions,scored,True,0,0.007471000117220683,
+scope-bleed-questions-code-excludes-writing,Scope disambiguation,scored,False,0,0.007029999778751517,openQuestions: missing b-auth-open-q
+persona-prelude-content-present,Persona prelude content,scored,False,0,0.007400999948004028,personaPrelude empty | personaPrelude missing substring 'direct' | personaPrelude missing substring 'preamble'
+edge-short-query-score-clears,Alias resolution,scored,False,0,0.007451000328728696,relevantBeliefs exact-set mismatch
+edge-whitespace-query,Design boundary cases,scored,False,0,0.007071000254654791,personaPrelude empty
+score-boundary-weak-match-filtered,Design boundary cases,scored,True,0,0.007061000360408798,
+user-edited-cross-scope-surfaces,Scope disambiguation,scored,True,0,0.007070000265230192,
+user-edited-absent-without-flag,Scope disambiguation,scored,True,0,0.0075510001806833316,
+ranking-canonical-name-over-content,Ranking stability,scored,False,0,0.007561000074929325,relevantBeliefs exact-set mismatch
+messy-typo-blind-spot,Fuzzy matching and prefix guards,scored,False,0,0.00879299977896153,relevantBeliefs exact-set mismatch
+messy-all-caps-case-insensitive,Alias resolution,scored,False,0,0.008153000180755043,relevantBeliefs exact-set mismatch
+messy-filler-heavy-extraction,Alias resolution,scored,False,0,0.008041999990382465,relevantBeliefs exact-set mismatch
+messy-negation-surfaces-topic,Alias resolution,scored,False,0,0.007601000106660649,relevantBeliefs exact-set mismatch
+messy-compound-surfaces-two-beliefs,Alias resolution,scored,False,0,0.007701999948039884,relevantBeliefs exact-set mismatch
+cap-stress-compound-six-entities,Alias resolution,scored,False,0,0.0075510001806833316,relevantBeliefs exact-set mismatch
+cap-stress-kitchen-sink-exceeds-twelve,Alias resolution,scored,False,0,0.0078010002653172705,relevantBeliefs exact-set mismatch
+cap-stress-late-position-entity-at-risk,Alias resolution,scored,False,0,0.00859300007505226,relevantBeliefs exact-set mismatch
+fuzzy-single-edit-fires-non-pinned,Fuzzy matching and prefix guards,scored,False,0,0.00893300011739484,relevantBeliefs exact-set mismatch
+fuzzy-scope-filter-discriminates-after-fuzzy-fires,Fuzzy matching and prefix guards,scored,False,0,0.007750999884592602,relevantBeliefs exact-set mismatch
+fuzzy-prefix-blocks-transitive-match,Fuzzy matching and prefix guards,scored,True,0,0.007410999842250021,
+fuzzy-abbreviation-prefix-blind-spot,Fuzzy matching and prefix guards,scored,True,0,0.0074509998739813454,
+fuzzy-two-edit-transposition-blocked,Fuzzy matching and prefix guards,scored,False,0,0.0071710001066094264,relevantBeliefs exact-set mismatch
+fuzzy-single-term-only-signal,Fuzzy matching and prefix guards,scored,False,0,0.007510999694204656,relevantBeliefs exact-set mismatch
+universal-scope-belief-content-in-persona-prelude,Persona prelude content,scored,False,0,0.0074509998739813454,personaPrelude empty | personaPrelude missing substring 'direct' | personaPrelude missing substring 'preamble'
+type-isolation-open-question-not-in-relevant,Type routing and open questions,scored,False,0,0.007320999884541379,openQuestions: missing b-auth-open-q
+multi-hop-supersession-chain-all-excluded,Supersession chain exclusion,scored,False,0,0.0076619999163085595,pinnedFacts: missing b-linting-current
+cross-scope-one-empty-domain-does-not-degrade,Scope disambiguation,scored,False,0,0.007249999725900125,relevantBeliefs exact-set mismatch
+ranking-orderedbefore-alias-beats-content,Ranking stability,scored,False,0,0.007471000117220683,relevantBeliefs exact-set mismatch
+cold-start-user-no-beliefs,Cold start behavior,scored,True,0,0.006820000180596253,
+narrator-voice-pinned-in-own-scope,Persona prelude content,scored,False,0,0.009012999726110138,pinnedFacts: missing b-narrator-voice | pinnedFacts: missing b-protagonist-entity | pinnedFacts: missing b-prose-style-user-edited | openQuestions: missing b-chapter-structure-q | personaPrelude empty
+multi-scope-prelude-uses-primary-scope-only,Persona prelude content,scored,False,0,0.008102000265353126,personaPrelude empty
+why-it-matters-not-indexed-blind-spot,Design boundary cases,scored,True,0,0.007270999958564062,
+budget-ceiling-evicts-relevant-beliefs,Budget eviction and capacity,scored,True,0,0.007671999810554553,
+negative-guidance-mongoose,Counter-signal retrieval,scored,False,0,0.007711000307608629,relevantBeliefs exact-set mismatch
+recency-tiebreak-reinforcement,Ranking stability,unscored,,0,0.00848199988467968,
+preference-flood-relevant-entity-survives,Budget eviction and capacity,scored,False,0,0.008271999831777066,relevantBeliefs exact-set mismatch
+cross-scope-non-user-edited-blocked,Scope disambiguation,scored,True,0,0.007751999874017201,
+alias-two-word-shingle-dead-letter,Alias resolution,scored,False,0,0.007781000022077933,relevantBeliefs exact-set mismatch
+alias-dlq-abbreviation-resolves,Alias resolution,scored,False,0,0.00780099981056992,relevantBeliefs exact-set mismatch
+counter-signal-jest-surfaces-vitest,Counter-signal retrieval,scored,False,0,0.007812000148987863,relevantBeliefs exact-set mismatch
+relation-type-expands-participants,Relation expansion,scored,False,0,0.008131999948091106,relevantBeliefs exact-set mismatch | openQuestions: missing b-auth-open-q
+relation-participant-open-question-routes-correctly,Relation expansion,scored,False,0,0.007691000064369291,relevantBeliefs exact-set mismatch | openQuestions: missing b-auth-open-q
+relation-expansion-respects-scope-filter,Relation expansion,scored,False,0,0.00735100002202671,relevantBeliefs exact-set mismatch
+subtype-expertise-retrieval,Type routing and open questions,scored,False,0,0.007401000402751379,relevantBeliefs exact-set mismatch
+pinned-plus-resolved-excluded-from-questions,Type routing and open questions,scored,True,0,0.00749099990571267,
+zero-reinforcement-fresh-belief-surfaces,Budget eviction and capacity,scored,False,0,0.007241000275826082,relevantBeliefs exact-set mismatch
+budget-zero-graceful-empty,Budget eviction and capacity,scored,True,0,0.007912000000942498,
+budget-one-pinned-wins-over-relevant,Budget eviction and capacity,scored,False,0,0.007871999969211174,pinnedFacts: missing b-db-decision
+multi-scope-code-writing-dedup-no-double-surface,Scope disambiguation,scored,True,0,0.007530999937443994,
+empty-alias-belief-content-path-only,Design boundary cases,scored,True,0,0.00876300009622355,
+universal-scope-explicit-query-no-relevant,Scope disambiguation,scored,False,0,0.007791999905748526,personaPrelude empty | personaPrelude missing substring 'direct'
+negation-query-still-surfaces-rejected-tool,Design boundary cases,scored,False,0,0.009593999948265264,relevantBeliefs exact-set mismatch
+superseded-chain-query-terminal-only,Supersession chain exclusion,scored,False,0,0.008152000191330444,pinnedFacts: missing b-linting-current
+relation-does-not-appear-as-entity,Relation expansion,scored,False,0,0.022904000161361182,relevantBeliefs exact-set mismatch | openQuestions: missing b-auth-open-q

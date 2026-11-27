@@ -1,0 +1,4 @@
+graphiti-core[falkordblite]==0.31.1
+falkordblite==0.10.0
+httpx==0.28.1  # graphiti-core 0.31.1 imports httpx but only declares openai (openai 3.x depends on httpx2, not httpx)
+fastembed==0.9.0

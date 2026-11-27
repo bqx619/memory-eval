@@ -1,0 +1,89 @@
+{
+  "report": "reports/null/report.html",
+  "planned": 77,
+  "status_counts": {
+    "scored": 76,
+    "unscored": 1
+  },
+  "n_with_pass_judgment": 76,
+  "passed": 15,
+  "pass_rate_on_scored": 0.19736842105263158,
+  "scoring_coverage": 0.987012987012987,
+  "execution_errors": 0,
+  "unsupported": 0,
+  "metrics": {
+    "all_evidence": {
+      "mean": 0.0,
+      "n": 43
+    },
+    "empty_result_correct": {
+      "mean": 1.0,
+      "n": 32
+    },
+    "hit": {
+      "mean": 0.0,
+      "n": 43
+    },
+    "mrr": {
+      "mean": 0.0,
+      "n": 43
+    },
+    "ndcg": {
+      "mean": 0.0,
+      "n": 43
+    },
+    "pinned_coverage": {
+      "mean": 0.0,
+      "n": 10
+    },
+    "precision": {
+      "mean": 0.0,
+      "n": 43
+    },
+    "recall": {
+      "mean": 0.0,
+      "n": 43
+    }
+  },
+  "timings": {
+    "reset_ms": {
+      "p50": 0.00033099968277383596,
+      "p95": 0.0007529998583777342,
+      "total": 0.030583001262129983,
+      "n": 77
+    },
+    "ingest_ms": {
+      "p50": 0.294433999897592,
+      "p95": 0.329421199967328,
+      "total": 23.36828000125024,
+      "n": 77
+    },
+    "ready_ms": {
+      "p50": 0.00017999991541728377,
+      "p95": 0.00030999990485724993,
+      "total": 0.014503999864245998,
+      "n": 77
+    },
+    "query_ms": {
+      "p50": 0.007701999948039884,
+      "p95": 0.009482000223215437,
+      "total": 0.6341770031212945,
+      "n": 77
+    },
+    "answer_ms": {
+      "p50": null,
+      "p95": null,
+      "total": 0,
+      "n": 0
+    }
+  },
+  "returned_chars": {
+    "p50": 0.0,
+    "p95": 0.0
+  },
+  "billing": {
+    "api_cost_usd": null,
+    "model_tokens": null,
+    "note": "No billing integration was executed; characters are not tokens"
+  }
+}

@@ -1,0 +1,98 @@
+{
+  "schema_version": "3",
+  "name": "cognee",
+  "variant": "llm-gateway",
+  "notes": "Cognee LLM 配置（gateway）：cognify 阶段经网关调用 LLM 抽取实体、关系与摘要建成知识图谱（SDK 不支持 reasoning_effort），嵌入仍在本地。适配器检索固定用 SearchType.CHUNKS（向量检索原文块），不使用 LLM 建的图，PMB-75 上与零外发变体有 74/75 例检索列表一致。fixed_reader 或 reader-input=items 只改变评测器怎样阅读结果，不会启用图检索；这些配置不能被解释为完整的 Cognee 图记忆能力评测。",
+  "adapter": {
+    "kind": "python-bridge",
+    "transport": "jsonrpc-stdio",
+    "max_frame_bytes": 16777216,
+    "request_timeout_s": 1800
+  },
+  "runtime": {
+    "kind": "uv-python",
+    "python": "3.12",
+    "requirements": "requirements.in",
+    "requirements_lock": "requirements.lock.txt",
+    "prepare": [
+      [
+        "{python}",
+        "{project}/prepare_models.py",
+        "{env}/models"
+      ]
+    ],
+    "base": "uv-python",
+    "indexes": [
+      {
+        "url": "https://download.pytorch.org/whl/cpu",
+        "strategy": "unsafe-best-match"
+      }
+    ],
+    "apt": [
+      "libssl3"
+    ],
+    "constraints": "requirements.constraints.txt"
+  },
+  "bridge": {
+    "module": "adapter",
+    "class": "Adapter",
+    "config": {
+      "extractor": "llm"
+    }
+  },
+  "process": {
+    "command": [],
+    "cwd": "{ep}/work",
+    "env": {
+      "LBUG_C_API_LIB_PATH": "{env}/models/lbug/lib/liblbug.so"
+    },
+    "env_passthrough": []
+  },
+  "sandbox": {
+    "network": "gateway",
+    "limits": {
+      "timeout_s": 3600
+    },
+    "backend": "container"
+  },
+  "ready": {
+    "strategy": "sync"
+  },
+  "declared": {
+    "project_version": "1.6.5",
+    "llm": "injected OpenAI-compatible gateway; reasoning_effort unsupported for extraction",
+    "embedding": "local install-time assets; runtime downloads disabled"
+  },
+  "telemetry_env": {
+    "TELEMETRY_DISABLED": "1",
+    "GRAPH_EXTRACTOR": "llm",
+    "DATA_ROOT_DIRECTORY": "{ep}/data",
+    "SYSTEM_ROOT_DIRECTORY": "{ep}/system",
+    "CACHE_ROOT_DIRECTORY": "{ep}/cache",
+    "HF_HOME": "{env}/models/hf",
+    "FASTEMBED_CACHE_PATH": "{env}/models/fastembed",
+    "HF_HUB_OFFLINE": "1",
+    "TRANSFORMERS_OFFLINE": "1",
+    "COGNEE_LOGS_DIR": "{ep}/logs",
+    "COGNEE_REPOS_DIR": "{ep}/repos",
+    "COGNEE_LOG_FILE": "false",
+    "IMPROVE_AUTO_ENABLED": "false",
+    "GLINER_AUTO_INSTALL": "false",
+    "EMBEDDING_PROVIDER": "fastembed",
+    "EMBEDDING_MODEL": "BAAI/bge-small-en-v1.5",
+    "EMBEDDING_DIMENSIONS": "384",
+    "TIKTOKEN_CACHE_DIR": "{env}/models/tiktoken",
+    "GRAPH_DATABASE_SUBPROCESS_ENABLED": "false",
+    "VECTOR_DB_SUBPROCESS_ENABLED": "false"
+  },
+  "llm": {
+    "required": true,
+    "concurrency": 40,
+    "env": {
+      "LLM_PROVIDER": "openai",
+      "LLM_ENDPOINT": "{llm.base_url}",
+      "LLM_API_KEY": "{llm.api_key}",
+      "LLM_MODEL": "{llm.model}"
+    }
+  }
+}

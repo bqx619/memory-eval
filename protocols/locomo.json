@@ -1,0 +1,80 @@
+{
+  "protocol_id": "locomo",
+  "version": "2",
+  "upstream": {
+    "repo": "https://github.com/snap-research/locomo",
+    "commit": "3eb6f2c585f5e1699204e3c3bdf7adc5c28cb376",
+    "files": [
+      {
+        "path": "design/upstream/locomo/task_eval/evaluate_qa.py",
+        "sha256": "dde7c1c6b5501486f96ce31398d6e49de76abbfa656e980b137e54fc69e9f6ee"
+      },
+      {
+        "path": "design/upstream/locomo/task_eval/evaluation.py",
+        "sha256": "8e3be5d57ff2ff9ec5cd05939592f468c5f3f1fd95d13e431932bdf6bf0fd6fd"
+      },
+      {
+        "path": "design/upstream/locomo/task_eval/evaluation_stats.py",
+        "sha256": "d36bf596de05ea6f1c355e433167a8cd704bea3a3745277c650ac0c464bba139"
+      },
+      {
+        "path": "design/upstream/locomo/task_eval/gpt_utils.py",
+        "sha256": "5fc977375878199735acd28fba5ae6f4d657fa0e000c0d2918a90c07b6035793"
+      }
+    ]
+  },
+  "variants": {
+    "text_only": {
+      "description": "Text-only conversations, without images or captions",
+      "params": {}
+    },
+    "multimodal": {
+      "description": "Registered only; no importer or runner",
+      "params": {}
+    }
+  },
+  "scoring": {
+    "primary": "token_f1",
+    "reader": {
+      "file": "design/upstream/locomo/task_eval/gpt_utils.py",
+      "sha256": "5fc977375878199735acd28fba5ae6f4d657fa0e000c0d2918a90c07b6035793",
+      "input_mode_default": "sources"
+    },
+    "answer_parsing": "gpt_utils.get_cat_5_answer then strip for category 5 with choices; strip otherwise",
+    "denominators": {
+      "exclude": [
+        "category 5 from f1 mean"
+      ],
+      "per_type_report": true
+    },
+    "secondary": [
+      "retrieval.event.recall_any@k"
+    ]
+  },
+  "fidelity_rules": {
+    "full": [
+      "reader.template==official",
+      "question_set complete (1986)",
+      "no truncation",
+      "scorer==vendored evaluation.py (oracle-verified)",
+      "reader.cat2_temporal_suffix==official",
+      "reader.cat5_choice_suffix==official and private distractor available",
+      "reader.cat5_postprocess==get_cat_5_answer (including length-based fallback)"
+    ],
+    "equivalent": [
+      "cat5 option order is uniform and reproducible from run_seed/sample_id; actual a/b mapping is recorded"
+    ],
+    "else": "partial"
+  },
+  "cluster_basis": "conversation",
+  "overlaps": [
+    "convomem"
+  ],
+  "notes": [
+    "Official cat2/cat5 suffixes are added only after retrieval, in evaluator reader prompts; SUT query and public DTO remain unchanged.",
+    "A missing required suffix or private cat5 distractor forces partial fidelity, including older v1 bundles.",
+    "Raw release adversarial_answer is the cat5 distractor; if absent, an answer-only preprocessed row is supported.",
+    "Cat5 postprocess mirrors upstream: length 1 non-a and length 3 non-(a) map to b; other lengths use strip().lower().",
+    "Full fidelity retains the existing completeness/truncation checks; PRNG substitution is explicitly disclosed, and real model output quality is not implied."
+  ]
+}

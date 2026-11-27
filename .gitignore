@@ -1,0 +1,63 @@
+# Private configuration. Ignore rules do not untrack files already in the index.
+.env
+.env.*
+!.env.example
+
+# Local executables and generated native build output.
+/bin/
+/suts/*/native/target/
+
+# Run outputs are evidence kept locally, not repository source.
+/reports/
+
+# Generated website data (HTML/JS/CSS source beside these directories stays visible).
+/docs-site/beam/
+/docs-site/cases/
+/docs-site/results/
+
+# Dataset content stays local. Preserve small provenance records at known locations.
+/data/upstream/*
+!/data/upstream/*/
+/data/upstream/*/**
+!/data/upstream/*/source.lock.json
+/data/normalized/*
+!/data/normalized/*/
+/data/normalized/*/**
+!/data/normalized/*.import.json
+!/data/normalized/*/import.json
+!/data/normalized/*/*.import.json
+
+# Fetched upstream templates are runtime inputs for some benchmarks.
+# Preserve their pins in either filename spelling; restore/verify using the fetch tool.
+# Required notices for distributed/ported code also live in THIRD_PARTY_NOTICES.md.
+/design/upstream/*/**
+!/design/upstream/*/SOURCES.md
+!/design/upstream/*/sources.md
+
+# Local coordination and publication drafts; keep technical history and SUT facts visible.
+/design/followups.md
+/design/handoff-*.md
+/design/cogletnet-maintenance-*.md
+/design/p12-answer-track-brief.md
+/design/case-notes/
+/design/mem-test-public-history/
+/design/mem-test-public-history.zip
+/design/open-source-docs-audit-*/
+
+# Rebuildable UI previews. Do not ignore docs/reports: it contains fixed regression inputs.
+/design/report-ui/prototype-*.html
+
+# Tool caches and editor/OS debris. Avoid broad *.log/*.json/*.txt rules: fixtures use them.
+__pycache__/
+*.pyc
+*.pyo
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+node_modules/
+.venv/
+.DS_Store
+._*
+*~
+*.swp
+*.swo

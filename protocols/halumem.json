@@ -1,0 +1,101 @@
+{
+  "protocol_id": "halumem",
+  "version": "1",
+  "upstream": {
+    "repo": "https://github.com/MemTensor/HaluMem",
+    "commit": "718f16ff0c83413b1c86fa83fc13cc1a639871f9",
+    "files": [
+      {
+        "path": "design/upstream/halumem/eval/eval_memzero.py",
+        "sha256": "7fa34de7e45e1b9730bb63453ee17627925c8a4304645eda7249844eb24ca3c1"
+      },
+      {
+        "path": "design/upstream/halumem/eval/eval_tools.py",
+        "sha256": "0c08e5ecb8c93945bafc4bd0336bd6c9756b40d175f442ce44aca4a43169ee3b"
+      },
+      {
+        "path": "design/upstream/halumem/eval/evaluation.py",
+        "sha256": "d4c0376a7e59872093564686d77db487ecf8fb5b5ba5f499f8c2ef4e417dba31"
+      },
+      {
+        "path": "design/upstream/halumem/eval/llms.py",
+        "sha256": "3944e8133c3777506f2f17971884f18c83ab7379fc3d79d22dfd6a748c0b8547"
+      },
+      {
+        "path": "design/upstream/halumem/eval/prompts.py",
+        "sha256": "641a9e89c8a42cedb83feed47543ab35cbd80cb80fb515c0a7afab60fe259a58"
+      }
+    ]
+  },
+  "variants": {
+    "medium": {
+      "description": "HaluMem medium, local-only ND normalization",
+      "suite_id_patterns": [
+        "halumem-medium@*"
+      ],
+      "params": {
+        "reset_policy_default": "incremental_per_episode",
+        "users": 20,
+        "questions": 3467,
+        "sessions": 1387
+      }
+    },
+    "long": {
+      "description": "HaluMem long, local-only ND normalization",
+      "suite_id_patterns": [
+        "halumem-long@*"
+      ],
+      "params": {
+        "reset_policy_default": "incremental_per_episode",
+        "users": 20,
+        "questions": 3467,
+        "sessions": 2417
+      }
+    }
+  },
+  "scoring": {
+    "primary": "judge",
+    "reader": {
+      "file": "design/upstream/halumem/eval/prompts.py",
+      "sha256": "641a9e89c8a42cedb83feed47543ab35cbd80cb80fb515c0a7afab60fe259a58",
+      "input_mode_default": "sources"
+    },
+    "judge": {
+      "file": "design/upstream/halumem/eval/eval_tools.py",
+      "sha256": "0c08e5ecb8c93945bafc4bd0336bd6c9756b40d175f442ce44aca4a43169ee3b",
+      "model_official": "gpt-4o",
+      "params": {
+        "temperature": 0,
+        "max_tokens": 16384
+      },
+      "label_rule": "integrity/accuracy 0/1/2; update Correct/Hallucination/Omission/Other; QA Correct/Hallucination/Omission"
+    },
+    "answer_parsing": "strict fenced json per llms.py; failures retained as None/invalid",
+    "denominators": {
+      "exclude": [
+        "generated QA session audits (unscored)",
+        "None/invalid records from valid denominators only"
+      ],
+      "per_type_report": true
+    },
+    "secondary": [
+      "halumem.memory_extraction_f1"
+    ]
+  },
+  "fidelity_rules": {
+    "full": [],
+    "equivalent": [
+      "matching replacement judge agreement study"
+    ],
+    "else": "partial"
+  },
+  "cluster_basis": "user",
+  "notes": [
+    "ND normalized copies stay local, never distributed; only synthetic conformance fixtures.",
+    "Per-session checkpoint ready/dump; new units are current dump IDs absent from previous snapshot.",
+    "Official mutually exclusive update/integrity routing; empty extracted memories score zero; zero denominators null.",
+    "Generated QA sessions ingest/ready/dump then skip official scoring.",
+    "Official excluded gpt-4o is declaration only; actual configured Router and model disclosed, fidelity partial without matching study.",
+    "Approximately 65–70 regular sessions/user; tens of thousands of judge calls for 20 users; acceptance fake upstream only; live budget separately approved."
+  ]
+}

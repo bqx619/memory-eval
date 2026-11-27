@@ -1,0 +1,43 @@
+{
+  "schema_version": "3",
+  "name": "echo",
+  "variant": "transport-fixture",
+  "notes": "仅验证 stdio 传输与隔离；不是记忆质量基线。",
+  "adapter": {
+    "kind": "generic",
+    "transport": "jsonrpc-stdio"
+  },
+  "runtime": {
+    "kind": "uv-python",
+    "python": "3.12",
+    "requirements": "requirements.in",
+    "base": "uv-python"
+  },
+  "process": {
+    "command": [
+      "{venv}/bin/python",
+      "{project}/echo_bridge.py"
+    ],
+    "cwd": "{ep}/work",
+    "env": {},
+    "env_passthrough": []
+  },
+  "config": {},
+  "sandbox": {
+    "network": "none",
+    "limits": {
+      "timeout_s": 600
+    },
+    "backend": "container"
+  },
+  "ready": {
+    "strategy": "sync"
+  },
+  "declared": {
+    "llm": null,
+    "embedding": null
+  },
+  "llm": {
+    "required": false
+  }
+}

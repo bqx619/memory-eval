@@ -1,0 +1,78 @@
+﻿case_id,category,status,passed,returned_chars,query_ms,failures
+happy-stack-repository-layer,Type routing and open questions,scored,False,1442,0.046288000248750905,relevantBeliefs exact-set mismatch
+happy-alias-match-kubernetes,Alias resolution,scored,False,1442,0.06602799976462848,relevantBeliefs exact-set mismatch
+alias-kube-resolves,Alias resolution,scored,False,1442,0.04057000023749424,relevantBeliefs exact-set mismatch
+alias-gha-resolves,Alias resolution,scored,False,1442,0.03702499998325948,relevantBeliefs exact-set mismatch
+long-query-rambling-kubernetes,Alias resolution,scored,False,1442,0.03798600027948851,relevantBeliefs exact-set mismatch
+out-of-scope-coin-collecting,Scope disambiguation,scored,True,388,0.02560800021456089,
+happy-writing-scope,Scope disambiguation,scored,False,864,0.030084000172792003,relevantBeliefs exact-set mismatch
+conflict-scope-disambiguation-redis-writing,Scope disambiguation,scored,False,864,0.03802599985647248,relevantBeliefs exact-set mismatch
+conflict-scope-disambiguation-redis-code,Scope disambiguation,scored,False,1442,0.037244999930408085,relevantBeliefs exact-set mismatch
+multi-scope-redis-both-surfaces,Scope disambiguation,scored,False,1731,0.03894700012097019,relevantBeliefs exact-set mismatch
+conflict-mongodb-supersedes-sqlalchemy,Supersession chain exclusion,scored,False,1442,0.035662999835039955,relevantBeliefs exact-set mismatch
+edge-empty-query,Design boundary cases,scored,True,589,0.030465000236290507,
+edge-short-query-raw-passthrough,Alias resolution,scored,False,1442,0.03974899982495117,relevantBeliefs exact-set mismatch
+isolation-user-scoping,Cross-user isolation,scored,True,1442,0.035803000173473265,
+questions-pinned-active-only,Type routing and open questions,scored,False,1442,0.03646400000434369,relevantBeliefs exact-set mismatch
+alias-ts-resolves,Alias resolution,scored,False,1442,0.03430099968682043,relevantBeliefs exact-set mismatch
+alias-mongo-resolves,Alias resolution,scored,False,1442,0.039138000374805415,relevantBeliefs exact-set mismatch
+alias-reactjs-resolves,Alias resolution,scored,False,1442,0.0386169999728736,relevantBeliefs exact-set mismatch
+alias-protagonist-resolves,Alias resolution,scored,False,864,0.0339700000040466,relevantBeliefs exact-set mismatch
+canonical-name-match-mara,Alias resolution,scored,False,864,0.031427000067196786,relevantBeliefs exact-set mismatch
+alias-pov-shift-resolves,Alias resolution,scored,False,864,0.03058499987673713,relevantBeliefs exact-set mismatch
+alias-base-class-retrieves-composition,Alias resolution,scored,False,1442,0.03589300013118191,relevantBeliefs exact-set mismatch
+alias-exceptions-retrieves-error-handling,Alias resolution,scored,False,1442,0.03770600005736924,relevantBeliefs exact-set mismatch
+filter-resolved-at-excluded,Type routing and open questions,scored,False,1442,0.04447600031198817,relevantBeliefs exact-set mismatch
+scope-bleed-questions-code-excludes-writing,Scope disambiguation,scored,False,1442,0.03795600014200318,relevantBeliefs exact-set mismatch
+persona-prelude-content-present,Persona prelude content,scored,False,1442,0.03825700014203903,relevantBeliefs exact-set mismatch
+edge-short-query-score-clears,Alias resolution,scored,False,1442,0.03533200015226612,relevantBeliefs exact-set mismatch
+edge-whitespace-query,Design boundary cases,scored,True,589,0.030355000035342528,
+score-boundary-weak-match-filtered,Design boundary cases,scored,False,1442,0.035072000173386186,relevantBeliefs exact-set mismatch
+user-edited-cross-scope-surfaces,Scope disambiguation,scored,False,1442,0.033118999908765545,relevantBeliefs exact-set mismatch
+user-edited-absent-without-flag,Scope disambiguation,scored,False,1442,0.03362000006745802,relevantBeliefs exact-set mismatch
+ranking-canonical-name-over-content,Ranking stability,scored,False,1442,0.03370999957041931,relevantBeliefs exact-set mismatch
+messy-typo-blind-spot,Fuzzy matching and prefix guards,scored,False,1442,0.03343899970786879,relevantBeliefs exact-set mismatch
+messy-all-caps-case-insensitive,Alias resolution,scored,False,1442,0.035321999803272774,relevantBeliefs exact-set mismatch
+messy-filler-heavy-extraction,Alias resolution,scored,False,1442,0.034471000162739074,relevantBeliefs exact-set mismatch
+messy-negation-surfaces-topic,Alias resolution,scored,False,1442,0.034050000067509245,relevantBeliefs exact-set mismatch
+messy-compound-surfaces-two-beliefs,Alias resolution,scored,False,1442,0.039307999941229355,relevantBeliefs exact-set mismatch
+cap-stress-compound-six-entities,Alias resolution,scored,False,1442,0.0399390000893618,relevantBeliefs exact-set mismatch
+cap-stress-kitchen-sink-exceeds-twelve,Alias resolution,scored,False,1442,0.039198000195028726,relevantBeliefs exact-set mismatch
+cap-stress-late-position-entity-at-risk,Alias resolution,scored,False,1442,0.03445999982432113,relevantBeliefs exact-set mismatch
+fuzzy-single-edit-fires-non-pinned,Fuzzy matching and prefix guards,scored,False,1442,0.03338900023663882,relevantBeliefs exact-set mismatch
+fuzzy-scope-filter-discriminates-after-fuzzy-fires,Fuzzy matching and prefix guards,scored,False,1442,0.034300000152143184,relevantBeliefs exact-set mismatch
+fuzzy-prefix-blocks-transitive-match,Fuzzy matching and prefix guards,scored,False,1442,0.03304899973954889,relevantBeliefs exact-set mismatch
+fuzzy-abbreviation-prefix-blind-spot,Fuzzy matching and prefix guards,scored,False,1442,0.03627299975050846,relevantBeliefs exact-set mismatch
+fuzzy-two-edit-transposition-blocked,Fuzzy matching and prefix guards,scored,False,1442,0.03366999999343534,relevantBeliefs exact-set mismatch
+fuzzy-single-term-only-signal,Fuzzy matching and prefix guards,scored,False,1442,0.20825599995077937,relevantBeliefs exact-set mismatch
+universal-scope-belief-content-in-persona-prelude,Persona prelude content,scored,True,388,0.02835199984474457,
+type-isolation-open-question-not-in-relevant,Type routing and open questions,scored,False,1442,0.03644299977167975,relevantBeliefs exact-set mismatch
+multi-hop-supersession-chain-all-excluded,Supersession chain exclusion,scored,False,1442,0.03700500019476749,relevantBeliefs exact-set mismatch
+cross-scope-one-empty-domain-does-not-degrade,Scope disambiguation,scored,False,1442,0.03692399968713289,relevantBeliefs exact-set mismatch
+ranking-orderedbefore-alias-beats-content,Ranking stability,scored,False,1442,0.03557199988790671,relevantBeliefs exact-set mismatch
+cold-start-user-no-beliefs,Cold start behavior,scored,True,0,0.012989000424568076,
+narrator-voice-pinned-in-own-scope,Persona prelude content,scored,True,670,0.03542300009939936,
+multi-scope-prelude-uses-primary-scope-only,Persona prelude content,scored,False,1731,0.038096999560366385,relevantBeliefs exact-set mismatch
+why-it-matters-not-indexed-blind-spot,Design boundary cases,scored,False,1442,0.03465100007815636,relevantBeliefs exact-set mismatch
+budget-ceiling-evicts-relevant-beliefs,Budget eviction and capacity,scored,True,518,0.0359030000254279,
+negative-guidance-mongoose,Counter-signal retrieval,scored,False,1442,0.038486999983433634,relevantBeliefs exact-set mismatch
+recency-tiebreak-reinforcement,Ranking stability,unscored,,589,0.14621499985878472,
+preference-flood-relevant-entity-survives,Budget eviction and capacity,scored,False,1014,0.03762599999390659,relevantBeliefs exact-set mismatch
+cross-scope-non-user-edited-blocked,Scope disambiguation,scored,False,1442,0.05581200002779951,relevantBeliefs exact-set mismatch
+alias-two-word-shingle-dead-letter,Alias resolution,scored,False,1442,0.036734000332216965,relevantBeliefs exact-set mismatch
+alias-dlq-abbreviation-resolves,Alias resolution,scored,False,1442,0.03759500032174401,relevantBeliefs exact-set mismatch
+counter-signal-jest-surfaces-vitest,Counter-signal retrieval,scored,False,1442,0.03605299980335985,relevantBeliefs exact-set mismatch
+relation-type-expands-participants,Relation expansion,scored,False,1442,0.03987800027971389,relevantBeliefs exact-set mismatch
+relation-participant-open-question-routes-correctly,Relation expansion,scored,False,1442,0.03728499996213941,relevantBeliefs exact-set mismatch
+relation-expansion-respects-scope-filter,Relation expansion,scored,False,1442,0.03881700013153022,relevantBeliefs exact-set mismatch
+subtype-expertise-retrieval,Type routing and open questions,scored,False,1442,0.03416099980313447,relevantBeliefs exact-set mismatch
+pinned-plus-resolved-excluded-from-questions,Type routing and open questions,scored,False,1442,0.03486100013105897,relevantBeliefs exact-set mismatch
+zero-reinforcement-fresh-belief-surfaces,Budget eviction and capacity,scored,False,1442,0.036204000025463756,relevantBeliefs exact-set mismatch
+budget-zero-graceful-empty,Budget eviction and capacity,scored,True,388,0.030764999792154413,
+budget-one-pinned-wins-over-relevant,Budget eviction and capacity,scored,True,450,0.032126999940373935,
+multi-scope-code-writing-dedup-no-double-surface,Scope disambiguation,scored,False,1731,0.04657799991036882,relevantBeliefs exact-set mismatch
+empty-alias-belief-content-path-only,Design boundary cases,scored,False,1442,0.039368000216200016,relevantBeliefs exact-set mismatch
+universal-scope-explicit-query-no-relevant,Scope disambiguation,scored,True,388,0.026017999971372774,
+negation-query-still-surfaces-rejected-tool,Design boundary cases,scored,False,1442,0.048000000333559,relevantBeliefs exact-set mismatch
+superseded-chain-query-terminal-only,Supersession chain exclusion,scored,False,1442,0.04197199996269774,relevantBeliefs exact-set mismatch
+relation-does-not-appear-as-entity,Relation expansion,scored,False,1442,0.03751499980353401,relevantBeliefs exact-set mismatch

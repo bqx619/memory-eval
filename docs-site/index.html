@@ -1,0 +1,934 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title> memeval documentation </title>
+<style>
+/* Layout: sticky left index (desktop) + single reading column (~72ch); tokens shared with design/report-ui/report.css */
+:root{
+  --page:#f9f9f7; --surface:#fcfcfb; --surface-2:#f3f3f0;
+  --ink:#0b0b0b; --ink-2:#52514e; --muted:#898781;
+  --grid:#e1e0d9; --axis:#c3c2b7; --ring:rgba(11,11,11,.10);
+  --accent:#2a78d6; --accent-ink:#184f95; --warm:#eb6834; --good:#0ca30c; --good-text:#006300; --warn:#fab219; --critical:#d03b3b;
+  --radius:10px;
+  --font:system-ui,-apple-system,"Segoe UI","PingFang SC","Hiragino Sans GB","Microsoft YaHei",sans-serif;
+  --mono:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
+}
+@media (prefers-color-scheme:dark){
+  :root:not([data-theme="light"]){
+    color-scheme:dark;
+    --page:#0d0d0d; --surface:#1a1a19; --surface-2:#232321;
+    --ink:#f0efec; --ink-2:#c3c2b7; --muted:#898781;
+    --grid:#2c2c2a; --axis:#383835; --ring:rgba(255,255,255,.10);
+    --accent:#3987e5; --accent-ink:#86b6ef; --warm:#d95926; --good-text:#0ca30c;
+  }
+}
+:root[data-theme="dark"]{
+  color-scheme:dark;
+  --page:#0d0d0d; --surface:#1a1a19; --surface-2:#232321;
+  --ink:#f0efec; --ink-2:#c3c2b7; --muted:#898781;
+  --grid:#2c2c2a; --axis:#383835; --ring:rgba(255,255,255,.10);
+  --accent:#3987e5; --accent-ink:#86b6ef; --warm:#d95926; --good-text:#0ca30c;
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--page);color:var(--ink);font:15px/1.65 var(--font);-webkit-font-smoothing:antialiased}
+a{color:var(--accent-ink);text-decoration:none;border-bottom:1px solid var(--grid)}
+a:hover,a:focus-visible{border-bottom-color:var(--accent)}
+:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+code,pre,.mono{font-family:var(--mono);font-size:.87em}
+code{background:var(--surface-2);padding:.1em .35em;border-radius:5px}
+pre{background:var(--surface-2);border:1px solid var(--grid);border-radius:var(--radius);padding:14px 16px;overflow-x:auto;line-height:1.5}
+pre code{background:none;padding:0;font-size:12.5px}
+.wrap{display:grid;grid-template-columns:1fr;gap:0;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));padding-block:0 80px;max-width:1200px;margin:0 auto}
+@media (min-width:960px){.wrap{grid-template-columns:240px minmax(0,1fr);gap:48px}}
+header.top{grid-column:1/-1;padding:40px 0 24px;border-bottom:1px solid var(--grid);margin-bottom:28px}
+.eyebrow{font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);margin:0 0 10px}
+h1{font-size:clamp(28px,4vw,40px);line-height:1.15;margin:0 0 12px;letter-spacing:-.01em;text-wrap:balance}
+.lede{font-size:17px;color:var(--ink-2);max-width:72ch;margin:0}
+.meta{margin-top:14px;display:flex;flex-wrap:wrap;gap:8px}
+.chip{display:inline-block;border:1px solid var(--grid);border-radius:999px;padding:3px 10px;font-size:12.5px;color:var(--ink-2);background:var(--surface)}
+nav.toc{display:none}
+@media (min-width:960px){nav.toc{display:block;position:sticky;top:max(16px,env(safe-area-inset-top,0px));align-self:start;max-height:calc(100vh - 32px);overflow:auto;padding-right:8px}}
+nav.toc ol{list-style:none;margin:0;padding:0}
+nav.toc li{margin:0}
+nav.toc a{display:block;padding:5px 10px;border:0;border-left:2px solid var(--grid);color:var(--ink-2);font-size:13.5px}
+nav.toc a:hover{color:var(--ink);border-left-color:var(--axis)}
+nav.toc a.cur{color:var(--accent-ink);border-left-color:var(--accent)}
+nav.toc .grp{font-size:11.5px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);margin:14px 0 4px 12px}
+main{min-width:0;max-width:78ch}
+details.mtoc{margin:0 0 20px;border:1px solid var(--grid);border-radius:var(--radius);background:var(--surface)}
+details.mtoc summary{cursor:pointer;padding:10px 14px;font-weight:600}
+details.mtoc ol{margin:0;padding:4px 14px 12px 32px}
+@media (min-width:960px){details.mtoc{display:none}}
+section{margin:0 0 44px;scroll-margin-top:16px}
+h2{font-size:24px;line-height:1.25;margin:0 0 14px;padding-top:8px;letter-spacing:-.005em;text-wrap:balance}
+h3{font-size:17px;margin:26px 0 8px;text-wrap:balance}
+h4{font-size:15px;margin:18px 0 6px;color:var(--ink-2)}
+p,ul,ol{margin:0 0 12px}
+ul,ol{padding-left:1.3em}
+li{margin:3px 0}
+.muted{color:var(--muted)}
+.note{border-left:3px solid var(--accent);background:var(--surface);padding:10px 14px;border-radius:0 var(--radius) var(--radius) 0;margin:14px 0}
+.note.warn{border-left-color:var(--warn)}
+.scroll{overflow-x:auto;margin:12px 0}
+table.tbl{border-collapse:collapse;width:100%;font-size:13.5px}
+table.tbl th,table.tbl td{text-align:left;vertical-align:top;padding:7px 10px;border-bottom:1px solid var(--grid)}
+table.tbl th{font-weight:600;color:var(--ink-2);background:var(--surface-2);white-space:nowrap}
+table.tbl td code{white-space:nowrap}
+table.tbl .num{font-variant-numeric:tabular-nums;text-align:right}
+.flow{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px;margin:14px 0}
+.step{background:var(--surface);border:1px solid var(--grid);border-radius:var(--radius);padding:12px 14px}
+.step b{display:block;font-size:12px;color:var(--muted);letter-spacing:.06em;text-transform:uppercase;margin-bottom:4px}
+.kv{display:grid;grid-template-columns:max-content 1fr;gap:4px 16px;margin:10px 0}
+.kv dt{color:var(--ink-2)}
+.kv dd{margin:0}
+.ok{color:var(--good-text);font-weight:600}
+.bad{color:var(--critical);font-weight:600}
+footer{grid-column:1/-1;border-top:1px solid var(--grid);padding-top:16px;color:var(--muted);font-size:13px}
+
+/* diagrams */
+.pipe{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:8px;margin:14px 0;counter-reset:st}
+.pipe .st{position:relative;background:var(--surface);border:1px solid var(--grid);border-radius:var(--radius);padding:10px 12px 10px 12px;font-size:13px;min-width:0}
+.pipe .st b{display:block;font-size:12px;color:var(--accent-ink);margin-bottom:2px}
+.pipe .st small{color:var(--muted);display:block;margin-top:4px;font-size:11.5px;word-break:break-all}
+.fig{margin:16px 0 20px}
+.fig svg{width:100%;height:auto;display:block;max-width:100%}
+.fig figcaption{font-size:12.5px;color:var(--muted);margin-top:6px}
+.fig .ln{stroke:var(--axis);stroke-width:1.5;fill:none}
+.fig .ar{stroke:var(--ink-2);stroke-width:1.5;fill:none;marker-end:url(#arr)}
+.fig .ar2{stroke:var(--accent);stroke-width:1.5;fill:none;marker-end:url(#arrb)}
+.fig .box{fill:var(--surface);stroke:var(--grid)}
+.fig .boxa{fill:var(--surface-2);stroke:var(--axis)}
+.fig .t{font:12px var(--font);fill:var(--ink)}
+.fig .t2{font:11px var(--font);fill:var(--ink-2)}
+.fig .tm{font:11px var(--mono);fill:var(--ink-2)}
+.fig .tmuted{font:11px var(--font);fill:var(--muted)}
+.fig .ev{fill:var(--surface-2);stroke:var(--axis)}
+.fig .gold{fill:var(--warm);stroke:var(--warm)}
+.fig .hit{fill:var(--good);stroke:var(--good)}
+.fig .miss{fill:var(--surface-2);stroke:var(--axis)}
+.fig .cut{stroke:var(--critical);stroke-width:2;stroke-dasharray:4 3}
+@media (prefers-reduced-motion:no-preference){html{scroll-behavior:smooth}}
+
+/* English labels may be longer than the original interface text. */
+h1,h2,h3,button,label,summary,.chip,.badge,.k,.kv dt{overflow-wrap:anywhere}
+button,.chip,.badge{max-width:100%;white-space:normal}
+.original-record{max-width:100%;min-width:0}.original-record pre{white-space:pre-wrap;overflow-wrap:anywhere;max-height:24rem;overflow:auto}
+@media(max-width:600px){.kv{grid-template-columns:1fr}.kv dt{white-space:normal}.kv dd{margin-bottom:.5rem}select{max-width:100%}}
+nav.toc .nav-description{text-transform:none;letter-spacing:normal;line-height:1.5}
+
+code{overflow-wrap:anywhere} pre code{overflow-wrap:normal}
+@media(max-width:600px){label{max-width:100%;min-width:0;flex-wrap:wrap}select{min-width:0!important;max-width:calc(100vw - 40px)!important}label select{flex-shrink:1}}
+
+.tbl .badge{white-space:nowrap;overflow-wrap:normal;max-width:none}
+</style>
+</head>
+<body>
+
+<div class="wrap">
+<header class="top">
+  <p class="eyebrow"> memeval · Personal-agent memory evaluation </p>
+  <h1> Evaluation data, protocols, and operation </h1>
+  <p class="lede"> memeval normalizes public benchmarks into common suites, connects systems under test (SUTs) through adapters, and supports installation, execution, review, and cleanup. Versioned code, protocols, and manifests define supported capabilities. Result cards separately document run conditions and coverage. </p>
+  <div class="meta">
+    <span class="chip"> Suite schema 2.0 / 3.0 </span><span class="chip"> Adapter protocol paeval-v2 </span><span class="chip">manifest v3</span><span class="chip"> Report v2 · Tier D </span><span class="chip">Lock v3</span>
+  </div>
+</header>
+
+<nav class="toc" aria-label="Contents">
+  <p class="grp" style="margin-top:0"><a href="results.html" style="border:0;font-weight:600"> Results and comparisons → </a></p>
+  <p class="grp" style="margin-top:0"><a href="cases.html" style="border:0;font-weight:600"> Case review → </a></p>
+  <p class="grp nav-description" style="margin-top:0"><a href="beam.html" style="border:0;font-weight:600"> BEAM 100K overview → </a> Compare collected runs by score, coverage, failures, usage, and latency. <code>beam-run.html?run=…</code> provides question-level run review. Available traces enable optional adapter views, such as <code>beam-coglet.html?run=…&amp;q=…</code> for CogletNet. These explain adapter-specific records without changing common scoring or comparison rules. </p>
+  <ol>
+    <li><a href="#overview"> Overview </a></li>
+    <li><a href="#quickstart"> Quick start </a></li>
+    <li class="grp"> Data </li>
+    <li><a href="#datasets"> Supported datasets </a></li>
+    <li><a href="#suite"> Normalized suite format </a></li>
+    <li><a href="#kinds"> Case kinds and scoring </a></li>
+    <li><a href="#protocols"> Benchmark protocol declarations </a></li>
+    <li><a href="#rebuild"> Rebuilding and verifying data </a></li>
+    <li><a href="#journey"> A case from source to result </a></li>
+    <li class="grp"> Integration </li>
+    <li><a href="#io"> Container data flow </a></li>
+    <li><a href="#rpc"> Adapter protocol v2 </a></li>
+    <li><a href="#bridges"> Three bridge types </a></li>
+    <li><a href="#manifest">SUT manifest v3</a></li>
+    <li><a href="#sidecars"> Sidecars and presets </a></li>
+    <li class="grp"> Run </li>
+    <li><a href="#container"> Container isolation and network modes </a></li>
+    <li><a href="#gateway"> LLM gateway </a></li>
+    <li><a href="#selftest"> Self-test </a></li>
+    <li><a href="#run"> Run modes and options </a></li>
+    <li><a href="#report"> Report v2 </a></li>
+    <li><a href="#results"> Result cards and comparisons </a></li>
+    <li><a href="#logs"> Logs and residue checks </a></li>
+    <li class="grp"> Maintenance </li>
+    <li><a href="#env"> Environment locks and cleanup </a></li>
+    <li><a href="#config"> Configuration </a></li>
+    <li><a href="#cli"> Command reference </a></li>
+    <li><a href="#status"> Capability boundaries and version history </a></li>
+  </ol>
+</nav>
+
+<main>
+<details class="mtoc"><summary> Contents </summary><ol>
+  <li><a href="#overview"> Overview </a></li><li><a href="#quickstart"> Quick start </a></li><li><a href="#datasets"> Supported datasets </a></li><li><a href="#suite"> Normalized suite format </a></li><li><a href="#kinds"> Case kinds and scoring </a></li><li><a href="#protocols"> Benchmark protocol declarations </a></li><li><a href="#rebuild"> Rebuilding and verifying data </a></li><li><a href="#journey"> A case from source to result </a></li><li><a href="#io"> Container data flow </a></li><li><a href="#rpc"> Adapter protocol v2 </a></li><li><a href="#bridges"> Three bridge types </a></li><li><a href="#manifest">SUT manifest v3</a></li><li><a href="#sidecars"> Sidecars and presets </a></li><li><a href="#container"> Container isolation and network modes </a></li><li><a href="#gateway"> LLM gateway </a></li><li><a href="#selftest"> Self-test </a></li><li><a href="#run"> Run modes and options </a></li><li><a href="#report"> Report v2 </a></li><li><a href="#results"> Result cards and comparisons </a></li><li><a href="#logs"> Logs and residue checks </a></li><li><a href="#env"> Environment locks and cleanup </a></li><li><a href="#config"> Configuration </a></li><li><a href="#cli"> Command reference </a></li><li><a href="#status"> Capability boundaries and version history </a></li>
+</ol></details>
+
+<section id="overview">
+<h2> Overview </h2>
+<p> memeval is a Go evaluator for personal-agent memory retrieval and answer quality on public benchmarks. It normalizes each benchmark into a common <strong>suite</strong> (episode → events → cases), uses a shared <strong>adapter protocol</strong> to drive systems, runs each external runtime episode in a <strong>container</strong>, and produces machine-verifiable <strong>reports</strong>.</p>
+<div class="flow">
+  <div class="step"><b> Data </b> Registry entry + upstream lock → <code>memeval import</code> → normalized suite bundle </div>
+  <div class="step"><b> Integration </b> One manifest v3 + one adapter (Python / Node / HTTP / native Go) </div>
+  <div class="step"><b> Install </b><code>env install</code> builds a Linux SUT image, writes Lock v3, and runs selftest </div>
+  <div class="step"><b> Run </b> One container per external runtime episode: reset → ingest → ready → retrieve → destroy </div>
+  <div class="step"><b> Results </b> report.json / cases.jsonl / report.html, including isolation, data flow, and log indexes </div>
+  <div class="step"><b> Cleanup </b> Residue check after each run; <code>env destroy</code>, <code>gc</code> (dry-run by default) </div>
+</div>
+<p> The evaluator runs on the host; external SUTs run in Linux containers; built-in baselines run in-process. Gold answers and dataset files are not mounted into SUT containers. Only visible events and queries cross the protocol. Network mode <code>none</code> restricts SUT runtime egress. Image builds, dependency/model downloads, and evaluator reader/judge calls have separate data flows that require their own configuration and disclosure. </p>
+</section>
+
+<section id="quickstart">
+<h2> Quick start </h2>
+<p> Requirements: Go 1.27, Python 3 standard library, and a Docker daemon. The code uses the standard <code>docker</code> CLI with explicit <code>--context</code>.</p>
+<pre><code># 1. Build the evaluator and static Linux container probe
+go build -o bin/memeval ./cmd/memeval
+scripts/build_linux_memeval.sh arm64
+
+# 2. Fetch official judge templates (verified by SHA-256 at runtime)
+python3 -B scripts/fetch_upstream_refs.py
+
+# 3. Configure MEMEVAL_DOCKER_CONTEXT and, if needed, MEMEVAL_SUT_LLM_*
+cp .env.example .env
+
+# 4. Check container capabilities (all five required checks must pass)
+bin/memeval sandbox caps
+
+# 5. Install a SUT (image, lock, selftest), then evaluate
+bin/memeval env install suts/mem0/manifest.json
+bin/memeval run --suite data/normalized/pmb-retrieval.json --sut suts/mem0/manifest.json --out reports/mem0-pmb
+
+# 6. Review results and clean up
+open reports/mem0-pmb/report.html
+bin/memeval gc            # dry-run: list reclaimable memeval resources
+bin/memeval env destroy mem0</code></pre>
+<div class="note"> Built-in baselines need no container: <code>bin/memeval run --suite pmb --sut bm25</code> (also <code>null</code>, <code>recent</code>, <code>fullcontext</code> ). They run in-process and are reported as Tier C. </div>
+</section>
+
+<section id="datasets">
+<h2> Supported datasets </h2>
+<p> Registry entries in <code>data/registry/&lt;id&gt;.json</code> are the authoritative dataset records. Dataset contents are not committed; rebuild them from upstream locks. <code>memeval registry list</code> prints the same inventory. </p>
+<div class="scroll"><table class="tbl">
+<thead><tr><th> Dataset </th><th> License </th><th> Case kinds </th><th> Suite (case count) </th><th> Protocol variant </th><th> Registry status </th></tr></thead>
+<tbody>
+<tr><td> PrecisionMemBench (field projection) </td><td>MIT</td><td>typed_context, retrieval</td><td><code>pmb.json</code>(77), <code>pmb-retrieval.json</code>(75)</td><td><code>precisionmembench#typed_context / #retrieval</code></td><td>run</td></tr>
+<tr><td>LongMemEval-S(cleaned)</td><td>MIT</td><td>qa</td><td><code>longmemeval-s.json</code>(500), <code>-strat70</code>(70)</td><td><code>longmemeval#s</code></td><td>run</td></tr>
+<tr><td>LoCoMo</td><td>CC BY-NC 4.0</td><td>qa</td><td><code>locomo10@3eb6f2c585f5</code>, <code>…-reader-v2</code>(1986)</td><td><code>locomo#text_only</code></td><td>imported</td></tr>
+<tr><td>PersonaMem v1</td><td>MIT</td><td>mcq</td><td><code>personamem-v1-32k@…</code>, <code>…-nopersona</code>(589)</td><td><code>personamem#official / #memory_only</code></td><td>imported</td></tr>
+<tr><td>MemoryAgentBench</td><td>MIT</td><td>qa, summary, recsys</td><td> 5 split bundles (1700 / 800 / 171 / 300 / 700) </td><td><code>memoryagentbench#&lt;split&gt;</code></td><td>imported</td></tr>
+<tr><td>BEAM</td><td>CC BY-SA 4.0</td><td>rubric</td><td><code>beam-100k/500k/1m@…</code>(400 / 700 / 700)</td><td><code>beam#100K / 500K / 1M</code></td><td>imported</td></tr>
+<tr><td>Memora</td><td>Apache-2.0</td><td>rubric</td><td><code>memora@…/weekly|monthly|quarterly</code>(150 / 150 / 300)</td><td><code>memora#&lt;period&gt;</code></td><td>imported</td></tr>
+<tr><td>HaluMem</td><td> CC BY-NC-ND 4.0 (do not redistribute copies) </td><td>qa, memory_audit</td><td><code>halumem-medium/long@…</code>(4854 / 5884)</td><td><code>halumem#medium / #long</code></td><td>imported</td></tr>
+<tr><td>PrefEval</td><td>CC BY-NC 4.0</td><td>rubric, mcq</td><td> explicit-generation t10/t300, explicit-mcq t10, implicit-choice-generation t10 (1000 each) </td><td><code>prefeval#&lt;form-task&gt;</code></td><td>imported</td></tr>
+<tr><td>ConvoMem</td><td>CC BY-NC 4.0</td><td>qa, rubric</td><td>abstention, assistant_facts, changing, implicit_connection, preference</td><td><code>convomem#&lt;type&gt;</code></td><td>imported</td></tr>
+<tr><td>LongMemEval-V2, MemoryArena</td><td>Apache-2.0 / CC BY 4.0</td><td>—</td><td>—</td><td> No protocol file </td><td>registered</td></tr>
+</tbody></table></div>
+<p> Registry fields: <code>id, name, repository, dataset_url, data_nature, task_kinds, protocol_id, variants, reported_scale, license{id,noncommercial,no_derivatives,share_alike,redistribute_normalized,source}, pinned_revision, implementation_status, importer, lock_path, suites[]{suite_id,path,protocol_ref,import_stats_path,suite_sha256}, overlaps, notes, verification_date</code>.</p>
+<h3> Dataset details </h3>
+<p> The following entries describe data, capabilities, sizes, variants, scoring, integration status, and limitations. Facts come from <code>data/registry/&lt;id&gt;.json</code>, <code>protocols/&lt;id&gt;.json</code> and import specifications. Registry states: <b>run</b> means a run is recorded, <b>imported</b> means normalization and a protocol are available, and <b>registered</b> means only the source is registered. Status does not imply all systems were tested, full coverage, or official fidelity. Consult each run's status, sample count, and <code>fidelity/deviations</code>. </p>
+
+<h4>PrecisionMemBench(PMB)· run</h4>
+<dl class="kv">
+<dt> Source </dt><dd> tenurehq/precisionMemBench, MIT; this repository uses a manually transcribed field projection, <code>pinned_revision 61a712a1…</code></dd>
+<dt> Data </dt><dd> A structured synthetic diagnostic set: one user, 35 seed facts about technology, conventions, and preferences, and 77 questions. It specifies which facts should or should not be retrieved, rather than supplying conversations. </dd>
+<dt> Capability </dt><dd> Memory retrieval <strong>precision behavior</strong> across 12 categories: aliases, scope disambiguation, relation expansion, supersession, reverse signals, fuzzy/prefix guards, stable ranking, cold start, eviction, type routing/open questions, persona prelude, and design boundaries. Of 75 retrieval cases, 32 have empty gold to test whether returning nothing is appropriate. </dd>
+<dt> Size and variants </dt><dd><code>pmb.json</code> (77 cases, typed_context: assertions for pinnedFacts / relevantBeliefs / openQuestions / personaPrelude); <code>pmb-retrieval.json</code> (75 retrieval cases, 43 with gold evidence). One episode and one cluster. </dd>
+<dt> Scored </dt><dd> typed_context uses assertions; retrieval uses memory-only metrics; <code>empty_result_correct</code> is defined for 32 negative cases </dd>
+<dt> Notes </dt><dd> A small manual diagnostic set for regression and precision checks. BM25 is a lexical reference; specify variant, budget, and sample size, without inferring general system rankings. Two cases lack relevantBeliefs annotations and are excluded from the retrieval projection. </dd>
+</dl>
+
+<h4>LongMemEval-S · run</h4>
+<dl class="kv">
+<dt> Source </dt><dd> xiaowu0162/LongMemEval (cleaned), MIT; <code>98d7416c24c7</code></dd>
+<dt> Data </dt><dd> 500 questions, each with historical user/assistant sessions as a haystack (S: approximately 115k tokens). Evidence may span several sessions; assistant messages are part of history. </dd>
+<dt> Capability </dt><dd> Five long-term memory capabilities: extraction, multi-session reasoning, temporal reasoning, updates, and abstention. Types include single-session-user / assistant / preference, multi-session, temporal-reasoning, knowledge-update, and abstention. </dd>
+<dt> Size and variants </dt><dd><code>longmemeval-s.json</code> (500) and the derived stratified subset <code>-strat70</code> (70). An early 50-case probe covered only single-session-user and cannot represent all 500 questions. Result cards show actual sample and category coverage. M and oracle variants have no importer. </dd>
+<dt> Scored </dt><dd> Retrieval: memory-only metrics plus official <code>recall_any / recall_all / ndcg_any@k</code> (at turn and session levels, following official <code>eval_utils.py</code> ); fixed_reader: official category-specific correctness judge </dd>
+<dt> Notes </dt><dd> Shares 300 questions with the MemoryAgentBench longmemeval-overlap bundle, which is excluded from the MAB aggregate. Ingestion batches one session at a time ( <code>ingestion: per_session</code>)</dd>
+</dl>
+
+<h4>LoCoMo · imported</h4>
+<dl class="kv">
+<dt> Source </dt><dd> snap-research/locomo, CC BY-NC 4.0 (noncommercial); <code>3eb6f2c585f5</code></dd>
+<dt> Data </dt><dd> 10 long timestamped, model-generated two-person conversations with 1,986 QA pairs. Original data contains images; this importer is text_only, with multimodal data registered only. </dd>
+<dt> Capability </dt><dd> Long-conversation QA: single-hop, multi-hop, temporal, open-domain/common-sense, and adversarial. Official F1 excludes category 5. </dd>
+<dt> Size and variants </dt><dd><code>locomo10@…</code> and <code>-reader-v2</code> (the latter retains private adversarial answers for the official reader suffix) </dd>
+<dt> Scored </dt><dd> fixed_reader: official token F1; retrieval: event-level recall </dd>
+<dt> Notes </dt><dd> Import normalizes evidence separators, whitespace, and IDs. Three unresolved references were dropped and recorded in diagnostics. ConvoMem's bundled LoCoMo runner is code overlap, not dataset overlap. </dd>
+</dl>
+
+<h4>PersonaMem v1 · imported</h4>
+<dl class="kv">
+<dt> Source </dt><dd>bowen-upenn/PersonaMem, MIT; <code>a8076d5608c9</code></dd>
+<dt> Data </dt><dd> 20 personas, 37 contexts, 589 MCQs in the 32k version; 128k/1M were not fetched. Preferences and states evolve, and questions ask for the appropriate current response. </dd>
+<dt> Capability </dt><dd> Personalized memory: tracking persona evolution across seven observed question types </dd>
+<dt> Size and variants </dt><dd><code>official</code> (system persona messages visible, matching official long-context setup) and <code>memory_only</code> (persona messages removed; memory-only, not comparable with official results) </dd>
+<dt> Scored </dt><dd> MCQ accuracy ( <code>personamem_final_answer</code>)</dd>
+</dl>
+
+<h4>MemoryAgentBench(MAB)· imported</h4>
+<dl class="kv">
+<dt> Source </dt><dd>HUST-AI-HYZ/MemoryAgentBench, MIT; <code>7ea066982b14</code></dd>
+<dt> Data </dt><dd> 146 contexts and 3,671 question occurrences across five bundles. Each context is one episode with <strong>incremental ingestion and read-only queries</strong>(<code>incremental_per_episode</code>)</dd>
+<dt> Capability </dt><dd> Four capabilities: accurate retrieval, test-time learning, long-range understanding, and conflict resolution. longmemeval-overlap contains 300 LME-S questions with different contexts, separately bundled and excluded from MAB aggregates. </dd>
+<dt> Scored </dt><dd> exact_match variants (substring / exact / F1), eventqa recall, recsys recall@5, ROUGE for infbench summaries, and an LLM judge for some splits </dd>
+<dt> Notes </dt><dd> Sentence segmentation uses neurosnap/sentences rather than nltk; implementation notes disclose differences </dd>
+</dl>
+
+<h4>BEAM · imported</h4>
+<dl class="kv">
+<dt> Source </dt><dd>mohammadtavakoli78/BEAM, CC BY-SA 4.0; <code>3205395e897e</code></dd>
+<dt> Data </dt><dd> Model-generated long conversations at 100K / 500K / 1M / 10M token lengths. The first three are imported: 90 conversations and 1,800 questions. 10M was not fetched. </dd>
+<dt> Capability </dt><dd> Very-long-context memory: facts, event order, and cross-session synthesis. Each conversation is a cluster, ingested incrementally. </dd>
+<dt> Scored </dt><dd> Rubric judge (mean of 0 / 0.5 / 1 items) plus event ordering ((τ_b+1)/2·F1) </dd>
+<dt> Notes </dt><dd> The 1M split has 1,720 repeated turn IDs; 198 evidence references expand to all matches, preserving ambiguity in import diagnostics </dd>
+</dl>
+
+<h4>Memora · imported</h4>
+<dl class="kv">
+<dt> Source </dt><dd>geniesinc/Memora, Apache-2.0; <code>a6493188efc8</code></dd>
+<dt> Data </dt><dd> Life-log conversations for 10 personas across weekly, monthly, and quarterly bundles: 27,614 sessions, about 430k turns, and 600 questions. One incremental episode per persona. </dd>
+<dt> Capability </dt><dd> Accumulating personal memory: presence and absence questions test invention and omission </dd>
+<dt> Scored </dt><dd> Rubric judge; mpa / faa / fama metrics. Official three-judge majority voting is not reproduced; fidelity is partial. </dd>
+</dl>
+
+<h4>HaluMem · imported</h4>
+<dl class="kv">
+<dt> Source </dt><dd> MemTensor/HaluMem (IAAR-Shanghai dataset), CC BY-NC-ND 4.0; <code>cb04336aa1b7</code></dd>
+<dt> Data </dt><dd> 20 users; medium: 1,387 sessions / about 60k turns; long: 2,417 sessions / about 107k turns. Annotations include 14,948 memory points, 3,122 updates, and 3,467 questions. </dd>
+<dt> Capability </dt><dd> Memory-system <strong>hallucination</strong>: invented, omitted, or outdated extracted memories. <code>memory_audit</code> Cases require SUT support for <code>dump</code>; exported memories are checked against annotated memory points </dd>
+<dt> Scored </dt><dd> QA uses a judge; memory-extraction F1 is secondary </dd>
+<dt> Notes </dt><dd> The license prohibits redistribution of these normalized copies: generate bundles locally without committing them, and use synthetic test fixtures. Baseline and octop dump outputs explicitly indicate no extraction. </dd>
+</dl>
+
+<h4>PrefEval · imported</h4>
+<dl class="kv">
+<dt> Source </dt><dd>amazon-science/prefeval, CC BY-NC 4.0; <code>50795054b5ff</code></dd>
+<dt> Data </dt><dd> 1,000 preference/question pairs across 20 topics. Preferences are explicit statements, implicit choices, or implicit personas; 10 or 300 filler turns separate preference and query (t10 / t300). </dd>
+<dt> Capability </dt><dd> Remembering and following earlier preferences as conversational distance increases </dd>
+<dt> Scored </dt><dd> Generation uses a judge for preference-following accuracy and errors such as unhelpful, inconsistent, or hallucination; MCQs use option matches </dd>
+<dt> Notes </dt><dd> Four registered suites each have 1,000 questions. They repeat the same preferences under different conditions, rather than representing 4,000 independent preferences. </dd>
+</dl>
+
+<h4>ConvoMem · imported</h4>
+<dl class="kv">
+<dt> Source </dt><dd>SalesforceAIResearch/ConvoMem, CC BY-NC 4.0; <code>e3e9b39115b0</code></dd>
+<dt> Data </dt><dd> Large model-generated conversations: 906 files, 56,273 entries, about 107k conversations and 3.8m messages. The pinned evidence_questions tree cannot reproduce the official 1..300-context sweep. </dd>
+<dt> Capability </dt><dd> Five suites: abstention, assistant_facts, changing facts, implicit_connection, and preference </dd>
+<dt> Scored </dt><dd> Judge; secondary <code>convomem.correct</code></dd>
+<dt> Notes </dt><dd> Of 107,041 evidence references, 77,261 match messages exactly. The other 29,780 retain text only and are excluded from retrieval denominators. </dd>
+</dl>
+
+<h4>LongMemEval-V2, MemoryArena · registered</h4>
+<p> Both contain agent trajectories/tasks: LME-V2 has 451 questions and 1,870 trajectories (Apache-2.0); MemoryArena covers shopping, search, travel planning, and formal reasoning (CC BY-4.0). These correspond to the protocol-v2 reserved <code>agentic</code> case kind. Only sources are registered; importers, protocol files, and complete pinned versions are unavailable. </p>
+
+
+</section>
+
+<section id="suite">
+<h2> Normalized suite format </h2>
+<p> Two storage formats: <strong>Single file</strong> (schema 2.0, four early suites) and <strong>bundle directory</strong> (schema 3.0 for the others). Go types are in <code>internal/suite/suite.go</code> and <code>v3_types.go</code>, <code>memeval suite schema</code> can export JSON Schema; the specification is in <code>design/dataset-protocol.md</code>(v1.2).</p>
+<pre><code>data/normalized/&lt;suite-id&gt;@&lt;rev12&gt;/
+├── suite.json             # Suite header + container{format:"bundle",version:"1",episodes_file,index_file,index_sha256,episodes,events,cases}
+├── episodes.jsonl         # One episode per line: {id, cluster_id, events[], cases[]}
+├── episodes.index.jsonl   # Per-episode index {id, cluster_id, line, offset, bytes, sha256, events, cases}
+└── import.json            # Import statistics: converter, counts{by_kind,cases,episodes,events,unresolved_evidence_refs}, by_category, diagnostics</code></pre>
+<h3> Suite header </h3>
+<dl class="kv">
+<dt><code>schema_version</code></dt><dd> "2.0" or "3.0" (1.0 upgraded automatically) </dd>
+<dt><code>suite_id</code>, <code>track</code></dt><dd> for example <code>pmb-retrieval</code>; tracks include <code>history-qa</code>, <code>seeded-state-diagnostic</code></dd>
+<dt><code>provenance</code></dt><dd><code>source_url</code> is required; usually also <code>revision</code>, <code>converter</code>, <code>local_input_sha256</code>, <code>cluster_basis</code></dd>
+<dt><code>protocol</code></dt><dd><code>ingestion</code> (per_event / per_session; 3.0 adds per_document, per_trajectory, per_file, per_turn_batch:N, per_chunk:N:x:y), <code>query_time_policy</code>(reference_only / as_of), <code>retrieval_metrics</code>, <code>reset_policy_allowed</code>, <code>speaker_mapping</code>, <code>text_only</code>, <code>haystack</code></dd>
+<dt><code>protocol_ref</code></dt><dd><code>protocols/&lt;id&gt;.json#&lt;variant&gt;</code>, resolved at runtime and recorded in the report </dd>
+<dt><code>license</code>, <code>data_nature</code>, <code>taxonomy</code>, <code>limitations[]</code></dt><dd> for disclosure </dd>
+</dl>
+<h3>episode / event / case</h3>
+<ul>
+<li><strong>episode</strong>: <code>id</code>, <code>cluster_id</code> (cluster unit for pairing and bootstrap; defaults to id), <code>events[]</code>, <code>cases[]</code>.</li>
+<li><strong>event</strong>: <code>source_id</code> (unique within episode, used as the retrieval evidence ID), <code>owner</code>, <code>role</code> (user / assistant / system / observation / fact; 3.0 adds tool), <code>content</code>, <code>session</code>, <code>timestamp</code>, <code>time_raw</code>, <code>turn_group</code>, <code>modality</code>, <code>attachments[]</code>, <code>attributes</code>.</li>
+<li><strong>case</strong>: <code>id</code>, <code>kind</code>, <code>query</code>, <code>user</code>, <code>scope[]</code>, <code>category</code>, <code>cutoff</code> (exclusive event-prefix index: the SUT sees only <code>events[:cutoff]</code>; gold evidence must precede it), <code>budget{top_k,max_context_chars}</code>, <code>options</code>, <code>query_point</code>, <code>question_type</code>, <code>gold</code>.</li>
+<li><strong>gold</strong>: <code>answers[]</code>, <code>abstain</code>, <code>evidence_ids[]</code>, <code>evidence_session_ids[]</code>, <code>evidence_unit</code>(event | session), <code>exhaustive</code>, <code>choice</code>, <code>expect</code> (PMB typed assertions); 3.0 also adds <code>evidence_refs[]{kind,ref}</code>, <code>mcq{seed,order,shuffle,parse}</code>, <code>rubric{items[{group,text,polarity,weight}],aggregate}</code>, <code>checker{type,params}</code>, <code>memory_points[]</code>, <code>reference</code>, <code>disputed</code>.</li>
+</ul>
+<p><code>suite_sha256</code> for bundles is <code>sha256(canonical suite.json + "\n" + raw episodes.index.jsonl bytes)</code>; single files use canonical JSON SHA-256. Reports use this identity to prove which dataset was evaluated. </p>
+</section>
+
+<section id="kinds">
+<h2> Case kinds and scoring </h2>
+<p> Both 2.0 and 3.0 support <code>typed_context, qa, mcq, retrieval</code>; 3.0 also supports <code>rubric, set_match, ordering, summary, memory_audit, recsys, agentic</code>. 3.0 kinds run only when their benchmark predicates match; otherwise the case is <code>unsupported</code> and included in warnings. </p>
+<h3>memory-only(<code>--mode retrieval</code>, default) </h3>
+<p> The evaluator scores returned evidence IDs. References must exist, precede the cutoff, and not repeat. </p>
+<ul>
+<li><code>typed_context</code> (PMB): use <code>gold.expect</code> to validate pinnedFacts / relevantBeliefs / openQuestions / personaPrelude. </li>
+<li> Other kinds score gold evidence using <code>hit, recall, mrr, all_evidence, ndcg, precision, empty_result_correct</code> @top-k; evidence units are events, or sessions when <code>evidence_unit=session</code>. LongMemEval additionally reports <code>recall_any / recall_all / ndcg_any</code>.</li>
+</ul>
+<h3>fixed_reader(<code>--mode fixed_reader</code>)</h3>
+<p> A fixed evaluator reader answers from retrieved material, then benchmark-specific official scoring is applied. </p>
+<p><code>--reader-input sources</code> (default) expands original events by source ID. LongMemEval, MemoryAgentBench, and BEAM also support explicit <code>--reader-input items</code> for SUT-returned memory text. Sourceless synthesized memories can answer in items mode, but retrieval metrics are unavailable for that case. Illegal references remain errors. Reports disclose input mode and deviations; these modes must not be pooled. <code>fullcontext</code> accepts sources only. </p>
+<div class="scroll"><table class="tbl">
+<thead><tr><th> Benchmark </th><th> Kind / checker </th><th> Official primary metric ( <code>scoring.primary</code>)</th></tr></thead>
+<tbody>
+<tr><td>LongMemEval</td><td>qa</td><td><code>judge</code> (official category-specific evaluate_qa.py); secondary recall_any@5 etc. </td></tr>
+<tr><td>LoCoMo</td><td>qa / <code>locomo_official</code></td><td><code>token_f1</code> (category 5 excluded from F1 mean) </td></tr>
+<tr><td>PersonaMem</td><td>mcq / <code>personamem_final_answer</code></td><td><code>mcq</code></td></tr>
+<tr><td>MemoryAgentBench</td><td>qa(substring/exact/eventqa/longmemeval_judge), summary(infbench_sum), recsys(recall@5)</td><td><code>exact_match</code> family; ROUGE for summaries; LLM judge for overlap split </td></tr>
+<tr><td>BEAM</td><td>rubric / <code>beam_rubric</code>, <code>beam_event_ordering</code></td><td><code>judge</code> (mean rubric values 0/0.5/1; event ordering (τ_b+1)/2·F1) </td></tr>
+<tr><td>ConvoMem</td><td> qa or rubric / <code>convomem_judge</code>, <code>convomem_rubric</code></td><td><code>judge</code>; secondary <code>convomem.correct</code></td></tr>
+<tr><td>HaluMem</td><td>qa / <code>halumem_qa_judge</code>; memory_audit / <code>halumem_memory_audit</code> (requires SUT <code>dump</code> capability) </td><td><code>judge</code>; secondary memory-extraction F1 </td></tr>
+<tr><td>Memora</td><td>rubric / <code>memora_fama</code></td><td><code>judge</code>; secondary mpa, faa, fama </td></tr>
+<tr><td>PrefEval</td><td>rubric(aggregate prefeval), mcq(<code>prefeval_choice_tag</code>)</td><td><code>judge</code>; secondary preference_following_accuracy and error types </td></tr>
+</tbody></table></div>
+<p> Judging uses Jev (TypeSafe System One decision model, <code>--judge-decision-model jev-X.Y.Z</code> ). Evaluator model calls use recording/replay ( <code>--llm replay|record|record-once|live</code> ), separately from SUT model channels. </p>
+</section>
+
+<section id="protocols">
+<h2> Benchmark protocol declarations <code>protocols/&lt;benchmark&gt;.json</code></h2>
+<p> One file per benchmark declares variants, official scoring, template files and hashes, and equivalent deviations. Suites reference it through <code>protocol_ref</code>; <code>memeval run</code> uses <code>benchmark.ResolveAt</code> to load and verify it, then records <code>protocol.benchmark{protocol_id,version,variant,ref,sha256}</code>.</p>
+<pre><code>{
+  "protocol_id": "longmemeval", "version": "1", "cluster_basis": "question", "overlaps": ["memoryagentbench"],
+  "upstream": {"repo": "https://github.com/xiaowu0162/LongMemEval", "commit": "&lt;40-hex&gt;",
+               "files": [{"path": "design/upstream/longmemeval/src/evaluation/evaluate_qa.py", "sha256": "…"}]},
+  "variants": {"s": {"description": "…", "suite_id_patterns": ["longmemeval-s*"], "params": {"reset_policy_default": "fresh_per_case"}}},
+  "scoring": {"primary": "judge",
+              "judge": {"file": "design/upstream/longmemeval/src/evaluation/evaluate_qa.py", "sha256": "…", "per_type": true, "model_official": "gpt-4o-2024-08-06"},
+              "denominators": {"exclude": [], "per_type_report": true},
+              "secondary": ["longmemeval_official.turn.recall_any@5"]},
+  "fidelity_rules": {"full": ["…"], "equivalent": ["…"], "else": "partial"}
+}</code></pre>
+<ul>
+<li><code>scoring.primary</code> ∈ <code>judge | exact_match | token_f1 | mcq | nugget | assertions | retrieval</code>.</li>
+<li> Template files ( <code>design/upstream/…</code> ) have individual licenses and are not committed. Missing files or hash mismatches make <code>run</code> fail with guidance to <code>python3 -B scripts/fetch_upstream_refs.py --only &lt;name&gt;</code>.</li>
+<li> Available files: beam, convomem, halumem, locomo (version 2), longmemeval, memora, memoryagentbench, personamem, precisionmembench, prefeval. </li>
+</ul>
+</section>
+
+<section id="rebuild">
+<h2> Rebuilding and verifying data </h2>
+<ol>
+<li><strong>Official templates</strong>: <code>python3 -B scripts/fetch_upstream_refs.py</code> using <code>design/upstream/&lt;name&gt;/sources.md</code> commits and SHA-256 values; <code>--verify-only</code> verifies offline. </li>
+<li><strong>Dataset contents</strong>: <code>memeval fetch longmemeval-s --revision &lt;locked revision&gt; --ack-license</code> is the only built-in downloader; fetch other datasets according to <code>data/upstream/&lt;name&gt;/source.lock.json</code>(<code>dataset_id, source_url, revision, files[]{path,bytes,sha256}</code> or <code>files_manifest</code> + <code>files_total</code> ) into the same directory. </li>
+<li><strong>Import</strong>: <code>memeval import &lt;dataset&gt; --input … --out data/normalized/&lt;suite-id&gt;@&lt;rev12&gt;</code> (pmb / longmemeval / locomo / personamem / memoryagentbench / beam / memora / halumem / prefeval / convomem; see options in <code>--help</code>).</li>
+<li><strong>Verify</strong>: <code>memeval validate &lt;suite&gt;</code> (structure, semantics, gold-leak scan); <code>memeval registry check --verify-files</code> recomputes file SHA-256 values and checks suite <code>suite_sha256</code>, import statistics, protocol references, and symmetric overlaps, producing <code>{ok, entries, problems[], warnings[]}</code>.</li>
+</ol>
+</section>
+
+
+<section id="journey">
+<h2> A case from source to result (PMB-retrieval) </h2>
+<p> This recorded PrecisionMemBench example follows data through evaluation using suite <code>pmb-retrieval</code>, case <code>alias-kube-resolves</code> (Alias resolution), with Mem0 raw-local in a Linux container on 2026-10-19. Numbers come from that run's <code>report.json</code> and <code>cases.jsonl</code>.</p>
+
+<div class="pipe">
+<div class="st"><b> ① Upstream </b>tenurehq/precisionMemBench<small>pinned_revision 61a712a1…</small></div>
+<div class="st"><b> ② Registry </b><code>data/registry/precisionmembench.json</code><small>suites[]: pmb-retrieval → protocols/precisionmembench.json#retrieval</small></div>
+<div class="st"><b> ③ Import </b><code>memeval import pmb --as retrieval</code><small> 1 episode · 35 events · 75 cases; import.json records by_category </small></div>
+<div class="st"><b> ④ Suite </b><code>data/normalized/pmb-retrieval.json</code><small>suite_sha256 64bdace8…; schema 2.0</small></div>
+<div class="st"><b> ⑤ Preflight </b>registry check · env check · selftest<small> Protocol SHA e7819c69…; Lock v3; selftest 23/23 </small></div>
+<div class="st"><b> ⑥ Run </b> 75 runtime episodes, one container each <small> reset → ingest → ready → retrieve → destroy → residue check </small></div>
+<div class="st"><b> ⑦ Score </b> Reference validation + set/rank metrics <small> recall 0.954 · NDCG 0.864 (43 evidence-bearing cases) </small></div>
+<div class="st"><b> ⑧ Verify </b> 0 residue · parity 73/75 · disclosure <small> run_clean=true; aggregate matches historical reference </small></div>
+</div>
+<figcaption class="muted" style="font-size:12.5px"> Figure 1 · Eight steps from upstream data to verifiable results. </figcaption>
+
+<h3> Data: the example case </h3>
+<p> The importer projects PMB into one episode with 35 <code>role: fact</code> seed facts (owner <code>test-user</code>, session <code>seed</code> ) and 75 cases. This case is: </p>
+<pre><code>{
+  "id": "alias-kube-resolves", "kind": "retrieval", "category": "Alias resolution",
+  "query": "how does kube schedule pods across our CI pipeline nodes?",
+  "user": "test-user", "cutoff": 35,
+  "gold": {"evidence_ids": ["b-ci-gha-entity", "b-kubernetes-entity"], "evidence_unit": "event", "exhaustive": true}
+}</code></pre>
+<p> The two gold events begin “Deploys services to a Kubernetes cluster on EKS…” and “CI/CD runs on GitHub Actions…”. The query only says <em>kube</em> and <em>CI pipeline</em>, testing alias resolution. <code>exhaustive: true</code> means gold is exhaustive, allowing precision calculation. </p>
+<figure class="fig"><svg viewBox="0 0 760 110" role="img" aria-label="Timeline of 35 events; evidence at indices 11 and 21, cutoff=35 at the end">
+<text class="t" x="10" y="16">episode <tspan class="tm">pmb-seed-corpus</tspan> : 35 events in source_id order </text>
+<rect class="ev" x="10" y="28" width="18" height="18" rx="3"/><rect class="ev" x="30" y="28" width="18" height="18" rx="3"/><rect class="ev" x="50" y="28" width="18" height="18" rx="3"/><rect class="ev" x="70" y="28" width="18" height="18" rx="3"/><rect class="ev" x="90" y="28" width="18" height="18" rx="3"/><rect class="ev" x="110" y="28" width="18" height="18" rx="3"/><rect class="ev" x="130" y="28" width="18" height="18" rx="3"/><rect class="ev" x="150" y="28" width="18" height="18" rx="3"/><rect class="ev" x="170" y="28" width="18" height="18" rx="3"/><rect class="ev" x="190" y="28" width="18" height="18" rx="3"/><rect class="ev" x="210" y="28" width="18" height="18" rx="3"/><rect class="gold" x="230" y="28" width="18" height="18" rx="3"/><line class="ln" x1="239.0" y1="46" x2="239.0" y2="62"/><text class="tm" x="239.0" y="76" text-anchor="middle">b-kubernetes-entity</text><text class="tmuted" x="239.0" y="90" text-anchor="middle">events[11]</text><rect class="ev" x="250" y="28" width="18" height="18" rx="3"/><rect class="ev" x="270" y="28" width="18" height="18" rx="3"/><rect class="ev" x="290" y="28" width="18" height="18" rx="3"/><rect class="ev" x="310" y="28" width="18" height="18" rx="3"/><rect class="ev" x="330" y="28" width="18" height="18" rx="3"/><rect class="ev" x="350" y="28" width="18" height="18" rx="3"/><rect class="ev" x="370" y="28" width="18" height="18" rx="3"/><rect class="ev" x="390" y="28" width="18" height="18" rx="3"/><rect class="ev" x="410" y="28" width="18" height="18" rx="3"/><rect class="gold" x="430" y="28" width="18" height="18" rx="3"/><line class="ln" x1="439.0" y1="46" x2="439.0" y2="62"/><text class="tm" x="439.0" y="76" text-anchor="middle">b-ci-gha-entity</text><text class="tmuted" x="439.0" y="90" text-anchor="middle">events[21]</text><rect class="ev" x="450" y="28" width="18" height="18" rx="3"/><rect class="ev" x="470" y="28" width="18" height="18" rx="3"/><rect class="ev" x="490" y="28" width="18" height="18" rx="3"/><rect class="ev" x="510" y="28" width="18" height="18" rx="3"/><rect class="ev" x="530" y="28" width="18" height="18" rx="3"/><rect class="ev" x="550" y="28" width="18" height="18" rx="3"/><rect class="ev" x="570" y="28" width="18" height="18" rx="3"/><rect class="ev" x="590" y="28" width="18" height="18" rx="3"/><rect class="ev" x="610" y="28" width="18" height="18" rx="3"/><rect class="ev" x="630" y="28" width="18" height="18" rx="3"/><rect class="ev" x="650" y="28" width="18" height="18" rx="3"/><rect class="ev" x="670" y="28" width="18" height="18" rx="3"/><rect class="ev" x="690" y="28" width="18" height="18" rx="3"/>
+<line class="cut" x1="712" y1="22" x2="712" y2="54"/>
+<text class="t2" x="758" y="36" text-anchor="end">cutoff = 35</text>
+<text class="tmuted" x="758" y="50" text-anchor="end"> All visible </text>
+<rect class="gold" x="10" y="92" width="12" height="12" rx="2"/><text class="t2" x="27" y="102"> gold.evidence_ids (hidden from SUT) </text>
+<rect class="ev" x="300" y="92" width="12" height="12" rx="2"/><text class="t2" x="317" y="102"> Other events (all ingested) </text>
+</svg><figcaption> Figure 3 · cutoff defines event visibility. Here cutoff=35, so all seed facts are ingested. Only the evaluator has gold labels. </figcaption></figure>
+
+<h3> Runtime: only SUT-visible information enters the container </h3>
+<p><code>memeval run --suite data/normalized/pmb-retrieval.json --sut suts/mem0/manifest.json --run-seed b53400d4…</code>. Preflight checks: suite <code>suite_sha256</code> matches the registry; <code>protocols/precisionmembench.json#retrieval</code> resolves with the expected file SHA-256; the environment lock is valid and selftest passed within 24 hours. Each case then follows this exchange. </p>
+<figure class="fig"><svg viewBox="0 0 760 460" role="img" aria-label="Evaluator/container message sequence within one episode">
+<defs><marker id="arr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" style="fill:var(--ink-2)"/></marker>
+<marker id="arrb" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" style="fill:var(--accent)"/></marker></defs>
+<rect class="boxa" x="20" y="10" width="200" height="34" rx="8"/><text class="t" x="120" y="31" text-anchor="middle"> Host: memeval run (evaluator) </text>
+<rect class="boxa" x="470" y="10" width="270" height="34" rx="8"/><text class="t" x="605" y="25" text-anchor="middle"> Container memeval-e80571b9-sut </text><text class="tmuted" x="605" y="38" text-anchor="middle"> none · read-only · uid 65532 · EP </text>
+<line class="ln" x1="120" y1="44" x2="120" y2="440"/><line class="ln" x1="605" y1="44" x2="605" y2="440"/>
+<line class="ar" x1="120" y1="70" x2="600" y2="70"/><text class="t2" x="362" y="64" text-anchor="middle"> create/start: 109/93 ms; delete injected env.list (0600) </text>
+<line class="ar" x1="120" y1="100" x2="600" y2="100"/><text class="tm" x="362" y="94" text-anchor="middle">reset {ns: "paeval_54558c1b…"}</text>
+<line class="ar" x1="120" y1="130" x2="600" y2="130"/><text class="tm" x="362" y="124" text-anchor="middle"> ingest {ns, events: 35 × PublicEvent} (no gold; 992 ms) </text>
+<line class="ar2" x1="600" y1="150" x2="125" y2="150"/><text class="tm" x="362" y="166" text-anchor="middle">{batch_seq, accepted: 35, filtered: 0, failed: 0}</text>
+<line class="ar" x1="120" y1="190" x2="600" y2="190"/><text class="tm" x="362" y="184" text-anchor="middle">ready {ns, handle, deadline}  →  {visible: true}</text>
+<line class="ar" x1="120" y1="222" x2="600" y2="222"/><text class="tm" x="362" y="216" text-anchor="middle">retrieve {query: "how does kube schedule pods…", user, budget{top_k:10, max_context_chars:100000}}</text>
+<line class="ar2" x1="600" y1="244" x2="125" y2="244"/><text class="tm" x="362" y="260" text-anchor="middle">{items: 10 × {id, text, source_ids:[…], score}}(32 ms)</text>
+<text class="tmuted" x="362" y="284" text-anchor="middle"> … fresh_per_case: one episode per case, repeated 75 times … </text>
+<line class="ar" x1="120" y1="312" x2="600" y2="312"/><text class="t2" x="362" y="306" text-anchor="middle"> destroy: docker kill/rm -f → network rm → anonymous volume rm (160 ms) </text>
+<rect class="box" x="30" y="332" width="180" height="40" rx="6"/><text class="t2" x="120" y="348" text-anchor="middle">verifyEpisodeEmpty</text><text class="tmuted" x="120" y="363" text-anchor="middle"> Episode resources: 0 </text>
+<rect class="box" x="30" y="384" width="180" height="40" rx="6"/><text class="t2" x="120" y="400" text-anchor="middle"> ValidateResponse + score </text><text class="tmuted" x="120" y="415" text-anchor="middle"> cases.jsonl + episode logs </text>
+<text class="tmuted" x="605" y="350" text-anchor="middle"> Container no longer exists </text>
+</svg><figcaption> Figure 2 · Episode message sequence, with recorded timings. Gold and dataset files never enter requests; the container receives only pre-cutoff events and queries. </figcaption></figure>
+<p> Each ingested <code>PublicEvent</code> contains only <code>{id, owner, sequence, role, content, timestamp, session_id, attributes}</code>; <code>gold</code>, cases, and dataset files remain on the host. Mem0 uses local fastembed to populate its vector store in the EP directory and retrieve by query. Network mode <code>none</code> blocks runtime external connections. </p>
+
+<h3> Scoring: source_id references </h3>
+<figure class="fig"><svg viewBox="0 0 760 270" role="img" aria-label="Ten returned references compared with gold; ranks 2 and 3 hit">
+<text class="t" x="10" y="14"> Returned source_ids (top_k=10) </text>
+<rect class="miss" x="40" y="19" width="14" height="14" rx="3"/><text class="tm" x="14" y="30"> 1</text><text class="tm" x="62" y="30">b-redis-code</text><rect class="hit" x="40" y="41" width="14" height="14" rx="3"/><text class="tm" x="14" y="52"> 2</text><text class="tm" x="62" y="52">b-ci-gha-entity</text><rect class="hit" x="40" y="63" width="14" height="14" rx="3"/><text class="tm" x="14" y="74"> 3</text><text class="tm" x="62" y="74">b-kubernetes-entity</text><rect class="miss" x="40" y="85" width="14" height="14" rx="3"/><text class="tm" x="14" y="96"> 4</text><text class="tm" x="62" y="96">b-zero-reinforcement-fresh</text><rect class="miss" x="40" y="107" width="14" height="14" rx="3"/><text class="tm" x="14" y="118"> 5</text><text class="tm" x="62" y="118">b-functional-pipeline</text><rect class="miss" x="40" y="129" width="14" height="14" rx="3"/><text class="tm" x="14" y="140"> 6</text><text class="tm" x="62" y="140">b-pinned-resolved-interaction</text><rect class="miss" x="40" y="151" width="14" height="14" rx="3"/><text class="tm" x="14" y="162"> 7</text><text class="tm" x="62" y="162">b-dead-letter-queue</text><rect class="miss" x="40" y="173" width="14" height="14" rx="3"/><text class="tm" x="14" y="184"> 8</text><text class="tm" x="62" y="184">b-fastify-pref</text><rect class="miss" x="40" y="195" width="14" height="14" rx="3"/><text class="tm" x="14" y="206"> 9</text><text class="tm" x="62" y="206">b-react-entity</text><rect class="miss" x="40" y="217" width="14" height="14" rx="3"/><text class="tm" x="14" y="228">10</text><text class="tm" x="62" y="228">b-auth-depends-redis</text>
+<rect class="hit" x="300" y="22" width="12" height="12" rx="2"/><text class="t2" x="318" y="32"> ∈ gold (hit) </text>
+<rect class="miss" x="300" y="44" width="12" height="12" rx="2"/><text class="t2" x="318" y="54">∉ gold</text>
+<text class="t" x="300" y="90"> Memory-only metrics (k=10, two gold items, hits at ranks 2 and 3) </text>
+<text class="tm" x="300" y="112"> hit          = 1          (at least one hit) </text>
+<text class="tm" x="300" y="130">recall       = 2/2 = 1.0</text>
+<text class="tm" x="300" y="148"> all_evidence = 1          (all gold found) </text>
+<text class="tm" x="300" y="166">precision    = 2/10 = 0.2</text>
+<text class="tm" x="300" y="184"> mrr          = 1/2 = 0.5  (first hit at rank 2) </text>
+<text class="tm" x="300" y="202" textLength="450" lengthAdjust="spacingAndGlyphs">ndcg         = (1/log2 3 + 1/log2 4) / (1 + 1/log2 3) = 1.1309 / 1.6309 = 0.6934</text>
+<text class="tmuted" x="300" y="228"> Validate ingested-only, pre-cutoff, unique references. </text>
+<text class="tmuted" x="300" y="246"> Returned text: 845 characters ≤ max_context_chars 100000. </text>
+</svg><figcaption> Figure 4 · Scoring uses source_id set membership and ranks against gold. Values come from the recorded Mem0 container run. </figcaption></figure>
+<p> The case record in <code>cases.jsonl</code> contains: <code>status: scored</code>, <code>retrieved_source_ids</code> 10 items, <code>metrics{hit:1, recall:1, mrr:0.5, ndcg:0.6934, precision:0.2, all_evidence:1}</code>, <code>timings{reset_ms:2399, ingest_ms:992, ready_ms:0.7, query_ms:32}</code>, <code>namespace: paeval_54558c1b…</code>. All 75 cases aggregate into <code>summary.metrics</code> and <code>by_category</code> (Alias resolution: 23 cases). </p>
+
+<h3> Verification: six independently reviewable checks </h3>
+<ol>
+<li><strong>Dataset identity</strong>: report <code>suite_sha256 = 64bdace8…</code> matches the registry; <code>memeval registry check --verify-files</code> recomputes it. </li>
+<li><strong>Protocol identity</strong>: <code>protocol.benchmark{protocol_id: precisionmembench, variant: retrieval, sha256: e7819c69…}</code>; judge benchmarks also verify official template SHA-256 values. </li>
+<li><strong>Isolation</strong>: all 23 historical none-mode preflight selftests passed: no gold or host-path visibility, read-only rootfs, blocked external DNS/TCP/TLS. The report records <code>isolation.tier=D</code>, <code>network_enforced=true</code>.</li>
+<li><strong>Valid references</strong>: each <code>source_id</code> must exist, precede cutoff, and not repeat; otherwise the case is <code>invalid</code>. All ten references in this case are valid. </li>
+<li><strong>No residue</strong>: after each episode, enumeration by <code>label=memeval.episode</code> returns zero resources. At run end: <code>residue{containers_remaining:0, networks_remaining:0, volumes_remaining:0, ep_removed:true, run_clean:true}</code>. The recorded container was <code>memeval-e80571b9-sut</code>, with create/start/destroy timings of 109/93/160 ms. </li>
+<li><strong>Reproducibility and comparison</strong>: with the same seed, five aggregate metrics matched the historical reference exactly. Retrieval sets matched in 73 of 75 cases; two differed at floating-point ties at rank 10. <code>scripts/parity_diff.py &lt;new&gt; &lt;ref&gt;</code> prints case-level differences. </li>
+</ol>
+<p> Logs are in <code>logs/0004-paeval_54558c1b…/</code>(<code>episode.json</code>, <code>sut.stderr.log</code>, <code>rpc-errors.jsonl</code> ). Credentials are redacted, dataset text is not. This historical run predates <code>data_flow</code>. New reports disclose SUT and evaluator data flows separately; SUT network mode <code>none</code> alone cannot establish zero egress for the entire evaluation. </p>
+</section>
+
+<section id="io">
+<h2> Container data flow </h2>
+<p> The evaluator runs on the host and external SUTs run in containers, connected by <strong>one protocol channel</strong>: the container main process's stdin/stdout. The evaluator uses <code>docker start --attach --interactive</code> to attach, writes one JSON-RPC 2.0 request per line, and reads responses from stdout. stderr is collected separately. The evaluator does not expose dataset files, a network listener, or a host socket through this protocol. </p>
+<figure class="fig"><svg viewBox="0 0 760 250" role="img" aria-label="Evaluator/container data flow">
+<rect class="boxa" x="10" y="14" width="250" height="220" rx="8"/><text class="t" x="135" y="34" text-anchor="middle"> Host: memeval run </text>
+<text class="t2" x="22" y="58"> Suite files (events, cases, gold) </text>
+<text class="t2" x="22" y="76"> Protocols, templates, evaluator credentials </text>
+<text class="t2" x="22" y="94"> Cutoff slicing and ingestion batching </text>
+<text class="t2" x="22" y="112"> Validate, score, write reports and logs </text>
+<rect class="box" x="22" y="130" width="226" height="92" rx="6"/><text class="t2" x="135" y="150" text-anchor="middle"> Never passed into the container: </text><text class="tm" x="135" y="168" text-anchor="middle"> Gold · case answers · dataset files </text><text class="tm" x="135" y="186" text-anchor="middle"> MEMEVAL_* / ANTHROPIC_* </text><text class="tm" x="135" y="204" text-anchor="middle"> Host paths · evaluator secrets </text>
+<rect class="boxa" x="470" y="14" width="280" height="220" rx="8"/><text class="t" x="610" y="34" text-anchor="middle"> Container memeval-&lt;ep&gt;-sut</text>
+<text class="t2" x="482" y="58"> Main: Python / Node / HTTP bridge </text>
+<text class="t2" x="482" y="76"> or the project's native bridge </text>
+<text class="t2" x="482" y="94"> Read-only rootfs + /opt/memeval/env </text>
+<text class="t2" x="482" y="112"> EP bind mount: HOME, </text><text class="t2" x="482" y="128"> workdir, stores, SQLite, model cache </text>
+<text class="t2" x="482" y="150"> /tmp tmpfs · internal-network sidecars </text>
+<text class="t2" x="482" y="172"> gateway: LLM → llm-gateway → governor </text>
+<text class="tmuted" x="482" y="196"> Remove resources + EP; verify zero residue </text>
+<line class="ar" x1="262" y1="80" x2="466" y2="80"/><text class="tm" x="364" y="72" text-anchor="middle">stdin: reset · ingest · ready · retrieve · dump</text>
+<line class="ar2" x1="466" y1="120" x2="266" y2="120"/><text class="tm" x="364" y="138" text-anchor="middle">stdout: JSON-RPC result / error</text>
+<line class="ar2" x1="466" y1="170" x2="266" y2="170"/><text class="tm" x="364" y="188" text-anchor="middle">stderr → logs/&lt;seq&gt;-&lt;ns&gt;/sut.stderr.log</text>
+</svg><figcaption> Figure 5 · Episode boundary: visible events and queries enter; JSON-RPC responses and stderr return. </figcaption></figure>
+
+<h3> Inputs </h3>
+<div class="scroll"><table class="tbl">
+<thead><tr><th> When </th><th> Message </th><th> Content source </th><th> Description </th></tr></thead>
+<tbody>
+<tr><td> Container creation </td><td> Environment variables <code>env.list</code> (0600; deleted immediately after start) </td><td> Manifest <code>process.env</code>, <code>telemetry_env</code>, <code>llm.env</code> template expansion ( <code>{llm.base_url}</code> → <code>http://llm-gateway:&lt;port&gt;/v1</code>, <code>{llm.api_key}</code>, <code>{llm.model}</code> ), sidecar exports </td><td> This supplies the SUT's own LLM credentials; evaluator-owned <code>MEMEVAL_*</code> variables are filtered out </td></tr>
+<tr><td> Start of each episode </td><td><code>reset {ns}</code></td><td> Runner-generated namespace <code>paeval_&lt;uuid&gt;</code></td><td> The new container initializes adapter storage on reset; native adapters also probe versions here </td></tr>
+<tr><td> Ingestion </td><td><code>ingest {ns, events: [PublicEvent]}</code>, possibly in batches </td><td> Suite episode <code>events[:cutoff]</code>, mapped individually to <code>{id, owner, sequence, role, content, timestamp, time_raw, session_id, attributes}</code></td><td> Batching follows suite <code>protocol.ingestion</code>: <code>per_event</code> using <code>--batch-size</code> (default 64), <code>per_session</code> one session per batch, <code>per_turn_batch:N</code>, <code>per_chunk:N:x:y</code>, <code>per_document</code>, <code>per_trajectory</code>, <code>per_file</code> and the corresponding named units. <code>id</code> matches suite <code>source_id</code> and is used for scoring </td></tr>
+<tr><td> Visibility </td><td><code>ready {ns, handle, deadline}</code></td><td> Handle returned by the preceding ingest </td><td> Waits until asynchronous writes are searchable; timeout follows manifest <code>adapter.request_timeout_s</code></td></tr>
+<tr><td> Query </td><td><code>retrieve {ns, request:{query, user, scope, as_of, budget{top_k, max_context_chars}, options, output_format}}</code></td><td> Case <code>query / user / scope / query_point</code> and run options </td><td> No gold is included; <code>as_of</code> is the case's <code>query_point</code> (most systems declare it ignored and disclose this) </td></tr>
+<tr><td> Answer (reserved) </td><td><code>answer {ns, request}</code></td><td> Same as above </td><td> native_answer is not enabled in the runner </td></tr>
+<tr><td> Audit </td><td><code>dump {ns}</code></td><td>—</td><td> Only systems declaring <code>dump</code> capability, for HaluMem memory_audit </td></tr>
+</tbody></table></div>
+
+<h3> Outputs and evaluator handling </h3>
+<ul>
+<li><code>ingest</code> → <code>{batch_seq, accepted, filtered, failed}</code>: counts must sum to the number of submitted events; otherwise <code>IngestFailed</code>.</li>
+<li><code>retrieve</code> → <code>{items:[{id, text, source_ids[], score, timestamp}]}</code>: retrieval scoring expands <code>source_ids</code> in return order, deduplicates first occurrences, and compares with gold. <strong>Nonempty references must identify ingested events in this episode and cannot repeat within an item</strong>. Unknown or future references are contract errors and must not be silently replaced with empty lists. Truly sourceless memories use <code>source_ids: []</code> with their actual text; <code>retrieval</code> and <code>fixed_reader/sources</code> are recorded as <code>unsupported</code>. For LongMemEval, MemoryAgentBench, and BEAM, <code>fixed_reader/items</code> can answer from text, but retrieval metrics are unavailable for that case. Partial provenance must not masquerade as complete retrieval. Total returned text must not exceed <code>max_context_chars</code>; over-budget responses remain errors. </li>
+<li><code>dump</code> → <code>{items:[{id, text, timestamp, layer}]}</code>; IDs must be nonempty and unique. </li>
+<li> Errors: JSON-RPC errors map to case <code>error_type</code>(<code>rpc_error(&lt;code&gt;)</code>, <code>rpc_timeout</code>, <code>frame_too_large</code>, <code>process_exited</code> etc.); governor 503 responses with <code>X-Memeval-Governor</code> are forwarded by the bridge as <code>gateway_exhausted / gateway_budget</code>.</li>
+<li> stderr is written to <code>logs/&lt;seq&gt;-&lt;ns&gt;/sut.stderr.log</code> (with credential redaction); RPC errors to <code>rpc-errors.jsonl</code>; sidecar output to <code>sidecar-&lt;name&gt;.log</code>.</li>
+</ul>
+<p> SUT storage (vector databases, SQLite, graph files, model cache) resides in EP or <code>/tmp</code> and is removed with the episode; <code>run --keep</code> preserves EP for inspection. Outputs consist of protocol items and logs. </p>
+</section>
+
+<section id="rpc">
+<h2> Adapter protocol v2 (paeval-v2) </h2>
+<p> The SUT process and evaluator communicate using <strong>JSON-RPC 2.0 over stdio</strong>, one JSON object per line and one request in flight. Responses require <code>jsonrpc:"2.0"</code>, a matching numeric <code>id</code>, and exactly one of <code>result</code> and <code>error</code>. Defaults are a 16 MiB frame cap and 30 s request timeout, configurable through manifest <code>adapter.max_frame_bytes</code>, <code>adapter.request_timeout_s</code>. SUT stderr goes to episode logs with credential redaction only. </p>
+<div class="scroll"><table class="tbl">
+<thead><tr><th> Method </th><th>params</th><th>result</th></tr></thead>
+<tbody>
+<tr><td><code>describe</code></td><td><code>{}</code> (separate process, ns=describe) </td><td><code>{name, version, capabilities, limitations, read_only_queries, config}</code></td></tr>
+<tr><td><code>reset</code></td><td><code>{ns}</code> (each reset uses a new process and episode directory) </td><td><code>{}</code></td></tr>
+<tr><td><code>ingest</code></td><td><code>{ns, events:[PublicEvent]}</code></td><td><code>{batch_seq, accepted, filtered, failed}</code> (counts must sum to submitted events) </td></tr>
+<tr><td><code>ready</code></td><td><code>{ns, handle, deadline}</code></td><td><code>{visible, stages[{name,status,warnings}], warnings}</code></td></tr>
+<tr><td><code>retrieve</code></td><td><code>{ns, request:{query,user,scope[],as_of,budget{top_k,max_context_chars},options,query_invocation_id,output_format}}</code></td><td><code>{items[{id,text,source_ids[],score,timestamp,status}]}</code> or <code>tiers{pinnedFacts,relevantBeliefs,openQuestions}</code> + <code>personaPrelude</code></td></tr>
+<tr><td><code>answer</code></td><td><code>{ns, request}</code></td><td><code>{text, abstain, choice}</code> (native_answer reserved; runner not enabled) </td></tr>
+<tr><td><code>dump</code></td><td><code>{ns}</code> (optional capability <code>dump</code>)</td><td><code>{items[{id,text,timestamp,layer}]}</code>; IDs nonempty and unique </td></tr>
+</tbody></table></div>
+<p><code>PublicEvent</code> = <code>{id, owner, sequence, role, content, timestamp, time_raw, session_id, attributes}</code>; gold, answers, and dataset files never enter requests. </p>
+<h3> Capabilities and errors </h3>
+<ul>
+<li> The runner gates behavior on <code>capabilities</code>: <code>retrieve</code>, <code>typed_context</code>, <code>dump</code> (memory_audit). Capabilities may be a string list or boolean map. </li>
+<li><code>config.llm_notes[]</code> is copied into report <code>sut.llm.notes</code>; HTTP bridges record the resolved host in <code>config.bridge_base_url_host</code>.</li>
+<li> Errors map to case <code>error_type</code>: <code>rpc_error(&lt;code&gt;)</code> (bridges use -32000 for adapter exceptions), -32601 → <code>UnsupportedCapability</code>, <code>rpc_timeout</code>, <code>frame_too_large</code>, <code>rpc_protocol_error</code>, <code>process_exited(&lt;code&gt;)</code> (including OOM markers), <code>ContractError</code>, <code>IngestFailed</code>.</li>
+</ul>
+</section>
+
+<section id="bridges">
+<h2> Three bridge types </h2>
+<dl class="kv">
+<dt> Python bridge </dt><dd><code>adapter.kind: python-bridge</code>. In the image: <code>python -m memeval_bridge --adapter &lt;module&gt;:&lt;Class&gt; --config &lt;json&gt;</code>; adapters inherit <code>AdapterBase</code> and implement describe/reset/ingest/ready/retrieve/answer/dump. Unimplemented methods return -32601. Validation checks event ID uniqueness, ingest counts, ready handles, and ingested-only retrieval references (otherwise rewritten to <code>status:"unsupported"</code>).<code>PYTHONPATH</code> as <code>{env}/bridge/python:{env}/project</code>.</dd>
+<dt> Node bridge </dt><dd><code>node bridge/node/index.mjs --adapter &lt;file.mjs&gt; --config &lt;json&gt;</code>, exporting <code>Adapter</code>, with the same rules as the Python bridge. </dd>
+<dt> HTTP bridge </dt><dd><code>adapter.kind: http-bridge</code>: the project's server runs as a generic sidecar; the bridge forwards protocol operations to its HTTP API. <code>bridge.base_url</code> accepts only <code>http://host:port</code> (episode network alias or numeric address, without userinfo/path/query); <code>bridge.routes</code> files (version 1) declare path / method / body templates / item mapping / pagination per method; at most one <code>headers_env</code> is used as a Bearer token. </dd>
+<dt> Native Go adapter </dt><dd><code>adapter.kind: native</code> (currently <code>octop</code> ): evaluator Go code drives the in-container bridge over stdio. </dd>
+</dl>
+<p> All bridges redirect SDK stdout to stderr, reserving actual stdout for protocol frames. </p>
+<h3> Data paths by bridge type </h3>
+
+<h4> Python bridge (mem0, cognee, graphiti) </h4>
+<div class="scroll"><table class="tbl">
+<thead><tr><th> Stage </th><th> Behavior </th></tr></thead>
+<tbody>
+<tr><td> Container main process </td><td><code>python -m memeval_bridge --adapter &lt;module&gt;:&lt;Class&gt; --config '&lt;json&gt;' --max-frame-bytes N</code>; <code>PYTHONPATH={env}/bridge/python:{env}/project</code>. The bridge reserves file descriptor 1 for protocol frames, then redirects <code>sys.stdout</code> to stderr so SDK prints cannot corrupt the protocol </td></tr>
+<tr><td> Input </td><td> The bridge reads JSON-RPC lines from stdin and calls the matching adapter method (inheriting <code>AdapterBase</code> ). Unimplemented methods return -32601, indicating missing capability. </td></tr>
+<tr><td> Events become memories </td><td> For mem0: <code>ingest</code> calls <code>Memory.add([{role, content}], user_id=ns, run_id=session, metadata={source_ids:[event.id], created_at, session_id}, infer=…)</code>——<strong>storing event IDs in metadata</strong> and recording which events created each memory; <code>retrieve</code> calls <code>Memory.search(query, top_k, filters={user_id: ns})</code> and converts returned memories into items: <code>text</code> = memory text, <code>source_ids</code> = metadata event IDs ∪ ingestion provenance. cognee and graphiti use analogous mappings over graph storage. </td></tr>
+<tr><td> Output </td><td> Before responding, the bridge checks unique event IDs, <code>accepted+filtered+failed</code> count conservation, ready handles, and ingested-only item references (otherwise the item is rewritten to <code>status:"unsupported"</code> ), then writes one JSON-RPC result line to fd 1 </td></tr>
+<tr><td> Storage </td><td> mem0 Qdrant/SQLite, cognee LanceDB/LadybugDB, and graphiti FalkorDB-Lite files reside under EP, configured through <code>MEM0_DIR</code>, <code>XDG_CACHE_HOME</code> and related telemetry_env fields </td></tr>
+</tbody></table></div>
+
+<h4> Node bridge (mastra) </h4>
+<div class="scroll"><table class="tbl">
+<thead><tr><th> Stage </th><th> Behavior </th></tr></thead>
+<tbody>
+<tr><td> Container main process </td><td><code>node bridge/node/index.mjs --adapter adapter.mjs --config '&lt;json&gt;'</code>; adapter modules export a <code>Adapter</code> class and follow Python-bridge redirection and validation rules </td></tr>
+<tr><td> Adapter </td><td>mastra: <code>ingest</code> writes each event as a thread message; <strong>message IDs equal event IDs</strong>, <code>threadId = ns:session</code>, <code>resourceId = ns</code>, <code>createdAt</code> uses event timestamps (fact/observation/system roles map to user with disclosure); <code>retrieve</code> in the <code>history</code> variant (a memeval control) lists resource messages in storage order and returns the earliest k, ignoring the query. The <code>semantic</code> variant calls Mastra's <code>recall</code> + <code>semanticRecall.topK</code> with local fastembed vectors. Returned message IDs become <code>source_ids</code> when ingested; otherwise empty </td></tr>
+</tbody></table></div>
+
+<h4> HTTP bridge (hindsight): a server-based project </h4>
+<div class="scroll"><table class="tbl">
+<thead><tr><th> Stage </th><th> Behavior </th></tr></thead>
+<tbody>
+<tr><td> Topology </td><td> Three containers share one episode-internal network: <strong>bridge container</strong> (SUT image, HTTP-mode memeval_bridge), <strong>API sidecar</strong> (same image, running the project's HTTP service, <code>--network-alias api</code>, listening on 0.0.0.0:8888 inside the episode network only), and <strong>Postgres sidecar</strong> (pgvector preset, tmpfs data). Sidecars are created, readied, and initialized in manifest order; exports pass connection strings to subsequent services. </td></tr>
+<tr><td> Input </td><td> Host → stdio → bridge. Using <code>routes.json</code>, the bridge translates each JSON-RPC method into an HTTP call: <code>reset</code> → <code>DELETE /v1/default/banks/{ns}</code>; <code>ingest</code> → <code>POST /v1/default/banks/{ns}/memories {items, async:false}</code> (items mapped from events; <strong>event IDs stored as document_id</strong>, with source_id and role in metadata); <code>retrieve</code> → <code>POST …/memories/recall {query, budget}</code>; <code>dump</code> → <code>GET …/memories/list?offset&amp;limit</code> pagination </td></tr>
+<tr><td> Output </td><td> HTTP JSON maps back through routes: <code>items: $.results</code>, <code>id: $.id</code>, <code>text: $.text</code>, <code>source_ids: $.document_id</code>. Validation matches the Python bridge. <code>bridge.base_url</code> accepts only <code>http://&lt;Alias&gt;:&lt;port&gt;</code>, without path, query, or credentials; <code>headers_env</code> allows at most one Bearer token </td></tr>
+<tr><td>LLM</td><td> The API sidecar initiates LLM-backed retain/reflect, using <code>HINDSIGHT_API_LLM_BASE_URL={llm.base_url}</code> through the <code>llm-gateway</code> alias to reach the governor; the bridge itself does not call models </td></tr>
+<tr><td> Readiness and audit </td><td> The API sidecar uses in-container <code>GET /health</code> (HTTP readiness is plaintext, credential-free, and limited to loopback or an alias); Postgres uses <code>pg_isready</code>. Before and after each RPC, audit verifies running sidecars, no published ports, and episode-only network attachment. </td></tr>
+</tbody></table></div>
+
+<h4> Native Go adapter (octop-memory) </h4>
+<div class="scroll"><table class="tbl">
+<thead><tr><th> Stage </th><th> Behavior </th></tr></thead>
+<tbody>
+<tr><td> Container main process </td><td> The project's own <code>{venv}/bin/octopmemory-bridge</code> speaks its native protocol without a memeval bridge </td></tr>
+<tr><td> Evaluator-side </td><td><code>internal/adapter/octop</code> Go code implements the <code>adapter.Adapter</code> interface and communicates over the same attached stdio: <code>Reset</code> first uses <code>--probe</code> Verify <code>protocol_version / octop_memory_version / sqlite fts5</code>; <code>Ingest</code> calls <code>capture</code> (session batches; returned counts must match event counts, otherwise ContractError); <code>Retrieve</code> calls <code>search</code>; <code>dump</code> lists memories. Count and reference validation occur in Go. </td></tr>
+<tr><td> When to use </td><td> For non-JSON-RPC protocols or evaluator-side client logic; each such system requires Go integration code </td></tr>
+</tbody></table></div>
+
+<h3> Where variant settings come from </h3>
+<p> Variants are configurations of one project, each with its own <code>manifest*.json</code>. Image identity depends on manifests, dependency locks, and build inputs; variants need not share an image. Most options are upstream configuration choices. Others adapt network access or event provenance; distinctions are listed below. </p>
+<div class="scroll"><table class="tbl">
+<thead><tr><th> Variant </th><th> Setting </th><th> Upstream option? </th><th> memeval adaptation </th></tr></thead>
+<tbody>
+<tr><td>mem0 raw-local / infer-local</td><td><code>Memory.add(…, infer=False|True)</code></td><td> Yes (infer=True is the mem0 default) </td><td> Local fastembed through supported embedder configuration; raw variants use a placeholder OpenAI key because mem0 constructs an LLM client even with infer=False </td></tr>
+<tr><td>mem0 raw-openai-embed</td><td><code>Memory.add(…, infer=False)</code> + <code>embedder.provider=openai</code>(<code>text-embedding-3-large</code>, 3072 dimensions, direct api.openai.com) </td><td> Yes (upstream OpenAI embedder configuration) </td><td> Remote embedding variant. Compare embedding model, retrieval path, and budget separately to avoid attributing embedding differences to memory structure. Inputs are initially limited to 32768 characters and halved on context-length errors; stored original text is unchanged. Truncation and retry counts are recorded in dump <code>embed_stats</code>. The real key reaches only the embedder through the manifest; the LLM client retains a placeholder key. <code>network: open</code> permits api.openai.com access but does not enforce a destination allowlist </td></tr>
+<tr><td>hindsight none / llm-gateway</td><td><code>HINDSIGHT_API_LLM_PROVIDER=none</code> (original chunks only, without LLM extraction, merging, or reflect) or an OpenAI-compatible provider </td><td> Yes </td><td> Local embedding and reranking models are upstream options; <code>manifest-open.json</code> is a compatibility filename for the gateway configuration </td></tr>
+<tr><td>cognee none / llm-gateway</td><td><code>GRAPH_EXTRACTOR=gliner_demo</code> (local GLiNER extraction, selected automatically without an LLM key) or LLM extraction </td><td> Yes </td><td> Retrieval uses <code>SearchType.CHUNKS</code> because original chunks preserve event IDs. The two variants therefore have similar retrieval behavior. fixed_reader/items does not enable graph retrieval, so these results do not evaluate full graph-memory capability. </td></tr>
+<tr><td>mastra semantic</td><td><code>semanticRecall</code> + <code>@mastra/fastembed</code></td><td> Yes </td><td> Merge threads, deduplicate in SDK order, then limit to k </td></tr>
+<tr><td>mastra history</td><td> List resource messages in storage order </td><td><strong>No</strong>; a memeval control </td><td> This is not Mastra's <code>lastMessages</code> (which selects recent N messages); it is a semantic-retrieval control and protocol smoke test </td></tr>
+<tr><td>graphiti falkordblite</td><td> FalkorDB Lite storage backend ( <code>graphiti-core[falkordblite]</code>)</td><td> Yes </td><td> The largest adaptation: local fastembed via Graphiti's <code>EmbedderClient</code> extension point; model-free order-preserving reranking replaces default OpenAI reranking. The LLM wrapper forwards reasoning_effort and normalizes JSON schemas into the gateway's strict form. </td></tr>
+<tr><td>octop-memory lexical</td><td> Uses only <code>capture</code> / <code>search</code>(SQLite FTS5)</td><td> Yes </td><td> The project also has LLM-based <code>extract</code>, which this evaluation does not call </td></tr>
+<tr><td> CogletNet variants </td><td><code>suts/cogletnet/manifest*.json</code> declare retrieval paths, embeddings, and model settings </td><td> Native interfaces plus evaluation host; see adapter facts for boundaries </td><td> A Python bridge invokes a Rust host inside the container, mapping public ingest, build, and search interfaces onto the common protocol. Provenance, usage, and traces follow adapter capabilities. Interpret results under the same conditions, coverage, and scoring rules as other SUTs; details: <code>suts/cogletnet/UPSTREAM_FACTS.md</code></td></tr>
+<tr><td>bm25 / recent / null / fullcontext</td><td>—</td><td> Not external SUTs </td><td> Built-in in-process memeval baselines </td></tr>
+</tbody></table></div>
+
+<h3> Adding a system </h3>
+<ol>
+<li> Write <code>suts/&lt;name&gt;/manifest.json</code> (v3): runtime, dependency locks, <code>adapter.kind</code>, <code>process</code>, <code>sandbox.network</code>, optional <code>llm.env</code> templates and <code>sidecars[]</code>; <code>UPSTREAM.json</code> recording project, repository, package, version, and license. </li>
+<li> Implement adapter methods for Python/Node: <code>describe / reset / ingest / ready / retrieve</code> (optional <code>answer / dump</code> ). The key requirement is to <strong>store event IDs with memories and return them during retrieval</strong>. HTTP server projects use <code>routes.json</code>; incompatible protocols use native adapters. </li>
+<li><code>env install</code> builds the image and runs selftest; <code>run --limit 3</code> checks three cases for scoring and valid references before a full run. </li>
+<li> Adapter <code>describe().limitations</code> and <code>config.llm_notes</code> must disclose unsupported behavior (such as ignored <code>as_of</code> or inexact top_k); these declarations enter the report. </li>
+</ol>
+<p> Detailed checklist: <code>suts/README.md</code>.</p>
+
+</section>
+
+<section id="manifest">
+<h2>SUT manifest v3</h2>
+<p> Each system or variant is represented by a <code>suts/&lt;name&gt;/manifest*.json</code>. JSON Schema is in <code>schemas/sut-manifest.v3.json</code> (generated from Go types by <code>memeval suite schema --kind sut-manifest</code> ). Unknown fields are rejected; <code>schema_version</code> accepts only "3". </p>
+<div class="scroll"><table class="tbl">
+<thead><tr><th> segments </th><th> Fields and rules </th></tr></thead>
+<tbody>
+<tr><td><code>name / variant / notes</code></td><td> name matches <code>^[a-zA-Z0-9][a-zA-Z0-9_.-]*$</code>; variant distinguishes configurations of one project </td></tr>
+<tr><td><code>status</code></td><td><code>active</code> (default) or <code>deferred</code> (requires <code>deferred_reason</code>, <code>env install</code> rejects it) </td></tr>
+<tr><td><code>adapter</code></td><td><code>kind</code>: generic(<code>transport: jsonrpc-stdio</code>)/ python-bridge / http-bridge / native(<code>name: octop</code>); <code>max_frame_bytes</code> (1..256 MiB; default 16 MiB); <code>request_timeout_s</code> (default 30) </td></tr>
+<tr><td><code>runtime</code></td><td><code>kind</code> uv-python | node (binary not yet supported); <code>base</code> uv-python (bookworm) | uv-python-trixie (glibc 2.41 for manylinux_2_39 wheels) | node; uv-python requires <code>python</code> + <code>requirements</code>, optionally <code>requirements_lock</code> (with hashes), <code>constraints</code> (resolved during phase 1: <code>-c</code> ); node requires <code>version</code> x.y.z, optionally <code>package_lock</code>; <code>indexes[{url,strategy}]</code> (such as the PyTorch CPU index); <code>apt[]</code>; <code>prepare[][]</code> (build-time execution as uid 65532; models baked into the image); <code>assets[]</code>; <code>cache_links{EP-relative-path: "{env}/…"}</code> (HOME-relative cache symlinks pointing into the image) </td></tr>
+<tr><td><code>bridge</code></td><td><code>module</code>, <code>class</code>(python-bridge); <code>base_url</code>, <code>routes</code>, <code>headers_env[]</code>(http-bridge); <code>config</code> Passed unchanged to adapter </td></tr>
+<tr><td><code>process</code></td><td><code>command[]</code> (optional for bridge adapters), <code>cwd</code> (default <code>{ep}/work</code>), <code>env</code>, <code>env_file</code>, <code>env_passthrough[]</code> (allowlisted .env forwarding), <code>secret_env[]</code></td></tr>
+<tr><td><code>sandbox</code></td><td><code>backend</code> container (default) | none; <code>network</code> none | gateway | open; <code>limits{timeout_s=600,max_rss,pids_max,cpus}</code>; <code>container.writable_tmpfs[]</code></td></tr>
+<tr><td><code>ready</code></td><td><code>strategy</code> sync | status | canary</td></tr>
+<tr><td><code>telemetry_env</code></td><td> Variables disabling telemetry and redirecting caches to <code>{ep}</code> or image directories; HOME/XDG_CACHE_HOME must remain under EP </td></tr>
+<tr><td><code>declared</code></td><td> Free-form declarations (conventions: <code>llm</code>, <code>embedding</code> ), preserved in report fingerprints </td></tr>
+<tr><td><code>llm</code></td><td><code>required</code>, <code>model</code>, <code>reasoning_effort</code> (pinned values, overridable by CLI), <code>env{VAR: template}</code>; templates may use only <code>{llm.base_url} {llm.api_key} {llm.model} {llm.reasoning_effort}</code>; <code>concurrency</code> (optional, ≥1) declares per-episode LLM fanout. Without an explicit override, governor slots = this value (default 8) × <code>--parallel</code>. Explicit <code>--sut-llm-concurrency</code> or corresponding environment/config values specify total slots without multiplication; <code>required:true</code> disallows <code>network: none</code></td></tr>
+<tr><td><code>sidecars[]</code></td><td> See next section </td></tr>
+</tbody></table></div>
+<h3> Placeholders </h3>
+<ul>
+<li> Process command/environment/cwd: <code>{ep}</code> (episode directory, bind-mounted at the same path), <code>{ns}</code>, <code>{env}</code> (in-image <code>/opt/memeval/env</code>), <code>{project}</code>, <code>{venv}</code>, <code>{py_root}</code>, <code>{node}</code>, <code>{config_json}</code>.</li>
+<li> Build-time prepare: <code>{env} {project} {python} {node} {venv} {py_root}</code>.</li>
+<li> Sidecars: <code>{sidecar.&lt;n&gt;.host}</code> (= alias n), <code>{sidecar.&lt;n&gt;.port}</code>, <code>{port}</code>, <code>{env.KEY}</code>, <code>{sidecar.&lt;n&gt;.export.&lt;K&gt;}</code>.</li>
+</ul>
+<p> Forbidden environment prefixes: <code>ANTHROPIC_ MEMEVAL_ HERDR_ CODEX_ CLAUDE</code>; evaluator configuration is filtered from containers. Keys such as <code>…_api_key / token / secret / password</code> are automatically redacted. </p>
+</section>
+
+<section id="sidecars">
+<h2> Sidecars and presets </h2>
+<p> Sidecars are auxiliary containers (databases or project APIs) on the SUT's episode network. Each is created, started, readied, and initialized in declaration order. Every episode gets new sidecars, destroyed with its SUT. </p>
+<div class="scroll"><table class="tbl">
+<thead><tr><th> Preset </th><th> Image (pinned manifest digest) </th><th> Port / user </th><th>tmpfs</th><th> Readiness </th></tr></thead>
+<tbody>
+<tr><td><code>postgres-pgvector-18</code></td><td><code>pgvector/pgvector:pg18@sha256:2358fcba…</code>(PostgreSQL 18.6, pgvector 0.8.7)</td><td>5432 / 999:999, shm 256m</td><td><code>/var/lib/postgresql</code> (4g, overrides image VOLUME), <code>/run/postgresql</code>, <code>/tmp</code></td><td><code>pg_isready -U {env.POSTGRES_USER} -d {env.POSTGRES_DB} -h 127.0.0.1</code></td></tr>
+<tr><td><code>qdrant-1.19.2</code></td><td><code>qdrant/qdrant:v1.19.2@sha256:b7b0444c…</code></td><td>6333 / 65532:65532</td><td><code>/qdrant/storage</code>(2g), <code>/qdrant/snapshots</code>, <code>/tmp</code></td><td>HTTP <code>/readyz</code> → 200 (telemetry disabled) </td></tr>
+</tbody></table></div>
+<p> Each manifest sidecar: <code>{name, kind: postgres|qdrant|generic, preset?, image? (requires @sha256), port, user, tmpfs[], env, secret_env, exports{VAR: template}, ready{exec|tcp|http, timeout_s}, init[][], command[], stop: SIGTERM}</code>. Standalone sidecar images start with only preset/manifest env and earlier exports. Generic sidecars using the SUT image inherit its environment. Readiness and audit run inside containers through <code>docker exec</code> or same-network probes. Checks cover Running, no published ports, episode-only networks, and restricted-network <code>Internal=true</code>. Names cannot be <code>sut</code> or <code>llm-gateway</code>.</p>
+<p> Examples: <code>suts/hindsight/manifest.json</code> (Postgres preset + generic <code>api</code> sidecar; HTTP bridge connects to <code>http://api:8888</code>); <code>suts/echo/manifest-postgres.json</code>, <code>manifest-qdrant.json</code> is a minimal acceptance fixture. </p>
+</section>
+
+<section id="container">
+<h2> Container isolation and network modes </h2>
+<p> One container per runtime episode is created using the standard <code>docker</code> CLI with explicit <code>--context</code>. The fixed parameter template is: </p>
+<pre><code>docker --context &lt;ctx&gt; create --name memeval-&lt;ep8&gt;-sut --platform linux/&lt;arch&gt;
+  --network &lt;episode-network&gt;|none [--network-alias sut]
+  --read-only --tmpfs /tmp:rw,nosuid,nodev,size=1g,mode=1777 --shm-size 512m
+  -v &lt;EP&gt;:&lt;EP&gt; --workdir &lt;EP&gt;/work --user 65532:65532
+  --cap-drop ALL --security-opt no-new-privileges --pids-limit 2048 --init
+  --stop-signal SIGTERM --stop-timeout 5 --env-file &lt;EP&gt;/.memeval/env.list   # 0600; deleted after start
+  --label memeval.run=… --label memeval.episode=… --label memeval.env=… --label memeval.role=sut|sidecar|relay|probe
+  &lt;imageID&gt; &lt;command…&gt;</code></pre>
+<ul>
+<li> Files: read-only rootfs and <code>/opt/memeval/env</code> (dependencies, models, project); only EP and <code>/tmp</code> are writable. Gold, datasets, and evaluator secrets are never mounted. </li>
+<li> Process: non-root, all capabilities dropped, no-new-privileges, separate PID/IPC namespaces, no usable setuid escalation. </li>
+<li> Ports: never <code>-p</code>; sidecars are reachable only on the episode network. </li>
+<li> reports <code>isolation.tier</code>: <strong>D</strong> = OCI container inside Linux; <strong>C</strong> = in-process baseline. </li>
+</ul>
+<div class="scroll"><table class="tbl">
+<thead><tr><th><code>sandbox.network</code></th><th> Episode network </th><th> SUT reachability </th><th> Purpose </th></tr></thead>
+<tbody>
+<tr><td><code>none</code> (default) </td><td><code>--network none</code>; with sidecars, create an <code>--internal</code> Network </td><td> Only same-episode sidecars; external DNS/TCP/TLS blocked </td><td> No SUT runtime egress; local embedding/extraction variants </td></tr>
+<tr><td><code>gateway</code></td><td><code>--internal</code> network plus a relay connected to the bridge network (alias <code>llm-gateway</code>)</td><td> Only the configured LLM gateway host:port </td><td> LLM-dependent variants </td></tr>
+<tr><td><code>open</code></td><td> Standard bridge </td><td> Unrestricted (disclosed, not intercepted) </td><td> Explicit direct-provider variants </td></tr>
+<tr><td><code>inherit</code> (Tier C report value only) </td><td> No container: built-in baselines <code>bm25 / recent / null / fullcontext</code> run in the evaluator process </td><td> Inherits the host process network, but built-in baselines are pure functions and issue no network requests </td><td> Baseline control. Reports retain this value for compatibility; result pages instead say “in-process baseline, no network calls”. <code>network_enforced=false</code> means isolation was not enforced, not that egress occurred </td></tr>
+</tbody></table></div>
+</section>
+
+<section id="gateway">
+<h2> LLM gateway </h2>
+<p> SUTs using <code>gateway</code> send model calls to a configured OpenAI-compatible endpoint, injected through manifest templates. <code>open</code> variants may declare direct services; call scope and metering depend on manifests and reports. Evaluator readers and judges are configured separately from SUT network modes: </p>
+<dl class="kv">
+<dt><code>MEMEVAL_SUT_LLM_BASE_URL</code></dt><dd> Gateway address, for example <code>http://&lt;reachable-gateway-IP&gt;:&lt;port&gt;/v1</code> (gateway mode requires <code>http://</code> and a literal IP; HTTPS or hostnames require open mode) </dd>
+<dt><code>MEMEVAL_SUT_LLM_API_KEY</code></dt><dd> Key; injected through a 0600 env.list and redacted from logs, reports, and argv </dd>
+<dt><code>MEMEVAL_SUT_LLM_MODEL</code> / <code>…_REASONING_EFFORT</code></dt><dd> Default <code>gpt-6-luna</code> / <code>low</code>; <code>run --sut-llm-model / --sut-llm-effort</code> overrides it; manifest <code>llm.model</code> can pin it </dd>
+</dl>
+<p> In gateway mode, the framework rewrites <code>{llm.base_url}</code> to <code>http://llm-gateway:&lt;port&gt;/…</code>. One pure-Go HTTP governor per run ( <code>__container-governor</code> ) forwards only to the configured IP:port, attaches/detaches episode networks, and is destroyed with residue verification at run end. <code>--sut-llm-concurrency</code> (explicit total slots; otherwise per-episode fanout × <code>--parallel</code>, default fanout 8), <code>--sut-llm-rpm</code> (0 = unlimited), <code>--sut-llm-budget-tokens</code> (0 = unlimited), <code>--sut-llm-max-pause</code> (30m) govern queues, retries, circuit breaking, and budgets. Upstream 429/502/503/504/disconnections retry using <code>Retry-After</code> or exponential backoff, up to six retries. Five consecutive upstream failures open the breaker, starting at 60 s and doubling to 600 s. Exceeding max-pause or exhausting the budget returns 503 plus <code>X-Memeval-Governor: exhausted|budget</code>. SUT disconnections while queued or retrying do not count as upstream failures; they increment <code>client_disconnects</code>. A positive count means the client disconnected before completion; inspect queue delay, request deadlines, and logs for cause. <code>governor/attempts.jsonl</code> and <code>billing.sut</code> record usage for each upstream attempt ( <code>calls</code> counts attempts including retries). Missing usage is explicitly unmetered. Exhaustion preserves completed results and exits 4; use <code>run --resume &lt;out&gt; --sut &lt;manifest&gt;</code> to resume while retaining historical accounting. Embeddings may use image-local models or declared remote services; endpoint capability determines embeddings support. Direct embeddings need matching network configuration and disclosure. Report <code>sut.llm{gateway_host, model, reasoning_effort, source, notes}</code> records effective settings and SDK behavior, including reasoning_effort forwarding. </p>
+</section>
+
+<section id="selftest">
+<h2> Self-test </h2>
+<p><code>env install</code> After <code>run</code> and before <strong>, the evaluator uses the exact SUT parameter template to</strong> start a probe container, adding only a read-only Linux probe binary. Host and container checks record v3 results in <code>~/.cache/memeval/selftests/</code>. The signature binds manifest, lock/image ID, parameter template, capabilities, binaries, and EP root. Matching successful records are reusable for 24 hours; otherwise checks rerun. <code>run</code> Scoring is refused without a valid record. </p>
+<div class="scroll"><table class="tbl">
+<thead><tr><th> Expected </th><th>none</th><th>open</th><th>gateway</th></tr></thead>
+<tbody>
+<tr><td><code>gold_absent host_paths_absent write_episode write_rootfs_fails write_tmp_ok env_read uid_nonroot caps_dropped no_new_privs rootfs_readonly pids_limit mounts_expected environment</code></td><td class="ok">true</td><td class="ok">true</td><td class="ok">true</td></tr>
+<tr><td><code>tcp4_control udp_control dns_external https_external</code> (to host control endpoint) </td><td class="bad">false</td><td class="ok">true</td><td class="bad">false</td></tr>
+<tr><td><code>network_internal</code></td><td class="ok">true</td><td>—</td><td class="ok">true</td></tr>
+<tr><td><code>gateway_connect relay_single_target relay_destroyed</code></td><td>—</td><td>—</td><td class="ok">true</td></tr>
+<tr><td><code>sidecar_&lt;n&gt;_connect sidecar_&lt;n&gt;_dns</code> (each declared sidecar) </td><td class="ok">true</td><td class="ok">true</td><td class="ok">true</td></tr>
+<tr><td><code>container_destroyed network_destroyed volumes_none ep_removed no_published_ports</code> (host-side, after teardown) </td><td class="ok">true</td><td class="ok">true</td><td class="ok">true</td></tr>
+</tbody></table></div>
+<p> Selftest records bind a specific environment identity; old results cannot validate a changed environment. Historical acceptance and probe evidence: <code>design/p8-implementation-notes.md</code>.</p>
+</section>
+
+<section id="run">
+<h2> Run modes and options </h2>
+<pre><code>memeval run --suite &lt;path|pmb&gt; --sut null|recent|bm25|fullcontext|&lt;manifest.json&gt;
+  [--mode retrieval|fixed_reader] [--reset-policy fresh_per_case|incremental_per_episode]
+  [--top-k 10] [--max-context-chars 100000] [--limit N] [--repeats 1] [--batch-size 64]
+  [--run-seed &lt;64 hex&gt;] [--parallel 1..16] [--network none|gateway|open] [--sut-llm-model M --sut-llm-effort E]
+  [--sut-llm-concurrency 8 --sut-llm-rpm 0 --sut-llm-budget-tokens 0 --sut-llm-max-pause 30m]
+  [--out reports/run] [--keep] [--no-logs] [--log-file-cap BYTES] [--trace-text]
+  [--resume &lt;dir&gt; --resume-statuses error,invalid] [--auto-resume-rate-limited 0..10]
+  [--llm replay|record|record-once|live] [--reader-model …] [--judge-decision-model jev-X.Y.Z]</code></pre>
+<h3> Three evaluation modes ( <code>--mode</code>)</h3>
+<p> Mode determines <strong>who answers and what is measured</strong>. The runner supports <code>retrieval</code> and <code>fixed_reader</code>; <code>native_answer</code> remains reserved. Retrieval uses information-retrieval metrics; answer scoring binds benchmark templates through <code>protocols/&lt;benchmark&gt;.json</code>. Alternative models, inputs, and implementation differences are disclosed in <code>fidelity</code> and <code>deviations</code>; a mode name alone does not establish official comparability. </p>
+<div class="scroll"><table class="tbl">
+<thead><tr><th> Mode </th><th> Who answers </th><th> What is measured </th><th> Scoring </th><th> Requirements </th><th> State </th></tr></thead>
+<tbody>
+<tr><td><code>retrieval</code> (default, also called memory-only) </td><td> No generated answer. The evaluator requests relevant memories ( <code>retrieve</code> ) and receives items with <code>source_ids</code></td><td> Memory-system <strong>evidence retrieval</strong>: returned event membership and ranks relative to gold </td><td> Expand item <code>source_ids</code> in order, deduplicate first occurrences, limit to top-k, and calculate <code>hit / recall / mrr / ndcg / all_evidence / precision / empty_result_correct</code>; PMB typed cases use four-layer assertions for <code>typed_context.*</code>; LongMemEval adds official <code>recall_any@k</code> etc. References must exist, precede cutoff, and not repeat within an item; violations are contract errors. </td><td> Evaluator retrieval scoring makes no model calls. SUT calls and output determinism depend on the system and configuration. </td><td> Implemented; check run mode and metric denominators when comparing </td></tr>
+<tr><td><code>fixed_reader</code></td><td> The evaluator's <strong>fixed reader</strong>(<code>--reader-model</code>; actual model and parameters are recorded in reports) answers using retrieved material formatted as official-template conversation history </td><td> Answer quality given retrieved memories. Comparisons should fix reader, input mode, and budget and inspect coverage; model randomness may affect individual runs. </td><td> Benchmark-specific official scoring: LongMemEval / ConvoMem / HaluMem / Memora / BEAM / PrefEval use official judge templates through Jev ( <code>--judge-decision-model</code>); LoCoMo <code>token_f1</code>; PersonaMem <code>mcq</code>; MemoryAgentBench <code>exact_match</code> family and ROUGE. Report <code>scores.official</code> are recorded as <code>fidelity: full|partial</code> and individual deviations </td><td> Evaluator model calls through recording/replay <code>--llm</code>, separate from the SUT gateway; <code>--reader-input sources|items</code> (original events by default; LongMemEval / MemoryAgentBench / BEAM also support returned memory text), <code>--reader-max-tokens</code>; <code>fullcontext</code> baseline is meaningful only in this mode </td><td> Implemented; see result cards for results and deviations </td></tr>
+<tr><td><code>native_answer</code></td><td><strong>The SUT itself</strong> answers (protocol-v2 <code>answer</code> RPC: <code>{text, abstain, choice}</code>)</td><td> End-to-end agent behavior: its own retrieval and generation </td><td> Reserved protocol; runner scoring and reporting are not implemented </td><td> The SUT declares <code>answer</code> capability and supplies its model (governor metering in gateway mode) </td><td> Reserved in protocol and baseline bridge; runner not enabled </td></tr>
+</tbody></table></div>
+<p> Two independent axes also affect visible information: <strong>Reset policy</strong> <code>--reset-policy</code>(<code>fresh_per_case</code>: a fresh instance per case, ingesting all pre-cutoff events; <code>incremental_per_episode</code>: cases share an episode instance with incremental ingestion and sequential queries; requires declared read-only queries) and <strong>Ingestion granularity</strong> <code>protocol.ingestion</code>(<code>per_event / per_session / per_turn_batch:N / per_chunk:N:x:y / per_document / per_trajectory / per_file</code>, declared by the suite, determining each <code>ingest</code> batch size). Both are defined in the dataset specification ( <code>design/dataset-protocol.md</code> ), with allowed values in suite header <code>protocol.reset_policy_allowed</code> and defaults in protocol variant <code>reset_policy_default</code>. Network mode <code>none / gateway / open</code> is a third axis, restricting SUT runtime egress. It does not change scoring formulas but may restrict runnable configurations. Builds/downloads and evaluator calls are configured separately. </p>
+<ul>
+<li><code>--mode</code> See the table above. Reports and cards record mode; scores from different modes should not be compared directly. </li>
+<li><code>--reader-input items</code>: LongMemEval, MAB, and BEAM accept returned memory text. MAB/BEAM join items in retrieval order under a Unicode-character budget including separators, dropping whole trailing items when necessary and disclosing truncation. No original text, gold, or future events are added. sources keeps its rules; items discloses input deviations and <code>fidelity=partial</code>. Unsupported benchmarks reject items before execution. </li>
+<li><code>--reset-policy</code> must be included in suite <code>protocol.reset_policy_allowed</code>; otherwise use protocol variant <code>reset_policy_default</code>.</li>
+<li><code>--run-seed</code> determines sampling and order and is recorded in reports. Use the reference seed for parity comparisons. </li>
+<li><code>--parallel N</code> (1..16, default 1) distributes runtime episodes among N workers. With <code>fresh_per_case</code>, each case is a runtime episode; with <code>incremental_per_episode</code>, an entire suite episode is one task. Workers have independent containers, EP directories, and logs. Incremental episode cases remain sequential; results assemble in suite order. Model randomness, load, and timeouts may change outputs, so stable order does not guarantee bitwise parity with serial execution. Gateway workers share one governor with per-episode fanout (manifest <code>llm.concurrency</code>, default 8) × N slots. Explicit <code>--sut-llm-concurrency</code> or corresponding environment/config values specify total slots directly. Too few slots can increase queueing; also check SUT request deadlines. Manifest <code>sandbox.limits.cpus</code> maps to <code>--cpus</code>; reports and stderr warn when N exceeds host CPU count. </li>
+<li><code>--auto-resume-rate-limited N</code> (default 0 = off): after a run, cases failing from governor exhaustion ( <code>gateway_exhausted</code> ) or <code>rpc_timeout</code>, plus unscheduled cases, wait for the suggested cooldown (30 s to <code>--sut-llm-max-pause</code> ), then <code>--resume</code> rerun in-process for up to N rounds, each recorded under <code>resume_history[]</code>(<code>auto: true, round, reason, waited_s, cases_retried, cases_recovered</code> ). Budget exhaustion ( <code>gateway_budget</code> ) does not auto-resume; increase <code>--sut-llm-budget-tokens</code> and resume manually. </li>
+<li> External SUT runtime lifecycle: reset (new container) → ingest batches → ready → retrieve → evaluator reader if required → destroy → residue check. Default <code>fresh_per_case</code> uses one runtime episode per case. </li>
+<li> Evaluator models: <code>--llm</code> four modes and cassette directory ( <code>MEMEVAL_CASSETTE_DIR</code> ); each run writes <code>llm_ledger.jsonl</code>. Judging uses the Jev decision route ( <code>jev-1.14.0</code> by default). </li>
+</ul>
+</section>
+
+<section id="report">
+<h2> Report v2 </h2>
+<p> Output directory: <code>report.json</code> (structure below), <code>cases.jsonl</code> / <code>cases.csv</code> (per case), <code>report.html</code> (offline-readable), <code>predictions.jsonl</code>(QA), <code>llm_ledger.jsonl</code> / <code>judge_inputs.jsonl</code> / <code>prompts.jsonl</code> (as needed), <code>logs/</code>.<code>memeval compare L R</code> performs paired bootstrap comparisons using <code>cluster_id</code> units, producing <code>delta_right_minus_left</code>, <code>ci95</code>, <code>paired_cases</code>, <code>protocol_differences</code>), <code>memeval report a.json b.json --out x.html [--compare delta.json]</code> renders a multi-report page. </p>
+<div class="scroll"><table class="tbl">
+<thead><tr><th> Field </th><th> Contents </th></tr></thead>
+<tbody>
+<tr><td><code>framework_version run_id run_seed started_at_utc wall_seconds</code></td><td> Run identity </td></tr>
+<tr><td><code>suite_id suite_sha256 source source_counts source_limitations</code></td><td> Dataset identity </td></tr>
+<tr><td><code>mode protocol{version:"paeval-v2", benchmark{protocol_id,version,variant,ref,sha256}, budget, batch_size, ingestion, reset_policy, scoring, k_unit, gold_hidden_from_adapter, query_time_policy, retrieval_metrics, fidelity…}</code></td><td> Evaluation conditions </td></tr>
+<tr><td><code>sut{name, variant, describe, fingerprint{k:{status,value}}, declared, llm{gateway_host,model,reasoning_effort,source,notes}, manifest_sha256, env_lock_sha256, lock}</code></td><td> SUT and model identity </td></tr>
+<tr><td><code>isolation{tier, backend, network_mode, network_enforced, egress_allowlist, sandbox_profile_sha256, selftest{path,sha256,created_at,checks}, caps, host, effective_config[], sidecars[], container{runtime, image, sidecar_images, network, relay, flags, user, user_mode, tmpfs, shm_size, limits_enforced, mounts, host_ports_published:false, residue{containers_remaining,networks_remaining,volumes_remaining,ep_removed,kept_eps,run_clean}, system_df{before,after}}}</code></td><td> Isolation scope and teardown verification </td></tr>
+<tr><td><code>data_flow{summary, parties[{role,endpoint,direction,enforcement,evidence}], zero_egress_proof{verified,checks,run_clean,selftest_sha256}, notes}</code></td><td> Data destinations (zero_egress / sut_gateway / sut_provider / evaluator_providers) </td></tr>
+<tr><td><code>evaluator_llm billing{evaluator,evaluator_by_purpose,sut} environment{go_version,platform,code_sha256}</code></td><td> Evaluator model usage and runtime </td></tr>
+<tr><td><code>summary{planned, status_counts, passed, pass_rate_on_scored, scoring_coverage, execution_errors, unsupported, invalid, metrics{k:{mean,n}}, timings{k:{p50,p95,total,n}}, returned_chars}</code>, <code>by_category</code>, <code>scores{official, memory_only}</code></td><td> Summary </td></tr>
+<tr><td><code>cases[]{case_id, episode_id, sample_id, repeat_index, category, cluster_id, kind, cutoff, budget, status, passed, metrics, failures, retrieved_source_ids, returned_chars, diagnostics, timings, error_type, error_detail, note, namespace, audit, answer_parse, qa, …}</code></td><td> Per case; <code>status</code> ∈ scored / invalid / unscored / unsupported / contract_error / error / ingest_failed</td></tr>
+<tr><td><code>logs{dir, episodes, files, bytes, truncated_files, redaction, kept_eps_unredacted_stderr, disabled}</code>, <code>warnings</code>, <code>limitations</code>, <code>resume_count</code>, <code>resume_history[]</code>, <code>judge_inputs</code></td><td> Log index and run notes </td></tr>
+</tbody></table></div>
+<p> Contract: report fields are additive. HTML reports are rendered by <code>design/report-ui/</code> with <code>report.css / report.js / shell.html</code> with <code>//go:embed</code> embedded and no external resources. </p>
+</section>
+
+<section id="results">
+<h2> Result cards and comparisons </h2>
+<p> One evaluation pairs one SUT variant with one dataset. <code>memeval results card</code> from <code>report.json</code> deterministically extracts a common <strong>Result cards</strong> (v1: summaries and fingerprints only, no case text). <code>memeval results build</code> collects cards from <code>reports/</code> into <code>docs-site/results/index.js</code>; <a href="results.html"> The result site <code>results.html</code></a> reads this index for filtering, details, 2–6-card comparisons, and drag-and-drop <code>report.json</code> comparisons. Question-level review is available in the <a href="cases.html"> case review page <code>cases.html</code></a> : ingested memories, queries, returned items, scoring rules, same-question comparisons, and failures attributed to ingestion, retrieval, bridge, or evaluator with native details. Data is extracted by <code>scripts/build_case_review.py</code> from a run directory and dataset files into <code>docs-site/cases/</code> (specification: <code>design/p15-case-review.md</code> ). Specification: <code>design/p10-results-site.md</code>.</p>
+<div class="scroll"><table class="tbl">
+<thead><tr><th> Card groups </th><th> Contents </th></tr></thead>
+<tbody>
+<tr><td><code>subject</code></td><td> SUT name, variant and description, upstream repository/package/version/license from <code>suts/&lt;name&gt;/UPSTREAM.json</code>, declared embedding/LLM, manifest and lock fingerprints, image ID </td></tr>
+<tr><td><code>dataset</code></td><td> Suite ID and <code>suite_sha256</code>, protocol ID/variant/SHA-256, case and gold-bearing counts, category count, license </td></tr>
+<tr><td><code>run</code></td><td> Mode, reset policy, top-k, max_context_chars, seed, limit/repeats/parallel, resume count, start time, wall time, isolation (tier, network, residue, selftest), memeval version and commit </td></tr>
+<tr><td><code>results</code></td><td> Case status distribution, scoring coverage, primary metric ID, all metrics <code>{mean, n}</code>, official scores, category breakdowns, stage p50/p95 timings </td></tr>
+<tr><td><code>cost</code></td><td> Evaluator model calls and SUT gateway calls/tokens (governor metering) </td></tr>
+</tbody></table></div>
+<h3> Reading scores </h3>
+<ul>
+<li> Every metric includes <code>n</code>: the cases for which it is defined. Memory-only <code>hit/recall/mrr/ndcg/all_evidence</code> averages only cases <strong>with gold</strong> (43 of 75 PMB retrieval cases); <code>empty_result_correct</code> averages only cases <strong>without gold</strong> covers the 32 negative cases, measuring restraint on irrelevant questions; <code>precision</code> averages only cases <code>gold.exhaustive</code> cases only. </li>
+<li> The embedded Go glossary is authoritative for definitions, formulas, ranges, direction, aggregation, and caveats ( <code>memeval results glossary</code> ). Result-site and report ⓘ controls display the same text. </li>
+<li><strong>Comparability</strong>: deltas require matching dataset fingerprint, mode, top-k, reset policy, and protocol variant. Otherwise cards are shown side by side with differences identified. LongMemEval official <code>recall_any@k</code> and memory-only <code>recall</code> use different definitions and must not be pooled. </li>
+<li> Read score and status together: <code>scored</code> excludes error / invalid / unsupported cases from the mean. A high conditional score with low coverage cannot establish overall quality. </li>
+</ul>
+</section>
+
+<section id="logs">
+<h2> Logs and residue checks </h2>
+<pre><code>&lt;out&gt;/logs/
+├── index.jsonl                      # One row per episode: seq, namespace, dir, start/end timestamps, file statistics, keep
+└── &lt;seq&gt;-&lt;namespace&gt;/
+    ├── episode.json                 # Metadata(EP path, keep, sidecar evidence)
+    ├── sut.stderr.log               # Raw SUT stderr (credentials redacted, dataset text retained)
+    ├── sidecar-&lt;name&gt;.log / init-&lt;name&gt;-&lt;i&gt;.log
+    └── rpc-errors.jsonl             # Each failed RPC: method, code/message/data(params omitted)</code></pre>
+<ul>
+<li> Enabled by default; <code>--no-logs</code> disables logs. Each file is capped at 32 MiB ( <code>--log-file-cap</code> ); overflow retains the head and tail with an omission marker. Resumed episodes go into <code>logs/resume-N/</code>.</li>
+<li> After each episode, enumeration by <code>label=memeval.episode</code> must find no containers/networks/volumes; otherwise the episode is <code>Unenforceable</code> and cannot score. Run completion repeats the check using <code>label=memeval.run</code> and writes <code>residue.run_clean</code>, also recording <code>docker system df</code> before and after. </li>
+<li> Historical PMB-75 acceptance runs for echo, mem0, mastra, hindsight, cognee, and octop recorded zero residue. This is historical evidence, not a guarantee for future runs. </li>
+</ul>
+</section>
+
+<section id="env">
+<h2> Environment locks and cleanup </h2>
+<p><code>env install</code> Stage project, bridge, dependency locks, and assets, then build in two phases: resolve locks inside the base image ( <code>uv pip compile --generate-hashes</code> / <code>npm install --package-lock-only</code>, optionally with <code>constraints</code> and <code>indexes</code> ), then build the image tagged <code>memeval/env:&lt;name&gt;-&lt;lock12&gt;</code>. Host artifacts are limited to <code>~/.cache/memeval/envs/&lt;name&gt;@&lt;lock_sha256&gt;/{env.lock.json, Containerfile, context.sha256.json, dependency-locks, build.log}</code>.</p>
+<p><strong>Lock v3</strong> Fields: <code>version:3, image_root:/opt/memeval/env, image{id,ref,repository,tag,size_bytes,base_images[],containerfile_sha256,context_sha256,built_at,platform}, platform, host_platform, lock_platform, inputs, input_sha256, lock_sha256, runtime_kind, runtime_version, runtime_actual_version, executable, requirements_lock_sha256 / package_lock_sha256, files, assets, sidecar_images[{name,ref,id,digest,platform}], sandbox_caps, probe, created_at</code>.</p>
+<div class="scroll"><table class="tbl">
+<thead><tr><th><code>env check</code> reason </th><th> Meaning </th></tr></thead>
+<tbody>
+<tr><td><code>lock_version</code></td><td> Lock, framework, or manifest-rule version mismatch; reinstall required </td></tr>
+<tr><td><code>retired_host_env</code></td><td> Legacy host-installed environment </td></tr>
+<tr><td><code>lock_platform</code></td><td> Lock resolution platform differs from target </td></tr>
+<tr><td><code>input_changed</code></td><td> Manifest/project/bridge changed; up to ten paths and old/new hash prefixes are listed </td></tr>
+<tr><td><code>files_changed</code></td><td> Host env directory, Containerfile, context, or lock digest changed </td></tr>
+<tr><td><code>image_missing</code> / <code>label_mismatch</code></td><td> Image missing from daemon or labels/architecture mismatch </td></tr>
+</tbody></table></div>
+<ul>
+<li><code>env list</code>: host locks ∪ daemon <code>memeval.env</code> images; unlocked images are marked orphan. </li>
+<li><code>env destroy &lt;name&gt;|--all</code>: remove env-labeled containers/networks/volumes → <code>rmi</code> env image → verify → remove host lock directory, SUT selftest records, and gate lock. </li>
+<li><code>gc [--apply] [--older-than 24h] [--base-images] [--json]</code>: dry-run by default; recognizes only <code>memeval.*</code> labels for expired/orphan containers, networks, volumes, unlocked env images, old probes, expired EP/build directories and selftests, orphan gate locks, and failed installs. <code>name=memeval-*</code> unlabeled resources are listed only. Never run <code>builder prune</code> because the daemon may serve other projects. </li>
+<li> Authoritative base-image and sidecar digest table: <code>design/p8-container-platform.md</code> Appendix A. </li>
+</ul>
+</section>
+
+<section id="config">
+<h2> Configuration </h2>
+<p> Read only from root <code>.env</code> or process environment and flags. Precedence: flags &gt; environment &gt; .env; <code>memeval env</code> prints key sources and masked values; <code>.env.example</code> and code read sites are kept in sync by tests. </p>
+<div class="scroll"><table class="tbl">
+<thead><tr><th> Variable </th><th> Flag </th><th> Default </th><th> Purpose </th></tr></thead>
+<tbody>
+<tr><td><code>MEMEVAL_DOCKER_CONTEXT</code> / <code>MEMEVAL_DOCKER_CLI</code></td><td><code>--docker-context</code> / <code>--docker-cli</code></td><td>orbstack / docker</td><td> Container backend </td></tr>
+<tr><td><code>MEMEVAL_LINUX_BINARY</code></td><td><code>--linux-binary</code></td><td>bin/memeval-linux-&lt;arch&gt;</td><td> Probe / relay binary </td></tr>
+<tr><td><code>MEMEVAL_CONTAINER_TMPFS_SIZE</code> / <code>…_SHM_SIZE</code></td><td><code>--container-tmpfs-size</code> / <code>--container-shm-size</code></td><td>1g / 512m</td><td> Container /tmp and /dev/shm </td></tr>
+<tr><td><code>MEMEVAL_EP_ROOT</code></td><td><code>--ep-root</code></td><td>Platform temporary directory / memeval (see <code>env config</code>)</td><td> Host episode root, bind-mounted into containers </td></tr>
+<tr><td><code>MEMEVAL_CACHE_DIR</code></td><td><code>--cache-dir</code></td><td>~/.cache/memeval</td><td> Locks, selftest records, cassettes </td></tr>
+<tr><td><code>MEMEVAL_SUT_LLM_BASE_URL / API_KEY / MODEL / REASONING_EFFORT</code></td><td><code>--sut-llm-base-url / --sut-llm-model / --sut-llm-effort</code></td><td>— / — / gpt-6-luna / low</td><td> SUT LLM gateway </td></tr>
+<tr><td><code>MEMEVAL_EPISODE_LOGS</code> / <code>MEMEVAL_LOG_FILE_CAP_BYTES</code></td><td><code>--no-logs</code> (inverted) / <code>--log-file-cap</code></td><td>1 / 33554432</td><td> Episode logs </td></tr>
+<tr><td><code>MEMEVAL_LLM_MODE</code> / <code>MEMEVAL_CASSETTE_DIR</code> / <code>MEMEVAL_LLM_PARALLEL</code></td><td><code>--llm</code> / <code>--cassette-dir</code> / <code>--llm-parallel</code></td><td>replay / ~/.cache/memeval/cassettes / 4</td><td> Evaluator model recording/replay </td></tr>
+<tr><td><code>MEMEVAL_READER_MODEL</code> / <code>MEMEVAL_ANTHROPIC_EFFORT</code> / <code>MEMEVAL_JUDGE_DECISION_MODEL</code></td><td><code>--reader-model</code> / <code>--anthropic-effort</code> / <code>--judge-decision-model</code></td><td>gpt-6-luna / low / jev-1.14.0</td><td> Fixed reader and judge </td></tr>
+<tr><td><code>MEMEVAL_OPENAI_* / MEMEVAL_ANTHROPIC_* / MEMEVAL_TYPESAFE_*</code></td><td>—</td><td>—</td><td> Evaluator provider credentials (never injected into containers) </td></tr>
+<tr><td><code>MEMEVAL_PARALLEL</code></td><td><code>--parallel</code></td><td>1</td><td> Runtime-episode workers (1..16) </td></tr>
+<tr><td><code>MEMEVAL_SUT_LLM_CONCURRENCY / RPM / BUDGET_TOKENS / MAX_PAUSE</code></td><td><code>--sut-llm-concurrency / --sut-llm-rpm / --sut-llm-budget-tokens / --sut-llm-max-pause</code></td><td> Fanout (manifest or 8) × parallel; explicit total slots / 0 / 0 / 30m </td><td> Gateway concurrency, token bucket, budget, and cumulative breaker-pause limit </td></tr>
+<tr><td><code>MEMEVAL_RUN_SEED</code> / <code>MEMEVAL_PRICES_FILE</code></td><td><code>--run-seed</code> / <code>--prices</code></td><td> Random / — </td><td> Reproducibility and usage attribution </td></tr>
+</tbody></table></div>
+</section>
+
+<section id="cli">
+<h2> Command reference </h2>
+<div class="scroll"><table class="tbl">
+<thead><tr><th> Command </th><th> Purpose </th></tr></thead>
+<tbody>
+<tr><td><code>run</code></td><td> Run evaluation (above) </td></tr>
+<tr><td><code>env</code> / <code>env install &lt;manifest&gt; [--force --offline --find-links]</code> / <code>env check</code> / <code>env list</code> / <code>env destroy</code></td><td> Inspect config; build image/lock and selftest; verify; list; destroy </td></tr>
+<tr><td><code>gc [--apply]</code></td><td> Reclaim abandoned memeval resources (dry-run by default) </td></tr>
+<tr><td><code>sandbox caps [--sut]</code> / <code>sandbox selftest --sut m [--network] [--out]</code></td><td> Probe container capabilities; write selftest record </td></tr>
+<tr><td><code>sut setup --sut m</code> / <code>sut check --sut m</code></td><td> Equivalent to env install; print effective specification and profile_sha256 </td></tr>
+<tr><td><code>fetch longmemeval-s</code> / <code>import &lt;dataset&gt;</code> / <code>validate &lt;suite&gt;</code></td><td> Fetch data; normalize; validate and scan for leakage </td></tr>
+<tr><td><code>suite upgrade|schema|pack|index</code></td><td> Suite tools: upgrade 1.0, export JSON Schema, pack single files into bundles, rebuild indexes </td></tr>
+<tr><td><code>registry list|check [--verify-files]</code></td><td> Registry and consistency checks </td></tr>
+<tr><td><code>compare L R [--metric --seed --draws --pair-by --exclude-status --out]</code> / <code>report … --out x.html</code> / <code>decide</code></td><td> Paired comparison; HTML rendering; fixed decision-model fixtures </td></tr>
+<tr><td><code>scripts/fetch_upstream_refs.py</code> / <code>scripts/build_linux_memeval.sh</code></td><td> Fetch/verify official templates; cross-compile container probe </td></tr>
+</tbody></table></div>
+</section>
+
+<section id="status">
+<h2> Capability boundaries and version history </h2>
+<p> Supported capabilities include retrieval, fixed-reader answers, normalized suites, containerized external SUTs, in-process baselines, reports, and case review. An integrated dataset or adapter does not imply every variant, budget, and model combination has been tested. Check manifests, adapter facts, and corresponding result cards. </p>
+<div class="note warn"><code>native_answer</code> remains reserved and disabled in the runner. Current contracts and historical decisions are in <code>design/current-contracts.md</code> and <code>design/history.md</code>; historical counts, environments, and validation apply only to their recorded versions. </div>
+<p> Further design and acceptance references: <code>design/README.md</code> (index), <code>design/p8-container-platform.md</code>, <code>design/p8-implementation-notes.md</code>, <code>design/dataset-protocol.md</code>.</p>
+</section>
+</main>
+
+<footer> memeval manual · Maintained with code versions · No external page resources; readable offline. Result data resources are generated separately. </footer>
+</div>
+<script>
+(function(){
+  var links=[].slice.call(document.querySelectorAll('nav.toc a[href^="#"]'));
+  var secs=links.map(function(a){return document.getElementById(a.getAttribute('href').slice(1));}).filter(Boolean);
+  if(!('IntersectionObserver' in window)||!secs.length)return;
+  var cur=null;
+  var io=new IntersectionObserver(function(es){
+    es.forEach(function(e){ if(e.isIntersecting){ cur=e.target.id; links.forEach(function(a){a.classList.toggle('cur',a.getAttribute('href')==='#'+cur);}); } });
+  },{rootMargin:'-10% 0px -70% 0px'});
+  secs.forEach(function(s){io.observe(s);});
+})();
+</script>
+
+</body>
+</html>

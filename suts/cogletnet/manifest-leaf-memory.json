@@ -1,0 +1,152 @@
+{
+  "schema_version": "3",
+  "name": "cogletnet",
+  "variant": "native-leaf-memory-jev3-openai-embedding",
+  "notes": "Explicit public session scopes via append_events/replace_event; LeafMemory-only indexing and native three-class Jev/Strict retrieval. Reader items use upstream leaf-memory-context-v1 rendering with complete layer source provenance. Defaults follow upstream; no benchmark tuning. Separate summary/validation and direct embedding/Jev services retain open networking. No native memory-token budget (MEMORY_TOKENS=200000, GENERATION_CONTEXT_TOKENS=200000); the evaluator reader's 100k-character budget is the only truncation.",
+  "adapter": {
+    "kind": "python-bridge",
+    "transport": "jsonrpc-stdio",
+    "max_frame_bytes": 16777216,
+    "request_timeout_s": 1800
+  },
+  "runtime": {
+    "kind": "uv-python",
+    "python": "3.12",
+    "base": "uv-python-trixie",
+    "requirements": "requirements.in",
+    "requirements_lock": "requirements.lock.txt",
+    "apt": [
+      "build-essential",
+      "pkg-config",
+      "ca-certificates",
+      "xz-utils"
+    ],
+    "assets": [
+      "source"
+    ],
+    "prepare": [
+      [
+        "{python}",
+        "{project}/prepare_native.py",
+        "{env}/models"
+      ]
+    ]
+  },
+  "bridge": {
+    "module": "adapter",
+    "class": "Adapter",
+    "config": {
+      "retrieval_mode": "leaf_memory",
+      "ingest_concurrency": 1,
+      "operation_resume_max_attempts": 4,
+      "operation_resume_initial_s": 30,
+      "operation_resume_max_wait_s": 300
+    }
+  },
+  "process": {
+    "command": [],
+    "cwd": "{ep}/work",
+    "env": {
+      "CLIPROXY_PROTOCOL": "responses",
+      "COGLETNET_WORK_TRACE": "full",
+      "MEMORY_SUMMARY_MODEL": "gpt-6-luna",
+      "MEMORY_SUMMARY_VALIDATION_MODEL": "gpt-6.1-sol",
+      "SUMMARY_REASONING_EFFORT": "medium",
+      "SUMMARY_PROMPT_PROFILE": "source-language-v1",
+      "SUMMARY_CANDIDATE_POLICY": "evidence-first-v1",
+      "BUILD_INPUT_BOUNDS": "conservative-bytes-v1",
+      "SUMMARY_VALIDATION_REASONING_EFFORT": "medium",
+      "SUMMARY_TOKENIZER": "tiktoken:o200k_base",
+      "SUMMARY_CONTEXT_TOKENS": "32768",
+      "SUMMARY_OUTPUT_TOKENS": "4096",
+      "SUMMARY_VALIDATION_CONTEXT_TOKENS": "32768",
+      "SUMMARY_VALIDATION_OUTPUT_TOKENS": "2048",
+      "GENERATION_TOKENIZER": "tiktoken:o200k_base",
+      "MEMORY_TOKENS": "200000",
+      "GENERATION_CONTEXT_TOKENS": "200000",
+      "GENERATION_OUTPUT_TOKENS": "2048",
+      "EMBEDDING_BASE_URL": "https://api.openai.com/v1",
+      "EMBEDDING_MODEL": "text-embedding-3-large",
+      "EMBEDDING_TOKENIZER": "tiktoken:cl100k_base",
+      "EMBEDDING_DIMENSIONS": "3072",
+      "EMBEDDING_CONTEXT_TOKENS": "8192",
+      "VECTOR_BATCH_SIZE": "32",
+      "JEV_MODEL": "jev-1.14.0",
+      "JEV_TOKENIZER": "bytes",
+      "JEV_THRESHOLD": "0.5",
+      "JEV_PROMPT_PROFILE": "leaf-memory-reference-v1",
+      "JEV_SELECTION_POLICY": "absolute-threshold",
+      "MAM_EPSILON": "0",
+      "MODEL_CONCURRENCY": "4",
+      "HTTP_TIMEOUT_SECONDS": "180",
+      "EVAL_MAX_CALLS": "10000",
+      "EVAL_MAX_INPUT_TOKENS": "100000000",
+      "INDEX_REPRESENTATIONS": "leaf_memory",
+      "JEV_CLASS_SUM_TOLERANCE": "0.02"
+    },
+    "env_passthrough": [
+      "EMBEDDING_API_KEY",
+      "JEV_API_KEY"
+    ]
+  },
+  "sandbox": {
+    "backend": "container",
+    "network": "open",
+    "limits": {
+      "timeout_s": 14400
+    }
+  },
+  "ready": {
+    "strategy": "sync"
+  },
+  "llm": {
+    "required": true,
+    "env": {
+      "CLIPROXY_BASE_URL": "{llm.base_url}",
+      "CLIPROXY_API_KEY": "{llm.api_key}",
+      "HOST_GENERATION_MODEL": "{llm.model}",
+      "GENERATION_REASONING_EFFORT": "{llm.reasoning_effort}"
+    }
+  },
+  "declared": {
+    "llm": {
+      "provider": "OpenAI-compatible Responses",
+      "host_model": "injected via llm.model",
+      "host_reasoning_effort": "injected via llm.reasoning_effort",
+      "summary": "gpt-6-luna/medium",
+      "validation": "gpt-6.1-sol/medium",
+      "selection": "TypeSafe jev-1.14.0"
+    },
+    "embedding": {
+      "provider": "OpenAI direct",
+      "model": "text-embedding-3-large",
+      "dimensions": 3072,
+      "local": false
+    }
+  },
+  "sidecars": [
+    {
+      "name": "qdrant",
+      "kind": "qdrant",
+      "image": "qdrant/qdrant:v1.20.0@sha256:9bfc89f9914fc14876a88c05270685921a55b8877b254a98bcc1cc2f0a424cd2",
+      "port": 6334,
+      "user": "65532:65532",
+      "tmpfs": [
+        "/qdrant/storage:rw,nosuid,nodev,size=2g,uid=65532,gid=65532,mode=0700",
+        "/qdrant/snapshots:rw,nosuid,nodev,size=1g,uid=65532,gid=65532,mode=0700",
+        "/tmp:rw,nosuid,nodev,size=1g,mode=1777"
+      ],
+      "env": {
+        "QDRANT__TELEMETRY_DISABLED": "true"
+      },
+      "exports": {
+        "QDRANT_URL": "http://{sidecar.qdrant.host}:{sidecar.qdrant.port}"
+      },
+      "ready": {
+        "tcp": "127.0.0.1:{port}",
+        "timeout_s": 60
+      },
+      "stop": "SIGTERM"
+    }
+  ]
+}

@@ -1,0 +1,27 @@
+FROM node:24.22.0-bookworm-slim@sha256:a5f4366e834695d5f363b920c104953a535d3a9864d1bdf74566a0ebe01daee5 AS base
+ENV UV_LINK_MODE=copy UV_NO_CACHE=1 PYTHONDONTWRITEBYTECODE=1 UV_PYTHON_INSTALL_DIR=/opt/memeval/env/runtime
+RUN groupadd -g 65532 memeval && useradd -u 65532 -g 65532 -M memeval && mkdir -p /opt/memeval/env/models-home
+FROM base AS lockfile
+WORKDIR /lock
+COPY project/package.json /lock/package.json
+RUN npm install --package-lock-only --ignore-scripts --no-audit --no-fund
+FROM scratch AS lockout
+COPY --from=lockfile /lock/package-lock.json /package-lock.json
+FROM base AS env
+LABEL memeval.env="golden@111111111111"
+LABEL memeval.framework="p8-k3-v3.1"
+LABEL memeval.input="2222222222222222222222222222222222222222222222222222222222222222"
+LABEL memeval.lock="1111111111111111111111111111111111111111111111111111111111111111"
+WORKDIR /opt/memeval/env/project
+COPY project/package.json package-lock.json ./
+RUN npm ci --no-audit --no-fund
+COPY --chown=65532:65532 bridge/ /opt/memeval/env/bridge/
+COPY --chown=65532:65532 project/ /opt/memeval/env/project/
+COPY --chown=65532:65532 assets/ /opt/memeval/env/assets/
+WORKDIR /opt/memeval/env/project
+COPY --chown=65532:65532 package-lock.json /opt/memeval/env/project/package-lock.json
+RUN mkdir -p /opt/memeval/env/models-home /opt/memeval/env/models && chown -R 65532:65532 /opt/memeval/env/models-home /opt/memeval/env/models
+USER 65532:65532
+RUN HOME=/opt/memeval/env/models-home '/usr/local/bin/node' '/opt/memeval/env/project/prepare.mjs'
+RUN test -e '/opt/memeval/env/models-home/.cache/mastra'
+RUN find /opt/memeval/env/models-home /opt/memeval/env/models ! -readable -print -quit > /tmp/memeval-unreadable && if test -s /tmp/memeval-unreadable; then cat /tmp/memeval-unreadable; exit 1; fi && rm /tmp/memeval-unreadable

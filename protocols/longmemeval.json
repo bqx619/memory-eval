@@ -1,0 +1,96 @@
+{
+  "protocol_id": "longmemeval",
+  "version": "1",
+  "upstream": {
+    "repo": "https://github.com/xiaowu0162/LongMemEval",
+    "commit": "9e0b455f4ef0e2ab8f2e582289761153549043fc",
+    "files": [
+      {
+        "path": "design/upstream/longmemeval/src/evaluation/evaluate_qa.py",
+        "sha256": "ecce9c4c79dc89d99534ac17b383a5cbb5b9f0c69ee98adaf0684742e3d95251"
+      },
+      {
+        "path": "design/upstream/longmemeval/src/generation/run_generation.py",
+        "sha256": "4f1eb3c69d7ad40f04065b9c0bc86f6582441018fc6ff751d162d66c95baf672"
+      }
+    ]
+  },
+  "variants": {
+    "s": {
+      "description": "Cleaned LongMemEval-S, independent question haystacks",
+      "suite_id_patterns": [
+        "longmemeval-s-cleaned@*"
+      ],
+      "params": {
+        "ingestion": "per_session",
+        "query_time_policy": "reference_only"
+      }
+    },
+    "m": {
+      "description": "尚无导入器：LongMemEval-M",
+      "params": {}
+    },
+    "oracle": {
+      "description": "尚无导入器：完整官方 oracle acquisition/registration 尚未实现；现有转换函数接受 oracle 标签不代表该变体已验收",
+      "params": {}
+    }
+  },
+  "scoring": {
+    "primary": "judge",
+    "judge": {
+      "file": "design/upstream/longmemeval/src/evaluation/evaluate_qa.py",
+      "sha256": "ecce9c4c79dc89d99534ac17b383a5cbb5b9f0c69ee98adaf0684742e3d95251",
+      "per_type": true,
+      "model_official": "gpt-4o-2024-08-06",
+      "params": {
+        "temperature": 0,
+        "max_tokens": 10,
+        "n": 1,
+        "template_set_sha256": "b70c08acfdb72d25d4f5134d2857f661364f5db64f25c7daab97bc864621efc3"
+      },
+      "label_rule": "contains 'yes'"
+    },
+    "reader": {
+      "file": "design/upstream/longmemeval/src/generation/run_generation.py",
+      "sha256": "4f1eb3c69d7ad40f04065b9c0bc86f6582441018fc6ff751d162d66c95baf672",
+      "input_mode_default": "sources"
+    },
+    "answer_parsing": "strip",
+    "denominators": {
+      "exclude": [
+        "abstain from retrieval metrics"
+      ],
+      "per_type_report": true
+    },
+    "secondary": [
+      "longmemeval_official.turn.recall_any@5",
+      "longmemeval_official.turn.recall_all@5",
+      "longmemeval_official.turn.ndcg_any@5",
+      "longmemeval_official.turn.recall_any@10",
+      "longmemeval_official.turn.recall_all@10",
+      "longmemeval_official.turn.ndcg_any@10",
+      "longmemeval_official.turn.recall_any@50",
+      "longmemeval_official.turn.recall_all@50",
+      "longmemeval_official.turn.ndcg_any@50",
+      "longmemeval_official.session.recall_all@5",
+      "longmemeval_official.session.ndcg_any@5",
+      "longmemeval_official.session.recall_all@10",
+      "longmemeval_official.session.ndcg_any@10"
+    ]
+  },
+  "fidelity_rules": {
+    "full": [
+      "official judge model, parameters and vendored template set match",
+      "complete official question set and denominator",
+      "official reader template; no truncation"
+    ],
+    "equivalent": [
+      "agreement study kappa >= 0.85 on the same suite"
+    ],
+    "else": "partial"
+  },
+  "cluster_basis": "episode",
+  "overlaps": [
+    "memoryagentbench"
+  ]
+}

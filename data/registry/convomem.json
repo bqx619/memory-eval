@@ -1,0 +1,87 @@
+{
+  "id": "convomem",
+  "name": "ConvoMem",
+  "repository": "https://github.com/SalesforceAIResearch/ConvoMem",
+  "dataset_url": "https://huggingface.co/datasets/Salesforce/ConvoMem",
+  "data_nature": "model-generated",
+  "task_kinds": [
+    "qa",
+    "rubric"
+  ],
+  "protocol_id": "convomem",
+  "variants": [
+    "abstention",
+    "assistant_facts",
+    "changing",
+    "implicit_connection",
+    "preference"
+  ],
+  "reported_scale": {
+    "files": 906,
+    "items": 56273,
+    "conversations": 106989,
+    "messages": 3801631
+  },
+  "license": {
+    "id": "CC-BY-NC-4.0",
+    "noncommercial": true,
+    "no_derivatives": false,
+    "share_alike": false,
+    "redistribute_normalized": true,
+    "source": "https://huggingface.co/datasets/Salesforce/ConvoMem"
+  },
+  "pinned_revision": "e3e9b39115b02346824c70d349350de738f8be41",
+  "implementation_status": "imported",
+  "importer": "memeval import convomem",
+  "suites": [
+    {
+      "suite_id": "convomem-abstention@e3e9b39115b0",
+      "path": "data/normalized/convomem-abstention@e3e9b39115b0",
+      "suite_sha256": "f7e942de49f9872f27afdc1ae0c5602b0c6be75968535b855ad8f5d8332b3164",
+      "import_stats_path": "data/normalized/convomem-abstention@e3e9b39115b0/import.json",
+      "protocol_ref": "protocols/convomem.json#abstention"
+    },
+    {
+      "suite_id": "convomem-assistant_facts@e3e9b39115b0",
+      "path": "data/normalized/convomem-assistant_facts@e3e9b39115b0",
+      "suite_sha256": "ab6662d31ed1c23390861f4b1b8b324255d93dd2ef41f6aff575cca429932178",
+      "import_stats_path": "data/normalized/convomem-assistant_facts@e3e9b39115b0/import.json",
+      "protocol_ref": "protocols/convomem.json#assistant_facts"
+    },
+    {
+      "suite_id": "convomem-changing@e3e9b39115b0",
+      "path": "data/normalized/convomem-changing@e3e9b39115b0",
+      "suite_sha256": "153e424cfd4f445f1996c8c83a6660a6aca12be8d07c52fb29cf6b8f0bc53d4e",
+      "import_stats_path": "data/normalized/convomem-changing@e3e9b39115b0/import.json",
+      "protocol_ref": "protocols/convomem.json#changing"
+    },
+    {
+      "suite_id": "convomem-implicit_connection@e3e9b39115b0",
+      "path": "data/normalized/convomem-implicit_connection@e3e9b39115b0",
+      "suite_sha256": "eb0266d5e975caadbe00c7c99fb6a37e729bdca4e1e33b00e208c9110243fe20",
+      "import_stats_path": "data/normalized/convomem-implicit_connection@e3e9b39115b0/import.json",
+      "protocol_ref": "protocols/convomem.json#implicit_connection"
+    },
+    {
+      "suite_id": "convomem-preference@e3e9b39115b0",
+      "path": "data/normalized/convomem-preference@e3e9b39115b0",
+      "suite_sha256": "74d37daa8707626ae25f5742e4e5fa72a5dc49cb0d8d38353367216fda3ef21b",
+      "import_stats_path": "data/normalized/convomem-preference@e3e9b39115b0/import.json",
+      "protocol_ref": "protocols/convomem.json#preference"
+    }
+  ],
+  "overlaps": [
+    "locomo"
+  ],
+  "notes": [
+    "Pinned 906-file evidence_questions tree only; no filler/pre_mixed data at this revision, official 1..300 context ladder cannot be reproduced.",
+    "CC BY-NC 4.0; normalized local bundles retain NC license; conformance uses synthetic placeholders.",
+    "implicit_connection official generator uses rubric template; qa/answers schema retained.",
+    "106 implicit_connection/1_evidence items contain 2 (95) or 3 (11) conversations; preserve all; file_n_evidence records directory, n_evidence records actual count.",
+    "107041 evidence references: 77261 exact speaker+text matches, 0 multiple, 29780 unmatched retained as text; only resolved refs enter retrieval denominators.",
+    "ConvoMem LoCoMo runner is code/protocol overlap only; no claim of shared samples.",
+    "Implementation and acceptance: design/p4b-implementation-notes.md."
+  ],
+  "verification_date": "2026-10-17",
+  "lock_path": "data/upstream/convomem/source.lock.json"
+}

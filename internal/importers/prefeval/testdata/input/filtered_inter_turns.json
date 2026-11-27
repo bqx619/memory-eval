@@ -1,0 +1,28 @@
+[
+  {
+    "conversation_id": "synthetic-0",
+    "conversation": [
+      {
+        "role": "user",
+        "content": "Filler question."
+      },
+      {
+        "role": "assistant",
+        "content": "Filler reply."
+      }
+    ]
+  },
+  {
+    "conversation_id": "synthetic-1",
+    "conversation": [
+      {
+        "role": "user",
+        "content": "Filler question."
+      },
+      {
+        "role": "assistant",
+        "content": "Filler reply."
+      }
+    ]
+  }
+]

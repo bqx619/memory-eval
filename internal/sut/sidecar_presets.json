@@ -1,0 +1,21 @@
+{
+  "postgres-pgvector-18": {
+    "image": "pgvector/pgvector:pg18@sha256:2358fcba361ed2233a5ed81b5fe4ca779ccb304120ce531a3bf51c0ed7e2bc11",
+    "port": 5432,
+    "user": "999:999",
+    "tmpfs": ["/var/lib/postgresql:rw,nosuid,nodev,size=4g,uid=999,gid=999,mode=0700", "/run/postgresql:rw,nosuid,nodev,size=64m,uid=999,gid=999,mode=0770", "/tmp:rw,nosuid,nodev,size=1g,mode=1777"],
+    "env": {"POSTGRES_USER": "memeval", "POSTGRES_DB": "postgres", "POSTGRES_HOST_AUTH_METHOD": "trust"},
+    "shm_size": "256m",
+    "ready": {"exec": ["pg_isready", "-U", "{env.POSTGRES_USER}", "-d", "{env.POSTGRES_DB}", "-h", "127.0.0.1"], "timeout_s": 60},
+    "stop": "SIGTERM"
+  },
+  "qdrant-1.19.2": {
+    "image": "qdrant/qdrant:v1.19.2@sha256:b7b0444c4c351c970b98e90a6f89c2ee4287c65b44e52b4cb503fa5b2aa927ad",
+    "port": 6333,
+    "user": "65532:65532",
+    "tmpfs": ["/qdrant/storage:rw,nosuid,nodev,size=2g,uid=65532,gid=65532,mode=0700", "/qdrant/snapshots:rw,nosuid,nodev,size=1g,uid=65532,gid=65532,mode=0700", "/tmp:rw,nosuid,nodev,size=1g,mode=1777"],
+    "env": {"QDRANT__TELEMETRY_DISABLED": "true"},
+    "ready": {"http": {"url": "http://127.0.0.1:{port}/readyz", "status": 200}, "timeout_s": 60},
+    "stop": "SIGTERM"
+  }
+}

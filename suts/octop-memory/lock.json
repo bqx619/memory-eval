@@ -1,0 +1,23 @@
+{
+  "python_version": "3.12.13",
+  "python_real_path": "/example/user/.local/share/uv/python/cpython-3.12.13-macos-aarch64-none/bin/python3.12",
+  "py_root": "/example/user/.local/share/uv/python/cpython-3.12.13-macos-aarch64-none",
+  "venv_real_path": "/example/user/.cache/memeval/octop-memory/bf99d0ec46f673dbb62ac12a516cd805fac2430e0298510d3fa80fa924d015bb/.venv",
+  "requirements_lock_sha256": "bf99d0ec46f673dbb62ac12a516cd805fac2430e0298510d3fa80fa924d015bb",
+  "requirements_input_sha256": "b8ba60d2fdaeedabd149ea9382d040abc8e59824f445d51dfcbb0bff70355217",
+  "platform": {
+    "os": "darwin",
+    "arch": "arm64"
+  },
+  "probe": {
+    "fts5": true,
+    "fts5_error": null,
+    "octop_memory_version": "1.0.1",
+    "ok": true,
+    "protocol_version": "1.0",
+    "python_executable": "/example/user/.cache/memeval/octop-memory/bf99d0ec46f673dbb62ac12a516cd805fac2430e0298510d3fa80fa924d015bb/.venv/bin/python",
+    "python_version": "3.12.13",
+    "sqlite_version": "3.50.4"
+  },
+  "created_at": "2026-10-15T18:48:37.975457Z"
+}

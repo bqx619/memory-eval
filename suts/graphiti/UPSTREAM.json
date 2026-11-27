@@ -1,0 +1,7 @@
+{
+  "project": "Graphiti (Zep)",
+  "repo": "https://github.com/getzep/graphiti",
+  "package": "graphiti-core",
+  "version": "0.31.1",
+  "license": "Apache-2.0"
+}

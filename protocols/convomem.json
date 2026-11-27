@@ -1,0 +1,152 @@
+{
+  "protocol_id": "convomem",
+  "version": "1",
+  "upstream": {
+    "repo": "https://github.com/SalesforceAIResearch/ConvoMem",
+    "commit": "624f582ecf0d336ae1d4539d19186089800774b1",
+    "files": [
+      {
+        "path": "design/upstream/convomem/src/main/scala/com/salesforce/crmmembench/questions/evidence/generation/AnsweringEvaluation.scala",
+        "sha256": "2c294a354861a364590b3e9c52fe9777afb60d641d186781d3004e78908355b0"
+      },
+      {
+        "path": "design/upstream/convomem/src/main/scala/com/salesforce/crmmembench/questions/evidence/generators/ImplicitConnectionEvidenceGenerator.scala",
+        "sha256": "7d01eb6efbba5ebe918a7766306817f4fa66c99d325e6b4346f97eed73cf94cc"
+      },
+      {
+        "path": "design/upstream/convomem/src/main/scala/com/salesforce/crmmembench/questions/evidence/generators/PreferenceEvidenceGenerator.scala",
+        "sha256": "ed9f440c90b10386f802a01505449dd069c0e58d89fca48b9dbce535712d424f"
+      },
+      {
+        "path": "design/upstream/convomem/src/main/scala/com/salesforce/crmmembench/questions/evidence/generators/ChangingEvidenceGenerator.scala",
+        "sha256": "4d47b267a063f63ec3d19a6bfb0aabb370e50a8413dd1cd97b2ad55dc3d56f82"
+      },
+      {
+        "path": "design/upstream/convomem/src/main/scala/com/salesforce/crmmembench/questions/evidence/generators/AssistantFactsEvidenceGenerator.scala",
+        "sha256": "da7a611d94e34312cddeadc092e75d392b841d23bc0b7d71b6739bc60c10527d"
+      },
+      {
+        "path": "design/upstream/convomem/src/main/scala/com/salesforce/crmmembench/questions/evidence/generators/AbstentionEvidenceGenerator.scala",
+        "sha256": "007e5ccc48afcf7c66b35f8cfdcafba257220b1342cba5bbf911f89a325cd3c4"
+      },
+      {
+        "path": "design/upstream/convomem/src/main/scala/com/salesforce/crmmembench/evaluation/EvaluationUtils.scala",
+        "sha256": "382e1625114e72584dfcb24e081860fc67c348a4478bf7555aba8a4d686abfcf"
+      },
+      {
+        "path": "design/upstream/convomem/src/main/scala/com/salesforce/crmmembench/evaluation/memory/LongContextMemoryAnswerer.scala",
+        "sha256": "b9e122fae56375d654689e3ded22bc14c46568a3081458840febf8950bb6fc37"
+      },
+      {
+        "path": "design/upstream/convomem/src/main/scala/com/salesforce/crmmembench/evaluation/memory/MemoryPromptUtils.scala",
+        "sha256": "511e74a56eff2e467f9cddaa13d5696d5c81e51d7bf8e91d5558de19ba0aac48"
+      },
+      {
+        "path": "design/upstream/convomem/src/main/scala/com/salesforce/crmmembench/Utils.scala",
+        "sha256": "82b308504ba639cdae3d3b8d7cdf95481c04ddf61bced7204c6d3a3e6fedb8b1"
+      }
+    ]
+  },
+  "variants": {
+    "abstention": {
+      "description": "abstention evidence-only histories",
+      "suite_id_patterns": [
+        "convomem-abstention@*"
+      ],
+      "params": {
+        "reset_policy_default": "fresh_per_case",
+        "template": "abstention",
+        "filler": false
+      }
+    },
+    "assistant_facts": {
+      "description": "assistant_facts evidence-only histories",
+      "suite_id_patterns": [
+        "convomem-assistant_facts@*"
+      ],
+      "params": {
+        "reset_policy_default": "fresh_per_case",
+        "template": "default",
+        "filler": false
+      }
+    },
+    "changing": {
+      "description": "changing evidence-only histories",
+      "suite_id_patterns": [
+        "convomem-changing@*"
+      ],
+      "params": {
+        "reset_policy_default": "fresh_per_case",
+        "template": "default",
+        "filler": false
+      }
+    },
+    "implicit_connection": {
+      "description": "implicit_connection evidence-only histories",
+      "suite_id_patterns": [
+        "convomem-implicit_connection@*"
+      ],
+      "params": {
+        "reset_policy_default": "fresh_per_case",
+        "template": "rubric",
+        "filler": false
+      }
+    },
+    "preference": {
+      "description": "preference evidence-only histories",
+      "suite_id_patterns": [
+        "convomem-preference@*"
+      ],
+      "params": {
+        "reset_policy_default": "fresh_per_case",
+        "template": "rubric",
+        "filler": false
+      }
+    }
+  },
+  "scoring": {
+    "primary": "judge",
+    "reader": {
+      "file": "design/upstream/convomem/src/main/scala/com/salesforce/crmmembench/evaluation/memory/LongContextMemoryAnswerer.scala",
+      "sha256": "b9e122fae56375d654689e3ded22bc14c46568a3081458840febf8950bb6fc37",
+      "input_mode_default": "sources"
+    },
+    "judge": {
+      "file": "design/upstream/convomem/src/main/scala/com/salesforce/crmmembench/questions/evidence/generation/AnsweringEvaluation.scala",
+      "sha256": "2c294a354861a364590b3e9c52fe9777afb60d641d186781d3004e78908355b0",
+      "model_official": "Gemini 2.5 Flash (Gemini.flash)",
+      "params": {
+        "answer_verification_max_retries": 20,
+        "max_attempts": 21
+      },
+      "label_rule": "trim/lowercase; both right and wrong=false; right=true; wrong=false; neither retries then invalid"
+    },
+    "answer_parsing": "Scala contains RIGHT/WRONG (case-insensitive substring)",
+    "denominators": {
+      "exclude": [
+        "invalid"
+      ],
+      "per_type_report": true
+    },
+    "secondary": [
+      "convomem.correct"
+    ]
+  },
+  "fidelity_rules": {
+    "full": [],
+    "equivalent": [],
+    "else": "partial"
+  },
+  "cluster_basis": "personId",
+  "notes": [
+    "Pinned data revision e3e9b39115b02346824c70d349350de738f8be41: 906 files / 56273 items / 106989 conversations / 3801631 messages; all containsEvidence=true.",
+    "Evidence-only histories: no filler or official 1..300 conversation ladder; no claim of reproduction of padded benchmark.",
+    "implicit_connection uses RubricBasedAnsweringEvaluation per generator; retains QA answers. Three implemented templates ignore evidenceMessages.",
+    "Scala Config lives in Utils.scala: ANSWER_VERIFICATION_MAX_RETRIES=20; Utils.retry executes first attempt plus 20 retries.",
+    "Logical parse retries immediate; transport uses evaluator retry/backoff. Output token caps and character budget are framework additions; no temperature specified at upstream callsite.",
+    "Original conversation debug IDs omitted from reader, as required by private identity mapping; original Conversation k numbers retained.",
+    "case.category/question_type is benchmark type; source topical category stays private. Unmatched text evidence is retained but excluded from retrieval denominators.",
+    "Invalid questions excluded; replacement LLM/decision/gated fidelity partial; no live official Gemini validation.",
+    "106 implicit_connection/1_evidence items have actual conversation counts 2 (95) or 3 (11); both directory and actual counts recorded; correctness by n_evidence uses actual count."
+  ]
+}

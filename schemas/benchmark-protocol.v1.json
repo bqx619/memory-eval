@@ -1,0 +1,236 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$ref": "#/$defs/Protocol",
+  "$defs": {
+    "Denominators": {
+      "properties": {
+        "exclude": {
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        },
+        "per_type_report": {
+          "type": "boolean"
+        }
+      },
+      "additionalProperties": false,
+      "type": "object",
+      "required": [
+        "exclude",
+        "per_type_report"
+      ]
+    },
+    "FidelityRules": {
+      "properties": {
+        "full": {
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        },
+        "equivalent": {
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        },
+        "else": {
+          "type": "string"
+        }
+      },
+      "additionalProperties": false,
+      "type": "object",
+      "required": [
+        "full",
+        "equivalent",
+        "else"
+      ]
+    },
+    "Protocol": {
+      "properties": {
+        "notes": {
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        },
+        "protocol_id": {
+          "type": "string"
+        },
+        "version": {
+          "type": "string"
+        },
+        "upstream": {
+          "$ref": "#/$defs/Upstream"
+        },
+        "variants": {
+          "additionalProperties": {
+            "$ref": "#/$defs/Variant"
+          },
+          "type": "object"
+        },
+        "scoring": {
+          "$ref": "#/$defs/Scoring"
+        },
+        "fidelity_rules": {
+          "$ref": "#/$defs/FidelityRules"
+        },
+        "cluster_basis": {
+          "type": "string"
+        },
+        "overlaps": {
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        }
+      },
+      "additionalProperties": false,
+      "type": "object",
+      "required": [
+        "protocol_id",
+        "version",
+        "upstream",
+        "variants",
+        "scoring",
+        "fidelity_rules",
+        "cluster_basis"
+      ]
+    },
+    "Scoring": {
+      "properties": {
+        "primary": {
+          "type": "string",
+          "enum": [
+            "judge",
+            "exact_match",
+            "token_f1",
+            "mcq",
+            "nugget",
+            "assertions",
+            "retrieval"
+          ]
+        },
+        "judge": {
+          "$ref": "#/$defs/TemplateRef"
+        },
+        "reader": {
+          "$ref": "#/$defs/TemplateRef"
+        },
+        "answer_parsing": {
+          "type": "string"
+        },
+        "denominators": {
+          "$ref": "#/$defs/Denominators"
+        },
+        "secondary": {
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        }
+      },
+      "additionalProperties": false,
+      "type": "object",
+      "required": [
+        "primary",
+        "answer_parsing",
+        "denominators",
+        "secondary"
+      ]
+    },
+    "SourceFile": {
+      "properties": {
+        "path": {
+          "type": "string"
+        },
+        "sha256": {
+          "type": "string"
+        }
+      },
+      "additionalProperties": false,
+      "type": "object",
+      "required": [
+        "path",
+        "sha256"
+      ]
+    },
+    "TemplateRef": {
+      "properties": {
+        "file": {
+          "type": "string"
+        },
+        "sha256": {
+          "type": "string"
+        },
+        "per_type": {
+          "type": "boolean"
+        },
+        "model_official": {
+          "type": "string"
+        },
+        "params": {
+          "type": "object"
+        },
+        "label_rule": {
+          "type": "string"
+        },
+        "input_mode_default": {
+          "type": "string"
+        }
+      },
+      "additionalProperties": false,
+      "type": "object",
+      "required": [
+        "file",
+        "sha256"
+      ]
+    },
+    "Upstream": {
+      "properties": {
+        "repo": {
+          "type": "string"
+        },
+        "commit": {
+          "type": "string"
+        },
+        "files": {
+          "items": {
+            "$ref": "#/$defs/SourceFile"
+          },
+          "type": "array"
+        }
+      },
+      "additionalProperties": false,
+      "type": "object",
+      "required": [
+        "repo",
+        "commit",
+        "files"
+      ]
+    },
+    "Variant": {
+      "properties": {
+        "description": {
+          "type": "string"
+        },
+        "suite_id_patterns": {
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        },
+        "params": {
+          "type": "object"
+        }
+      },
+      "additionalProperties": false,
+      "type": "object",
+      "required": [
+        "description",
+        "params"
+      ]
+    }
+  }
+}

@@ -1,0 +1,80 @@
+{
+  "schema_version": "3",
+  "name": "graphiti",
+  "variant": "falkordblite",
+  "notes": "Graphiti 知识图谱：每条事件经 LLM（经网关）抽取实体与关系写入 FalkorDB-Lite 图谱，本地 fastembed 嵌入，重排已禁用；单例约 5 分钟。",
+  "adapter": {
+    "kind": "python-bridge",
+    "transport": "jsonrpc-stdio",
+    "max_frame_bytes": 16777216,
+    "request_timeout_s": 1800
+  },
+  "runtime": {
+    "kind": "uv-python",
+    "python": "3.12",
+    "requirements": "requirements.in",
+    "base": "uv-python-trixie",
+    "apt": [
+      "libgomp1"
+    ],
+    "prepare": [
+      [
+        "{python}",
+        "{project}/prepare_models.py",
+        "{env}/models"
+      ]
+    ],
+    "constraints": "requirements.constraints.txt"
+  },
+  "bridge": {
+    "module": "adapter",
+    "class": "Adapter",
+    "config": {}
+  },
+  "process": {
+    "command": [],
+    "cwd": "{ep}/work",
+    "env": {},
+    "env_passthrough": []
+  },
+  "sandbox": {
+    "network": "gateway",
+    "limits": {
+      "timeout_s": 7200
+    },
+    "backend": "container"
+  },
+  "ready": {
+    "strategy": "sync"
+  },
+  "telemetry_env": {
+    "GRAPHITI_TELEMETRY_ENABLED": "false",
+    "XDG_CACHE_HOME": "{ep}",
+    "FASTEMBED_CACHE_PATH": "{env}/models",
+    "HF_HUB_OFFLINE": "1",
+    "TRANSFORMERS_OFFLINE": "1"
+  },
+  "declared": {
+    "llm": {
+      "provider": "OpenAI-compatible gateway chat/completions",
+      "model": "injected via llm.model",
+      "reasoning_effort": "injected via llm.reasoning_effort; adapter transport shim"
+    },
+    "embedding": {
+      "provider": "fastembed",
+      "model": "BAAI/bge-small-en-v1.5",
+      "dimensions": 384,
+      "local": true
+    },
+    "reranker": "disabled: stable incoming order, constant score 1"
+  },
+  "llm": {
+    "required": true,
+    "env": {
+      "OPENAI_BASE_URL": "{llm.base_url}",
+      "OPENAI_API_KEY": "{llm.api_key}",
+      "GRAPHITI_LLM_MODEL": "{llm.model}",
+      "GRAPHITI_LLM_REASONING_EFFORT": "{llm.reasoning_effort}"
+    }
+  }
+}

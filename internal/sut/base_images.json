@@ -1,0 +1,6 @@
+{
+  "uv-python": {"ref":"ghcr.io/astral-sh/uv:python3.12-bookworm-slim","digest":"sha256:e5b65587bce7de595f299855d7385fe7fca39b8a74baa261ba1b7147afa78e58","platforms":["linux/amd64","linux/arm64"]},
+  "uv-python-trixie": {"ref":"ghcr.io/astral-sh/uv:python3.12-trixie-slim","digest":"sha256:e28141cccc682844c7bed0cb7e5b2b4522c1f72f1d5116c7d22710d0d421f7dc","platforms":["linux/amd64","linux/arm64"]},
+  "node": {"ref":"node:24.22.0-bookworm-slim","digest":"sha256:a5f4366e834695d5f363b920c104953a535d3a9864d1bdf74566a0ebe01daee5","platforms":["linux/amd64","linux/arm64/v8","linux/ppc64le"]},
+  "debian": {"ref":"debian:bookworm-slim","digest":"sha256:7c7b2c966bc9ee8cedfeef67e0e279108992c77681fa595db4a9d65c06ccc587","platforms":["linux/amd64","linux/arm64"]}
+}

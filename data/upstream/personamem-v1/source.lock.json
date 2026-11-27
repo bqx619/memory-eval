@@ -1,0 +1,40 @@
+{
+  "dataset_id": "bowen-upenn/PersonaMem-v1",
+  "source_url": "https://huggingface.co/datasets/bowen-upenn/PersonaMem-v1",
+  "revision": "a8076d5608c93ba2a28983cd78aa99b01a163ae7",
+  "license_ack": {
+    "id": "MIT",
+    "source": "dataset card (README.md front matter: license: mit)",
+    "acknowledged_by": "claude (manual review of data card)",
+    "note": "MIT; normalized copies may be redistributed with attribution"
+  },
+  "files": [
+    {
+      "path": "README.md",
+      "bytes": 7139,
+      "sha256": "1b9160ff0719535cbd0fe5952922f69b705362873489d566372318dbc1334193",
+      "hash_authority": "HF tree API git blob oid cbdbe59590ab (sha1) verified; sha256 local"
+    },
+    {
+      "path": "questions_32k.csv",
+      "bytes": 1305366,
+      "sha256": "cccd34cf53e0bc4d9536c04cff5ca045156d9a4e227e83327112482840bbc93c",
+      "hash_authority": "HF tree API git blob oid 4e1780388455 (sha1) verified; sha256 local"
+    },
+    {
+      "path": "shared_contexts_32k.jsonl",
+      "bytes": 5613210,
+      "sha256": "217247ebfec9e8442fc53570c795ab69f21aad08745f7de78d9beab51b122d4a",
+      "hash_authority": "HF tree API git blob oid 473447f007a1 (sha1) verified; sha256 local"
+    }
+  ],
+  "not_fetched": [
+    "questions_128k.csv",
+    "questions_1M.csv",
+    "shared_contexts_128k.jsonl (lfs sha256 733cc009e84a138b…)",
+    "shared_contexts_1M.jsonl (lfs sha256 283c1d4714970284…)"
+  ],
+  "fetched_at": "2026-10-17T01:15:04Z",
+  "fetched_by": "curl (manual, pre-Go-fetch; Claude)",
+  "hash_authority": "non-LFS files: HF tree API git blob sha1 oid; sha256 computed locally after oid verification"
+}

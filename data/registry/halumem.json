@@ -1,0 +1,58 @@
+{
+  "id": "halumem",
+  "name": "HaluMem",
+  "repository": "https://github.com/MemTensor/HaluMem",
+  "dataset_url": "https://huggingface.co/datasets/IAAR-Shanghai/HaluMem",
+  "data_nature": "",
+  "task_kinds": [
+    "qa",
+    "memory_audit"
+  ],
+  "protocol_id": "halumem",
+  "variants": [
+    "medium",
+    "long"
+  ],
+  "reported_scale": {
+    "users": 20
+  },
+  "license": {
+    "id": "CC-BY-NC-ND-4.0",
+    "noncommercial": true,
+    "no_derivatives": true,
+    "share_alike": false,
+    "redistribute_normalized": false,
+    "source": "https://huggingface.co/datasets/IAAR-Shanghai/HaluMem"
+  },
+  "pinned_revision": "cb04336aa1b732d4b24f5186c552456b4099806e",
+  "implementation_status": "imported",
+  "importer": "memeval import halumem",
+  "lock_path": "data/upstream/halumem/source.lock.json",
+  "suites": [
+    {
+      "suite_id": "halumem-medium@cb04336aa1b7",
+      "path": "data/normalized/halumem-medium@cb04336aa1b7",
+      "protocol_ref": "protocols/halumem.json#medium",
+      "import_stats_path": "data/normalized/halumem-medium@cb04336aa1b7/import.json",
+      "suite_sha256": "d3fdcf0abae8dc030404df10465fde55ff8cb606e7e48f2dfe54752380df034c"
+    },
+    {
+      "suite_id": "halumem-long@cb04336aa1b7",
+      "path": "data/normalized/halumem-long@cb04336aa1b7",
+      "protocol_ref": "protocols/halumem.json#long",
+      "import_stats_path": "data/normalized/halumem-long@cb04336aa1b7/import.json",
+      "suite_sha256": "4c1402f8934039bdd62591021931ea686e577cb524c061cccc004a8dacc422d0"
+    }
+  ],
+  "overlaps": [],
+  "notes": [
+    "Source locked by full revision and HF tree API lfs.oid SHA256.",
+    "CC BY-NC-ND: local normalization only; redistribute_normalized=false; normalized bundles excluded by owner-maintained .gitignore; no real conformance samples distributed.",
+    "Memory audit checkpoint dump differences replace mem0 add() extraction output; raw baseline/octop lexical dumps explicitly have no extraction.",
+    "Medium 20 users / 1,387 sessions / 60,146 turns; Long 20 / 2,417 / 107,032, including 1,030 unscored generated QA sessions. Both: 14,948 memory points, 3,122 updates, 3,467 questions.",
+    "Data card #Dialogues counts pairs (30,073 / 53,516), not individual turns.",
+    "Approximately 65–70 regular sessions per user; judge calls on 20 users are tens of thousands. Acceptance is fake upstream only; live evaluation requires separately approved budget.",
+    "Data nature not established by pinned schema facts; left empty."
+  ],
+  "verification_date": "2026-10-17"
+}

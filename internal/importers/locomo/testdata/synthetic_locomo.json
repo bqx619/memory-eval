@@ -1,0 +1,169 @@
+[
+  {
+    "sample_id": "synthetic-conv-0",
+    "conversation": {
+      "speaker_a": "Aster",
+      "speaker_b": "Birch",
+      "session_1": [
+        {
+          "speaker": "Aster",
+          "dia_id": "D1:1",
+          "text": "I collect blue stones.",
+          "img_url": "synthetic://image",
+          "blip_caption": "synthetic caption",
+          "query": "private image search",
+          "re-download": true
+        },
+        {
+          "speaker": "Birch",
+          "dia_id": "D1:2",
+          "text": "I count three stones."
+        }
+      ],
+      "session_1_date_time": "12:01 am on 1 January, 2024",
+      "session_2": [
+        {
+          "speaker": "Aster",
+          "dia_id": "D2:1",
+          "text": "I collect blue stones."
+        },
+        {
+          "speaker": "Birch",
+          "dia_id": "D2:2",
+          "text": "I count three stones."
+        }
+      ],
+      "session_2_date_time": "12:02 pm on 2 January, 2024"
+    },
+    "qa": [
+      {
+        "question": "Which stones?",
+        "answer": "blue, gray",
+        "category": 1,
+        "evidence": [
+          "D1:1; D2:2"
+        ]
+      },
+      {
+        "question": "How many?",
+        "answer": 3,
+        "category": 2,
+        "evidence": [
+          "D1:2"
+        ]
+      },
+      {
+        "question": "What color?",
+        "answer": "blue; azure",
+        "category": 3,
+        "evidence": [
+          "D2:1"
+        ]
+      },
+      {
+        "question": "What do you collect?",
+        "answer": "stones",
+        "category": 4,
+        "evidence": [
+          "D1:1"
+        ]
+      },
+      {
+        "question": "Where is the museum?",
+        "category": 5,
+        "evidence": [],
+        "adversarial_answer": "PRIVATE SYNTHETIC SENTINEL"
+      }
+    ]
+  },
+  {
+    "sample_id": "synthetic-conv-1",
+    "conversation": {
+      "speaker_a": "Aster",
+      "speaker_b": "Birch",
+      "session_1": [
+        {
+          "speaker": "Aster",
+          "dia_id": "D1:1",
+          "text": "I collect blue stones.",
+          "img_url": "synthetic://image",
+          "blip_caption": "synthetic caption",
+          "query": "private image search",
+          "re-download": true
+        },
+        {
+          "speaker": "Birch",
+          "dia_id": "D1:2",
+          "text": "I count three stones."
+        }
+      ],
+      "session_1_date_time": "12:01 am on 1 January, 2024",
+      "session_2": [
+        {
+          "speaker": "Aster",
+          "dia_id": "D2:1",
+          "text": "I collect blue stones."
+        },
+        {
+          "speaker": "Birch",
+          "dia_id": "D2:2",
+          "text": "I count three stones."
+        }
+      ],
+      "session_2_date_time": "12:02 pm on 2 January, 2024",
+      "session_3": [
+        {
+          "speaker": "Aster",
+          "dia_id": "D3:1",
+          "text": "I collect blue stones."
+        },
+        {
+          "speaker": "Birch",
+          "dia_id": "D3:2",
+          "text": "I count three stones."
+        }
+      ],
+      "session_3_date_time": "12:03 pm on 3 January, 2024"
+    },
+    "qa": [
+      {
+        "question": "Which stones?",
+        "answer": "blue, gray",
+        "category": 1,
+        "evidence": [
+          "D1:1; D2:2"
+        ]
+      },
+      {
+        "question": "How many?",
+        "answer": 3,
+        "category": 2,
+        "evidence": [
+          "D1:2"
+        ]
+      },
+      {
+        "question": "What color?",
+        "answer": "blue; azure",
+        "category": 3,
+        "evidence": [
+          "D2:1"
+        ]
+      },
+      {
+        "question": "What do you collect?",
+        "answer": "stones",
+        "category": 4,
+        "evidence": [
+          "D1:1"
+        ]
+      },
+      {
+        "question": "Where is the museum?",
+        "category": 5,
+        "evidence": [],
+        "adversarial_answer": "PRIVATE SYNTHETIC SENTINEL"
+      }
+    ]
+  }
+]

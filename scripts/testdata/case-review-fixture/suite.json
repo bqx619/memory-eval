@@ -1,0 +1,66 @@
+{
+  "episodes": [
+    {
+      "cases": [
+        {
+          "cutoff": 1,
+          "gold": {
+            "evidence_ids": [
+              "a"
+            ],
+            "exhaustive": true
+          },
+          "id": "good",
+          "kind": "retrieval",
+          "query": "How should you respond?",
+          "user": "u"
+        },
+        {
+          "cutoff": 2,
+          "gold": {
+            "evidence_ids": [
+              "b"
+            ],
+            "exhaustive": true
+          },
+          "id": "failed",
+          "kind": "retrieval",
+          "query": "Can you change my settings?",
+          "user": "u"
+        },
+        {
+          "cutoff": 1,
+          "gold": {
+            "evidence_ids": [
+              "a"
+            ],
+            "exhaustive": true
+          },
+          "id": "search-failed",
+          "kind": "retrieval",
+          "query": "Which memory is relevant?",
+          "user": "u"
+        }
+      ],
+      "events": [
+        {
+          "content": "Please use concise answers.",
+          "owner": "u",
+          "role": "user",
+          "session": "s",
+          "source_id": "a"
+        },
+        {
+          "content": "Ask before changing my settings.",
+          "owner": "u",
+          "role": "user",
+          "session": "s",
+          "source_id": "b"
+        }
+      ],
+      "id": "episode"
+    }
+  ],
+  "suite_id": "work-fixture",
+  "track": "retrieval-smoke"
+}

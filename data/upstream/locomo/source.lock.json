@@ -1,0 +1,84 @@
+{
+  "dataset_id": "snap-research/locomo",
+  "source_url": "https://github.com/snap-research/locomo",
+  "revision": "3eb6f2c585f5e1699204e3c3bdf7adc5c28cb376",
+  "revision_note": "main as of 2024-08-13; data/locomo10.json and task_eval/*.py blobs are identical to the earlier research-pinned commit cbfbc1dba6bc53d00625212a0f22d55ffee7c1fc, which predates LICENSE.txt",
+  "license_ack": {
+    "id": "CC-BY-NC-4.0",
+    "source": "LICENSE.txt in repository (added 2024-08-10, commit a9f0a462c37e)",
+    "acknowledged_by": "claude (manual review of LICENSE.txt and README.MD)",
+    "noncommercial": true,
+    "no_derivatives": false,
+    "share_alike": false,
+    "redistribute_normalized": true,
+    "note": "NonCommercial: evaluation use only; normalized copies carry attribution and the NC marker; images are not released upstream (text-only)"
+  },
+  "files": [
+    {
+      "path": "locomo10.json",
+      "upstream_path": "data/locomo10.json",
+      "bytes": 2805274,
+      "sha256": "79fa87e90f04081343b8c8debecb80a9a6842b76a7aa537dc9fdf651ea698ff4",
+      "git_blob_sha1": "d95b872480b413d935821fdc3c84f8a8f5f29e73",
+      "expected_git_blob_sha1": "d95b872480b413d935821fdc3c84f8a8f5f29e73",
+      "verified": true
+    },
+    {
+      "path": "README.MD",
+      "upstream_path": "README.MD",
+      "bytes": 7109,
+      "sha256": "9f8e6fd00a3400aa687109f40ed53715f0a2c028ee3f8c465bdfa96475640e8a",
+      "git_blob_sha1": "8418f7637a75434f76ea1531e0c340996962c488",
+      "expected_git_blob_sha1": "8418f7637a75434f76ea1531e0c340996962c488",
+      "verified": true
+    },
+    {
+      "path": "LICENSE.txt",
+      "upstream_path": "LICENSE.txt",
+      "bytes": 19347,
+      "sha256": "41003d4a74749c0220e33dd415042164b5a1093ed401f36277234f772d22d3d0",
+      "git_blob_sha1": "fe463e0f7888bbf8b82e42d55f5743508ddafb7e",
+      "expected_git_blob_sha1": "fe463e0f7888bbf8b82e42d55f5743508ddafb7e",
+      "verified": true
+    },
+    {
+      "path": "task_eval/evaluation.py",
+      "upstream_path": "task_eval/evaluation.py",
+      "bytes": 9441,
+      "sha256": "8e3be5d57ff2ff9ec5cd05939592f468c5f3f1fd95d13e431932bdf6bf0fd6fd",
+      "git_blob_sha1": "8f597dd687e66832da1f6f04a169e05622049576",
+      "expected_git_blob_sha1": "8f597dd687e66832da1f6f04a169e05622049576",
+      "verified": true
+    },
+    {
+      "path": "task_eval/evaluation_stats.py",
+      "upstream_path": "task_eval/evaluation_stats.py",
+      "bytes": 8398,
+      "sha256": "d36bf596de05ea6f1c355e433167a8cd704bea3a3745277c650ac0c464bba139",
+      "git_blob_sha1": "3283edf03b047175fe28714944e9db3d9cddf549",
+      "expected_git_blob_sha1": "3283edf03b047175fe28714944e9db3d9cddf549",
+      "verified": true
+    },
+    {
+      "path": "task_eval/evaluate_qa.py",
+      "upstream_path": "task_eval/evaluate_qa.py",
+      "bytes": 4381,
+      "sha256": "dde7c1c6b5501486f96ce31398d6e49de76abbfa656e980b137e54fc69e9f6ee",
+      "git_blob_sha1": "c3e888ce910c614d22faddab811aa90271f316a5",
+      "expected_git_blob_sha1": "c3e888ce910c614d22faddab811aa90271f316a5",
+      "verified": true
+    },
+    {
+      "path": "task_eval/gpt_utils.py",
+      "upstream_path": "task_eval/gpt_utils.py",
+      "bytes": 15800,
+      "sha256": "5fc977375878199735acd28fba5ae6f4d657fa0e000c0d2918a90c07b6035793",
+      "git_blob_sha1": "64d65dfb6e36e710f8bbbffa5e7764380fe97a7d",
+      "expected_git_blob_sha1": "64d65dfb6e36e710f8bbbffa5e7764380fe97a7d",
+      "verified": true
+    }
+  ],
+  "fetched_at": "2026-10-17T01:16:35Z",
+  "fetched_by": "curl (manual, pre-Go-fetch; Claude)",
+  "hash_authority": "GitHub git tree API blob sha1 at the pinned commit (size + sha1 verified); sha256 computed locally"
+}

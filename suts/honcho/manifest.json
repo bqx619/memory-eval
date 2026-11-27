@@ -1,0 +1,107 @@
+{
+  "schema_version": "3",
+  "name": "honcho",
+  "variant": "local",
+  "notes": "Honcho（暂缓）：需要 Postgres+pgvector 边车与 Python 3.13，尚未真实安装；requirements.lock.txt 为空时安装直接拒绝。",
+  "adapter": {
+    "kind": "python-bridge",
+    "transport": "jsonrpc-stdio",
+    "max_frame_bytes": 16777216,
+    "request_timeout_s": 300
+  },
+  "runtime": {
+    "kind": "uv-python",
+    "python": "3.13",
+    "requirements": "requirements.in",
+    "requirements_lock": "requirements.lock.txt"
+  },
+  "bridge": {
+    "module": "adapter",
+    "class": "Adapter",
+    "config": {}
+  },
+  "process": {
+    "command": [],
+    "cwd": "{ep}/work",
+    "env": {},
+    "env_passthrough": []
+  },
+  "sandbox": {
+    "network": "open",
+    "limits": {
+      "timeout_s": 1800
+    },
+    "backend": "container"
+  },
+  "ready": {
+    "strategy": "status"
+  },
+  "declared": {
+    "project_version": "3.3.0",
+    "llm": "project-direct; unmetered",
+    "embedding": "local install-time assets; runtime downloads disabled"
+  },
+  "sidecars": [
+    {
+      "name": "postgres",
+      "kind": "postgres",
+      "preset": "postgres-pgvector-18",
+      "port": 5432,
+      "env": {
+        "POSTGRES_USER": "memeval",
+        "POSTGRES_DB": "postgres"
+      },
+      "exports": {
+        "PGHOST": "{sidecar.postgres.host}",
+        "PGPORT": "{sidecar.postgres.port}",
+        "PGUSER": "memeval",
+        "PGDATABASE": "postgres"
+      },
+      "init": [
+        [
+          "psql",
+          "-U",
+          "memeval",
+          "-d",
+          "postgres",
+          "-h",
+          "127.0.0.1",
+          "-v",
+          "ON_ERROR_STOP=1",
+          "-c",
+          "CREATE EXTENSION IF NOT EXISTS vector;"
+        ]
+      ],
+      "stop": "SIGTERM"
+    },
+    {
+      "name": "api",
+      "kind": "generic",
+      "port": 8888,
+      "command": [
+        "{python}",
+        "{project}/server.py",
+        "--host",
+        "0.0.0.0",
+        "--port",
+        "8888"
+      ],
+      "ready": {
+        "http": {
+          "url": "http://127.0.0.1:8888/health",
+          "status": 200
+        },
+        "timeout_s": 120
+      },
+      "exports": {
+        "HONCHO_BASE_URL": "http://{sidecar.api.host}:{sidecar.api.port}"
+      },
+      "stop": "SIGTERM"
+    }
+  ],
+  "telemetry_env": {
+    "DERIVER_FLUSH_ENABLED": "true"
+  },
+  "status": "deferred",
+  "deferred_reason": "P6c: server requires source installation, deriver lifecycle/metrics port, direct provider embeddings and asynchronous deletion; outside P6b-2 acceptance."
+}

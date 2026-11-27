@@ -1,0 +1,77 @@
+{
+  "id": "prefeval",
+  "name": "PrefEval",
+  "repository": "https://github.com/amazon-science/prefeval",
+  "dataset_url": "",
+  "data_nature": "",
+  "task_kinds": [
+    "rubric",
+    "mcq"
+  ],
+  "protocol_id": "prefeval",
+  "variants": [
+    "explicit-generation-t10",
+    "explicit-generation-t300",
+    "explicit-mcq-t10",
+    "implicit-choice-generation-t10"
+  ],
+  "reported_scale": {
+    "preference_question_pairs": 1000,
+    "forms": 3
+  },
+  "license": {
+    "id": "CC-BY-NC-4.0",
+    "noncommercial": true,
+    "no_derivatives": false,
+    "share_alike": false,
+    "redistribute_normalized": true,
+    "source": "https://github.com/amazon-science/prefeval"
+  },
+  "pinned_revision": "50795054b5ff5f418d2b768a331d71e480f93331",
+  "implementation_status": "imported",
+  "importer": "memeval import prefeval",
+  "suites": [
+    {
+      "path": "data/normalized/prefeval-explicit-generation-t10@50795054b5ff",
+      "suite_id": "prefeval-explicit-generation-t10@50795054b5ff",
+      "protocol_ref": "protocols/prefeval.json#explicit-generation",
+      "suite_sha256": "fcc9cf9ad7d6bde9b72aaed7a9b09d7af336f4206c8cb68136e7967ab11f62a3",
+      "import_stats_path": "data/normalized/prefeval-explicit-generation-t10@50795054b5ff/import.json"
+    },
+    {
+      "path": "data/normalized/prefeval-explicit-generation-t300@50795054b5ff",
+      "suite_id": "prefeval-explicit-generation-t300@50795054b5ff",
+      "protocol_ref": "protocols/prefeval.json#explicit-generation",
+      "suite_sha256": "648465beb384d5a04d0816256cb33512f1d52045cda2295a230b83e223c5e20f",
+      "import_stats_path": "data/normalized/prefeval-explicit-generation-t300@50795054b5ff/import.json"
+    },
+    {
+      "path": "data/normalized/prefeval-explicit-mcq-t10@50795054b5ff",
+      "suite_id": "prefeval-explicit-mcq-t10@50795054b5ff",
+      "protocol_ref": "protocols/prefeval.json#explicit-mcq",
+      "suite_sha256": "8f3024b949f713ff603fd57281816c2902a9a9ba1bd087eb0b265da1d52101df",
+      "import_stats_path": "data/normalized/prefeval-explicit-mcq-t10@50795054b5ff/import.json"
+    },
+    {
+      "path": "data/normalized/prefeval-implicit-choice-generation-t10@50795054b5ff",
+      "suite_id": "prefeval-implicit-choice-generation-t10@50795054b5ff",
+      "protocol_ref": "protocols/prefeval.json#implicit-choice-generation",
+      "suite_sha256": "906eec1e6371cef6b832ae99a512eb66cb1341887f31dbbc587085b68293a8e4",
+      "import_stats_path": "data/normalized/prefeval-implicit-choice-generation-t10@50795054b5ff/import.json"
+    }
+  ],
+  "overlaps": [],
+  "notes": [
+    "Source lock: 204 extracted files verified, commit 50795054b5ff5f418d2b768a331d71e480f93331; CC BY-NC 4.0 attribution retained.",
+    "Implementation: design/p4a-implementation-notes.md; synthetic-only conformance fixtures.",
+    "scale: each registered suite has 1000 tasks and 20 topics; 4 variants repeat tasks under different history/task conditions, not 4000 unique preference pairs.",
+    "Canonical topic counts unequal; native JSON fields accepted; unmatched travel_hotel copy.json (52 MCQ rows) excluded.",
+    "MCQ preference/question uses upstream mcq_options load path; 30 preferences differ from explicit_preference.",
+    "Official realtime assistant pref_generation omitted; Go permutation differs from Python and is recorded per case; judge fidelity partial.",
+    "Other form/task/inter-turn combinations are supported but not initially registered.",
+    "Data provenance category not established by locally vendored facts; data_nature left empty.",
+    "Separate dataset URL not established; repository is recorded source."
+  ],
+  "verification_date": "2026-10-17",
+  "lock_path": "data/upstream/prefeval/source.lock.json"
+}

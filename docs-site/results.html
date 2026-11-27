@@ -1,0 +1,541 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title> memeval evaluation results </title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<style>
+/* Tokens shared with docs-site/index.html and design/report-ui/report.css */
+:root{
+  --page:#f9f9f7; --surface:#fcfcfb; --surface-2:#f3f3f0;
+  --ink:#0b0b0b; --ink-2:#52514e; --muted:#898781;
+  --grid:#e1e0d9; --axis:#c3c2b7; --ring:rgba(11,11,11,.10);
+  --accent:#2a78d6; --accent-ink:#184f95; --warm:#eb6834; --good:#0ca30c; --good-text:#006300; --warn:#fab219; --warn-text:#8a5a00; --critical:#d03b3b;
+  --s1:#2a78d6; --s2:#eb6834; --s3:#1baf7a; --s4:#8e63d6; --s5:#c2185b; --s6:#5c6b73;
+  --radius:10px;
+  --font:system-ui,-apple-system,"Segoe UI","PingFang SC","Hiragino Sans GB","Microsoft YaHei",sans-serif;
+  --mono:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
+}
+@media (prefers-color-scheme:dark){
+  :root:not([data-theme="light"]){
+    color-scheme:dark;
+    --page:#0d0d0d; --surface:#1a1a19; --surface-2:#232321;
+    --ink:#f0efec; --ink-2:#c3c2b7; --muted:#898781;
+    --grid:#2c2c2a; --axis:#383835; --ring:rgba(255,255,255,.10);
+    --accent:#3987e5; --accent-ink:#86b6ef; --warm:#d95926; --good-text:#0ca30c; --warn-text:#f5c04a;
+    --s1:#3987e5; --s2:#d95926; --s3:#199e70; --s4:#a98be8; --s5:#e06b9a; --s6:#8e9ba3;
+  }
+}
+:root[data-theme="dark"]{
+  color-scheme:dark;
+  --page:#0d0d0d; --surface:#1a1a19; --surface-2:#232321;
+  --ink:#f0efec; --ink-2:#c3c2b7; --muted:#898781;
+  --grid:#2c2c2a; --axis:#383835; --ring:rgba(255,255,255,.10);
+  --accent:#3987e5; --accent-ink:#86b6ef; --warm:#d95926; --good-text:#0ca30c; --warn-text:#f5c04a;
+  --s1:#3987e5; --s2:#d95926; --s3:#199e70; --s4:#a98be8; --s5:#e06b9a; --s6:#8e9ba3;
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--page);color:var(--ink);font:15px/1.6 var(--font);-webkit-font-smoothing:antialiased}
+a{color:var(--accent-ink);text-decoration:none;border-bottom:1px solid var(--grid)}
+a:hover,a:focus-visible{border-bottom-color:var(--accent)}
+:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+code,.mono{font-family:var(--mono);font-size:.87em}
+code{background:var(--surface-2);padding:.1em .35em;border-radius:5px}
+.wrap{max-width:1240px;margin:0 auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));padding-block:0 80px}
+header.top{padding:36px 0 20px;border-bottom:1px solid var(--grid);margin-bottom:22px;display:flex;flex-wrap:wrap;gap:12px 24px;align-items:flex-end;justify-content:space-between}
+.eyebrow{font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);margin:0 0 8px}
+h1{font-size:clamp(26px,3.6vw,36px);line-height:1.15;margin:0 0 8px;letter-spacing:-.01em;text-wrap:balance}
+.lede{color:var(--ink-2);max-width:72ch;margin:0}
+.meta{display:flex;flex-wrap:wrap;gap:8px;margin-top:12px}
+.chip{display:inline-block;border:1px solid var(--grid);border-radius:999px;padding:3px 10px;font-size:12.5px;color:var(--ink-2);background:var(--surface)}
+h2{font-size:22px;margin:0 0 12px;letter-spacing:-.005em;text-wrap:balance}
+h3{font-size:16px;margin:18px 0 8px}
+section{margin:0 0 36px;scroll-margin-top:16px}
+.muted{color:var(--muted)}
+.note{border-left:3px solid var(--accent);background:var(--surface);padding:10px 14px;border-radius:0 var(--radius) var(--radius) 0;margin:12px 0}
+.note.warn{border-left-color:var(--warn)}
+.bar{display:flex;flex-wrap:wrap;gap:10px;align-items:center;margin:12px 0}
+.bar label{display:flex;flex-direction:column;gap:3px;font-size:12px;color:var(--ink-2)}
+select,input[type=search],button{font:inherit;color:var(--ink);background:var(--surface);border:1px solid var(--axis);border-radius:8px;padding:6px 10px}
+button{cursor:pointer}
+button.primary{background:var(--accent);color:#fff;border-color:var(--accent)}
+button.primary[disabled]{opacity:.5;cursor:default}
+button.ghost{background:transparent}
+.scroll{overflow-x:auto;margin:10px 0}
+table.tbl{border-collapse:collapse;width:100%;font-size:13.5px}
+table.tbl th,table.tbl td{text-align:left;vertical-align:top;padding:7px 10px;border-bottom:1px solid var(--grid)}
+table.tbl th{font-weight:600;color:var(--ink-2);background:var(--surface-2);white-space:nowrap;position:sticky;top:0}
+table.tbl td.num,table.tbl th.num{font-variant-numeric:tabular-nums;text-align:right;white-space:nowrap}
+table.tbl tr.sel td{background:color-mix(in srgb,var(--accent) 8%,transparent)}
+table.tbl tbody tr:hover td{background:color-mix(in srgb,var(--accent) 5%,transparent)}
+.n{color:var(--muted);font-size:11.5px;margin-left:3px}
+.info{display:inline-flex;align-items:center;justify-content:center;width:17px;height:17px;border-radius:50%;border:1px solid var(--axis);background:transparent;color:var(--ink-2);font-size:11px;line-height:1;padding:0;margin-left:4px;vertical-align:middle}
+.info:hover{border-color:var(--accent);color:var(--accent-ink)}
+.pop{position:absolute;z-index:50;max-width:min(420px,calc(100vw - 32px));background:var(--surface);border:1px solid var(--axis);border-radius:var(--radius);box-shadow:0 8px 28px var(--ring);padding:12px 14px;font-size:13px;line-height:1.5}
+.pop h4{margin:0 0 6px;font-size:14px}
+.pop dl{display:grid;grid-template-columns:max-content 1fr;gap:3px 10px;margin:6px 0 0}
+.pop dt{color:var(--muted)}
+.pop dd{margin:0}
+.delta{font-size:12px;margin-left:6px;font-variant-numeric:tabular-nums}
+.delta.up{color:var(--good-text)} .delta.down{color:var(--critical)} .delta.flat{color:var(--muted)}
+.badge{display:inline-block;font-size:11.5px;border-radius:6px;padding:1px 7px;border:1px solid var(--grid);background:var(--surface-2);color:var(--ink-2);white-space:nowrap}
+.badge.ok{color:var(--good-text);border-color:var(--good-text)}
+.badge.bad{color:var(--critical);border-color:var(--critical)}
+.badge.warn{color:var(--warn-text);border-color:var(--warn-text)}
+.kv{display:grid;grid-template-columns:max-content 1fr;gap:4px 16px;margin:8px 0}
+.kv dt{color:var(--ink-2);white-space:nowrap}
+.kv dd{margin:0;min-width:0;overflow-wrap:anywhere}
+.cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:12px}
+.card{background:var(--surface);border:1px solid var(--grid);border-radius:var(--radius);padding:12px 14px;min-width:0}
+.drop{border:1.5px dashed var(--axis);border-radius:var(--radius);padding:14px;text-align:center;color:var(--ink-2);background:var(--surface)}
+.drop.over{border-color:var(--accent);background:color-mix(in srgb,var(--accent) 6%,transparent)}
+.rowhead{font-weight:600}
+.grp td{background:var(--surface-2)!important;color:var(--ink-2);font-size:12px;letter-spacing:.06em;text-transform:uppercase}
+details.sec{border:1px solid var(--grid);border-radius:var(--radius);background:var(--surface);margin:10px 0}
+details.sec summary{cursor:pointer;padding:10px 14px;font-weight:600}
+details.sec .body{padding:0 14px 12px}
+footer{border-top:1px solid var(--grid);padding-top:14px;color:var(--muted);font-size:13px;margin-top:28px}
+.chart{background:var(--surface);border:1px solid var(--grid);border-radius:var(--radius);padding:10px 12px 6px;margin:10px 0}
+.chart svg{width:100%;height:auto;display:block;max-width:100%}
+.chart .grid{stroke:var(--grid);stroke-width:1}
+.chart .axis{stroke:var(--axis);stroke-width:1}
+.chart .lbl{font:11px var(--font);fill:var(--ink-2)}
+.chart .ttl{font:12.5px var(--font);fill:var(--ink)}
+.chart .ln{fill:none;stroke-width:2.5;stroke-linejoin:round;stroke-linecap:round}
+.chart .pt{cursor:pointer}
+.chart .pt:hover{r:7}
+.chart .sr{transition:opacity .15s}
+.legend{display:flex;flex-wrap:wrap;gap:6px 14px;font-size:12.5px;color:var(--ink-2);margin:6px 2px 2px}
+.legend .sw{display:inline-block;width:12px;height:12px;border-radius:3px;vertical-align:-2px;margin-right:6px}
+@media (max-width:720px){header.top{padding-top:24px}.kv{grid-template-columns:1fr}.pop dl{grid-template-columns:1fr}}
+
+/* English labels may be longer than the original interface text. */
+h1,h2,h3,button,label,summary,.chip,.badge,.k,.kv dt{overflow-wrap:anywhere}
+button,.chip,.badge{max-width:100%;white-space:normal}
+.original-record{max-width:100%;min-width:0}.original-record pre{white-space:pre-wrap;overflow-wrap:anywhere;max-height:24rem;overflow:auto}
+@media(max-width:600px){.kv{grid-template-columns:1fr}.kv dt{white-space:normal}.kv dd{margin-bottom:.5rem}select{max-width:100%}}
+
+code{overflow-wrap:anywhere} pre code{overflow-wrap:normal}
+@media(max-width:600px){label{max-width:100%;min-width:0;flex-wrap:wrap}select{min-width:0!important;max-width:calc(100vw - 40px)!important}label select{flex-shrink:1}}
+
+.tbl .badge{white-space:nowrap;overflow-wrap:normal;max-width:none}
+</style>
+</head>
+<body>
+<div class="wrap">
+<header class="top">
+  <div>
+    <p class="eyebrow"> memeval · Evaluation results </p>
+    <h1> Result cards and comparisons </h1>
+    <p class="lede"> Each SUT × dataset evaluation produces a standard result card. Browse collected cards, inspect details, or compare 2–6 cards. Metric ⓘ controls explain definitions, formulas, direction, and aggregation. Data is extracted by <code>memeval results build</code> from <code>reports/</code> into <code>docs-site/results/index.js</code>.</p>
+    <div class="meta" id="meta"></div>
+  </div>
+  <nav><a href="index.html"> ← Documentation </a> · <a href="cases.html"> Case review </a> · <a href="beam.html"> BEAM 100K overview </a> · <a href="#trend"> Trends </a> · <a href="#glossary"> Metric glossary </a></nav>
+</header>
+<p class="note">Question text, answers, traces, and historical metadata are original recorded content and retain their source language. Interface labels are English; source records are not rewritten.</p>
+
+<main>
+<section id="list">
+  <h2> Collected evaluations </h2>
+  <div class="bar">
+    <label> Dataset <select id="f-suite"><option value=""> All </option></select></label>
+    <label> System under test <select id="f-sut"><option value=""> All </option></select></label>
+    <label> Mode <select id="f-mode"><option value=""> All </option></select></label>
+    <label> Network <select id="f-net"><option value=""> All </option></select></label>
+    <label> Search <input type="search" id="f-q" placeholder="Variant, run ID, category…"></label>
+    <label style="flex-direction:row;align-items:center;gap:6px;align-self:flex-end"><input type="checkbox" id="f-base"> Show baseline controls (null / recent / fullcontext) </label>
+    <span style="flex:1"></span>
+    <button id="btn-compare" class="primary" disabled> Compare selected (0) </button>
+    <button id="btn-clear" class="ghost"> Clear selection </button>
+  </div>
+  <div class="scroll"><table class="tbl" id="tbl">
+    <thead><tr><th></th><th> SUT / variant </th><th> Dataset </th><th> Run conditions </th><th> Isolation </th><th> State </th><th> Primary metric </th><th class="num"> Wall time </th><th> Time </th><th></th></tr></thead>
+    <tbody id="rows"></tbody>
+  </table></div>
+  <p class="muted" id="count"></p>
+  <p class="muted" style="font-size:12.5px"><b>bm25</b> is an in-process lexical reference; null / recent / fullcontext are other baseline controls, hidden by default. Control variants use alternative configurations of the same project, such as mastra/history. Controls help explain memory/retrieval effects without presuming a winner. Compare data, mode, budget, models, coverage, and denominators. </p>
+  <div class="drop" id="drop"> Drag any <code>report.json</code> here (or <label style="text-decoration:underline;cursor:pointer"> choose a file <input type="file" id="file" accept="application/json" multiple hidden></label> ) to extract a card in the browser for listing and comparison. The stored index is unchanged. </div>
+</section>
+
+<section id="trend">
+  <h2> Charts </h2>
+  <p class="muted" style="font-size:13px"> Ordered bars show the latest primary metric per configuration on the selected dataset, starting at zero; a vertical dashed line marks BM25 and hollow bars mark controls. Numeric order is not a ranking across unequal conditions. Trends show configurations with repeated runs. Hover for values and n. </p>
+  <div class="bar">
+    <label> Dataset <select id="t-suite"></select></label>
+    <label> Metric <select id="t-metric"></select></label>
+  </div>
+  <div class="chart" id="rank-chart"></div>
+  <div class="bar"><label> Trends: configurations with repeated runs <select id="t-series"></select></label></div>
+  <div class="chart" id="trend-chart"></div>
+</section>
+
+<section id="detail" hidden>
+  <h2> Details <button class="ghost" id="detail-close"> Close </button></h2>
+  <div id="detail-body"></div>
+</section>
+
+<section id="compare" hidden>
+  <h2> Compare <button class="ghost" id="compare-close"> Close </button></h2>
+  <div id="compare-gate"></div>
+  <div id="compare-profile"></div>
+  <div class="scroll"><table class="tbl" id="cmp"><thead></thead><tbody></tbody></table></div>
+  <p class="muted"> Deltas use the first column as reference. Colors follow metric direction: green improves, red worsens. Incompatible conditions suppress deltas. </p>
+</section>
+
+<section id="glossary">
+  <h2> Metric glossary </h2>
+  <p class="muted" id="glossary-src"></p>
+  <div class="scroll"><table class="tbl" id="gloss"><thead><tr><th> Metric </th><th> Group </th><th> Definition </th><th> Formula / range / direction </th><th> Aggregation and notes </th></tr></thead><tbody></tbody></table></div>
+</section>
+</main>
+<footer> Result cards v1 · Definitions: <code>design/p10-results-site.md</code>; original report v2 files in <code>reports/&lt;run&gt;/report.json</code> (not committed). </footer>
+</div>
+<div class="pop" id="pop" hidden role="dialog"></div>
+
+<script src="results/index.js"></script>
+<script>
+(function(){
+"use strict";
+const $ = (s, r=document) => r.querySelector(s);
+const el = (t, a={}, ...kids) => { const e = document.createElement(t); for (const [k,v] of Object.entries(a)) { if (v==null) continue; if (k==="text") e.textContent = v; else if (k==="html") e.innerHTML = v; else if (k.startsWith("on")) e.addEventListener(k.slice(2), v); else e.setAttribute(k, v); } for (const k of kids.flat()) if (k!=null) e.append(k.nodeType ? k : document.createTextNode(String(k))); return e; };
+const fmt = v => v==null ? "—" : (typeof v==="number" ? (Number.isInteger(v) ? String(v) : v.toFixed(3)) : String(v));
+const secs = s => s==null ? "—" : (s>=3600 ? (s/3600).toFixed(1)+" h" : s>=60 ? (s/60).toFixed(1)+" min" : Math.round(s)+" s");
+const dt = s => s ? s.replace("T"," ").replace(/\.\d+Z?$/,"").replace("Z","") : "—";
+
+// ---- built-in glossary copy (used only when the index carries none) ----
+const BUILTIN = [
+ {id:"hit",group:"Memory-only retrieval",name_zh:"Hit",definition_zh:"At least one gold evidence item appears in top-k.",formula:"1[|retrieved∩gold|>0]",range:"0/1",higher_is_better:true,aggregation:"Mean only over gold-bearing cases; n = cases with gold",caveats:[]},
+ {id:"recall",group:"Memory-only retrieval",name_zh:"Evidence recall",definition_zh:"Gold evidence hits in top-k divided by total gold evidence.",formula:"|retrieved∩gold| / |gold|",range:"[0,1]",higher_is_better:true,aggregation:"Mean only over cases with gold",caveats:["Evidence units follow suite evidence_unit (event or session)"]},
+ {id:"mrr",group:"Memory-only retrieval",name_zh:"Reciprocal rank of first hit",definition_zh:"Reciprocal rank of the first gold hit; zero without a hit.",formula:"1 / rank(first hit)",range:"[0,1]",higher_is_better:true,aggregation:"Mean only over cases with gold",caveats:[]},
+ {id:"ndcg",group:"Memory-only retrieval",name_zh:"Normalized discounted cumulative gain",definition_zh:"Discounted gain at hit ranks divided by ideal gain, with min(gold count, k) ideal positions.",formula:"Σ 1/log2(rank+1) / Σ_{i<min(|gold|,k)} 1/log2(i+2)",range:"[0,1]",higher_is_better:true,aggregation:"Mean only over cases with gold",caveats:["Deduplicate first-seen references before truncating to k"]},
+ {id:"all_evidence",group:"Memory-only retrieval",name_zh:"All evidence",definition_zh:"All gold evidence appears in top-k.",formula:"1[|retrieved∩gold|=|gold|]",range:"0/1",higher_is_better:true,aggregation:"Mean only over cases with gold",caveats:[]},
+ {id:"precision",group:"Memory-only retrieval",name_zh:"Precision",definition_zh:"Hits divided by returned count; zero for an empty return with nonempty gold.",formula:"|retrieved∩gold| / |retrieved|",range:"[0,1]",higher_is_better:true,aggregation:"Only exhaustive cases; nonempty returns against empty gold score zero, so n includes negative cases",caveats:["With fixed top-k, the k limit can lower precision"]},
+ {id:"empty_result_correct",group:"Memory-only retrieval",name_zh:"Correct empty result",definition_zh:"For empty-gold cases, returning nothing scores 1.",formula:"1[|retrieved|=0]",range:"0/1",higher_is_better:true,aggregation:"Only empty-gold, exhaustive cases",caveats:["Measures restraint on irrelevant or out-of-scope queries"]},
+ {id:"status_counts",group:"Run status",name_zh:"Case status distribution",definition_zh:"Counts of scored / error / invalid / unsupported cases.",formula:"",range:"",higher_is_better:null,aggregation:"Means use scored cases; always inspect coverage",caveats:["invalid includes illegal references (unknown, future, duplicate); error indicates execution failure"]},
+ {id:"scoring_coverage",group:"Run status",name_zh:"Scoring coverage",definition_zh:"Scored cases divided by planned cases.",formula:"scored / planned",range:"[0,1]",higher_is_better:true,aggregation:"",caveats:[]},
+ {id:"wall_seconds",group:"Cost",name_zh:"Wall time",definition_zh:"Total run wall-clock seconds.",formula:"",range:"",higher_is_better:false,aggregation:"Host load affects timing; compare under matching environments and periods",caveats:[]},
+ {id:"cost.sut.prompt_tokens",group:"Cost",name_zh:"SUT prompt tokens",definition_zh:"Total SUT prompt tokens sent through the gateway, metered by the governor.",formula:"",range:"",higher_is_better:false,aggregation:"Includes retries",caveats:["cached_tokens is the cached subset"]},
+ {id:"cost.sut.calls",group:"Cost",name_zh:"SUT call count",definition_zh:"Upstream gateway attempts, including retries.",formula:"",range:"",higher_is_better:false,aggregation:"",caveats:[]},
+];
+
+// English presentation for legacy glossary records; source records remain intact.
+const hasLegacyText = value => /[\u3400-\u9fff]/.test(JSON.stringify(value||""));
+const metricDisplay = (g, fallback) => {
+  if (!hasLegacyText(g)) return g;
+  const f = fallback.find(x=>x.id===g.id);
+  const rangeLabels = {"\u5e03\u5c14\u503c":"boolean","\u975e\u8d1f\u6574\u6570":"nonnegative integer","\u975e\u8d1f\u6574\u6570\u6620\u5c04":"map of nonnegative integers"};
+  return {...g, range:rangeLabels[g.range]||String(g.range||"").replace(/\u6216/g,"or"), group:f?.group||(!hasLegacyText(g.group)?g.group:"Recorded metric"), name_zh:f?.name_zh||g.id,
+    definition_zh:f?.definition_zh||"See Original recorded content for the source definition.",
+    formula:!hasLegacyText(g.formula)?g.formula:(f?.formula||"See Original recorded content"),
+    aggregation:f?.aggregation||(!hasLegacyText(g.aggregation)?g.aggregation:"See Original recorded content"),
+    caveats:f?.caveats||((g.caveats||[]).filter(x=>!hasLegacyText(x))), _original:g};
+};
+const originalMetric = g => g?._original ? el("details",{class:"original-record"}, el("summary",{text:"Original recorded content"}), el("pre",{text:JSON.stringify(g._original,null,2)})) : null;
+
+const data = window.MEMEVAL_RESULTS || {};
+const glossary = (data.glossary && data.glossary.length) ? data.glossary.map(g=>metricDisplay(g, BUILTIN)) : BUILTIN;
+$("#glossary-src").textContent = (data.glossary && data.glossary.length) ? `From memeval results glossary (${glossary.length} items)` : "No glossary in index; displaying the built-in copy matching design/p10-results-site.md §3";
+const defOf = id => { const cands = [id, id.replace(/^(memory_only|official)\./,""), id.replace(/^(memory_only|official)\./,"").replace(/@\d+$/,"@k")]; for (const c of cands){ const g = glossary.find(g => g.id===c) || glossary.find(g => g.id.includes("@k") && c.startsWith(g.id.split("@k")[0])); if (g) return g; } return null; };
+// scores may be nested groups (e.g. memory_only / official → longmemeval_official.session.ndcg_any@10); flatten to dotted ids with {mean,n} or scalar leaves.
+const flatScores = (obj, prefix="") => { const out = {}; const isLeaf = v => v==null || typeof v!=="object" || ("mean" in v && !Object.keys(v).some(k => k!=="mean" && k!=="n")); for (const [k,v] of Object.entries(obj||{})) { const id = prefix ? prefix+"."+k : k; if (isLeaf(v)) { if (v!=null && !(typeof v==="object" && v.mean==null)) out[id] = v; } else Object.assign(out, flatScores(v, id)); } return out; };
+
+// ---- cards ----
+let cards = (data.cards || []).slice();
+const imported = [];
+const selected = new Set();
+const sutLabel = c => `${c.subject?.name||"?"} / ${c.subject?.variant||"?"}`;
+// Controls: Tier C in-process baselines (null / recent / fullcontext are hidden by default; bm25 is the floor line and stays visible);
+// a Tier A/D variant that declares no embedding and no LLM is a project's own no-retrieval control (e.g. mastra/history).
+const isBaseline = c => c.run?.isolation?.tier==="C";
+const isFloor = c => isBaseline(c) && c.subject?.name==="bm25";
+const isControl = c => !isBaseline(c) && c.subject?.declared && c.subject.declared.embedding==="none" && c.subject.declared.llm==="none";
+const BASELINE_NOTES = {bm25:"In-process BM25 lexical retrieval (k1=1.5, b=0.75); performance depends on data and budget.", recent:"The latest k events, ignoring query content: a recency control.", null:"Returns no memories. Abstention questions and fixed-reader answer scores need not be zero.", fullcontext:"Supplies visible events to fixed_reader under its context budget. A full-history input control, not a guaranteed upper bound."};
+const variantNotes = c => c.subject?.variant_notes || (isBaseline(c) ? BASELINE_NOTES[c.subject?.name] : null) || null;
+const roleBadge = c => isFloor(c) ? el("span",{class:"badge",text:"BM25 lexical reference",title:"In-process lexical baseline for interpreting retrieval under matching conditions"}) : isBaseline(c) ? el("span",{class:"badge",text:"Baseline control",title:"In-process reference, not an external SUT"}) : isControl(c) ? el("span",{class:"badge",text:"Control variant",title:"A configuration without a retrieval model, used to compare variants of the same project"}) : null;
+const headline = c => { const want = (c.results?.headline && c.results.headline.length) ? c.results.headline : ["recall","ndcg"]; const keys = Object.keys(c.results?.metrics||{}); return want.map(id => keys.includes(id) ? id : (keys.find(k => k.endsWith("_"+id) || k.endsWith("."+id)) || id)); };
+// Cards carry each quantity once: the card builder already drops scores entries that duplicate results.metrics (design/p10-results-site.md §2).
+const scoresOf = c => flatScores(c.results?.scores);
+const metricOf = (c, id) => { const m = (c.results?.metrics||{})[id]; if (m) return m; const v = scoresOf(c)[id]; if (v==null) return null; return typeof v==="object" ? v : {mean:v, n:null}; };
+const condKeys = [["dataset.suite_sha256","Dataset fingerprint"],["run.mode","Mode"],["run.top_k","top-k"],["run.reset_policy","Reset policy"],["dataset.protocol.variant","Protocol variant"]];
+const get = (o, path) => path.split(".").reduce((a,k) => a==null ? a : a[k], o);
+
+function infoBtn(id){ const d = defOf(id); return el("button",{class:"info",type:"button","aria-label":`${id} explanation`,onclick:e=>showPop(e.currentTarget, id, d)}, "i"); }
+function showPop(anchor, id, d){
+  const pop = $("#pop"); pop.innerHTML = "";
+  pop.append(el("h4",{}, d ? `${d.name_zh||id} ` : id, el("code",{text:id})));
+  if (!d) pop.append(el("p",{class:"muted",text:"No glossary entry for this metric; add it to internal/scoring/glossary.go."}));
+  else {
+    pop.append(el("p",{text:d.definition_zh||""}));
+    const dl = el("dl",{});
+    const row=(k,v)=>{ if(v) { dl.append(el("dt",{text:k}), el("dd",{}, v)); } };
+    row("Formula", d.formula ? el("code",{text:d.formula}) : null); row("Range", d.range); row("Direction", d.higher_is_better==null ? "No direction" : d.higher_is_better ? "Higher is better" : "Lower is better"); row("Aggregation", d.aggregation); row("Notes", (d.caveats||[]).join("; "));
+    pop.append(dl);
+    const original = originalMetric(d); if (original) pop.append(original);
+  }
+  pop.hidden = false;
+  const r = anchor.getBoundingClientRect(); const top = window.scrollY + r.bottom + 6; let left = window.scrollX + r.left; left = Math.min(left, window.scrollX + document.documentElement.clientWidth - pop.offsetWidth - 16);
+  pop.style.top = top+"px"; pop.style.left = Math.max(16,left)+"px";
+}
+document.addEventListener("click", e => { if (!e.target.closest(".pop") && !e.target.closest(".info")) $("#pop").hidden = true; });
+document.addEventListener("keydown", e => { if (e.key==="Escape") $("#pop").hidden = true; });
+
+function metricCell(c, id){
+  const m = metricOf(c, id); if (!m) return el("span",{class:"muted",text:"—"});
+  return el("span",{}, fmt(m.mean), m.n!=null ? el("span",{class:"n",text:`n=${m.n}`}) : null, infoBtn(id));
+}
+function statusBadge(c){
+  const sc = c.results?.status_counts||{}; const planned = Object.values(sc).reduce((a,b)=>a+b,0);
+  const bad = (sc.error||0)+(sc.invalid||0)+(sc.ingest_failed||0); const cls = bad ? (sc.scored ? "warn":"bad") : "ok";
+  return el("span",{class:"badge "+cls, text:`scored ${sc.scored||0}/${planned}${bad?` · Failed ${bad}`:""}${sc.unsupported?` · Unsupported ${sc.unsupported}`:""}`});
+}
+const ISO_LEGEND = {
+  tier:{D:"OCI Linux container: read-only rootfs, non-root, no capabilities, separate namespaces, fresh creation and teardown per runtime episode", C:"In-process: bm25 / recent / null / fullcontext run inside the evaluator without containers or network calls"},
+  net:{none:"No SUT runtime egress: external DNS/TCP/TLS blocked. Build/download and evaluator calls are disclosed separately.", gateway:"Only the configured LLM gateway is reachable, through a single-destination metered governor", open:"Unrestricted egress, disclosed in the report", inherit:"Legacy Tier C report value: no container; inherits evaluator network. Baselines are pure functions and issue no requests."}
+};
+function isoBadge(c){ const i = c.run?.isolation||{}; const net = i.network_mode||"—"; const ok = i.run_clean!==false && (i.network_enforced!==false || net==="open" || i.tier==="C"); const label = i.tier==="C" ? "Tier C · In-process baseline, no network calls" : `Tier ${i.tier||"?"} · ${net}${i.network_enforced===false && net!=="open" ? "(not enforced)" : ""}${i.run_clean===false?" · Residue present":""}`; const b = el("span",{class:"badge "+(ok?"ok":"warn"), text:label}); const info = el("button",{class:"info",type:"button","aria-label":"Isolation details",onclick:e=>{ const pop=$("#pop"); pop.innerHTML=""; pop.append(el("h4",{text: i.tier==="C" ? "Tier C · In-process baseline" : `Tier ${i.tier||"?"} · Network ${net}`}), el("p",{text:ISO_LEGEND.tier[i.tier]||"Unknown isolation tier"}), el("p",{text:ISO_LEGEND.net[net]||"Unknown network mode"}), el("p",{class:"muted",text:`network_enforced=${i.network_enforced} · run_clean=${i.run_clean} · selftest_passed=${i.selftest_passed}`})); pop.hidden=false; const r=e.currentTarget.getBoundingClientRect(); pop.style.top=(window.scrollY+r.bottom+6)+"px"; pop.style.left=Math.max(16,Math.min(window.scrollX+r.left, window.scrollX+document.documentElement.clientWidth-pop.offsetWidth-16))+"px"; }}, "i"); return el("span",{}, b, info); }
+
+function fillFilters(){
+  const opts = (sel, vals) => { const cur = sel.value; sel.innerHTML = ""; sel.append(el("option",{value:"",text:"All"})); [...vals].sort().forEach(v => sel.append(el("option",{value:v,text:v}))); sel.value = cur; };
+  const all = cards.concat(imported);
+  opts($("#f-suite"), new Set(all.map(c=>c.dataset?.suite_id).filter(Boolean)));
+  opts($("#f-sut"), new Set(all.map(c=>c.subject?.name).filter(Boolean)));
+  opts($("#f-mode"), new Set(all.map(c=>c.run?.mode).filter(Boolean)));
+  opts($("#f-net"), new Set(all.map(c=>c.run?.isolation?.network_mode).filter(Boolean)));
+}
+function visible(){
+  const q = $("#f-q").value.trim().toLowerCase();
+  const showBase = $("#f-base").checked;
+  return cards.concat(imported).filter(c => (showBase || !isBaseline(c) || isFloor(c)) && (!$("#f-suite").value || c.dataset?.suite_id===$("#f-suite").value) && (!$("#f-sut").value || c.subject?.name===$("#f-sut").value) && (!$("#f-mode").value || c.run?.mode===$("#f-mode").value) && (!$("#f-net").value || c.run?.isolation?.network_mode===$("#f-net").value) && (!q || JSON.stringify([c.subject,c.dataset?.suite_id,c.id,Object.keys(c.results?.by_category||{})]).toLowerCase().includes(q)));
+}
+const expanded = new Set();
+const cfgKey = c => JSON.stringify([c.subject?.name, c.subject?.variant, c.dataset?.suite_sha256, c.run?.mode, c.run?.top_k, c.run?.reset_policy, c.run?.repeats, c.run?.limit, c.run?.run_seed]);
+function render(){
+  const tb = $("#rows"); tb.innerHTML = "";
+  const vis = visible();
+  // Repeated runs of one configuration (same system, variant, dataset, conditions and seed) collapse to the newest card with an expander.
+  const groups = new Map(); for (const c of vis) { const k = cfgKey(c); if (!groups.has(k)) groups.set(k, []); groups.get(k).push(c); }
+  const shown = []; for (const [k, list] of groups) { list.sort((a,b) => (b.run?.started_at_utc||"").localeCompare(a.run?.started_at_utc||"")); if (expanded.has(k) || list.length===1) shown.push(...list.map(c => ({c, group:list, key:k, head:c===list[0]}))); else shown.push({c:list[0], group:list, key:k, head:true}); }
+  shown.sort((a,b) => (b.c.run?.started_at_utc||"").localeCompare(a.c.run?.started_at_utc||""));
+  for (const {c, group, key, head} of shown){
+    const tr = el("tr",{class:selected.has(c.id)?"sel":""});
+    const cb = el("input",{type:"checkbox"}); cb.checked = selected.has(c.id); cb.addEventListener("change", ()=>{ if (cb.checked){ if (selected.size>=6){ cb.checked=false; return; } selected.add(c.id);} else selected.delete(c.id); render(); });
+    tr.append(el("td",{}, cb));
+    tr.append(el("td",{}, el("div",{class:"rowhead"}, sutLabel(c), " ", roleBadge(c)), el("div",{class:"muted",style:"font-size:12px"}, c.subject?.upstream ? `${c.subject.upstream.project} ${c.subject.upstream.version||""}` : "", c.__imported ? el("span",{class:"badge warn",text:"Manual import"}) : null), variantNotes(c) ? (hasLegacyText(variantNotes(c)) ? el("details",{class:"original-record muted",style:"font-size:12px;max-width:34ch"}, el("summary",{text:"Original recorded content: variant"}), el("div",{text:variantNotes(c)})) : el("div",{class:"muted",style:"font-size:12px;max-width:34ch",text:variantNotes(c)})) : null));
+    tr.append(el("td",{}, el("div",{text:c.dataset?.suite_id||"—"}), el("div",{class:"muted",style:"font-size:12px",text:`${c.dataset?.cases_planned??"?"} cases ${c.dataset?.cases_with_gold!=null?` · With gold ${c.dataset.cases_with_gold}`:""}${c.run?.limit?` · limit ${c.run.limit}`:""}`})));
+    tr.append(el("td",{}, el("div",{text:`${c.run?.mode||"—"} · ${c.run?.reset_policy||"—"}`}), el("div",{class:"muted",style:"font-size:12px",text:`top-k ${c.run?.top_k??"—"}${c.run?.parallel>1?` · Parallel ${c.run.parallel}`:""}${c.run?.resume_count?` · Resumes ${c.run.resume_count}`:""}`})));
+    tr.append(el("td",{}, isoBadge(c)));
+    tr.append(el("td",{}, statusBadge(c)));
+    tr.append(el("td",{}, ...headline(c).map(id => el("div",{}, el("span",{class:"muted",text:id+" "}), metricCell(c,id)))));
+    tr.append(el("td",{class:"num",text:secs(c.run?.wall_seconds)}));
+    tr.append(el("td",{class:"muted",style:"font-size:12.5px;white-space:nowrap",text:dt(c.run?.started_at_utc)}));
+    tr.append(el("td",{style:"white-space:nowrap"}, el("button",{class:"ghost",type:"button",onclick:()=>showDetail(c)},"Details"), group.length>1 && head ? el("button",{class:"ghost",type:"button",style:"margin-left:6px",title:"Repeated runs of the same configuration: system, variant, dataset, conditions, and seed",onclick:()=>{ if (expanded.has(key)) expanded.delete(key); else expanded.add(key); render(); }}, expanded.has(key) ? "Collapse" : `+${group.length-1} runs with matching configuration`) : null));
+    if (!head) tr.style.opacity = ".8";
+    tb.append(tr);
+  }
+  $("#count").textContent = `${vis.length} / ${cards.length+imported.length} cards · ${groups.size} configurations (latest run shown by default; expand for all repeats; trends use all runs)`;
+  renderTrend();
+  $("#btn-compare").disabled = selected.size<2; $("#btn-compare").textContent = `Compare selected (${selected.size})`;
+}
+["f-suite","f-sut","f-mode","f-net","f-base"].forEach(id => $("#"+id).addEventListener("change", render)); $("#f-q").addEventListener("input", render);
+$("#btn-clear").addEventListener("click", ()=>{ selected.clear(); render(); });
+
+// ---- detail ----
+function kv(pairs){ const d = el("dl",{class:"kv"}); for (const [k,v] of pairs){ if (v==null || v==="") continue; d.append(el("dt",{text:k}), el("dd",{}, v)); } return d; }
+function metricsTable(metrics, scores){
+  const t = el("table",{class:"tbl"}); t.append(el("thead",{}, el("tr",{}, el("th",{text:"Metric"}), el("th",{class:"num",text:"mean"}), el("th",{class:"num",text:"n"}), el("th",{text:"Description"}))));
+  const tb = el("tbody",{});
+  for (const [id,m] of Object.entries(metrics||{}).sort()) tb.append(el("tr",{}, el("td",{}, el("code",{text:id})), el("td",{class:"num",text:fmt(m?.mean)}), el("td",{class:"num",text:m?.n==null?"—":String(m.n)}), el("td",{}, (defOf(id)?.definition_zh)||el("span",{class:"muted",text:"No glossary entry"}), infoBtn(id))));
+  for (const [id,v] of Object.entries(scores||{}).sort()) tb.append(el("tr",{}, el("td",{}, el("code",{text:id}), el("span",{class:"n",text:"Official"})), el("td",{class:"num",text:fmt(typeof v==="object"?v?.mean:v)}), el("td",{class:"num",text:(typeof v==="object"&&v?.n!=null)?String(v.n):"—"}), el("td",{}, (defOf(id)?.definition_zh)||el("span",{class:"muted",text:"No glossary entry"}), infoBtn(id))));
+  t.append(tb); return el("div",{class:"scroll"}, t);
+}
+function showDetail(c){
+  const b = $("#detail-body"); b.innerHTML = "";
+  const u = c.subject?.upstream;
+  b.append(el("h3",{text:`${sutLabel(c)} × ${c.dataset?.suite_id||"—"}`}));
+  b.append(el("div",{class:"cards"},
+    el("div",{class:"card"}, el("h3",{text:"Subject"}), kv([["Project", u ? el("span",{}, u.project, " · ", el("a",{href:u.repo,target:"_blank",rel:"noopener",text:u.repo}), ` · ${u.package} ${u.version} · ${u.license}`) : "(no UPSTREAM.json)"],["Variant", c.subject?.variant],["Original recorded content: variant", variantNotes(c)],["Declarations", c.subject?.declared ? el("code",{text:JSON.stringify(c.subject.declared)}) : null],["LLM", c.subject?.llm ? el("code",{text:JSON.stringify(c.subject.llm)}) : "None (none mode)"],["manifest", c.subject?.manifest_sha256 ? el("code",{text:c.subject.manifest_sha256.slice(0,12)}) : null],["Image", c.subject?.image_id ? el("code",{text:String(c.subject.image_id).replace("sha256:","").slice(0,12)}) : null]])),
+    el("div",{class:"card"}, el("h3",{text:"Dataset"}), kv([["Suite", c.dataset?.suite_id],["Fingerprint", c.dataset?.suite_sha256 ? el("code",{text:c.dataset.suite_sha256.slice(0,12)}) : null],["Protocol", c.dataset?.protocol ? `${c.dataset.protocol.id} # ${c.dataset.protocol.variant}` : null],["Cases", `${c.dataset?.cases_planned??"?"}(with gold ${c.dataset?.cases_with_gold??"?"}, categories ${c.dataset?.categories??"?"})`],["License", c.dataset?.license]])),
+    el("div",{class:"card"}, el("h3",{text:"Run"}), kv([["Mode", `${c.run?.mode||"—"} · ${c.run?.reset_policy||"—"} · top-k ${c.run?.top_k??"—"} · max_context ${c.run?.max_context_chars??"—"}`],["seed", c.run?.run_seed ? el("code",{text:c.run.run_seed.slice(0,12)}) : null],["limit / repeats / parallel", `${c.run?.limit??"—"} / ${c.run?.repeats??"—"} / ${c.run?.parallel??"—"}`],["Isolation", c.run?.isolation ? `Tier ${c.run.isolation.tier} · ${c.run.isolation.backend||""} · Network ${c.run.isolation.network_mode} · Residue ${c.run.isolation.run_clean===false?"Available":"None"} · selftest ${c.run.isolation.selftest_passed===false?"Failed":"Passed"}` : null],["Started", dt(c.run?.started_at_utc)],["Wall time", el("span",{}, secs(c.run?.wall_seconds), infoBtn("wall_seconds"))],["memeval", `${c.run?.framework_version||""} ${c.run?.memeval_commit||""}`]])),
+    el("div",{class:"card"}, el("h3",{text:"Cost"}), kv([["SUT (gateway)", c.cost?.sut ? el("span",{}, `${c.cost.sut.calls??"—"} calls · prompt ${fmt(c.cost.sut.prompt_tokens)}(cached ${fmt(c.cost.sut.cached_tokens)})· completion ${fmt(c.cost.sut.completion_tokens)}`, infoBtn("cost.sut.prompt_tokens")) : "None (none mode or unmetered)"],["Evaluator", c.cost?.evaluator ? el("code",{text:JSON.stringify(c.cost.evaluator)}) : "None"]])),
+  ));
+  b.append(el("h3",{}, "Results ", statusBadge(c)));
+  b.append(metricsTable(c.results?.metrics, scoresOf(c)));
+  const bc = c.results?.by_category||{};
+  if (Object.keys(bc).length){
+    const ids = headline(c);
+    const t = el("table",{class:"tbl"}); t.append(el("thead",{}, el("tr",{}, el("th",{text:"Category"}), el("th",{class:"num",text:"Cases"}), ...ids.map(id=>el("th",{class:"num"}, id, infoBtn(id))))));
+    const tb = el("tbody",{}); for (const [k,v] of Object.entries(bc).sort()) tb.append(el("tr",{}, el("td",{text:k}), el("td",{class:"num",text:String(v.planned??"—")}), ...ids.map(id => el("td",{class:"num"}, fmt(v.metrics?.[id]?.mean), v.metrics?.[id]?.n!=null?el("span",{class:"n",text:`n=${v.metrics[id].n}`}):null))));
+    t.append(tb); b.append(el("details",{class:"sec"}, el("summary",{text:`By category (${Object.keys(bc).length})`}), el("div",{class:"body"}, el("div",{class:"scroll"}, t))));
+  }
+  if ((c.warnings||[]).length) b.append(el("details",{class:"sec"}, el("summary",{text:`Warnings (${c.warnings.length})`}), el("div",{class:"body"}, el("ul",{class:"muted"}, ...c.warnings.map(w=>el("li",{text:w}))))));
+  b.append(el("p",{class:"muted"}, "Source:", el("code",{text:c.source?.report_path||"(manually imported)"}), c.source?.report_sha256 ? ` · sha256 ${c.source.report_sha256.slice(0,12)}` : "", ` · run ${c.id}`));
+  $("#detail").hidden = false; $("#detail").scrollIntoView({behavior:"smooth",block:"start"});
+}
+$("#detail-close").addEventListener("click", ()=>{ $("#detail").hidden = true; });
+
+// ---- charts (plain SVG; forms picked by the data's job) ----
+const SERIES = ["var(--s1)","var(--s2)","var(--s3)","var(--s4)","var(--s5)","var(--s6)"];
+const NS = "http://www.w3.org/2000/svg";
+const S = (t,a={},txt) => { const e = document.createElementNS(NS,t); for (const [k,v] of Object.entries(a)) e.setAttribute(k,v); if (txt!=null) e.textContent = txt; return e; };
+function hover(node, title, text){ const show = e => { const pop=$("#pop"); pop.innerHTML=""; pop.append(el("h4",{text:title}), el("p",{text})); pop.hidden=false; const r=e.currentTarget.getBoundingClientRect(); pop.style.top=(window.scrollY+r.bottom+8)+"px"; pop.style.left=Math.max(16,Math.min(window.scrollX+r.left-40, window.scrollX+document.documentElement.clientWidth-pop.offsetWidth-16))+"px"; }; node.addEventListener("mouseenter", show); node.addEventListener("click", e => { show(e); e.stopPropagation(); }); node.addEventListener("mouseleave", () => { $("#pop").hidden = true; }); }
+const trunc = (s,n) => s.length>n ? s.slice(0,n-1)+"…" : s;
+// Ranking: one horizontal bar per configuration, bars start at 0, a dotted reference line at the floor (bm25).
+function rankChart(rows, opts){
+  // rows: [{label, sub, value, n, control, floor, tip}] sorted desc; opts: {yLabel}
+  const W = 820, L = 250, R = 70, rowH = 26, T = 28; const H = T + rows.length*rowH + 16;
+  const svg = S("svg",{viewBox:`0 0 ${W} ${H}`,role:"img"});
+  const X = v => L + (W-L-R)*Math.max(0,Math.min(1,v));
+  for (const g of [0,.2,.4,.6,.8,1]) { svg.append(S("line",{class:"grid",x1:X(g),x2:X(g),y1:T-6,y2:H-12})); svg.append(S("text",{class:"lbl",x:X(g),y:T-10,"text-anchor":"middle"}, g.toFixed(1))); }
+  const floor = rows.find(r => r.floor);
+  if (floor && floor.value!=null) { svg.append(S("line",{x1:X(floor.value),x2:X(floor.value),y1:T-4,y2:H-12,stroke:"var(--ink-2)","stroke-width":1.5,"stroke-dasharray":"3 4"})); svg.append(S("text",{class:"lbl",x:X(floor.value)+4,y:H-2}, `BM25 reference ${fmt(floor.value)}`)); }
+  rows.forEach((r,i) => {
+    const y = T + i*rowH; const bar = S("g",{});
+    svg.append(S("text",{class:"lbl",x:L-10,y:y+12,"text-anchor":"end",fill:"var(--ink)"}, trunc(r.label,30)));
+    if (r.sub) svg.append(S("text",{class:"lbl",x:L-10,y:y+23,"text-anchor":"end",fill:"var(--muted)",style:"font-size:10px"}, trunc(r.sub,36)));
+    if (r.value==null) { svg.append(S("text",{class:"lbl",x:L+4,y:y+15,fill:"var(--muted)"}, "—")); return; }
+    const w = Math.max(2, X(r.value)-L); const color = r.control ? "var(--surface)" : (r.floor ? "var(--axis)" : "var(--s1)");
+    const rect = S("rect",{x:L,y:y+4,width:w,height:14,rx:4,fill:color,stroke:r.control?"var(--axis)":(r.floor?"var(--ink-2)":"none"),"stroke-width":r.control?1.5:1,"stroke-dasharray":r.control?"4 3":"none"});
+    hover(rect, r.label, r.tip); bar.append(rect);
+    bar.append(S("text",{class:"lbl",x:X(r.value)+6,y:y+15,fill:"var(--ink)"}, `${fmt(r.value)}`+(r.n!=null?`  n=${r.n}`:"")));
+    svg.append(bar);
+  });
+  const wrap = el("div",{}); wrap.append(el("div",{class:"ttl",style:"font-size:13px;margin:0 0 6px"}, opts.title)); wrap.append(svg); return wrap;
+}
+// Dot plot: rows = categories, one dot per system, a thin connector spans the row's min..max; the x-axis fits the data (positions, not lengths).
+function dotPlot(rows, series, opts){
+  // rows: [{label, values:[{si, v, n}]}]; series: [{name, control}]
+  const W = 820, L = 230, R = 24, rowH = 24, T = 30; const H = T + rows.length*rowH + 12;
+  const vals = rows.flatMap(r => r.values.map(x => x.v).filter(v => v!=null));
+  let lo = Math.min(...vals), hi = Math.max(...vals); if (!isFinite(lo)) { lo = 0; hi = 1; } let pad = Math.max(0.03,(hi-lo)*0.12); lo = Math.max(0,lo-pad); hi = Math.min(1,hi+pad); if (hi-lo<0.2){ const m=(lo+hi)/2; lo=Math.max(0,m-0.1); hi=Math.min(1,lo+0.2); lo=Math.max(0,hi-0.2); }
+  const step = [0.02,0.05,0.1,0.2,0.25].find(s => (hi-lo)/s <= 6) || 0.25; const ticks=[]; for (let v=Math.ceil(lo/step)*step; v<=hi+1e-9; v+=step) ticks.push(+v.toFixed(4));
+  const svg = S("svg",{viewBox:`0 0 ${W} ${H}`,role:"img"}); const X = v => L + (W-L-R)*(v-lo)/(hi-lo);
+  for (const g of ticks) { svg.append(S("line",{class:"grid",x1:X(g),x2:X(g),y1:T-6,y2:H-10})); svg.append(S("text",{class:"lbl",x:X(g),y:T-10,"text-anchor":"middle"}, g.toFixed(2))); }
+  rows.forEach((r,i) => {
+    const y = T + i*rowH + 10; svg.append(S("text",{class:"lbl",x:L-10,y:y+4,"text-anchor":"end",fill:"var(--ink)"}, trunc(r.label,30)));
+    const vs = r.values.filter(x => x.v!=null); if (vs.length>1) svg.append(S("line",{x1:X(Math.min(...vs.map(x=>x.v))),x2:X(Math.max(...vs.map(x=>x.v))),y1:y,y2:y,stroke:"var(--grid)","stroke-width":3}));
+    for (const x of vs) { const sr = series[x.si]; const c = S("circle",{cx:X(x.v),cy:y,r:6,fill:sr.control?"var(--surface)":SERIES[x.si%SERIES.length],stroke:SERIES[x.si%SERIES.length],"stroke-width":2,class:"pt"}); hover(c, `${sr.name} · ${r.label}`, `${opts.metric} = ${fmt(x.v)}(n=${x.n??"—"})`); svg.append(c); }
+  });
+  const wrap = el("div",{}); wrap.append(el("div",{class:"ttl",style:"font-size:13px;margin:0 0 6px"}, opts.title)); wrap.append(svg);
+  wrap.append(el("div",{class:"legend"}, ...series.map((sr,i) => el("span",{}, el("span",{class:"sw",style:`background:${sr.control?"var(--surface)":SERIES[i%SERIES.length]};border:2px solid ${SERIES[i%SERIES.length]}`}), sr.name, sr.control?"(control)":""))));
+  return wrap;
+}
+// Trend: one configuration's runs over time; only drawn when a configuration has at least two runs.
+function trendChart(points, opts){
+  const W = 820, L = 52, R = 24, T = 22, plotH = 220, B = 40, H = T+plotH+B;
+  const pts = points.filter(p => p.y!=null).sort((a,b)=>a.x-b.x);
+  let lo = Math.min(...pts.map(p=>p.y)), hi = Math.max(...pts.map(p=>p.y)); let pad = Math.max(0.03,(hi-lo)*0.3); lo=Math.max(0,lo-pad); hi=Math.min(1,hi+pad); if (hi-lo<0.1){ const m=(lo+hi)/2; lo=Math.max(0,m-0.05); hi=Math.min(1,lo+0.1); lo=Math.max(0,hi-0.1); }
+  const step = [0.01,0.02,0.05,0.1,0.2].find(s => (hi-lo)/s <= 6) || 0.2; const ticks=[]; for (let v=Math.ceil(lo/step)*step; v<=hi+1e-9; v+=step) ticks.push(+v.toFixed(4));
+  const svg = S("svg",{viewBox:`0 0 ${W} ${H}`,role:"img"});
+  const X = i => L + (W-L-R) * (pts.length>1 ? i/(pts.length-1) : .5); const Y = y => T + plotH*(1-(y-lo)/(hi-lo));
+  for (const g of ticks) { svg.append(S("line",{class:"grid",x1:L,x2:W-R,y1:Y(g),y2:Y(g)})); svg.append(S("text",{class:"lbl",x:L-8,y:Y(g)+4,"text-anchor":"end"}, g.toFixed(step<0.05?3:2))); }
+  svg.append(S("line",{class:"axis",x1:L,x2:L,y1:T,y2:T+plotH})); svg.append(S("line",{class:"axis",x1:L,x2:W-R,y1:T+plotH,y2:T+plotH}));
+  svg.append(S("path",{class:"ln",d:pts.map((p,i)=>(i?"L":"M")+X(i).toFixed(1)+" "+Y(p.y).toFixed(1)).join(" "),stroke:"var(--s1)"}));
+  pts.forEach((p,i) => { const c = S("circle",{class:"pt",cx:X(i),cy:Y(p.y),r:6,fill:"var(--s1)"}); hover(c, opts.title, p.tip); svg.append(c); svg.append(S("text",{class:"lbl",x:X(i),y:Y(p.y)-11,"text-anchor":"middle",fill:"var(--ink)"}, fmt(p.y))); svg.append(S("text",{class:"lbl",x:X(i),y:T+plotH+16,"text-anchor":"middle"}, p.xlabel)); if (p.xsub) svg.append(S("text",{class:"lbl",x:X(i),y:T+plotH+30,"text-anchor":"middle",fill:"var(--muted)"}, p.xsub)); });
+  const wrap = el("div",{}); wrap.append(el("div",{class:"ttl",style:"font-size:13px;margin:0 0 6px"}, opts.title)); wrap.append(svg); return wrap;
+}
+function metricChoices(cs){ const ids = new Set(); for (const c of cs) { for (const id of Object.keys(c.results?.metrics||{})) ids.add(id); for (const id of Object.keys(scoresOf(c))) ids.add(id); } return [...ids].sort((a,b)=>a.localeCompare(b)); }
+function latestPerConfig(cs){ const m = new Map(); for (const c of cs) { const k = cfgKey(c); if (!m.has(k) || (c.run?.started_at_utc||"") > (m.get(k).run?.started_at_utc||"")) m.set(k,c); } return [...m.values()]; }
+function renderTrend(){
+  const pool = visible(); const suites = [...new Set(pool.map(c=>c.dataset?.suite_id).filter(Boolean))].sort((a,b)=>pool.filter(c=>c.dataset?.suite_id===b).length-pool.filter(c=>c.dataset?.suite_id===a).length);
+  const sSel = $("#t-suite"), mSel = $("#t-metric"), rSel = $("#t-series"); const curS = sSel.value, curM = mSel.value, curR = rSel.value;
+  sSel.innerHTML = ""; suites.forEach(v => sSel.append(el("option",{value:v,text:v}))); sSel.value = suites.includes(curS) ? curS : (suites[0]||"");
+  const cs = pool.filter(c => c.dataset?.suite_id===sSel.value);
+  const ids = metricChoices(cs); mSel.innerHTML = ""; ids.forEach(v => mSel.append(el("option",{value:v,text:v}))); const want = ids.includes(curM) ? curM : (cs[0] ? headline(cs[0])[0] : ids[0]); if (want) mSel.value = want;
+  const rank = $("#rank-chart"), trend = $("#trend-chart"); rank.innerHTML = ""; trend.innerHTML = ""; rSel.innerHTML = "";
+  if (!cs.length || !mSel.value) { rank.append(el("p",{class:"muted",text:"No cards match the current filters."})); return; }
+  const id = mSel.value, d = defOf(id);
+  const rows = latestPerConfig(cs).map(c => { const m = metricOf(c,id); const i = c.run?.isolation||{}; return {label:sutLabel(c), sub:`${i.network_mode||""}${c.run?.top_k!=null?` · top-k ${c.run.top_k}`:""}${c.run?.limit?` · limit ${c.run.limit}`:""} · ${dt(c.run?.started_at_utc).slice(0,10)}`, value:m?.mean??null, n:m?.n, control:isBaseline(c)||isControl(c), floor:isFloor(c), tip:`${id} = ${fmt(m?.mean)}(n=${m?.n??"—"})· ${dt(c.run?.started_at_utc)} · ${c.source?.report_path||c.id}`}; }).sort((a,b)=>(b.value??-1)-(a.value??-1));
+  rank.append(rankChart(rows, {title:[`${sSel.value} · `, el("code",{text:id}), infoBtn(id), ` · ${rows.length} configurations, latest run each;${d?.higher_is_better===false?"Lower is better":"Higher is better"}`]}));
+  // trend candidates: configurations with ≥2 runs
+  const groups = new Map(); for (const c of cs) { const k = cfgKey(c); if (!groups.has(k)) groups.set(k,[]); groups.get(k).push(c); }
+  const multi = [...groups.entries()].filter(([,v]) => v.length>=2);
+  if (!multi.length) { trend.append(el("p",{class:"muted",text:"Each configuration currently has one run on this dataset. Trends appear after repeated runs with matching configuration."})); return; }
+  multi.forEach(([k,v]) => rSel.append(el("option",{value:k,text:`${sutLabel(v[0])}(${v.length} attempts)`}))); rSel.value = multi.some(([k])=>k===curR) ? curR : multi[0][0];
+  const runs = groups.get(rSel.value) || [];
+  const pts = runs.map(c => { const m = metricOf(c,id); const i = c.run?.isolation||{}; return {x:Date.parse(c.run?.started_at_utc||"")||0, y:m?.mean??null, xlabel:dt(c.run?.started_at_utc).slice(0,16), xsub:`Tier ${i.tier||"?"} · ${i.network_mode||""}${c.run?.parallel>1?` · Parallel ${c.run.parallel}`:""}`, tip:`${id} = ${fmt(m?.mean)}(n=${m?.n??"—"})· ${c.source?.report_path||c.id}`}; });
+  trend.append(trendChart(pts, {title:[`${sutLabel(runs[0])} · ${sSel.value} · `, el("code",{text:id}), ` · ${runs.length} runs (chronological)`]}));
+}
+["t-suite","t-metric","t-series"].forEach(id => $("#"+id).addEventListener("change", renderTrend));
+function profileChart(sel){
+  const base = sel[0]; const id = headline(base)[0]; const cats = Object.keys(base.results?.by_category||{});
+  if (cats.length<2) return null;
+  const val = (c,k) => c.results?.by_category?.[k]?.metrics?.[id]?.mean;
+  const order = cats.slice().sort((a,b) => (val(base,b)??-1) - (val(base,a)??-1));
+  const series = sel.map(c => ({name:sutLabel(c), control:isBaseline(c)||isControl(c)}));
+  const rows = order.map(k => ({label:k, values:sel.map((c,si) => ({si, v:val(c,k)??null, n:c.results?.by_category?.[k]?.metrics?.[id]?.n}))}));
+  const box = el("div",{class:"chart"}); box.append(dotPlot(rows, series, {metric:id, title:["By category · ", el("code",{text:id}), infoBtn(id), el("span",{class:"muted",text:" · One category per row (reference column descending), one system per point; axis zooms to data range"})]}));
+  return box;
+}
+
+// ---- compare ----
+function comparable(base, c){ return condKeys.filter(([k]) => JSON.stringify(get(base,k)) !== JSON.stringify(get(c,k))); }
+function delta(id, base, v){
+  if (base==null || v==null) return null; const d = v-base; const def = defOf(id); const dir = def?.higher_is_better;
+  const cls = Math.abs(d)<1e-9 ? "flat" : dir==null ? "flat" : ((d>0)===dir ? "up" : "down");
+  return el("span",{class:"delta "+cls, text:(d>0?"+":"")+(Number.isInteger(d)?String(d):d.toFixed(3))});
+}
+function showCompare(){
+  const sel = cards.concat(imported).filter(c => selected.has(c.id)); if (sel.length<2) return;
+  const base = sel[0];
+  const gate = $("#compare-gate"); gate.innerHTML = "";
+  const diffs = sel.slice(1).map(c => [c, comparable(base,c)]).filter(([,d])=>d.length);
+  gate.append(el("div",{class:"note "+(diffs.length?"warn":"")}, diffs.length ? el("span",{}, "Some cards differ from reference conditions; only side-by-side values are shown, without deltas:", ...diffs.map(([c,d]) => el("div",{}, el("b",{text:sutLabel(c)+" × "+(c.dataset?.suite_id||"")}), `: ${d.map(x=>x[1]).join(", ")} differs`))) : "Dataset fingerprint, mode, top-k, reset policy, and protocol variant match across these cards; deltas are shown. Inspect model, budget, coverage, and other disclosed differences as well."));
+  const t = $("#cmp"); const th = t.querySelector("thead"); const tb = t.querySelector("tbody"); th.innerHTML = ""; tb.innerHTML = "";
+  th.append(el("tr",{}, el("th",{text:"Metric / condition"}), ...sel.map((c,i) => el("th",{}, el("div",{}, sutLabel(c), " ", roleBadge(c)), el("div",{class:"muted",style:"font-weight:400;font-size:12px",text:`${c.dataset?.suite_id||""}${i===0?" · Reference":""}${(isBaseline(c)||isControl(c))?" · Control, excluded from ranking":""}`})))));
+  const grp = name => tb.append(el("tr",{class:"grp"}, el("td",{text:name,colspan:String(sel.length+1)})));
+  const rowCond = (label, path) => tb.append(el("tr",{}, el("td",{text:label}), ...sel.map(c => { const v = get(c,path); return el("td",{}, typeof v==="string" && v.length>24 ? el("code",{text:v.slice(0,12)}) : fmt(v)); })));
+  grp("Subject"); rowCond("Project / version","subject.upstream.project"); rowCond("Variant","subject.variant"); rowCond("LLM model","subject.llm.model");
+  grp("Dataset and run conditions"); rowCond("Suite","dataset.suite_id"); rowCond("Dataset fingerprint","dataset.suite_sha256"); rowCond("Protocol variant","dataset.protocol.variant"); rowCond("Cases / with gold","dataset.cases_planned"); rowCond("Mode","run.mode"); rowCond("Reset policy","run.reset_policy"); rowCond("top-k","run.top_k"); rowCond("Parallel","run.parallel"); rowCond("Network","run.isolation.network_mode"); rowCond("Tier","run.isolation.tier");
+  grp("State"); tb.append(el("tr",{}, el("td",{}, "Case status", infoBtn("status_counts")), ...sel.map(c => el("td",{}, statusBadge(c)))));
+  const covRow = (label, id, getter) => tb.append(el("tr",{}, el("td",{}, label, infoBtn(id)), ...sel.map((c,i) => { const v = getter(c); const ok = i>0 && !comparable(base,c).length; return el("td",{class:"num"}, fmt(v), ok ? delta(id, getter(base), v) : null); })));
+  covRow("Scoring coverage","scoring_coverage", c => c.results?.scoring_coverage);
+  grp("Metrics (mean; n = cases with defined values)");
+  const ids = [...new Set(sel.flatMap(c => Object.keys(c.results?.metrics||{})))].sort((a,b) => (headline(base).indexOf(b)>=0) - (headline(base).indexOf(a)>=0) || a.localeCompare(b));
+  for (const id of ids) tb.append(el("tr",{}, el("td",{}, el("code",{text:id}), infoBtn(id)), ...sel.map((c,i) => { const m = metricOf(c,id); const ok = i>0 && !comparable(base,c).length; return el("td",{class:"num"}, m ? fmt(m.mean) : "—", m?.n!=null ? el("span",{class:"n",text:`n=${m.n}`}) : null, (ok && m && metricOf(base,id)) ? delta(id, metricOf(base,id).mean, m.mean) : null); })));
+  const sids = [...new Set(sel.flatMap(c => Object.keys(scoresOf(c))))].sort();
+  if (sids.length){ grp("Official scores"); for (const id of sids) tb.append(el("tr",{}, el("td",{}, el("code",{text:id}), infoBtn(id)), ...sel.map((c,i) => { const v = scoresOf(c)[id]; const num = typeof v==="object" ? v?.mean : v; const b0 = scoresOf(base)[id]; const bnum = typeof b0==="object" ? b0?.mean : b0; const ok = i>0 && !comparable(base,c).length; return el("td",{class:"num"}, fmt(num), ok ? delta(id, bnum, num) : null); }))); }
+  grp("Cost");
+  covRow("Wall time (seconds)","wall_seconds", c => c.run?.wall_seconds==null?null:Math.round(c.run.wall_seconds));
+  covRow("SUT gateway calls","cost.sut.calls", c => c.cost?.sut?.calls ?? null);
+  covRow("SUT prompt tokens","cost.sut.prompt_tokens", c => c.cost?.sut?.prompt_tokens ?? null);
+  const prof = $("#compare-profile"); prof.innerHTML = ""; const comp = sel.filter(c => c===base || !comparable(base,c).length); const pc = comp.length>=2 ? profileChart(comp) : null; if (pc) { if (comp.length<sel.length) pc.prepend(el("p",{class:"muted",style:"font-size:12px;margin:0 0 4px",text:`Profile chart includes only cards matching reference conditions: ${comp.length} cards`})); prof.append(pc); }
+  $("#compare").hidden = false; $("#compare").scrollIntoView({behavior:"smooth",block:"start"});
+}
+$("#btn-compare").addEventListener("click", showCompare);
+$("#compare-close").addEventListener("click", ()=>{ $("#compare").hidden = true; });
+
+// ---- import report.json (browser-side card, subset of design/p10-results-site.md §2) ----
+function cardFromReport(r, path){
+  const sc = r.summary?.status_counts||{}; const planned = r.summary?.planned ?? Object.values(sc).reduce((a,b)=>a+b,0);
+  const bench = r.protocol?.benchmark||{}; const bud = r.protocol?.budget||{}; const iso = r.isolation||{}; const cont = iso.container||{};
+  const metrics = r.summary?.metrics||{}; const byc = {}; for (const [k,v] of Object.entries(r.by_category||{})) byc[k] = {planned:v.planned, status_counts:v.status_counts, metrics:v.metrics||{}};
+  // gold is never written to the report; recall is defined only for cases that have gold, so count those (same rule as the Go card builder).
+  const withGold = Array.isArray(r.cases) ? r.cases.filter(c => c.metrics && c.metrics.recall != null).length : (metrics.recall?.n ?? null);
+  const timings = {}; for (const [k,v] of Object.entries(r.summary?.timings||{})) if (v && typeof v==="object") timings[k] = {p50:v.p50, p95:v.p95};
+  const sutB = r.billing?.sut||null;
+  return {card_version:1, id:r.run_id, __imported:true,
+    subject:{name:r.sut?.name, variant:r.sut?.variant, variant_notes:null, upstream:null, declared:r.sut?.declared||null, llm:r.sut?.llm||null, manifest_sha256:r.sut?.manifest_sha256||null, env_lock_sha256:r.sut?.env_lock_sha256||null, image_id:cont.image?.id||null},
+    dataset:{suite_id:r.suite_id, suite_sha256:r.suite_sha256, schema_version:null, protocol:{id:bench.protocol_id, variant:bench.variant, ref:bench.ref, sha256:bench.sha256}, cases_planned:planned, cases_with_gold:withGold, categories:Object.keys(byc).length, license:null},
+    run:{mode:r.mode, reset_policy:r.protocol?.reset_policy, top_k:bud.top_k, max_context_chars:bud.max_context_chars, run_seed:r.run_seed, limit:r.protocol?.case_limit??null, repeats:r.repeats, parallel:r.parallel??null, resume_count:r.resume_count||0, started_at_utc:r.started_at_utc, wall_seconds:r.wall_seconds, isolation:{tier:iso.tier, backend:iso.backend, network_mode:iso.network_mode, network_enforced:iso.network_enforced, run_clean:cont.residue?.run_clean, selftest_passed:iso.selftest?.passed}, framework_version:r.framework_version, memeval_commit:null},
+    results:{status_counts:sc, scoring_coverage:r.summary?.scoring_coverage, execution_errors:r.summary?.execution_errors, invalid:r.summary?.invalid, unsupported:r.summary?.unsupported, headline:null, metrics, scores:r.scores||{}, by_category:byc, timings},
+    cost:{evaluator:r.billing?.evaluator||null, sut:sutB ? {calls:sutB.calls, prompt_tokens:sutB.prompt_tokens, cached_tokens:sutB.cached_tokens, completion_tokens:sutB.completion_tokens, retries:sutB.retries, rate_limited_responses:sutB.rate_limited_responses} : null},
+    warnings:r.warnings||[], source:{report_path:path, report_sha256:null}};
+}
+async function importFiles(files){
+  for (const f of files){ try { const r = JSON.parse(await f.text()); if (!r.summary || !r.run_id) throw new Error("Not a memeval report (missing summary/run_id)"); const c = cardFromReport(r, f.name); const i = imported.findIndex(x=>x.id===c.id); if (i>=0) imported[i]=c; else imported.push(c); selected.add(c.id); } catch(e){ alert(`${f.name}: ${e.message}`); } }
+  fillFilters(); render();
+}
+const drop = $("#drop");
+drop.addEventListener("dragover", e => { e.preventDefault(); drop.classList.add("over"); }); drop.addEventListener("dragleave", ()=>drop.classList.remove("over"));
+drop.addEventListener("drop", e => { e.preventDefault(); drop.classList.remove("over"); importFiles([...e.dataTransfer.files]); });
+$("#file").addEventListener("change", e => importFiles([...e.target.files]));
+
+// ---- glossary table + meta ----
+(function(){ const tb = $("#gloss tbody"); for (const g of glossary) tb.append(el("tr",{id:"g-"+g.id.replace(/[^a-z0-9_.@-]/gi,"_")}, el("td",{}, el("code",{text:g.id}), el("div",{class:"muted",style:"font-size:12px",text:g.name_zh||""})), el("td",{text:g.group||""}), el("td",{}, g.definition_zh||"", originalMetric(g)), el("td",{}, g.formula ? el("div",{}, el("code",{text:g.formula})) : null, el("div",{class:"muted",style:"font-size:12px",text:`${g.range||""} ${g.higher_is_better==null?"":g.higher_is_better?"· Higher is better":"· Lower is better"}`})), el("td",{}, g.aggregation||"", (g.caveats||[]).length ? el("div",{class:"muted",style:"font-size:12px",text:(g.caveats||[]).join("; ")}) : null))); })();
+(function(){ const m = $("#meta"); const suites = new Set(cards.map(c=>c.dataset?.suite_id)); const suts = new Set(cards.map(c=>c.subject?.name)); m.append(el("span",{class:"chip",text:`${cards.length} cards`}), el("span",{class:"chip",text:`${suites.size} datasets`}), el("span",{class:"chip",text:`${suts.size} SUTs`}), data.generated_at ? el("span",{class:"chip",text:`Index ${dt(data.generated_at)}`}) : null, data.memeval_commit ? el("span",{class:"chip",text:`memeval ${data.memeval_commit}`}) : null); if (!cards.length) $("#list").prepend(el("div",{class:"note warn",text:"No index (docs-site/results/index.js missing or empty). Generate it with memeval results build --reports reports/ --out docs-site/results/, or drop report.json below."})); })();
+fillFilters(); render();
+})();
+</script>
+</body>
+</html>

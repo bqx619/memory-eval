@@ -1,0 +1,67 @@
+{
+  "schema_version": "3",
+  "name": "octop-memory",
+  "variant": "octop-lexical",
+  "notes": "Octop Memory 词法模式：capture/search 只做全文检索（SQLite FTS5），不抽取、不调用 LLM。",
+  "adapter": {
+    "kind": "native",
+    "name": "octop"
+  },
+  "runtime": {
+    "kind": "uv-python",
+    "python": "3.12",
+    "requirements": "requirements.in",
+    "base": "uv-python"
+  },
+  "process": {
+    "command": [
+      "{venv}/bin/octopmemory-bridge",
+      "--namespace",
+      "{ns}",
+      "--db-path",
+      "{ep}/work/memory.sqlite",
+      "--backend",
+      "sqlite",
+      "--config-json",
+      "{config_json}",
+      "--log-level",
+      "warning"
+    ],
+    "cwd": "{ep}/work",
+    "env": {},
+    "env_passthrough": []
+  },
+  "config": {
+    "capture": {
+      "min_message_chars": 0,
+      "include_roles": [
+        "user",
+        "assistant"
+      ]
+    },
+    "privacy": {
+      "redact_secrets": false
+    },
+    "recall": {
+      "raw_policy": "always"
+    }
+  },
+  "sandbox": {
+    "network": "none",
+    "limits": {
+      "timeout_s": 600
+    },
+    "backend": "container"
+  },
+  "ready": {
+    "strategy": "sync"
+  },
+  "declared": {
+    "llm": null,
+    "embedding": null,
+    "query_handling": "verbatim question; upstream gathers candidates per token with first-token precedence"
+  },
+  "llm": {
+    "required": false
+  }
+}

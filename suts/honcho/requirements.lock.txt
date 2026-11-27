@@ -1,0 +1,2 @@
+# PENDING: no verified wheel/source closure supplied locally.
+# Claude: verify distributions and generate --require-hashes lock; no invented package hashes.

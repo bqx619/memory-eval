@@ -1,0 +1,67 @@
+{
+  "schema_version": "3",
+  "name": "mastra",
+  "variant": "history",
+  "notes": "Mastra 无检索对照（history，memeval 自定义）：事件写成线程消息后，检索时按存储顺序列出该资源的消息（最早的在前）取前 k 条，不看问题内容、不用任何模型。这不是 Mastra 推荐的记忆用法（Mastra 自带的 lastMessages 取的是最近 N 条），只作为 semantic 变体的对照与协议烟雾测试。",
+  "adapter": {
+    "kind": "generic",
+    "transport": "jsonrpc-stdio",
+    "max_frame_bytes": 16777216,
+    "request_timeout_s": 120
+  },
+  "runtime": {
+    "kind": "node",
+    "version": "24.22.0",
+    "sources": {
+      "darwin-arm64": {
+        "url": "https://nodejs.org/dist/v24.22.0/node-v24.22.0-darwin-arm64.tar.gz",
+        "sha256": "6a9724d9b50a5f22b4816cded441b5a8d9ddae546191a5e5b7efa5a5e2ee26d5"
+      },
+      "linux-amd64": {
+        "url": "https://nodejs.org/dist/v24.22.0/node-v24.22.0-linux-x64.tar.gz",
+        "sha256": "28ea0a438de9a13bd7891fd758eee6c7819ee8af5442dfd8d45bd65e56d4228c"
+      },
+      "linux-arm64": {
+        "url": "https://nodejs.org/dist/v24.22.0/node-v24.22.0-linux-arm64.tar.gz",
+        "sha256": "b7e7991d5407815adfa74a2a9cd4db683552c8ce32ff4a295c22e972849c3f5d"
+      }
+    },
+    "base": "node"
+  },
+  "process": {
+    "command": [
+      "{node}",
+      "{env}/bridge/node/index.mjs",
+      "--adapter",
+      "{project}/adapter.mjs",
+      "--config",
+      "{config_json}"
+    ],
+    "cwd": "{ep}/work",
+    "env": {},
+    "env_passthrough": []
+  },
+  "sandbox": {
+    "network": "none",
+    "limits": {
+      "timeout_s": 600
+    },
+    "backend": "container"
+  },
+  "ready": {
+    "strategy": "sync"
+  },
+  "telemetry_env": {
+    "MASTRA_TELEMETRY_DISABLED": "1"
+  },
+  "declared": {
+    "llm": "none",
+    "embedding": "none"
+  },
+  "config": {
+    "semantic": false
+  },
+  "llm": {
+    "required": false
+  }
+}

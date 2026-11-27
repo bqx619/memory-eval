@@ -1,0 +1,92 @@
+{
+  "id": "memora",
+  "name": "Memora",
+  "repository": "https://github.com/geniesinc/Memora",
+  "dataset_url": "",
+  "data_nature": "",
+  "task_kinds": [
+    "rubric"
+  ],
+  "protocol_id": "memora",
+  "variants": [
+    "weekly",
+    "monthly",
+    "quarterly"
+  ],
+  "reported_scale": {
+    "personas": 10,
+    "periods": 3,
+    "episodes": 30,
+    "questions": 600,
+    "sessions": 27614,
+    "turns": 432113,
+    "by_period": {
+      "weekly": {
+        "sessions": 1551,
+        "questions": 150,
+        "turns": 24451,
+        "presence": 479,
+        "absence": 256
+      },
+      "monthly": {
+        "sessions": 6150,
+        "questions": 150,
+        "turns": 95944,
+        "presence": 534,
+        "absence": 781
+      },
+      "quarterly": {
+        "sessions": 19913,
+        "questions": 300,
+        "turns": 311718,
+        "presence": 1934,
+        "absence": 2431
+      }
+    }
+  },
+  "license": {
+    "id": "Apache-2.0",
+    "noncommercial": false,
+    "no_derivatives": false,
+    "share_alike": false,
+    "redistribute_normalized": true,
+    "source": "https://github.com/geniesinc/Memora"
+  },
+  "pinned_revision": "a6493188efc836d6511ed5e4163fe3ba87da30ff",
+  "implementation_status": "imported",
+  "importer": "memeval-import-memora/1",
+  "suites": [
+    {
+      "path": "data/normalized/memora@a6493188efc8/weekly",
+      "suite_id": "memora-weekly@a6493188efc8",
+      "suite_sha256": "ec320e7d9daa44bfda84e2e03136d7390b6fc61bea544da52260d68d716a0da6",
+      "protocol_ref": "protocols/memora.json#weekly",
+      "import_stats_path": "data/normalized/memora@a6493188efc8/weekly/import.json"
+    },
+    {
+      "path": "data/normalized/memora@a6493188efc8/monthly",
+      "suite_id": "memora-monthly@a6493188efc8",
+      "suite_sha256": "76f3c3f6f943955f55691fdec06371b0eba01bc7e9e202d941ff3a6a43376c8a",
+      "protocol_ref": "protocols/memora.json#monthly",
+      "import_stats_path": "data/normalized/memora@a6493188efc8/monthly/import.json"
+    },
+    {
+      "path": "data/normalized/memora@a6493188efc8/quarterly",
+      "suite_id": "memora-quarterly@a6493188efc8",
+      "suite_sha256": "9187812d6b639bb51fd2ea9ef410dd0d3ca08fcfc462e35481e38d1e442777d7",
+      "protocol_ref": "protocols/memora.json#quarterly",
+      "import_stats_path": "data/normalized/memora@a6493188efc8/quarterly/import.json"
+    }
+  ],
+  "overlaps": [],
+  "notes": [
+    "Locked Apache-2.0 repository data; all 27673 manifest files verified offline before import.",
+    "One bundle per weekly/monthly/quarterly; 10 personas each. README sessions/persona are approximate; import.json contains actual counts.",
+    "Official three-judge majority not reproduced; actual evaluator kind/models and partial fidelity disclosed.",
+    "Track 1 normalized user_agent turns retained; upstream full-session renderer checks user. See design/p3c-implementation-notes.md.",
+    "Separate dataset URL and data provenance category left unspecified; repository is the recorded source.",
+    "scale: reported_scale totals cover all three period bundles; per-bundle questions are 150/150/300 and each has 10 episodes. README session counts are approximate."
+  ],
+  "verification_date": "2026-10-17",
+  "lock_path": "data/upstream/memora/source.lock.json"
+}

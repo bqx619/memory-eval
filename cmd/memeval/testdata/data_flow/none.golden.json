@@ -1,0 +1,63 @@
+{
+  "summary": "zero_egress",
+  "parties": [
+    {
+      "role": "sidecar_image_registry",
+      "endpoint": "docker.io:443",
+      "direction": "egress",
+      "enforcement": "host_policy",
+      "evidence": [
+        "sut.lock.sidecar_images (install-time only; not runtime traffic)"
+      ]
+    }
+  ],
+  "zero_egress_proof": {
+    "scope": "sut_runtime",
+    "network_mode": "none",
+    "verified": true,
+    "network_enforced": true,
+    "selftest_sha256": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+    "configuration_sha256": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+    "checks": {
+      "dns_external": {
+        "expected": false,
+        "observed": false,
+        "control_passed": true,
+        "passed": true
+      },
+      "https_external": {
+        "expected": false,
+        "observed": false,
+        "control_passed": true,
+        "passed": true
+      },
+      "network_internal": {
+        "expected": true,
+        "observed": true,
+        "control_passed": true,
+        "passed": true
+      },
+      "tcp4_control": {
+        "expected": false,
+        "observed": false,
+        "control_passed": true,
+        "passed": true
+      },
+      "udp_control": {
+        "expected": false,
+        "observed": false,
+        "control_passed": true,
+        "passed": true
+      }
+    },
+    "run_clean": true,
+    "run_clean_evidence": "isolation.container.residue.run_clean"
+  },
+  "notes": [
+    "SUT credentials are injected through env.list; same-user Docker access can inspect container environment values.",
+    "Embedding is configured locally in the container variants; this disclosure is not independent verification of SDK traffic.",
+    "Image installation/build may contact registries and download wheels/models; zero_egress describes runtime only.",
+    "Evaluator LLM calls run on the host and are not intercepted by the SUT network policy.",
+    "Summary follows effective evaluator llm.mode: non-replay modes may egress even when record-once hits the cassette cache."
+  ]
+}

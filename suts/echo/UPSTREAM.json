@@ -1,0 +1,7 @@
+{
+  "project": "memeval echo fixture",
+  "repo": "https://github.com/bqx619/memeval",
+  "package": "suts/echo",
+  "version": "in-repo",
+  "license": "repo"
+}

@@ -1,0 +1,137 @@
+{
+  "env": {
+    "anthropic-effort": "effective default",
+    "cache-dir": "effective default",
+    "cassette-dir": "effective default",
+    "judge-decision-model": "effective default",
+    "llm": "effective default",
+    "llm-parallel": "effective default",
+    "llm-prices": "alias",
+    "prices": "effective default",
+    "reader-model": "effective default",
+    "run-seed": "effective default"
+  },
+  "validate": {},
+  "fetch": {
+    "ack-license": "acknowledge reviewing data card (not commercial clearance)",
+    "force": "replace existing lock/content",
+    "out": "upstream directory",
+    "revision": "immutable upstream revision",
+    "verify-only": "verify local lock and files without network"
+  },
+  "import pmb": {
+    "as": "typed_context|retrieval",
+    "input": "PMB projection",
+    "out": "output suite"
+  },
+  "import longmemeval": {
+    "input": "upstream JSON",
+    "out": "output suite",
+    "revision": "immutable revision (otherwise source.lock.json)",
+    "variant": "s|oracle"
+  },
+  "sut setup": {
+    "cache-dir": "container environment cache",
+    "manifest": "alias for --sut",
+    "network": "override none/gateway/open for an explicit variant",
+    "out": "selftest report directory",
+    "sut": "SUT manifest JSON"
+  },
+  "sut check": {
+    "cache-dir": "container environment cache",
+    "manifest": "alias for --sut",
+    "network": "override none/gateway/open for an explicit variant",
+    "out": "selftest report directory",
+    "sut": "SUT manifest JSON"
+  },
+  "sandbox caps": {
+    "cache-dir": "container environment cache",
+    "manifest": "alias for --sut",
+    "network": "override none/gateway/open for an explicit variant",
+    "out": "selftest report directory",
+    "sut": "SUT manifest JSON"
+  },
+  "sandbox selftest": {
+    "cache-dir": "container environment cache",
+    "manifest": "alias for --sut",
+    "network": "override none/gateway/open for an explicit variant",
+    "out": "selftest report directory",
+    "sut": "SUT manifest JSON"
+  },
+  "run": {
+    "auto-resume-rate-limited": "automatically resume gateway exhaustion/timeouts (0..10 rounds; never budget stops)",
+    "allow-unenforced": "explicitly allow unverified isolation",
+    "anthropic-effort": "Anthropic adaptive-thinking effort",
+    "batch-size": "per_event batch size",
+    "cassette-dir": "evaluator cassette directory",
+    "judge-decision-model": "pinned TypeSafe judge model",
+    "keep": "retain episode directories",
+    "limit": "source case limit",
+    "llm": "live|record|replay|record-once",
+    "llm-base-url": "evaluator-only base URL override",
+    "llm-parallel": "maximum evaluator calls in flight",
+    "llm-prices": "optional token price JSON",
+    "llm-retries": "maximum retries (0..10)",
+    "llm-timeout": "per-attempt HTTP timeout",
+    "max-context-chars": "Unicode code point budget",
+    "mode": "retrieval|fixed_reader",
+    "network": "manifest network override none/gateway/open",
+    "out": "output directory",
+    "parallel": "episode workers (1..16)",
+    "prices": "optional token price JSON",
+    "reader-input": "sources|items",
+    "reader-max-tokens": "reader output token limit",
+    "reader-model": "fixed reader model",
+    "reader-provider": "openai-compat|anthropic",
+    "repeats": "independent repeats",
+    "reset-policy": "fresh_per_case",
+    "run-seed": "64 hex characters",
+    "suite": "normalized suite path (or pmb)",
+    "sut": "null|recent|bm25|fullcontext",
+    "top-k": "returned item budget",
+    "trace-prompts": "write complete evaluator prompts and responses to out/prompts.jsonl (0600)",
+    "trace-text": "include public query and response"
+  },
+  "decide": {
+    "anthropic-effort": "Anthropic adaptive-thinking effort",
+    "cassette-dir": "evaluator cassette directory",
+    "fixture": "explicitly label local fake-provider evidence",
+    "headers": "JSON object of TypeSafe-Danger-Zone-* experimental headers",
+    "input": "local decision fixture JSON (required)",
+    "llm": "live|record|replay|record-once",
+    "llm-base-url": "evaluator-only base URL override",
+    "llm-parallel": "maximum evaluator calls in flight",
+    "llm-prices": "optional token price JSON",
+    "llm-retries": "maximum retries (0..10)",
+    "llm-timeout": "per-attempt HTTP timeout",
+    "model": "TypeSafe decision model (required)",
+    "out": "output directory",
+    "prices": "optional token price JSON",
+    "provider": "typesafe",
+    "repeats": "independent requests per original case",
+    "run-seed": "64 hex characters",
+    "trace-prompts": "write complete evaluator prompts and responses to out/prompts.jsonl (0600)"
+  },
+  "compare": {
+    "draws": "bootstrap draws",
+    "metric": "metric name",
+    "out": "comparison JSON",
+    "pair-by": "sample (explicitly compare repeated experiments, allowing disclosed top_k differences)",
+    "resample-indices": "JSONL cluster indices",
+    "seed": "PCG seed"
+  },
+  "report": {
+    "compare": "paired comparison JSON",
+    "out": "comparison HTML"
+  },
+  "results card": {
+    "out": "output JSON file (default: stdout)"
+  },
+  "results build": {
+    "out": "output directory for index.json and index.js",
+    "reports": "reports directory (repeatable; searched recursively)"
+  },
+  "results glossary": {
+    "out": "output JSON file (default: stdout)"
+  }
+}

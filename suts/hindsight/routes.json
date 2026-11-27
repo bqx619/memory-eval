@@ -1,0 +1,79 @@
+{
+  "version": 1,
+  "ready_strategy": "sync",
+  "describe": {
+    "name": "hindsight",
+    "version": "1.0.0",
+    "capabilities": [
+      "retrieve",
+      "dump",
+      "read_only_queries"
+    ],
+    "read_only_queries": true,
+    "limitations": [
+      "synchronous retain completion; recall visibility depends on upstream synchronous contract",
+      "recall has budget tiers, not exact top_k; timestamp retained but as_of filtering unsupported"
+    ]
+  },
+  "methods": {
+    "create": {
+      "method": "PUT",
+      "path": "/v1/default/banks/{ns}",
+      "body": {}
+    },
+    "reset": {
+      "method": "DELETE",
+      "path": "/v1/default/banks/{ns}"
+    },
+    "ingest": {
+      "method": "POST",
+      "path": "/v1/default/banks/{ns}/memories",
+      "body": {
+        "items": {
+          "$": "items"
+        },
+        "async": false
+      }
+    },
+    "retrieve": {
+      "method": "POST",
+      "path": "/v1/default/banks/{ns}/memories/recall",
+      "body": {
+        "query": {
+          "$": "request.query"
+        },
+        "budget": {
+          "$": "request.hindsight_budget"
+        }
+      },
+      "items": "$.results",
+      "map": {
+        "id": "$.id",
+        "text": "$.text",
+        "source_ids": "$.document_id"
+      }
+    },
+    "dump": {
+      "method": "GET",
+      "path": "/v1/default/banks/{ns}/memories/list",
+      "query": {
+        "offset": {
+          "$": "offset"
+        },
+        "limit": {
+          "$": "limit"
+        }
+      },
+      "items": "$.items",
+      "map": {
+        "id": "$.id",
+        "text": "$.text"
+      },
+      "pagination": {
+        "kind": "offset",
+        "limit": 100,
+        "max_pages": 10000
+      }
+    }
+  }
+}

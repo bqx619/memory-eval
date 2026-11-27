@@ -1,0 +1,4 @@
+octop-memory==1.0.1 \
+    --hash=sha256:8750dee56dbbb43bbb41ff868d85a6e5efcf4aad20f140e0675213647cd52c22 \
+    --hash=sha256:e8d1a2394ebdef1544b873d6f9adecf478756b8b540185369595d119bffdb82e
+    # via -r suts/octop-memory/requirements.in

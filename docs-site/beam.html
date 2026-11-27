@@ -1,0 +1,405 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title> memeval BEAM 100K overview </title>
+<style>
+/* Tokens shared with docs-site/index.html, beam-run.html, beam-coglet.html, cases.html and design/report-ui/report.css */
+:root{
+  --page:#f9f9f7; --surface:#fcfcfb; --surface-2:#f3f3f0;
+  --ink:#0b0b0b; --ink-2:#52514e; --muted:#898781;
+  --grid:#e1e0d9; --axis:#c3c2b7; --ring:rgba(11,11,11,.10);
+  --accent:#2a78d6; --accent-ink:#184f95; --warm:#eb6834;
+  --good:#0ca30c; --good-text:#006300; --good-bg:#e7f6e7;
+  --warn:#fab219; --warn-text:#7a4f00; --warn-bg:#fdf3dc;
+  --critical:#d03b3b; --critical-text:#8c1d1d; --critical-bg:#fbe6e6;
+  --warm-text:#8a3a14; --warm-bg:#fdebe2;
+  --neutral-bg:#ecebe6;
+  --radius:10px;
+  --font:system-ui,-apple-system,"Segoe UI","PingFang SC","Hiragino Sans GB","Microsoft YaHei",sans-serif;
+  --mono:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
+}
+@media (prefers-color-scheme:dark){
+  :root:not([data-theme="light"]){
+    color-scheme:dark;
+    --page:#0d0d0d; --surface:#1a1a19; --surface-2:#232321;
+    --ink:#f0efec; --ink-2:#c3c2b7; --muted:#898781;
+    --grid:#2c2c2a; --axis:#383835; --ring:rgba(255,255,255,.10);
+    --accent:#3987e5; --accent-ink:#86b6ef; --warm:#d95926;
+    --good-text:#5fd45f; --good-bg:#15301a; --warn-text:#f2c35c; --warn-bg:#3a2d0f;
+    --critical-text:#f08a8a; --critical-bg:#3b1717; --warm-text:#f0a37d; --warm-bg:#3a2214; --neutral-bg:#2a2a28;
+  }
+}
+:root[data-theme="dark"]{
+  color-scheme:dark;
+  --page:#0d0d0d; --surface:#1a1a19; --surface-2:#232321;
+  --ink:#f0efec; --ink-2:#c3c2b7; --muted:#898781;
+  --grid:#2c2c2a; --axis:#383835; --ring:rgba(255,255,255,.10);
+  --accent:#3987e5; --accent-ink:#86b6ef; --warm:#d95926;
+  --good-text:#5fd45f; --good-bg:#15301a; --warn-text:#f2c35c; --warn-bg:#3a2d0f;
+  --critical-text:#f08a8a; --critical-bg:#3b1717; --warm-text:#f0a37d; --warm-bg:#3a2214; --neutral-bg:#2a2a28;
+}
+*{box-sizing:border-box}
+html{background:var(--page)}
+body{margin:0;background:var(--page);color:var(--ink);font:14px/1.55 var(--font)}
+.wrap{max-width:1280px;margin:0 auto;padding-block:24px 64px;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+header.top{display:flex;justify-content:space-between;gap:12px 24px;align-items:flex-start;flex-wrap:wrap;margin-bottom:20px}
+header.top > div:first-child{flex:1 1 560px;min-width:0}
+header.top nav{font-size:13px;color:var(--ink-2);padding-top:6px;margin-left:auto}
+.eyebrow{margin:0 0 4px;font-size:12px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted)}
+h1{margin:0 0 8px;font-size:24px;line-height:1.25;text-wrap:balance}
+h2{font-size:17px;margin:0 0 10px}
+h3{font-size:14px;margin:18px 0 6px;color:var(--ink-2);letter-spacing:.02em}
+.lede{margin:0 0 12px;color:var(--ink-2);max-width:72ch}
+a{color:var(--accent-ink)}
+code,.mono{font-family:var(--mono);font-size:12.5px}
+section{background:var(--surface);border:1px solid var(--grid);border-radius:var(--radius);padding:16px 18px;margin-bottom:16px}
+.bar{display:flex;flex-wrap:wrap;gap:10px 16px;align-items:flex-end}
+.bar label{display:flex;flex-direction:column;gap:4px;font-size:12px;color:var(--ink-2)}
+.bar label.row{flex-direction:row;align-items:center;gap:6px;padding-bottom:6px}
+select,input[type=search]{font:13px var(--font);color:var(--ink);background:var(--surface-2);border:1px solid var(--grid);border-radius:7px;padding:6px 8px;min-width:150px}
+.tiles{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px;margin:0 0 4px}
+.tile{background:var(--surface-2);border-radius:8px;padding:10px 12px;min-width:0}
+.tile .k{font-size:12px;color:var(--ink-2)}
+.tile .v{font-size:22px;font-variant-numeric:tabular-nums;line-height:1.2;margin-top:2px;word-break:break-word}
+.tile .s{font-size:11.5px;color:var(--muted);word-break:break-word}
+.badge{display:inline-flex;align-items:center;gap:4px;font-size:12px;padding:1px 8px;border-radius:999px;white-space:nowrap;border:1px solid transparent}
+.b-scored{background:var(--good-bg);color:var(--good-text)}
+.b-error{background:var(--neutral-bg);color:var(--ink-2);border-color:var(--axis)}
+.b-invalid{background:var(--warm-bg);color:var(--warm-text)}
+.b-lost{background:var(--critical-bg);color:var(--critical-text)}
+.b-dim{background:var(--surface-2);color:var(--muted);border-color:var(--grid)}
+.b-cls{background:var(--surface-2);color:var(--ink-2);border-color:var(--grid)}
+table{width:100%;border-collapse:collapse;font-size:13px}
+th,td{text-align:left;padding:6px 8px;border-bottom:1px solid var(--grid);vertical-align:top}
+th{font-weight:600;color:var(--ink-2);font-size:12px;white-space:nowrap}
+td.num,th.num{text-align:right;font-variant-numeric:tabular-nums}
+.tbl{overflow-x:auto}
+.stack{display:flex;height:14px;border-radius:4px;overflow:hidden;background:var(--surface-2);min-width:120px}
+.stack span{display:block;height:100%;border-right:2px solid var(--surface)}
+.stack span:last-child{border-right:0}
+.stack.dist{min-width:220px;height:16px}
+.s-scored{background:var(--good)} .s-error{background:var(--axis)} .s-invalid{background:var(--warm)} .s-unscheduled{background:var(--neutral-bg)}
+.d-one{background:var(--good)} .d-mid{background:var(--warn)} .d-zero{background:var(--critical)} .d-invalid{background:var(--warm)} .d-error{background:var(--axis)} .d-missing{background:var(--neutral-bg)}
+.legend{display:flex;flex-wrap:wrap;gap:6px 14px;font-size:12px;color:var(--ink-2);margin:8px 0 0}
+.legend .sw{display:inline-block;width:11px;height:11px;border-radius:3px;vertical-align:-1px;margin-right:5px}
+.cnt{color:var(--muted);font-size:12.5px;margin:6px 0 10px}
+.kv{display:grid;grid-template-columns:auto 1fr;gap:3px 12px;font-size:12.5px}
+.kv dt{color:var(--muted)} .kv dd{margin:0;word-break:break-word}
+.two{display:grid;grid-template-columns:1fr 1fr;gap:14px 22px}
+.two > *{min-width:0}
+.heat{font-variant-numeric:tabular-nums;text-align:right;background:color-mix(in oklab, var(--accent) calc(var(--p) * 55%), transparent)}
+.heat .n{color:var(--muted);font-size:11px;margin-left:4px}
+td.best{font-weight:700}
+.meter{height:5px;border-radius:3px;background:var(--surface-2);overflow:hidden;margin-top:5px;min-width:72px} .meter span{display:block;height:100%;background:var(--accent)} .meter.rc span{opacity:.55}
+.cell{display:inline-block;min-width:34px;text-align:center;font-variant-numeric:tabular-nums;font-size:12px;padding:1px 6px;border-radius:6px}
+.c-1{background:var(--good-bg);color:var(--good-text)} .c-mid{background:var(--warn-bg);color:var(--warn-text)} .c-0{background:var(--critical-bg);color:var(--critical-text)}
+.c-err{background:var(--neutral-bg);color:var(--ink-2);border:1px dashed var(--axis)} .c-inv{background:var(--warm-bg);color:var(--warm-text)} .c-na{color:var(--muted)}
+.note{font-size:12.5px;color:var(--ink-2)}
+.note.warn{color:var(--warn-text);background:var(--warn-bg);padding:8px 10px;border-radius:6px}
+.sub{font-size:12px;color:var(--muted)}
+.empty{color:var(--muted);font-style:italic}
+.runs-pick{display:flex;flex-wrap:wrap;gap:6px 12px;font-size:12.5px;margin:6px 0 10px}
+.runs-pick label{display:inline-flex;gap:5px;align-items:center;padding:2px 8px;border:1px solid var(--grid);border-radius:999px;background:var(--surface-2);cursor:pointer}
+.runs-pick input{margin:0}
+.go{display:inline-block;font-size:12px;padding:3px 9px;border:1px solid var(--grid);border-radius:999px;background:var(--surface-2);text-decoration:none;white-space:nowrap;color:var(--accent-ink)} .go:hover{border-color:var(--accent)}
+.runlink{font-weight:600;text-decoration:none} .runlink:hover{text-decoration:underline}
+.grp-row td{background:var(--surface-2);padding-top:9px;border-bottom:1px solid var(--axis)} .grp-row .grp-name{font-weight:600} .grp-row .sub{display:inline}
+.stg{display:inline-block;width:8px;height:8px;border-radius:50%;margin-left:4px;vertical-align:1px;border:1px solid transparent}
+.st-covered{background:var(--good)} .st-partial{background:var(--warn)} .st-not_packed{background:var(--accent)} .st-jev_rejected{background:var(--axis)} .st-capped{background:var(--warm)} .st-not_candidate{background:var(--critical)} .st-not_written{background:var(--surface);border-color:var(--critical)!important} .st-no_evidence{background:var(--surface);border-color:var(--axis)!important} .st-no_search{background:var(--surface);border-color:var(--axis)!important;border-style:dashed}
+table.funnel td.n{font-variant-numeric:tabular-nums;text-align:right}
+table.funnel td.n a{text-decoration:none}
+table.funnel td.n .m{display:block;font-size:11px;color:var(--muted)}
+table.funnel th.st{min-width:68px}
+@media (max-width:720px){
+  h1{font-size:20px}
+  .two{grid-template-columns:1fr}
+  .col-sec{display:none}
+  select,input[type=search]{min-width:120px}
+}
+
+/* English labels may be longer than the original interface text. */
+h1,h2,h3,button,label,summary,.chip,.badge,.k,.kv dt{overflow-wrap:anywhere}
+button,.chip,.badge{max-width:100%;white-space:normal}
+.original-record{max-width:100%;min-width:0}.original-record pre{white-space:pre-wrap;overflow-wrap:anywhere;max-height:24rem;overflow:auto}
+@media(max-width:600px){.kv{grid-template-columns:1fr}.kv dt{white-space:normal}.kv dd{margin-bottom:.5rem}select{max-width:100%}}
+
+code{overflow-wrap:anywhere} pre code{overflow-wrap:normal}
+@media(max-width:600px){label{max-width:100%;min-width:0;flex-wrap:wrap}select{min-width:0!important;max-width:calc(100vw - 40px)!important}label select{flex-shrink:1}}
+
+.tbl .badge{white-space:nowrap;overflow-wrap:normal;max-width:none}
+</style>
+</head>
+<body>
+<div class="wrap">
+<header class="top">
+  <div>
+    <p class="eyebrow"> memeval · BEAM 100K · Overview </p>
+    <h1> BEAM 100K: collected runs </h1>
+    <p class="lede"> This page summarizes judge scores, ordering checks, category and episode results, failures, usage, and latency for collected BEAM 100K runs. Select a run for question-level answers, decisions, and coverage. Available adapter traces enable additional diagnostics. Report metrics come from <code>report.json</code>; direct-source counts, citation coverage, and evidence funnels are deterministically derived by <code>scripts/build_beam_review.py</code> from reports, datasets, and available traces. These diagnostics are distinct from official answer scoring. The page does not bundle real data; displayed content depends on the review resources provided. </p>
+  </div>
+  <nav><a href="index.html"> ← Documentation </a> · <a href="results.html"> Result cards </a> · <a href="cases.html"> PMB case review </a> · <a href="#compare"> Category / episode </a> · <a href="#dist"> Score distribution </a> · <a href="#cost"> Usage </a> · <a href="#dataset"> Dataset </a> · <a href="#glossary"> Metric glossary </a></nav>
+</header>
+<p class="note">Question text, answers, traces, and historical metadata are original recorded content and retain their source language. Interface labels are English; source records are not rewritten.</p>
+
+<div id="loadnote"></div>
+
+<section id="overview">
+  <div class="tiles" id="ov-tiles"></div>
+</section>
+
+<section id="runs">
+  <h2> Run overview </h2>
+  <p class="cnt" id="runs-cnt"></p>
+  <div class="tbl"><table id="runs-tbl"><thead><tr>
+    <th> Run </th><th> System under test </th><th> State </th><th class="num"> Judge mean </th><th class="num" id="th-recall" title="Fraction of gold evidence events directly represented by returned items; LeafMemory counts only L0 events. Measured before reader budgeting."> Evidence recall </th><th class="num" id="th-ids" title="Deduplicated events directly represented by returned items; parentheses show the share of query-visible events"> Direct sources / question </th><th class="num" id="th-prec" title="Gold fraction among direct sources; undefined for zero-source questions, which are excluded"> Evidence precision </th><th class="num col-sec" id="th-cov" title="Fraction of gold covered by all declared sources, including summary dependencies. Closure may contain events not directly returned. This is a provenance diagnostic, not a cross-system measure of direct retrieval quality."> Citation coverage </th><th class="num"> Ordering check </th><th class="num"> Wall time </th><th class="col-sec"> Usage </th><th class="col-sec"> Resumes / interruption </th><th class="col-sec"> Residue </th><th class="col-sec">report</th><th></th>
+  </tr></thead><tbody></tbody></table></div>
+  <div class="legend"><span><span class="sw s-scored"></span>scored</span><span><span class="sw s-error"></span> error (execution failure) </span><span><span class="sw s-invalid"></span> invalid (such as empty reader answers) </span><span><span class="sw s-unscheduled"></span> Not scheduled (budget interruption) </span></div>
+</section>
+
+<section id="compare">
+  <h2> Category × run </h2>
+  <p class="note"> Select runs to compare. Paired subset uses only questions scored by every selected run; otherwise each run uses its own scored subset, matching its result card. Bold marks the highest row value. Shared scored subsets still have selection bias: check full-set coverage, model, budget, and input mode before interpreting comparisons. </p>
+  <div class="runs-pick" id="pick"></div>
+  <div class="bar"><label class="row" id="metric-label" hidden> Metric <select id="metric"><option value="judge"> Judge mean </option><option value="recall"> Evidence recall </option><option value="precision" id="metric-precision"> Evidence precision </option></select></label><label class="row"><input type="checkbox" id="paired" checked> Paired subset </label><span class="sub" id="paired-n"></span></div>
+  <div class="tbl"><table id="cat-tbl"><thead></thead><tbody></tbody></table></div>
+  <h3 id="ep-h3"> Episode × run (scored-question mean; parentheses: scored / 20; missing episodes in red) </h3>
+  <div class="tbl"><table id="ep-tbl"><thead></thead><tbody></tbody></table></div>
+</section>
+
+<section id="dist">
+  <h2> Score distribution × run </h2>
+  <p class="note"> Each question score averages rubric-item values 0 / 0.5 / 1. The 400-question distribution separates perfect, partial, zero, invalid, error, and unscheduled outcomes. Perfect-score rate divides scores of 1 by 400. Full-set mean imputes zero for unscored questions in this derived statistic and is shown beside the conditional scored-only mean. It reflects completion without changing original error or invalid statuses into scored answers. </p>
+  <div class="tbl"><table id="dist-tbl"><thead><tr><th> Run </th><th> Distribution (400 questions) </th><th class="num"> Score 1 </th><th class="num"> Partial </th><th class="num"> Score 0 </th><th class="num">invalid</th><th class="num">error</th><th class="num"> Not scheduled </th><th class="num"> Perfect-score rate </th><th class="num"> Judge mean </th><th class="num"> Full-set mean </th></tr></thead><tbody></tbody></table></div>
+  <div id="dist-legend"></div>
+</section>
+
+<section id="failures" hidden>
+  <h2> Execution failures and invalid answers </h2>
+  <p class="note"> Only runs with error, invalid, or unscheduled questions are listed. Errors are grouped by evaluator, bridge/transport, or native SUT origin. Invalid answers cannot be scored; unscheduled questions were not reached before interruption. Individual failures are available in each run view. </p>
+  <div class="tbl"><table id="fail-tbl"><thead><tr><th> Run </th><th class="num">error</th><th class="num">invalid</th><th class="num"> Not scheduled </th><th> Failure stage </th><th> Error type </th><th class="col-sec"> Interrupted </th></tr></thead><tbody></tbody></table></div>
+</section>
+
+<section id="cost">
+  <h2> Usage and latency × run </h2>
+  <p class="note"> Wall time includes ingestion, retrieval, answering, and judging; resumed runs sum attempts. Native SUT usage is reported by the adapter; gateway usage is metered by the evaluator relay; none means no remote model calls declared or local models only. Missing accounting is not zero usage. Evaluator prompt tokens cover reader and judge calls. Retrieval and answer latency use per-question medians. </p>
+  <div class="tbl"><table id="cost-tbl"><thead><tr><th> Run </th><th class="num"> Wall time </th><th> SUT usage </th><th class="num"> Evaluator calls </th><th class="num"> Evaluator prompt tokens </th><th class="num"> Median retrieval </th><th class="num"> Median answer </th><th class="num col-sec"> Median ingestion (episode) </th></tr></thead><tbody></tbody></table></div>
+</section>
+
+<section id="funnel" hidden>
+  <h2> Adapter extension: evidence funnel </h2>
+  <p class="note"> This panel uses CogletNet work traces to follow question evidence events (dataset <code>gold.evidence_ids</code> ) through ingestion, candidate retrieval, JEV admission, packing, and reading. Cells show question counts and mean scores. Select a cell for filtered run details, category funnels, and per-question evidence tables. This adapter-specific diagnostic is not a common SUT metric or ranking criterion. Evidence labels are post-hoc and invisible to the SUT and decision service. Read the funnel alongside missing-source and derivation limitations. </p>
+  <div class="tbl"><table id="funnel-tbl" class="funnel"><thead></thead><tbody></tbody></table></div>
+</section>
+
+<section id="dataset">
+  <h2> Dataset </h2>
+  <div class="tiles" id="ds-tiles"></div>
+  <div class="two">
+    <div><dl class="kv" id="ds-kv"></dl></div>
+    <div>
+      <h3 style="margin-top:0"> 10 categories, 40 questions each </h3>
+      <div class="tbl"><table id="cats"><thead><tr><th> Category </th><th> Capability </th><th class="num"> Question count </th></tr></thead><tbody></tbody></table></div>
+    </div>
+  </div>
+  <h3> 20 episodes (conversation histories) </h3>
+  <div class="tbl"><table id="eps"><thead><tr><th>episode</th><th class="num"> Events </th><th class="num"> Size </th><th class="num"> Question count </th><th class="col-sec"> Content fingerprint </th></tr></thead><tbody></tbody></table></div>
+  <p class="sub" id="ds-lim"></p>
+</section>
+
+<section id="glossary">
+  <h2> Metric glossary </h2>
+  <p class="sub" id="gloss-src"></p>
+  <div class="tbl"><table id="gloss"><thead><tr><th> Metric </th><th> Name </th><th> Definition </th><th class="col-sec"> Scope / aggregation </th></tr></thead><tbody></tbody></table></div>
+  <p class="sub" id="gen"></p>
+</section>
+</div>
+
+<script>/*  */
+for (const s of ["beam/beam-100k.js","beam-common.js"]) document.write(`<script src="${s}?v=${Date.now()}"><\/script>`);</script>
+<script>
+let SEL = new Set();
+const D = window.MEMEVAL_BEAM;
+
+function render(d){
+  const ds = d.dataset||{}, runs = d.runs||[], Q = d.questions||[];
+  const grouped = hasEmbedding(D);
+  const sorted = [...runs].sort(grouped ? byEmbedThenJudge : byJudge);
+  const planned = Q.length||400;
+
+  /* ---- overview ---- */
+  const suts = new Set(runs.map(r=>r.sut?.name).filter(Boolean));
+  const best = [...runs].sort(byJudge)[0];
+  const allScored = Q.filter(q => runs.every(r => scoreOf(D, r.name, q.id)!=null)).length;
+  const latest = runs.map(r=>r.started_at_utc).filter(Boolean).sort().pop();
+  const complete = runs.filter(r => (r.status_counts?.scored||0)===planned).length;
+  $("#ov-tiles").replaceChildren(
+    tile("Run", runs.length, `${suts.size} SUTs (including variants) · ${complete} scored 400 / 400`),
+    tile("Highest judge mean", best ? fmt(judgeMean(best),4) : "—", best ? el("a",{href:runHref(best.name),text:shortName(best.name)}) : "—"),
+    ...(hasRecall(D) ? [(() => { const br = [...runs].filter(r=>recallMean(r)!=null).sort((a,b)=>recallMean(b)-recallMean(a))[0]; return tile("Highest evidence recall", br ? fmt(recallMean(br),4) : "—", br ? el("span",{}, el("a",{href:runHref(br.name),text:shortName(br.name)}), ` · All evidence hit ${fullRecall(D, br.name, Q)} questions`, idsMean(br)!=null ? ` · Direct sources per question ${fmt(idsMean(br),1)} items` : "") : "—", {title:RECALL_TIP}); })()] : []),
+    ...(hasFanout(D) ? [(() => { const bp = [...runs].filter(r=>precMean(r)!=null).sort((a,b)=>precMean(b)-precMean(a))[0]; return tile("Highest evidence precision", bp ? fmt(precMean(bp),4) : "—", bp ? el("span",{}, el("a",{href:runHref(bp.name),text:shortName(bp.name)}), ` · Direct sources per question ${fmt(idsMean(bp),1)} items · F1 ${fmt(f1Mean(bp),3)}`) : "—", {title:PREC_TIP}); })()] : []),
+    tile("Shared scored subset", `${allScored} / ${planned}`, "Questions scored by every run"),
+    tile("Question", planned, `${(ds.episodes||[]).length} episodes × 20 questions · ${(ds.categories||[]).length} categories`),
+    tile("With work traces", workRuns(D).length, "CogletNet runs (evidence funnel + coglet views)"),
+    tile("Latest run", latest ? dt(latest).slice(0,10) : "—", latest ? dt(latest).slice(11) : ""));
+
+  /* ---- runs ---- */
+  $("#runs-cnt").textContent = `${runs.length} runs, ${grouped?"Grouped by declared embedding: API → local / other → none, then ordered by judge mean within groups. Groups use report sut.declared.embedding, not run names.":"Ordered by judge mean."} Judge means use each run's scored subset. Different sample counts are not directly comparable; paired comparisons follow below.${hasRecall(D)?" Evidence recall is the gold-event fraction covered by returned sources, before reader budgeting, for scored questions with evidence only. The 45 questions without evidence labels are excluded. Read it alongside judge mean.":""}${hasFanout(D)?" Direct-source recall counts only events directly represented by returned items, consistently across systems. LeafMemory counts L0 events, excluding summary dependencies. Direct sources / question is their deduplicated count; parentheses show visible-event share. Precision is the gold fraction among them.":""}${hasCoverage(D)?" Citation coverage includes all declared dependencies, including summary closure. It was previously labeled recall. Broad dependency closure can raise coverage without precise direct retrieval; use it only as a provenance diagnostic.":""} Select a run name for its complete results.`;
+  $("#th-recall").hidden = !hasRecall(D); $("#th-ids").hidden = $("#th-prec").hidden = !hasFanout(D); $("#th-cov").hidden = !hasCoverage(D);
+  const rb = $("#runs-tbl tbody"); rb.replaceChildren();
+  const maxJ = Math.max(...sorted.map(r=>judgeMean(r)??0), 0.0001), maxR = Math.max(...sorted.map(r=>recallMean(r)??0), 0.0001), maxP = Math.max(...sorted.map(r=>precMean(r)??0), 0.0001);
+  let tier = -1;
+  for (const r of sorted){
+    if (grouped && embedTier(r)!==tier){
+      tier = embedTier(r); const t = EMBED_TIERS[tier]||{label:"Unclassified"}, members = sorted.filter(x=>embedTier(x)===tier), kinds = t.key==="none" ? [] : [...new Set(members.map(embedText))];
+      rb.append(el("tr",{class:"grp-row"}, el("td",{colspan:"15",title:t.desc||""}, el("span",{class:"grp-name",text:t.label}), el("span",{class:"sub",text:`${kinds.length?` · ${kinds.join("; ")}`:""} · ${members.length} runs`}))));
+    }
+    const sc = r.status_counts||{}, scheduled = Object.values(sc).reduce((a,b)=>a+b,0);
+    const j = r.metrics?.[JUDGE]||{}, eo = r.metrics?.[EO]||{}, rc = r.metrics?.[RECALL], ids = r.metrics?.[IDS], sh = r.metrics?.[SHARE], pr = r.metrics?.[PREC], f1 = r.metrics?.[F1], cov = r.metrics?.[COV];
+    const bill = r.billing||{};
+    const usage = bill.native ? `Native ${int(bill.native.calls)} calls · Input ${int(bill.native.input_tokens)}` : bill.sut?.prompt_tokens ? `Gateway ${int(bill.sut.calls)} calls · prompt ${int(bill.sut.prompt_tokens)}` : "—";
+    rb.append(el("tr",{},
+      el("td",{}, el("div",{}, el("a",{class:"runlink",href:runHref(r.name),title:r.name,text:shortName(r.name)})), el("div",{class:"sub",text:dt(r.started_at_utc)})),
+      el("td",{}, el("div",{text:[r.sut?.name,r.sut?.variant].filter(Boolean).join(" / ")||"—"}), el("div",{class:"sub",text:`Network ${r.sut?.network||"—"}`}), grouped ? el("div",{class:"sub",title:EMBED_TIP,text:embedLine(r)}) : null),
+      el("td",{}, stack(sc, planned), el("div",{class:"sub",text:`${sc.scored||0} scored${sc.error?` · ${sc.error} error`:""}${sc.invalid?` · ${sc.invalid} invalid`:""}${planned-scheduled>0?` · ${planned-scheduled} Not scheduled`:""}`})),
+      el("td",{class:"num"}, el("div",{text:fmt(j.mean,4)}), el("div",{class:"meter"}, el("span",{style:`width:${100*(j.mean??0)/maxJ}%`})), el("div",{class:"sub",text:`n=${j.n??"—"}`})),
+      hasRecall(D)? el("td",{class:"num",title:RECALL_TIP}, el("div",{text:fmt(rc?.mean,4)}), el("div",{class:"meter rc"}, el("span",{style:`width:${100*(rc?.mean??0)/maxR}%`})), el("div",{class:"sub",text:rc?.n!=null?`n=${rc.n} · All evidence hit ${fullRecall(D, r.name, Q)} questions`:"Not derived"})):null,
+      hasFanout(D)? el("td",{class:"num",title:IDS_TIP}, el("div",{text:ids?.mean!=null?`${fmt(ids.mean,1)}${sh?.mean!=null?`(${pct(sh.mean,1)})`:""}`:"—"}), el("div",{class:"sub",text:ids?.n!=null?`n=${ids.n}`:"Not derived"})):null,
+      hasFanout(D)? el("td",{class:"num",title:PREC_TIP}, el("div",{text:fmt(pr?.mean,4)}), el("div",{class:"meter rc"}, el("span",{style:`width:${100*(pr?.mean??0)/maxP}%`})), el("div",{class:"sub",text:pr?.n!=null?`F1 ${fmt(f1?.mean,3)} · n=${pr.n}`:"Not derived (undefined for zero sources)"})):null,
+      hasCoverage(D)? el("td",{class:"num col-sec",title:COV_TIP}, el("div",{class:cov?.mean!=null && rc?.mean!=null && Math.abs(cov.mean-rc.mean)>0.0005?"":"sub",text:fmt(cov?.mean,4)}), el("div",{class:"sub",text:cov?.mean!=null && rc?.mean!=null ? (Math.abs(cov.mean-rc.mean)>0.0005 ? "Includes summary closure" : "= recall") : ""})):null,
+      el("td",{class:"num"}, el("div",{text:fmt(eo.mean,4)}), el("div",{class:"sub",text:`n=${eo.n??"—"}`})),
+      el("td",{class:"num",text:dur(r.wall_seconds)}),
+      el("td",{class:"col-sec"}, el("div",{text:usage}), el("div",{class:"sub",text:`Evaluator prompt ${int(bill.evaluator?.prompt_tokens)}`})),
+      el("td",{class:"col-sec"}, el("div",{}, r.resume_count?`resume ×${r.resume_count}`:"—", sutChanges(r).length? el("span",{class:"badge b-invalid",style:"margin-left:6px",title:SUT_CHANGE_TIP,text:`SUT changes ×${sutChanges(r).length}`}):null), el("div",{class:"sub",text:[r.interruption?.reason?`Interrupted: ${r.interruption.reason}(${r.interruption.unscheduled??"?"} questions unscheduled)`:"", ...sutChanges(r).map(sutChangeText)].filter(Boolean).join(" · ")})),
+      el("td",{class:"col-sec"}, el("span",{class:"badge "+(r.isolation?.run_clean?"b-scored":"b-lost"),text:r.isolation?.run_clean?"Clean":"Residue present"}), el("div",{class:"sub",text:r.isolation?.backend||""})),
+      el("td",{class:"col-sec"}, el("code",{text:(r.report_sha256||"").slice(0,12)}), el("div",{class:"sub mono",text:r.report_path||""})),
+      el("td",{}, el("a",{class:"go",href:runHref(r.name),text:"Complete results →"}))));
+  }
+
+  /* ---- run picker ---- */
+  SEL = new Set(runs.map(r=>r.name));
+  const pk = $("#pick"); pk.replaceChildren();
+  for (const r of sorted){ const cb = el("input",{type:"checkbox",checked:"",value:r.name}); cb.addEventListener("change",()=>{ cb.checked? SEL.add(r.name): SEL.delete(r.name); renderCompare(); }); pk.append(el("label",{}, cb, shortName(r.name))); }
+  $("#paired").addEventListener("change", renderCompare);
+  $("#metric-label").hidden = !hasRecall(D); if (!hasFanout(D)) $("#metric-precision").remove(); $("#metric").addEventListener("change", renderCompare);
+  renderCompare();
+
+  /* ---- score distribution ---- */
+  const db = $("#dist-tbl tbody"); db.replaceChildren();
+  for (const r of sorted){
+    const dd = distOf(D, r.name, Q); const strict = Q.map(q=>scoreOf(D,r.name,q.id)??0);
+    db.append(el("tr",{}, el("td",{}, el("a",{class:"runlink",href:runHref(r.name),text:shortName(r.name)})), el("td",{}, distBar(dd, planned)),
+      ...["one","mid","zero","invalid","error","missing"].map(k => el("td",{class:"num"+(dd[k]?"":" c-na"),text:dd[k]?String(dd[k]):"·"})),
+      el("td",{class:"num",text:pct(dd.one/planned,1)}), el("td",{class:"num",text:fmt(judgeMean(r),4)}), el("td",{class:"num",text:fmt(mean(strict),4)})));
+  }
+  $("#dist-legend").replaceChildren(distLegend());
+
+  /* ---- failures ---- */
+  const failing = sorted.filter(r => { const sc=r.status_counts||{}; return (sc.error||0)+(sc.invalid||0)>0 || Object.values(sc).reduce((a,b)=>a+b,0)<planned; });
+  $("#failures").hidden = !failing.length;
+  const fb = $("#fail-tbl tbody"); fb.replaceChildren();
+  for (const r of failing){
+    const sc = r.status_counts||{}, scheduled = Object.values(sc).reduce((a,b)=>a+b,0), cells = Object.values(D.results?.[r.name]||{});
+    const et = {}; for (const x of cells) if (x.status!=="scored"){ const k = x.error_type||"(not recorded)"; et[k]=(et[k]||0)+1; }
+    const fc = r.failures_by_class||{};
+    fb.append(el("tr",{}, el("td",{}, el("a",{class:"runlink",href:runHref(r.name,"&status=error"),text:shortName(r.name)})),
+      el("td",{class:"num"+(sc.error?"":" c-na"),text:sc.error?String(sc.error):"·"}), el("td",{class:"num"+(sc.invalid?"":" c-na"),text:sc.invalid?String(sc.invalid):"·"}), el("td",{class:"num"+(planned-scheduled>0?"":" c-na"),text:planned-scheduled>0?String(planned-scheduled):"·"}),
+      el("td",{text:Object.entries(fc).sort((a,b)=>b[1]-a[1]).map(([k,v])=>`${k} ${v}`).join(", ")||"—"}),
+      el("td",{}, ...Object.entries(et).sort((a,b)=>b[1]-a[1]).map(([k,v]) => el("div",{}, el("code",{text:k}), ` ${v}`))),
+      el("td",{class:"col-sec sub",text:r.interruption?.reason?`${r.interruption.reason}(${r.interruption.unscheduled??"?"} questions unscheduled)`:"—"})));
+  }
+
+  /* ---- cost & time ---- */
+  const cb2 = $("#cost-tbl tbody"); cb2.replaceChildren();
+  for (const r of sorted){
+    const bill = r.billing||{}, cells = Object.values(D.results?.[r.name]||{});
+    const med = k => median(cells.map(x=>x.timings?.[k]).filter(v=>typeof v==="number"));
+    const su = bill.native ? el("div",{}, el("div",{text:`Native ${int(bill.native.calls)} times`}), el("div",{class:"sub",text:`Inputs ${int(bill.native.input_tokens)} · Output ${int(bill.native.output_tokens)} tokens`}))
+      : bill.sut ? el("div",{}, el("div",{text:`Gateway ${int(bill.sut.calls)} times`}), el("div",{class:"sub",text:`prompt ${int(bill.sut.prompt_tokens)}${bill.sut.completion_tokens!=null?` · completion ${int(bill.sut.completion_tokens)}`:""} tokens`}))
+      : el("span",{class:"c-na",text:"None"});
+    cb2.append(el("tr",{}, el("td",{}, el("a",{class:"runlink",href:runHref(r.name),text:shortName(r.name)}), r.resume_count? el("div",{class:"sub",text:`resume ×${r.resume_count}`}):null), el("td",{class:"num",text:dur(r.wall_seconds)}), el("td",{}, su),
+      el("td",{class:"num",text:int(bill.evaluator?.calls)}), el("td",{class:"num",text:int(bill.evaluator?.prompt_tokens)}),
+      el("td",{class:"num",text:med("query_ms")!=null?`${fmt(med("query_ms")/1000,1)} s`:"—"}), el("td",{class:"num",text:med("answer_ms")!=null?`${fmt(med("answer_ms")/1000,1)} s`:"—"}), el("td",{class:"num col-sec",text:med("ingest_ms")!=null?dur(med("ingest_ms")/1000):"—"})));
+  }
+
+  /* ---- CogletNet funnel summary ---- */
+  const wrs = workRuns(D).sort(byJudge); $("#funnel").hidden = !wrs.length;
+  if (wrs.length){
+    const cols = STAGE_ORDER.slice().reverse();
+    $("#funnel-tbl thead").replaceChildren(el("tr",{}, el("th",{text:"Run"}), el("th",{class:"num",text:"Recorded"}), el("th",{class:"num",text:"JEV threshold"}), ...cols.map(s=>el("th",{class:"num st",title:stageDesc(s)}, el("i",{class:"stg st-"+s,style:"margin:0 4px 0 0"}), stageLabel(s)))));
+    const tb = $("#funnel-tbl tbody"); tb.replaceChildren();
+    for (const r of wrs){
+      const cells = D.results[r.name]||{}, withWork = Q.filter(q => cells[q.id]?.work);
+      const tr = el("tr",{}, el("td",{}, el("a",{class:"runlink",href:runHref(r.name,"#improve"),text:shortName(r.name)}), el("div",{class:"sub",text:`Judge mean ${fmt(judgeMean(r),4)}`})), el("td",{class:"num",text:`${withWork.length} questions`}), el("td",{class:"num",text:String(r.work.config?.jev_threshold??"—")}));
+      for (const s of cols){ const sel = withWork.filter(q => cells[q.id].work.stage===s); const sc = sel.map(q=>cells[q.id].score).filter(v=>typeof v==="number"); const m = mean(sc);
+        tr.append(el("td",{class:"n"}, sel.length ? el("a",{href:runHref(r.name,"&stage="+encodeURIComponent(s)),title:"Open the run filtered to these questions",text:String(sel.length)}) : el("span",{class:"c-na",text:"·"}), sel.length ? el("span",{class:"m",text: m==null ? "" : `Mean score ${fmt(m,2)}${sc.length<sel.length?` (n=${sc.length})`:""}`}) : null)); }
+      tb.append(tr);
+    }
+  }
+
+  /* ---- dataset ---- */
+  const totalEvents = (ds.episodes||[]).reduce((a,e)=>a+(e.events||0),0), totalBytes=(ds.episodes||[]).reduce((a,e)=>a+(e.bytes||0),0);
+  $("#ds-tiles").replaceChildren(
+    tile("episode", (ds.episodes||[]).length, "conversation histories"),
+    tile("Question", Q.length, "20 questions each"),
+    tile("Category", (ds.categories||[]).length, "40 questions each"),
+    tile("events", int(totalEvents), `Total ${kb(totalBytes)} Text`),
+    tile("Judge", ds.protocol?.judge?.model||"—", `cutoff ${ds.protocol?.judge?.cutoff??"—"}`),
+    tile("Reader", ds.protocol?.reader?.model||"—", `${ds.protocol?.reader?.max_tokens??"—"} tokens · ${ds.protocol?.reader?.input||""}`));
+  const lic = ds.license||{}, src = ds.source||{};
+  $("#ds-kv").replaceChildren(...kv([
+    ["Suite", el("code",{text:ds.suite_id||"—"})],
+    ["Dataset fingerprint", el("code",{text:ds.suite_sha256||"—"})],
+    ["Source", src.attribution ? `${src.attribution}` : "—"],
+    ["Repository / revision", src.url ? el("span",{}, el("a",{href:src.url,target:"_blank",rel:"noopener",text:src.url})," · ", el("code",{text:(src.revision||"").slice(0,12)})) : el("code",{text:(src.revision||"—").slice(0,12)})],
+    ["License", `${lic.id||"—"}${lic.share_alike?"(ShareAlike)":""}${lic.redistribute_normalized?"; normalized copies may be redistributed under its terms":""}`],
+    ["Protocol", ds.protocol?.benchmark ? el("span",{}, `${ds.protocol.benchmark.protocol_id} v${ds.protocol.benchmark.version} · ${ds.protocol.benchmark.variant} · `, el("code",{text:(ds.protocol.benchmark.sha256||"").slice(0,12)})) : "—"],
+    ["Question type", "rubric: judge assigns 0 / 0.5 / 1 per item, averaged per question; event_ordering additionally uses an ordering check"],
+    ["Converter", src.converter||"—"],
+  ]));
+  const cb = $("#cats tbody"); cb.replaceChildren();
+  for (const c of (ds.categories||[])) cb.append(el("tr",{}, el("td",{}, el("div",{text:catLabel(c.id)}), el("div",{class:"sub mono",text:c.id})), el("td",{text:catDesc(c.id)}), el("td",{class:"num",text:int(c.n)})));
+  const eb = $("#eps tbody"); eb.replaceChildren();
+  for (const e of (ds.episodes||[])) eb.append(el("tr",{}, el("td",{text:e.id}), el("td",{class:"num",text:int(e.events)}), el("td",{class:"num",text:kb(e.bytes)}), el("td",{class:"num",text:int(e.cases)}), el("td",{class:"col-sec mono sub",text:(e.sha256||"").slice(0,16)})));
+  $("#ds-lim").textContent = (ds.limitations||[]).length ? "Limitations:"+ds.limitations.join("; ") : "";
+
+  /* ---- glossary ---- */
+  renderGlossary(D, "#gloss tbody", "#gloss-src");
+  $("#gen").textContent = `Generated at ${dt(d.generated_at)}(latest resume timestamp across runs, not page-build wall time) ${d.memeval_commit?` · memeval ${d.memeval_commit.slice(0,12)}`:""} · Data beam/beam-100k.js · Run view beam-run.html?run=… · Coglet view beam-coglet.html?run=…&q=…`;
+}
+
+function renderCompare(){
+  const runs = (D.runs||[]).filter(r=>SEL.has(r.name)).sort(byJudge);
+  const Q = D.questions||[], paired = $("#paired").checked, metric = $("#metric").value, recall = hasRecall(D) && metric==="recall", precision = hasFanout(D) && metric==="precision";
+  const V = precision ? precisionOf : recall ? recallOf : scoreOf, label = precision ? "Evidence precision" : recall ? "Evidence recall" : "Judge mean";
+  const common = paired ? Q.filter(q => runs.every(r => V(D, r.name,q.id)!=null)) : Q;
+  $("#paired-n").textContent = (paired ? `Questions where every selected run has ${label}: ${common.length} / ${Q.length}` : `Each run's own scored-question ${label} conditional mean`) + (recall ? "; excludes questions without gold evidence (45 total). Uses direct sources; see glossary" : precision ? "; excludes questions without gold evidence or with zero direct sources (undefined precision); see glossary" : "");
+  $("#ep-h3").textContent = `Episode × run (${label}, mean over scored questions; parentheses: included / 20; missing episodes in red)`;
+  const cats = (D.dataset?.categories||[]).map(c=>c.id);
+  const cellVals = (r, qs) => { const v = qs.map(q=>V(D, r.name,q.id)).filter(x=>x!=null); return [mean(v), v.length]; };
+  const thead = $("#cat-tbl thead"); thead.replaceChildren(el("tr",{}, el("th",{text:"Category"}), ...runs.map(r=>el("th",{class:"num"}, el("a",{href:runHref(r.name),title:r.name,text:shortName(r.name)})))));
+  const tb = $("#cat-tbl tbody"); tb.replaceChildren();
+  const rows = [["All", common], ...cats.map(c=>[c, common.filter(q=>q.category===c)])];
+  for (const [c, qs] of rows){
+    const vals = runs.map(r=>cellVals(r, qs)); const best = Math.max(...vals.map(v=>v[0]??-1));
+    tb.append(el("tr",{style:c==="All"?"font-weight:600":""}, el("td",{}, c==="All"? "All" : el("span",{}, catLabel(c), el("div",{class:"sub mono",text:c}))),
+      ...vals.map(([m,n]) => el("td",{class:"num heat"+(m!=null&&m===best&&runs.length>1?" best":""),style:`--p:${m??0}`}, m==null?"—":fmt(m,3), el("span",{class:"n",text:`(${n})`})))));
+  }
+  /* episode × run */
+  const eps = (D.dataset?.episodes||[]);
+  const eh = $("#ep-tbl thead"); eh.replaceChildren(el("tr",{}, el("th",{text:"episode"}), ...runs.map(r=>el("th",{class:"num"}, el("a",{href:runHref(r.name),title:r.name,text:shortName(r.name)})))));
+  const etb = $("#ep-tbl tbody"); etb.replaceChildren();
+  for (const e of eps){
+    const qs = Q.filter(q=>String(q.episode_id)===String(e.id));
+    etb.append(el("tr",{}, el("td",{text:e.id}), ...runs.map(r=>{ const sc = qs.map(q=>V(D, r.name,q.id)).filter(x=>x!=null); const st = qs.map(q=>statusOf(D, r.name,q.id)); const errs = st.filter(s=>s==="error").length, miss = st.filter(s=>s==="missing").length; const m = mean(sc);
+      return el("td",{class:"num heat",style:`--p:${m??0}`}, sc.length? fmt(m,3) : (miss===qs.length ? el("span",{class:"c-na",text:"Not scheduled"}) : el("span",{class:"badge b-lost",text:"Entire episode missing"})), el("span",{class:"n",text:`(${sc.length}/${qs.length})`}), errs&&sc.length? el("span",{class:"n",text:`${errs} err`}):null); })));
+  }
+}
+
+/* boot */
+if (!D){ $("#loadnote").append(el("div",{class:"note warn",text:NO_DATA})); }
+else render(D);
+</script>
+</body>
+</html>

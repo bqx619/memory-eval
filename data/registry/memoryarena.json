@@ -1,0 +1,46 @@
+{
+  "id": "memoryarena",
+  "name": "MemoryArena",
+  "repository": "",
+  "dataset_url": "https://huggingface.co/datasets/ZexueHe/memoryarena",
+  "data_nature": "",
+  "task_kinds": [
+    "agentic"
+  ],
+  "protocol_id": "memoryarena",
+  "variants": [
+    "bundled_shopping",
+    "progressive_search",
+    "group_travel_planner",
+    "formal_reasoning_math",
+    "formal_reasoning_phys"
+  ],
+  "reported_scale": {
+    "bundled_shopping": 150,
+    "progressive_search": 221,
+    "group_travel_planner": 270,
+    "formal_reasoning_math": 40,
+    "formal_reasoning_phys": 20
+  },
+  "license": {
+    "id": "CC-BY-4.0",
+    "noncommercial": false,
+    "no_derivatives": false,
+    "share_alike": false,
+    "redistribute_normalized": true,
+    "source": "https://huggingface.co/datasets/ZexueHe/memoryarena"
+  },
+  "pinned_revision": "",
+  "implementation_status": "registered",
+  "importer": "",
+  "suites": [],
+  "overlaps": [],
+  "notes": [
+    "Facts: design/upstream/dataset-schemas-2026-10.md and design/dataset-protocol.md §9.",
+    "No importer or protocol implementation is claimed. Full immutable revision not available locally; pinned_revision left empty.",
+    "Data provenance category not established by the locally vendored facts; data_nature left empty.",
+    "Repository URL not established in local facts; left empty.",
+    "Only upstream revision prefix da1a37c8 is locally documented; not promoted to a full revision."
+  ],
+  "verification_date": "2026-10-17"
+}

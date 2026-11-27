@@ -1,0 +1,54 @@
+{
+  "summary": "sut_provider+evaluator_providers",
+  "parties": [
+    {
+      "role": "sut_provider",
+      "endpoint": "192.0.2.10:8317",
+      "direction": "egress",
+      "enforcement": "none",
+      "evidence": [
+        "isolation.network_mode=open"
+      ]
+    },
+    {
+      "role": "evaluator_llm",
+      "endpoint": "openai-compat",
+      "direction": "egress",
+      "enforcement": "host_policy",
+      "evidence": [
+        "evaluator_llm.mode=record-once",
+        "evaluator_llm.models_pinned",
+        "reader.provider / protocol.judge.provider"
+      ]
+    },
+    {
+      "role": "evaluator_llm",
+      "endpoint": "typesafe",
+      "direction": "egress",
+      "enforcement": "host_policy",
+      "evidence": [
+        "evaluator_llm.mode=record-once",
+        "evaluator_llm.models_pinned",
+        "reader.provider / protocol.judge.provider"
+      ]
+    },
+    {
+      "role": "sidecar_image_registry",
+      "endpoint": "docker.io:443",
+      "direction": "egress",
+      "enforcement": "host_policy",
+      "evidence": [
+        "sut.lock.sidecar_images (install-time only; not runtime traffic)"
+      ]
+    }
+  ],
+  "zero_egress_proof": null,
+  "notes": [
+    "SUT credentials are injected through env.list; same-user Docker access can inspect container environment values.",
+    "Embedding is configured locally in the container variants; this disclosure is not independent verification of SDK traffic.",
+    "Image installation/build may contact registries and download wheels/models; zero_egress describes runtime only.",
+    "Evaluator LLM calls run on the host and are not intercepted by the SUT network policy.",
+    "Summary follows effective evaluator llm.mode: non-replay modes may egress even when record-once hits the cassette cache.",
+    "Open networking is unrestricted; any disclosed SUT endpoint is not an egress allowlist."
+  ]
+}

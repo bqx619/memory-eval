@@ -1,0 +1,133 @@
+{
+  "card_version": 1,
+  "cost": {
+    "evaluator": {
+      "prompt_tokens": 9007199254740993
+    },
+    "sut": null
+  },
+  "dataset": {
+    "cases_planned": 75,
+    "cases_with_gold": 43,
+    "categories": 1,
+    "license": "MIT",
+    "protocol": {
+      "id": null,
+      "ref": null,
+      "sha256": null,
+      "variant": null
+    },
+    "schema_version": "3.0",
+    "suite_id": "pmb-retrieval",
+    "suite_sha256": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+  },
+  "id": "mem0-pmb",
+  "results": {
+    "by_category": {
+      "synthetic": {
+        "metrics": {
+          "ndcg": {
+            "mean": 0.8603585084090906,
+            "n": 43
+          },
+          "precision": {
+            "mean": 0.3763856362217018,
+            "n": 61
+          },
+          "recall": {
+            "mean": 0.9186046511627907,
+            "n": 43
+          }
+        },
+        "planned": 75,
+        "status_counts": {
+          "scored": 75
+        }
+      }
+    },
+    "execution_errors": 0,
+    "headline": [
+      "recall",
+      "ndcg"
+    ],
+    "invalid": null,
+    "metrics": {
+      "ndcg": {
+        "mean": 0.8603585084090906,
+        "n": 43
+      },
+      "precision": {
+        "mean": 0.3763856362217018,
+        "n": 61
+      },
+      "recall": {
+        "mean": 0.9186046511627907,
+        "n": 43
+      }
+    },
+    "scores": {
+      "official": null
+    },
+    "scoring_coverage": 1,
+    "status_counts": {
+      "scored": 75
+    },
+    "timings": {
+      "query_ms": {
+        "p50": 0.1165,
+        "p95": 0.2116786
+      }
+    },
+    "unsupported": 0
+  },
+  "run": {
+    "framework_version": "0.4.0-m2a",
+    "isolation": {
+      "backend": "container/docker",
+      "network_enforced": true,
+      "network_mode": "none",
+      "run_clean": true,
+      "selftest_passed": true,
+      "tier": "D"
+    },
+    "limit": null,
+    "max_context_chars": 100000,
+    "memeval_commit": "recorded-commit",
+    "mode": "retrieval",
+    "parallel": 4,
+    "repeats": 1,
+    "reset_policy": "fresh_per_case",
+    "resume_count": 0,
+    "run_seed": "fixed-seed",
+    "started_at_utc": "2026-10-19T11:30:00Z",
+    "top_k": 10,
+    "wall_seconds": 0.060506083
+  },
+  "source": {
+    "report_path": "reports/mem0-pmb/report.json",
+    "report_sha256": "7d7cfc08a95bd963ca0edc33b311d13d00a3c8d6bd8fcb5918c4ea8d2250d323"
+  },
+  "subject": {
+    "declared": {
+      "embedding": {
+        "local": true,
+        "provider": "fastembed"
+      }
+    },
+    "env_lock_sha256": "eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee",
+    "image_id": "sha256:image",
+    "llm": null,
+    "manifest_sha256": "mmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmm",
+    "name": "mem0",
+    "upstream": {
+      "license": "MIT",
+      "package": "mem0",
+      "project": "Fixture",
+      "repo": "https://github.com/example/fixture",
+      "version": "1.0.0"
+    },
+    "variant": "synthetic",
+    "variant_notes": "合成变体说明"
+  },
+  "warnings": []
+}

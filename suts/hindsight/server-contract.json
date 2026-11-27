@@ -1,0 +1,18 @@
+{
+  "reviewed": true,
+  "source": "design/research/p6b-project-facts-2026-10.md",
+  "distribution": "hindsight-all==1.0.0",
+  "argv": [
+    "{venv}/bin/hindsight-api",
+    "--host",
+    "127.0.0.1",
+    "--port",
+    "{port}"
+  ],
+  "database_url": "pg0://hindsight:{sidecar.pg0.port}",
+  "cwd": "{ep}/work",
+  "home": "{ep}",
+  "pg0_installation": "$HOME/.pg0/installation",
+  "authentication": "DefaultTenantExtension: no auth; only local audited ports",
+  "real_smoke": "pending Claude"
+}

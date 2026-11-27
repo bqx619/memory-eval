@@ -1,0 +1,77 @@
+{
+  "schema_version": "3",
+  "name": "mem0-openai-embed",
+  "variant": "raw-openai-embed",
+  "notes": "Mem0 原文模式（infer=False）+ OpenAI text-embedding-3-large 3072 维直连嵌入，与 CogletNet 各变体同一嵌入模型；不调用任何 LLM；network open 用于 api.openai.com 的 embeddings 请求，不声称目标级网络强制隔离；评的是「高 star 开源记忆系统 + 强嵌入模型」的纯向量召回基线。",
+  "adapter": {
+    "kind": "python-bridge",
+    "transport": "jsonrpc-stdio",
+    "max_frame_bytes": 16777216,
+    "request_timeout_s": 1800
+  },
+  "runtime": {
+    "kind": "uv-python",
+    "python": "3.12",
+    "requirements": "requirements.in",
+    "prepare": [
+      [
+        "{python}",
+        "{project}/prepare_models.py",
+        "{env}/models"
+      ]
+    ],
+    "base": "uv-python",
+    "constraints": "requirements.constraints.txt"
+  },
+  "bridge": {
+    "module": "adapter",
+    "class": "Adapter",
+    "config": {
+      "infer": false,
+      "embedder": {
+        "provider": "openai",
+        "model": "text-embedding-3-large",
+        "dims": 3072,
+        "base_url": "https://api.openai.com/v1",
+        "api_key_env": "OPENAI_API_KEY",
+        "max_input_chars": 32768
+      }
+    }
+  },
+  "process": {
+    "command": [],
+    "cwd": "{ep}/work",
+    "env": {},
+    "env_passthrough": [
+      "OPENAI_API_KEY"
+    ]
+  },
+  "sandbox": {
+    "network": "open",
+    "limits": {
+      "timeout_s": 3600
+    },
+    "backend": "container"
+  },
+  "ready": {
+    "strategy": "sync"
+  },
+  "telemetry_env": {
+    "MEM0_TELEMETRY": "false",
+    "MEM0_DIR": "{ep}",
+    "HF_HUB_OFFLINE": "1",
+    "TRANSFORMERS_OFFLINE": "1"
+  },
+  "declared": {
+    "llm": "none (infer=False)",
+    "embedding": {
+      "provider": "OpenAI direct",
+      "model": "text-embedding-3-large",
+      "dimensions": 3072,
+      "local": false
+    }
+  },
+  "llm": {
+    "required": false
+  }
+}

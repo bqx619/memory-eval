@@ -1,0 +1,85 @@
+{
+  "id": "memoryagentbench",
+  "name": "MemoryAgentBench",
+  "repository": "https://github.com/HUST-AI-HYZ/MemoryAgentBench",
+  "dataset_url": "https://huggingface.co/datasets/ai-hyz/MemoryAgentBench",
+  "data_nature": "",
+  "task_kinds": [
+    "qa",
+    "summary",
+    "recsys"
+  ],
+  "protocol_id": "memoryagentbench",
+  "variants": [
+    "accurate_retrieval",
+    "longmemeval-overlap",
+    "conflict_resolution",
+    "long_range_understanding",
+    "test_time_learning"
+  ],
+  "reported_scale": {
+    "rows": 146
+  },
+  "license": {
+    "id": "MIT",
+    "noncommercial": false,
+    "no_derivatives": false,
+    "share_alike": false,
+    "redistribute_normalized": true,
+    "source": "https://huggingface.co/datasets/ai-hyz/MemoryAgentBench"
+  },
+  "pinned_revision": "7ea066982b140a19337e17e60d45d4076e042faf",
+  "implementation_status": "imported",
+  "importer": "memeval import memoryagentbench",
+  "suites": [
+    {
+      "suite_id": "mab-accurate-retrieval@7ea066982b14",
+      "path": "data/normalized/mab-accurate-retrieval@7ea066982b14",
+      "protocol_ref": "protocols/memoryagentbench.json#accurate_retrieval",
+      "import_stats_path": "data/normalized/mab-accurate-retrieval@7ea066982b14/import.json",
+      "suite_sha256": "cf4d0443b781f28f66074fe7b6ac26889384bf16cc54b75874d3383b05691943"
+    },
+    {
+      "suite_id": "mab-longmemeval-overlap@7ea066982b14",
+      "path": "data/normalized/mab-longmemeval-overlap@7ea066982b14",
+      "protocol_ref": "protocols/memoryagentbench.json#longmemeval-overlap",
+      "import_stats_path": "data/normalized/mab-longmemeval-overlap@7ea066982b14/import.json",
+      "suite_sha256": "cad8c3742f718ee991ca7cfe51722af1a39a211ab960cc49666531b3bf5a3ad3"
+    },
+    {
+      "suite_id": "mab-conflict-resolution@7ea066982b14",
+      "path": "data/normalized/mab-conflict-resolution@7ea066982b14",
+      "protocol_ref": "protocols/memoryagentbench.json#conflict_resolution",
+      "import_stats_path": "data/normalized/mab-conflict-resolution@7ea066982b14/import.json",
+      "suite_sha256": "5d0a212a506c9891abbcdf60bd14861057c19fb5dcff11ad6cae95a5844bef48"
+    },
+    {
+      "suite_id": "mab-long-range-understanding@7ea066982b14",
+      "path": "data/normalized/mab-long-range-understanding@7ea066982b14",
+      "protocol_ref": "protocols/memoryagentbench.json#long_range_understanding",
+      "import_stats_path": "data/normalized/mab-long-range-understanding@7ea066982b14/import.json",
+      "suite_sha256": "659cf03e64c3f7aacf1dd31af060037ee47768b2f04aa6889b6630b5c583b833"
+    },
+    {
+      "suite_id": "mab-test-time-learning@7ea066982b14",
+      "path": "data/normalized/mab-test-time-learning@7ea066982b14",
+      "protocol_ref": "protocols/memoryagentbench.json#test_time_learning",
+      "import_stats_path": "data/normalized/mab-test-time-learning@7ea066982b14/import.json",
+      "suite_sha256": "c9f47af1db93fb5d7aa416e33002bf47d8a97bc2c9f2015651df78ee0e5cd5c3"
+    }
+  ],
+  "overlaps": [
+    "longmemeval"
+  ],
+  "notes": [
+    "Facts: design/upstream/dataset-schemas-2026-10.md and design/dataset-protocol.md §9.",
+    "Data provenance category not established by the locally vendored facts; data_nature left empty.",
+    "P3a: locked parquet shard rows 22/8/110/6; 146 contexts and 3671 question occurrences in five bundles. Sentence tokenizer is neurosnap/sentences instead of nltk; memorize time_stamp fixed empty; see design/p3a-implementation-notes.md.",
+    "LongMemEval overlap is a separate bundle: 5 contexts x 60 disjoint question IDs = 300 distinct questions, all 300 IDs in LongMemEval-S 500 (user approved correction of the earlier 60-total statement). Excluded from independent MAB aggregate and must not be added to LongMemEval evidence as independent questions.",
+    "Candidate entity2id.json is pinned in the protocol; exact-distance recommendation ties use stable lexical ordering, a declared deviation from upstream Python set iteration.",
+    "All 300 raw overlap questions already contain the upstream Current Date/question wrapper. After removing that exact wrapper for verification only, questions and answers match LongMemEval-S. Importer and runner preserve the raw query unchanged; no additional date is injected.",
+    "Sentence-boundary deviation measured by Claude: design/findings/mab-chunker-deviation-2026-10.md (block count difference <=1, boundary shifts 1–3 sentences, full text coverage; upstream ruler insertion of space at done.[citation needed])."
+  ],
+  "verification_date": "2026-10-17",
+  "lock_path": "data/upstream/memoryagentbench/source.lock.json"
+}

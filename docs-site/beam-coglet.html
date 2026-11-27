@@ -1,0 +1,908 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title> memeval BEAM coglet review </title>
+<style>
+/* Tokens shared with docs-site/index.html, beam.html, beam-run.html, cases.html and design/report-ui/report.css */
+:root{
+  --page:#f9f9f7; --surface:#fcfcfb; --surface-2:#f3f3f0;
+  --ink:#0b0b0b; --ink-2:#52514e; --muted:#898781;
+  --grid:#e1e0d9; --axis:#c3c2b7; --ring:rgba(11,11,11,.10);
+  --accent:#2a78d6; --accent-ink:#184f95; --accent-bg:#e3eefb; --warm:#eb6834;
+  --good:#0ca30c; --good-text:#006300; --good-bg:#e7f6e7;
+  --warn:#fab219; --warn-text:#7a4f00; --warn-bg:#fdf3dc;
+  --critical:#d03b3b; --critical-text:#8c1d1d; --critical-bg:#fbe6e6;
+  --warm-text:#8a3a14; --warm-bg:#fdebe2;
+  --neutral-bg:#ecebe6;
+  --radius:10px;
+  --font:system-ui,-apple-system,"Segoe UI","PingFang SC","Hiragino Sans GB","Microsoft YaHei",sans-serif;
+  --mono:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
+}
+@media (prefers-color-scheme:dark){
+  :root:not([data-theme="light"]){
+    color-scheme:dark;
+    --page:#0d0d0d; --surface:#1a1a19; --surface-2:#232321;
+    --ink:#f0efec; --ink-2:#c3c2b7; --muted:#898781;
+    --grid:#2c2c2a; --axis:#383835; --ring:rgba(255,255,255,.10);
+    --accent:#3987e5; --accent-ink:#86b6ef; --accent-bg:#172a44; --warm:#d95926;
+    --good-text:#5fd45f; --good-bg:#15301a; --warn-text:#f2c35c; --warn-bg:#3a2d0f;
+    --critical-text:#f08a8a; --critical-bg:#3b1717; --warm-text:#f0a37d; --warm-bg:#3a2214; --neutral-bg:#2a2a28;
+  }
+}
+:root[data-theme="dark"]{
+  color-scheme:dark;
+  --page:#0d0d0d; --surface:#1a1a19; --surface-2:#232321;
+  --ink:#f0efec; --ink-2:#c3c2b7; --muted:#898781;
+  --grid:#2c2c2a; --axis:#383835; --ring:rgba(255,255,255,.10);
+  --accent:#3987e5; --accent-ink:#86b6ef; --accent-bg:#172a44; --warm:#d95926;
+  --good-text:#5fd45f; --good-bg:#15301a; --warn-text:#f2c35c; --warn-bg:#3a2d0f;
+  --critical-text:#f08a8a; --critical-bg:#3b1717; --warm-text:#f0a37d; --warm-bg:#3a2214; --neutral-bg:#2a2a28;
+}
+*{box-sizing:border-box}
+html{background:var(--page)}
+body{margin:0;background:var(--page);color:var(--ink);font:14px/1.55 var(--font)}
+.wrap{max-width:1480px;margin:0 auto;padding-block:22px 64px;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+header.top{display:flex;justify-content:space-between;gap:12px 24px;align-items:flex-start;flex-wrap:wrap;margin-bottom:16px}
+header.top > div:first-child{flex:1 1 560px;min-width:0}
+header.top nav{font-size:13px;color:var(--ink-2);padding-top:6px;margin-left:auto;display:flex;flex-wrap:wrap;gap:4px 10px;align-items:center}
+.eyebrow{margin:0 0 4px;font-size:12px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted)}
+h1{margin:0 0 6px;font-size:22px;line-height:1.25;text-wrap:balance}
+h2{font-size:17px;margin:0 0 10px}
+h3{font-size:14px;margin:14px 0 6px;color:var(--ink-2);letter-spacing:.02em}
+.lede{margin:0 0 8px;color:var(--ink-2);max-width:80ch;font-size:15px}
+a{color:var(--accent-ink)}
+code,.mono{font-family:var(--mono);font-size:12.5px}
+section{background:var(--surface);border:1px solid var(--grid);border-radius:var(--radius);padding:16px 18px;margin-bottom:16px}
+.badge{display:inline-flex;align-items:center;gap:4px;font-size:12px;padding:1px 8px;border-radius:999px;white-space:nowrap;border:1px solid transparent}
+.b-scored{background:var(--good-bg);color:var(--good-text)} .b-error{background:var(--neutral-bg);color:var(--ink-2);border-color:var(--axis)} .b-invalid{background:var(--warm-bg);color:var(--warm-text)}
+.b-dim{background:var(--surface-2);color:var(--muted);border-color:var(--grid)} .b-cls{background:var(--surface-2);color:var(--ink-2);border-color:var(--grid)}
+.b-ok{background:var(--good-bg);color:var(--good-text)} .b-no{background:var(--critical-bg);color:var(--critical-text)} .b-ev{background:var(--good-bg);color:var(--good-text);border-color:var(--good)} .b-st{border:1px solid var(--grid);background:var(--surface);color:var(--ink)}
+.stg{display:inline-block;width:8px;height:8px;border-radius:50%;margin-right:4px;vertical-align:1px;border:1px solid transparent}
+.st-covered{background:var(--good)} .st-partial{background:var(--warn)} .st-not_packed{background:var(--accent)} .st-jev_rejected{background:var(--axis)} .st-capped{background:var(--warm)} .st-not_candidate{background:var(--critical)} .st-not_written{background:var(--surface);border-color:var(--critical)!important} .st-no_evidence{background:var(--surface);border-color:var(--axis)!important} .st-no_search{background:var(--surface);border-color:var(--axis)!important;border-style:dashed}
+.hd{display:flex;flex-wrap:wrap;gap:4px 8px;align-items:center;color:var(--ink-2);font-size:12px;margin-bottom:6px}
+.note{font-size:12.5px;color:var(--ink-2)} .note.warn{color:var(--warn-text);background:var(--warn-bg);padding:8px 10px;border-radius:6px}
+.sub{font-size:12px;color:var(--muted)} .empty{color:var(--muted);font-style:italic}
+.box{background:var(--surface-2);border-radius:8px;padding:10px 12px;min-width:0;margin-bottom:10px} .box h3{margin:0 0 8px;font-size:13px}
+.kv{display:grid;grid-template-columns:auto 1fr;gap:3px 12px;font-size:12.5px} .kv dt{color:var(--muted);white-space:nowrap} .kv dd{margin:0;word-break:break-word;min-width:0}
+table{width:100%;border-collapse:collapse;font-size:12.5px} th,td{text-align:left;padding:5px 7px;border-bottom:1px solid var(--grid);vertical-align:top} th{font-weight:600;color:var(--ink-2);font-size:12px;white-space:nowrap} td.num,th.num{text-align:right;font-variant-numeric:tabular-nums} .tbl{overflow-x:auto}
+tr.evidence td{background:var(--good-bg)}
+pre,.tx{white-space:pre-wrap;word-break:break-word;background:var(--surface);border:1px solid var(--grid);border-radius:6px;padding:7px 9px;font-size:12px;margin:4px 0;max-height:260px;overflow:auto}
+details>summary{cursor:pointer;font-size:12.5px;color:var(--accent-ink)}
+details.prompt summary{cursor:pointer;font-size:14px;padding:4px 0} details.prompt summary .sub{font-weight:400}
+.msg{margin:10px 0} .msg .role{display:flex;gap:8px;align-items:center;margin-bottom:4px} .msgtext{white-space:pre-wrap;word-break:break-word;font:12.5px/1.55 var(--mono);background:var(--surface);border:1px solid var(--grid);border-radius:6px;padding:8px 10px}
+.answer{white-space:pre-wrap;word-break:break-word;font-size:13px;line-height:1.6;margin:0 0 8px}
+ol.rub{margin:0;padding-left:22px} ol.rub li{margin:0 0 5px;word-break:break-word} ol.rub .pol{color:var(--muted);font-size:11.5px;margin-left:6px}
+.two{display:grid;grid-template-columns:1fr 1fr;gap:12px 22px} .two>*{min-width:0}
+select,input[type=checkbox]{font:13px var(--font);color:var(--ink)} select{background:var(--surface-2);border:1px solid var(--grid);border-radius:7px;padding:5px 8px}
+.ctl{display:flex;flex-wrap:wrap;gap:8px 16px;align-items:center;font-size:12.5px;color:var(--ink-2);margin-bottom:8px}
+.ctl label{display:inline-flex;gap:6px;align-items:center}
+/* ---- stage bar ---- */
+.stagebar{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:8px}
+.stage{text-align:left;background:var(--surface-2);border:1px solid var(--grid);border-radius:8px;padding:8px 10px;cursor:pointer;font:inherit;color:var(--ink);min-width:0}
+.stage .n{display:inline-block;font-size:11px;color:var(--accent-ink);background:var(--accent-bg);border-radius:5px;padding:0 6px;margin-right:6px;font-variant-numeric:tabular-nums}
+.stage .t{font-weight:600;font-size:13px} .stage .s{display:block;font-size:11.5px;color:var(--ink-2);margin-top:3px;line-height:1.45}
+.stage.on{border-color:var(--accent);box-shadow:0 0 0 2px var(--accent-bg)} .stage.future{opacity:.45}
+.stagebar-note{margin:8px 0 0}
+/* ---- main grid ---- */
+.main{display:grid;grid-template-columns:minmax(0,1fr) 300px;gap:16px;align-items:start}
+.main>*{min-width:0}
+.forest-wrap{position:relative;overflow:auto;max-height:78vh;background:var(--surface);border:1px solid var(--grid);border-radius:8px}
+.cg{display:block;font:9.5px var(--font);fill:var(--ink)}
+.cg .lvl{font-size:10px;fill:var(--muted);font-weight:600}
+.cg .band-line{stroke:var(--grid);stroke-dasharray:2 4}
+.cg .src>rect.sbox{fill:var(--surface-2);stroke:var(--axis);stroke-width:1;rx:7}
+.cg .src.evidence>rect.sbox{stroke:var(--good);stroke-width:1.8}
+.cg .src.after>rect.sbox,.cg .src.unwritten>rect.sbox{fill:url(#hatch)}
+.cg .src .h1{font-size:10px;font-weight:600;fill:var(--ink)} .cg .src .h2{font-size:9px;fill:var(--ink-2)} .cg .src .h3{font-size:9px;fill:var(--accent-ink)}
+.cg .src .hdr{cursor:pointer} .cg .src.sel>rect.sbox{stroke:var(--ink);stroke-width:2}
+.cg .chip rect{rx:3;fill:var(--good-bg);stroke:var(--good)} .cg .chip text{font-size:8.5px;fill:var(--good-text);font-weight:600}
+.cg .nd{cursor:pointer} .cg .nd:focus{outline:none} .cg .nd:focus>rect.card{stroke:var(--accent);stroke-width:2}
+.cg .nd>rect.card{fill:var(--surface);stroke:var(--grid);stroke-width:1;rx:5}
+.cg .nd.nd-S>rect.card{fill:var(--good-bg);stroke:var(--good);stroke-width:1.4}
+.cg .nd.nd-pass>rect.card{fill:var(--accent-bg);stroke:var(--accent);stroke-width:1.2}
+.cg .nd.nd-low>rect.card{fill:var(--surface);stroke:var(--axis)}
+.cg .nd.nd-cap>rect.card{fill:var(--warm-bg);stroke:var(--warm)}
+.cg .nd.nd-R>rect.card{fill:var(--surface-2);stroke:var(--axis)}
+.cg .nd.nd-none>rect.card{fill:var(--surface);stroke:var(--grid)}
+.cg .nd.sel>rect.card{stroke:var(--ink);stroke-width:2.2}
+.cg .nd.on-path>rect.card{stroke-width:2;stroke:var(--warn-text)}
+.cg .nd .t1{font-size:8.5px;fill:var(--muted);font-family:var(--mono)} .cg .nd .p{font-size:8.5px;fill:var(--ink-2);font-family:var(--mono);font-weight:600}
+.cg .nd .t2{font-size:9.5px;fill:var(--ink)} .cg .nd.nd-none .t2{fill:var(--ink-2)}
+.cg .nd .t3{font-size:8.5px;fill:var(--ink-2)} .cg .nd.nd-S .t3{fill:var(--good-text);font-weight:600} .cg .nd.nd-pass .t3{fill:var(--accent-ink)} .cg .nd.nd-cap .t3{fill:var(--warm-text)}
+.cg .lvbar{fill:var(--axis)} .cg .nd.lv1 .lvbar{fill:var(--accent)} .cg .nd.lv2 .lvbar{fill:var(--accent-ink)} .cg .nd.lv3 .lvbar{fill:var(--warm)}
+.cg .edge{fill:none;stroke-width:1.3} .cg .edge.ek-SummaryParent{stroke:var(--accent-ink)} .cg .edge.ek-ContextFallback{stroke:var(--warm);stroke-dasharray:4 3}
+.cg .halo{fill:none;stroke:var(--warn);stroke-width:7;stroke-opacity:.45;stroke-linecap:round;display:none} .cg .eg.hl .halo{display:inline}
+.cg .covlab rect{fill:var(--warn-bg);stroke:var(--warn);rx:3} .cg .covlab text{font-size:8.5px;fill:var(--warn-text);font-weight:600}
+.cg.dim .nd:not(.keep){opacity:.22} .cg.dim .eg:not(.keep) .edge{opacity:.25} .cg.dim .src:not(.keep)>rect.sbox{opacity:.5}
+.cg.build-only .ov{display:none} .cg.build-only .nd>rect.card{fill:var(--surface)!important;stroke:var(--axis)!important;stroke-width:1!important} .cg.build-only .nd .t3{display:none}
+.cg-legend{display:flex;flex-wrap:wrap;gap:4px 14px;font-size:12px;color:var(--ink-2);margin:8px 0 4px}
+.cg-legend i{display:inline-block;width:12px;height:12px;vertical-align:-1px;margin-right:5px;border-radius:3px;border:1px solid var(--axis);background:var(--surface)}
+.cg-legend i.S{background:var(--good-bg);border-color:var(--good)} .cg-legend i.pass{background:var(--accent-bg);border-color:var(--accent)} .cg-legend i.cap{background:var(--warm-bg);border-color:var(--warm)} .cg-legend i.R{background:var(--surface-2)} .cg-legend i.none{border-color:var(--grid)}
+.cg-legend i.ln{height:0;width:18px;border:0;border-top:2px solid var(--accent-ink);vertical-align:3px;border-radius:0} .cg-legend i.ln.fb{border-top-style:dashed;border-color:var(--warm)} .cg-legend i.ln.hl{border-top:5px solid var(--warn);opacity:.6} .cg-legend i.ev{border:2px solid var(--good)} .cg-legend i.hatch{background:repeating-linear-gradient(45deg,var(--surface),var(--surface) 2px,var(--grid) 2px,var(--grid) 4px)}
+/* ---- flow bar ---- */
+.flow{display:flex;flex-direction:column;gap:6px}
+.flow .q{font-size:13.5px;margin:0 0 4px;line-height:1.45}
+.step{background:var(--surface-2);border:1px solid var(--grid);border-radius:8px;padding:7px 10px;cursor:pointer;font:inherit;text-align:left;color:var(--ink);min-width:0}
+.step .n{display:inline-block;font-size:11px;color:var(--accent-ink);background:var(--accent-bg);border-radius:5px;padding:0 6px;margin-right:6px;font-variant-numeric:tabular-nums}
+.step .t{font-weight:600;font-size:13px} .step .s{display:block;font-size:12px;color:var(--ink-2);margin-top:3px;line-height:1.45;word-break:break-word}
+.step.on{border-color:var(--warn);box-shadow:0 0 0 2px var(--warn-bg)} .step.future{opacity:.45} .step.static{cursor:default}
+.step .ev{display:block;font-size:11.5px;margin-top:2px}
+.arrow{text-align:center;color:var(--muted);font-size:11px;line-height:1}
+/* ---- detail ---- */
+#detail{margin-top:10px}
+#detail .ttl{font-weight:600;font-size:13.5px;margin-bottom:6px}
+.chips{display:flex;flex-wrap:wrap;gap:4px 6px;margin:4px 0}
+.lnk{background:none;border:1px solid var(--grid);border-radius:999px;padding:1px 8px;font:12px var(--mono);color:var(--accent-ink);cursor:pointer}
+.lnk:hover{border-color:var(--accent)}
+/* ---- explainer ---- */
+.ex{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:10px;align-items:start}
+.ex .card{background:var(--surface-2);border-radius:8px;padding:9px 11px;min-width:0;border-left:3px solid var(--axis)}
+.ex .card.leaf{border-left-color:var(--axis)} .ex .card.sum{border-left-color:var(--warn)} .ex .card.par{border-left-color:var(--accent)}
+.ex .card .k{font-size:11.5px;color:var(--muted);margin-bottom:3px} .ex .card .tx{max-height:150px}
+.ex .arr{align-self:center;text-align:center;color:var(--muted);font-size:18px}
+ul.pts{margin:6px 0;padding-left:20px} ul.pts li{margin:4px 0}
+.chooser ul{columns:2;column-gap:24px;padding-left:18px;font-size:13px} .chooser li{break-inside:avoid;margin:2px 0}
+@media (max-width:1000px){ .main{grid-template-columns:1fr} .stagebar{grid-template-columns:1fr 1fr} .two{grid-template-columns:1fr} .chooser ul{columns:1} }
+@media (max-width:720px){ h1{font-size:19px} .stagebar{grid-template-columns:1fr} }
+
+/* English labels may be longer than the original interface text. */
+h1,h2,h3,button,label,summary,.chip,.badge,.k,.kv dt{overflow-wrap:anywhere}
+button,.chip,.badge{max-width:100%;white-space:normal}
+.original-record{max-width:100%;min-width:0}.original-record pre{white-space:pre-wrap;overflow-wrap:anywhere;max-height:24rem;overflow:auto}
+@media(max-width:600px){.kv{grid-template-columns:1fr}.kv dt{white-space:normal}.kv dd{margin-bottom:.5rem}select{max-width:100%}}
+
+code{overflow-wrap:anywhere} pre code{overflow-wrap:normal}
+@media(max-width:600px){label{max-width:100%;min-width:0;flex-wrap:wrap}select{min-width:0!important;max-width:calc(100vw - 40px)!important}label select{flex-shrink:1}}
+
+.tbl .badge{white-space:nowrap;overflow-wrap:normal;max-width:none}
+</style>
+</head>
+<body>
+<div class="wrap">
+<header class="top">
+  <div>
+    <p class="eyebrow"> memeval · BEAM 100K · CogletNet adapter trace </p>
+    <h1 id="h1"> Coglet review </h1>
+    <p class="lede" id="lede"></p><p class="note"> This optional CogletNet adapter view displays version-specific structures and reader input from recorded traces. It does not change common scoring or require other systems to expose the same structures. Check results and comparison conditions in the overview. </p>
+  </div>
+  <nav id="nav"><a href="beam.html"> ← Evaluation overview </a></nav>
+</header>
+<p class="note">Question text, answers, traces, and historical metadata are original recorded content and retain their source language. Interface labels are English; source records are not rewritten.</p>
+<div id="loadnote"></div>
+<div id="page"></div>
+</div>
+
+<script>/*  */
+for (const s of ["beam/beam-100k.js","coglet-tree.js"]) document.write(`<script src="${s}?v=${Date.now()}"><\/script>`);</script>
+<script>
+const $ = s => document.querySelector(s);
+function el(tag, attrs={}, ...kids){ const n=document.createElement(tag); for (const [k,v] of Object.entries(attrs)){ if (v==null) continue; if (k==="text") n.textContent=v; else if (k==="html") n.innerHTML=v; else if (k==="style" && typeof v!=="string") Object.assign(n.style,v); else n.setAttribute(k,v);} for (const c of kids.flat()){ if (c==null) continue; n.append(c.nodeType? c : document.createTextNode(String(c))); } return n; }
+const SVGNS = "http://www.w3.org/2000/svg";
+function svgEl(tag, attrs={}, ...kids){ const n = document.createElementNS(SVGNS, tag); for (const [k,v] of Object.entries(attrs)){ if (v==null) continue; if (k==="text") n.textContent = String(v); else n.setAttribute(k, String(v)); } for (const c of kids.flat()){ if (c!=null) n.append(c); } return n; }
+const fmt = (v,d=3) => v==null||Number.isNaN(v) ? "—" : Number(v).toFixed(d);
+const int = v => v==null ? "—" : Number(v).toLocaleString("en-US");
+const shortId = id => id ? String(id).slice(0, 8) : "—";
+const shortName = n => String(n||"").replace(/-beam100k-400$/,"");
+const sidShort = sid => sid==null ? "?" : (String(sid).includes(":") ? String(sid).split(":").pop() : String(sid));
+const CAT_ZH = {information_extraction:"Information extraction", knowledge_update:"Knowledge update", contradiction_resolution:"Contradiction resolution", event_ordering:"Event ordering", temporal_reasoning:"Temporal reasoning", multi_session_reasoning:"Multi-session reasoning", summarization:"Summarization", abstention:"Abstention", preference_following:"Preference following", instruction_following:"Instruction following"};
+const catLabel = c => CAT_ZH[c]||c;
+const STAGE = {no_search:"No search trace", no_evidence:"No evidence labels", not_written:"Evidence not ingested", not_candidate:"Evidence not retrieved", capped:"Truncated before JEV", jev_rejected:"Below JEV threshold", not_packed:"Admitted but not packed", partial:"Evidence partially returned", covered:"All evidence returned"};
+const stageLabel = s => STAGE[s]||s||"—";
+const ORIGIN = {VectorHit:"Vector match", AncestorExpansion:"Ancestor expansion", EvidenceExpansion:"Evidence expansion", Unknown:"—"};
+const ORIGIN_G = {VectorHit:"Vector", AncestorExpansion:"↑ Ancestors", EvidenceExpansion:"↓ Evidence"};
+const OUTCOME = {selected:"Selected S", result_limit:"Admitted · limit exceeded", CONTEXT_BUNDLE_TOO_LARGE:"Admitted · context too large", jev_below_threshold:"Below JEV threshold", candidate_cap:"Candidate cap reached", evidence_cap:"Evidence expansion cap reached"};
+const KIND_ZH = {ExactCopy:"Exact copy", ExtractivePrefix:"Prefix extraction", Model:"Model generated", Generated:"Model generated"};
+const kindLabel = k => KIND_ZH[k] || k || "—";
+const D = window.MEMEVAL_BEAM;
+
+function params(){ try { const u = new URLSearchParams((window.location && window.location.search) || ""); return {run: u.get("run")||"", q: u.get("q")||""}; } catch (e) { return {run:"", q:""}; } }
+const href = (run, qid) => `beam-coglet.html?run=${encodeURIComponent(run)}&q=${encodeURIComponent(qid)}`;
+const store = { get(k){ try { return localStorage.getItem(k); } catch (e) { return null; } }, set(k,v){ try { localStorage.setItem(k,v); } catch (e) {} } };
+
+/* lazy per-episode data: beam/work/<run>/<ep>.js registers itself into window.MEMEVAL_BEAM_WORK */
+function loadWork(run, ep, file){
+  /* a resumed episode can span several namespaces; each question's cell names its own file (work/<run>/<ep>[-rN].js) */
+  file = file || (D.runs||[]).find(r=>r.name===run)?.work?.episodes?.[String(ep)]?.file;
+  if (!file) return Promise.reject(new Error("No work trace for this episode"));
+  const key = file.replace(/^work\//,"").replace(/\.js$/,""), have = (window.MEMEVAL_BEAM_WORK||{})[key];
+  if (have) return Promise.resolve(have);
+  return new Promise((res, rej) => { const s = document.createElement("script"); s.src = "beam/"+file+"?v="+Date.now();
+    s.onload = () => { const w = (window.MEMEVAL_BEAM_WORK||{})[key]; w ? res(w) : rej(new Error(file+" No data after loading")); };
+    s.onerror = () => rej(new Error(file+" Loading failed")); document.head.append(s); });
+}
+
+/*  */
+function promptBox(W, run, q, x){
+  const P = W?.searches?.[q.id]?.reader_prompt || null;
+  const sec = el("section",{id:"prompt"});
+  const det = el("details",{class:"prompt"});
+  const total = P ? (P.messages||[]).reduce((a,m)=>a+(m.content||"").length,0) : null;
+  det.append(el("summary",{}, el("b",{text:`Full prompt sent to reader ${P?.model || run.reader?.model || D.dataset?.protocol?.reader?.model || "gpt-6-luna"} model`}), el("span",{class:"sub",text: P ? `　${(P.messages||[]).length} messages · ${int(total)} characters · ${P.items_in_prompt??"—"} / ${P.items_returned??"—"} returned items in the prompt ${P.truncated?` · Truncated (dropped last ${P.dropped_items} items)`:""}` : "　(Prompt data not included in this work trace)"})));
+  if (!P){
+    det.append(el("p",{class:"note",text: x ? `The reader received ${x.returned_items??"—"} items returned by CogletNet (${int(x.returned_chars)} characters) and a fixed question instruction. This work trace has no reader_prompt field. Rebuild docs-site/beam/ with scripts/build_beam_review.py to display all messages (design/p16-beam-review.md §7).` : "This question was not scheduled; no reader call occurred."}));
+    sec.append(det); return sec;
+  }
+  const hd = el("div",{class:"hd"},
+    el("span",{class:"badge b-cls",text:`${P.provider||"—"} / ${P.model||"—"}`}),
+    el("span",{class:"badge b-dim",title:"Evaluator reader template ID (including template file SHA)",text:`Template ${P.template_id||"—"}`}),
+    el("span",{class:"badge b-dim",text:`temperature ${P.temperature??"—"} · max_tokens ${P.max_tokens??"—"} · n ${P.n??1}`}),
+    el("span",{class:"badge b-dim",text:`Input mode ${P.input_mode||"items"} · Character budget ${int(P.context_budget_chars)}`}),
+    P.request_sha ? el("span",{class:"badge "+(P.verified===true?"b-ok":P.verified===false?"b-no":"b-dim"),title:P.verify_note||"request_sha is report qa.reader_request_sha; verified indicates whether reconstruction produces the same hash",text:`request_sha ${String(P.request_sha).slice(0,12)} · ${P.verified===true?"Hash verified":P.verified===false?"Hash mismatch":"Not verified"}`}) : null,
+    P.ledger?.prompt_tokens!=null ? el("span",{class:"badge b-dim",title:"Prompt tokens and latency recorded for this reader call in the evaluator LLM ledger (llm_ledger.jsonl)",text:`Prompt ${int(P.ledger.prompt_tokens)} tokens${P.ledger.latency_ms!=null?` · ${fmt(P.ledger.latency_ms/1000,1)} s`:""}`}) : null,
+    P.reader_output ? el("span",{class:"badge b-dim",text:`Answer ${int(P.reader_output.completion_tokens)} tokens${P.reader_output.reasoning_tokens?` · Reasoning ${int(P.reader_output.reasoning_tokens)}`:""} · ${P.reader_output.finish_reason||"—"}`}) : null);
+  det.append(hd);
+  det.append(el("p",{class:"note",text:(P.messages||[]).length>1
+    ? `Messages sent to the reader (beam/reader-v1, items mode): CogletNet item bodies are joined by newlines in return order, dropping whole trailing items when over budget. A fixed question instruction follows. The reader cannot see the rubric, evidence labels, or other evaluation information.`
+    : `CogletNet returned no items. The reader received only the fixed question instruction (beam/reader-v1, items mode), without the rubric, evidence labels, or other evaluation information.`}));
+  (P.messages||[]).forEach((m,i) => {
+    det.append(el("div",{class:"msg"}, el("div",{class:"role"}, el("span",{class:"badge b-st",text:`Message ${i+1} · ${m.role||"user"}`}), el("span",{class:"sub",text:`${int((m.content||"").length)} characters`})), el("div",{class:"msgtext",text:m.content||"(empty)"})));
+  });
+  if (P.verified===false) det.append(el("p",{class:"note warn",text:`Reconstructed request_sha differs from the report (${P.verify_note||"reason not recorded"}). The reconstructed text above may differ slightly from the actual request.`}));
+  sec.append(det); return sec;
+}
+
+/* ======================= boot ======================= */
+function boot(){
+  if (!D){ $("#loadnote").append(el("div",{class:"note warn",text:"No data: docs-site/beam/beam-100k.js is missing. Generate it with scripts/build_beam_review.py (design/p16-beam-review.md §5)."})); return; }
+  const P = params(), workRuns = (D.runs||[]).filter(r => r.work && r.work.episodes);
+  const run = (D.runs||[]).find(r => r.name===P.run) || workRuns[0];
+  const q = (D.questions||[]).find(x => x.id===P.q);
+  if (!run || !q || !run.work){ chooser(workRuns, run); return; }
+  const x = D.results?.[run.name]?.[q.id] || null;
+  header(run, q, x);
+  const page = $("#page"); page.replaceChildren(questionBox(run, q, x), el("p",{class:"sub",id:"loading",text:`Loading beam/${x?.work?.file || ("work/"+run.name+"/"+q.episode_id+".js")} …`}));
+  loadWork(run.name, q.episode_id, x?.work?.file).then(W => { $("#loading")?.remove();
+      if (W.representation==="tree"){ if (!window.CogletTree){ page.append(el("div",{class:"note warn",text:"docs-site/coglet-tree.js is missing; cannot render the Tree scope."})); return; } const M = modelTree(W, run, q, x); page.append(stageBarTree(M), mainGridLeaf(M), explainerTree(M), tableViewTree(M), promptBox(W, run, q, x)); drawTree(M); return; }
+      if (W.representation==="leaf_memory"){ if (!window.CogletTree){ page.append(el("div",{class:"note warn",text:"docs-site/coglet-tree.js is missing; cannot render the LeafMemory scope."})); return; } const M = modelLeaf(W, run, q, x); page.append(stageBarLeaf(M), mainGridLeaf(M), explainerLeaf(M), tableViewLeaf(M), promptBox(W, run, q, x)); drawLeaf(M); return; }
+      const M = model(W, run, q, x); page.append(stageBar(M), mainGrid(M), explainer(M), tableView(M), promptBox(W, run, q, x)); drawAll(M); })
+    .catch(e => { $("#loading")?.remove(); page.append(el("div",{class:"note warn",text:"Coglet data loading failed:"+e.message})); });
+}
+function chooser(workRuns, run){
+  $("#h1").textContent = "Choose a question to review"; $("#lede").textContent = "Each question has a view of its CogletNet forest, retrieval and packing steps, reader answer, and judge decisions.";
+  const page = $("#page"); page.replaceChildren();
+  if (!workRuns.length){ page.append(el("div",{class:"note warn",text:"No runs contain work traces."})); return; }
+  const r = run && run.work ? run : workRuns[0];
+  const box = el("section",{class:"chooser"}, el("h2",{text:`${shortName(r.name)} · Questions with work traces`}));
+  const only = el("input",{type:"checkbox"}); only.checked = store.get("memeval.coglet.onlyMiss")==="1";
+  const list = el("ul");
+  const draw = () => { list.replaceChildren(); for (const q of D.questions||[]){ const x = D.results?.[r.name]?.[q.id]; if (!x?.work) continue; const sc = x.status==="scored" ? x.score : null; if (only.checked && !(sc!=null && sc<1)) continue;
+    list.append(el("li",{}, el("a",{href:href(r.name,q.id),text:q.id}), ` ${catLabel(q.category)} · `, el("span",{class:"badge "+(x.status==="scored"?"b-cls":"b-error"),text:x.status==="scored"?`Score ${fmt(sc,2)}`:x.status}), " ", el("span",{class:"badge b-st"}, el("i",{class:"stg st-"+x.work.stage}), stageLabel(x.work.stage)))); } };
+  only.addEventListener("change", () => { store.set("memeval.coglet.onlyMiss", only.checked?"1":"0"); draw(); });
+  box.append(el("div",{class:"ctl"}, el("label",{}, only, "Only questions with score < 1")), list); draw(); page.append(box);
+}
+function header(run, q, x){
+  $("#h1").textContent = `${q.id} · ${catLabel(q.category)}`;
+  $("#lede").textContent = q.query;
+  const nav = $("#nav"); nav.replaceChildren(el("a",{href:`beam-run.html?run=${encodeURIComponent(run.name)}#q=${encodeURIComponent(q.id)}`,title:"Return to this run and locate the question",text:"← This run"}), el("span",{class:"sub",text:shortName(run.name)}), el("a",{href:"beam.html",text:"Overview"}));
+  const only = el("input",{type:"checkbox"}); only.checked = store.get("memeval.coglet.onlyMiss")==="1";
+  const links = el("span");
+  const draw = () => { const qs = (D.questions||[]).filter(z => { const y = D.results?.[run.name]?.[z.id]; if (!y?.work) return false; if (!only.checked) return true; return y.status==="scored" && y.score!=null && y.score<1; });
+    const i = qs.findIndex(z=>z.id===q.id); const prev = i>0 ? qs[i-1] : null, next = i>=0 && i<qs.length-1 ? qs[i+1] : null;
+    links.replaceChildren(prev ? el("a",{href:href(run.name,prev.id),title:prev.query,text:"‹ Previous question"}) : el("span",{class:"sub",text:"‹ Previous question"}), " ", el("span",{class:"sub",text:i>=0?`${i+1} / ${qs.length}`:`— / ${qs.length}`}), " ", next ? el("a",{href:href(run.name,next.id),title:next.query,text:"Next question ›"}) : el("span",{class:"sub",text:"Next question ›"})); };
+  only.addEventListener("change", () => { store.set("memeval.coglet.onlyMiss", only.checked?"1":"0"); draw(); }); draw();
+  nav.append(links, el("label",{style:"display:inline-flex;gap:4px;align-items:center;font-size:12px"}, only, "Only browse questions with score < 1"));
+}
+function questionBox(run, q, x){
+  const w = x?.work || null;
+  const sec = el("section",{id:"qbox"});
+  const hd = el("div",{class:"hd"}, el("span",{class:"badge b-cls",text:catLabel(q.category)}), el("span",{class:"badge b-dim",text:`episode ${q.episode_id}`}), el("span",{class:"badge b-dim",text:`cutoff ${q.cutoff??"—"} events`}), q.difficulty? el("span",{class:"badge b-dim",text:`Difficulty ${q.difficulty}`}):null);
+  if (!x) hd.append(el("span",{class:"badge b-error",text:"Not scheduled"}));
+  else { hd.append(el("span",{class:"badge b-"+(x.status==="scored"?"scored":x.status==="invalid"?"invalid":"error"),text:x.status}), x.status==="scored"? el("span",{class:"badge b-cls",text:`Judge score ${fmt(x.score,3)}`}):null, x.event_ordering!=null? el("span",{class:"badge b-cls",text:`Ordering check ${fmt(x.event_ordering,3)}`}):null, x.reader_abstain? el("span",{class:"badge b-dim",text:"Reader abstained"}):null, x.truncated? el("span",{class:"badge b-invalid",text:"Reader context truncated"}):null); }
+  if (w) hd.append(el("span",{class:"badge b-st",title:"Furthest stage reached by evidence in the CogletNet pipeline (post-hoc diagnostic)"}, el("i",{class:"stg st-"+w.stage}), "Loss stage:", stageLabel(w.stage)), w.covered ? el("span",{class:"badge b-dim",text:`Evidence returned ${w.covered[0]} / ${w.covered[1]}`}) : null);
+  const att = x?.attempt || w?.attempt || null;
+  if (att && att!=="root") hd.append(el("span",{class:"badge b-dim",title:"This score comes from a resumed attempt that reran selected questions with a new SUT identity and replaced their prior results (--resume-cases --resume-sut-change)",text:`Score from ${att}`}));
+  if (w?.attempt_mismatch) hd.append(el("span",{class:"badge b-invalid",title:"This search trace comes from a different attempt. Episode build counts (ingestion, leaves, levels) come from the majority attempt and may not describe this question.",text:"Attempt mismatch"}));
+  sec.append(hd);
+  if (w?.attempt_mismatch) sec.append(el("p",{class:"note",text:`This trace comes from a different attempt (${w.attempt||"?"}). Episode build counts may differ; candidates, JEV, packing, and evidence diagnostics remain specific to this question.`}));
+  const left = el("div");
+  left.append(q.rubric && q.rubric.length ? el("div",{}, el("h3",{style:"margin-top:0",text:`rubric(${q.rubric.length} items; aggregate ${q.aggregate==="mean"?"mean":q.aggregate||"mean"})`}), el("ol",{class:"rub"}, ...q.rubric.map((it,i) => { const j = x?.items?.[i]; return el("li",{}, it.text, el("span",{class:"pol",text:`${it.polarity||""}${it.weight!=null&&it.weight!==1?` · Weight ${it.weight}`:""}`}), j ? el("span",{class:"badge "+(j.expectation>=0.75?"b-ok":j.expectation<=0.25?"b-no":"b-invalid"),style:"margin-left:6px",title:"Judge expectation (probability-weighted 0 / 0.5 / 1)",text:fmt(j.expectation,2)}) : null); }))) : el("p",{class:"empty",text:"No rubric text for this question"}));
+  if ((q.evidence_ids||[]).length) left.append(el("p",{class:"sub",text:"Evidence events (dataset gold.evidence_ids; post-hoc only, invisible to the SUT and JEV):"+q.evidence_ids.map(sidShort).join(", ")}));
+  const right = el("div");
+  if (x){ right.append(el("h3",{style:"margin-top:0",text:"Reader answer (fixed reader, using only returned CogletNet items)"}), x.answer!=null ? el("div",{class:"answer",text:x.answer||"(empty)"}) : el("p",{class:"empty",text:x.status==="scored"?"Answer text was not retained":"No answer"}));
+    if (x.status!=="scored"){ const f = x.failure||{}; right.append(el("p",{class:"note"}, el("b",{text:"Failure stage:"}), f.class||x.error_type||"Unknown", (f.native_kinds||[]).length? ` · ${f.native_kinds.join(", ")}`:""), f.message? el("pre",{text:f.message}):null); }
+    if (x.timings) right.append(el("p",{class:"sub",text:`Ingest ${fmt((x.timings.ingest_ms||0)/1000,0)} s · Retrieve ${fmt((x.timings.query_ms||0)/1000,1)} s · Answer ${fmt((x.timings.answer_ms||0)/1000,1)} s · Returned ${x.returned_items??"—"} items / ${int(x.returned_chars)} characters`})); }
+  sec.append(el("div",{class:"two"}, left, right));
+  return sec;
+}
+
+/* ======================= model over the episode file ======================= */
+function nodeState(c, thr, cv){
+  if (!c) return "none";
+  const o = c.outcome;
+  if (o==="selected" || c.rank!=null) return "S";
+  if (o==="result_limit" || o==="CONTEXT_BUNDLE_TOO_LARGE") return "pass";
+  if (o==="candidate_cap" || o==="evidence_cap") return "cap";
+  if (o==="jev_below_threshold") return "low";
+  if (c.p_use!=null && thr!=null) return c.p_use >= thr ? "pass" : "low";
+  return "R";
+}
+const STATE_ORDER = ["none","R","cap","low","pass","S"];
+const STATE_ZH = {S:"Selected S", pass:"Admitted but not packed", low:"Below JEV threshold", cap:"Truncated before JEV", R:"Candidate not scored", none:"Not a candidate"};
+function model(W, run, q, x){
+  const w = x?.work || null, s = W.searches?.[q.id] || null, thr = s?.jev_threshold ?? W.config?.jev_threshold ?? run.work?.config?.jev_threshold ?? null;
+  const T = h => (h && W.texts && W.texts[h]!==undefined) ? W.texts[h] : null;
+  const events = W.events||[], evMeta = new Map(events.map(e=>[e.source_id, e])), evSeq = new Map(events.map((e,i)=>[e.source_id, i]));
+  const builds = W.builds||[], bySid = new Map(); builds.forEach((b,i)=>{ if (b.source_id!=null) bySid.set(b.source_id, {b, i}); });
+  const builds_before = s?.builds_before ?? builds.length;
+  const nodeIx = new Map(); builds.forEach((b,i)=>{ for (const n of b.nodes||[]) nodeIx.set(n.node, {n, b, i, sid:b.source_id}); });
+  const evidence = new Set(q.evidence_ids||[]);
+  const cand = new Map(); for (const c of s?.candidates||[]) cand.set(c.node, {...c});
+  for (const it of s?.items||[]){ const c = cand.get(it.node); if (c) Object.assign(c, {rank:it.rank, outcome:"selected", item:it, rank_utility:it.rank_utility}); else cand.set(it.node, {...it, outcome:"selected", item:it}); }
+  for (const [node, reason] of Object.entries(s?.omitted||{})){ const c = cand.get(node); if (c){ if (!c.outcome) c.outcome = reason; } else { const ix = nodeIx.get(node); cand.set(node, {node, source_id: ix?.sid ?? null, level: ix?.n.level ?? null, origin:"Unknown", outcome: reason, p_use:null, similarity:null, vector_rank:null, rank:null, implicit:true}); } }
+  const jev = new Map(); for (const b of s?.jev_trace||[]) for (const t of b.targets||[]) jev.set(t.node, {...t, batch:b.batch, model:b.model, attempts:b.attempts, error_code:b.error_code});
+  const cvis = new Map(); for (const v of s?.context_view?.visible||[]) cvis.set(v.node, v);
+  const sources = new Map();
+  const touch = sid => { if (sid==null) return null; if (!sources.has(sid)){ const e = bySid.get(sid);
+      const nodes = (e?.b?.nodes||[]).map(n => ({...n, c: cand.get(n.node)||null, jev: jev.get(n.node)||null, cv: cvis.get(n.node)||null}));
+      sources.set(sid, {sid, ev: evMeta.get(sid)||null, seq: evSeq.get(sid) ?? 1e9, build: e?.b||null, idx: e?.i, nodes, evidence: evidence.has(sid), written: e ? (e.i >= builds_before ? "after_query" : e.b.state) : null}); } return sources.get(sid); };
+  for (const c of cand.values()) touch(c.source_id ?? nodeIx.get(c.node)?.sid);
+  for (const v of cvis.values()) touch(v.source_id ?? nodeIx.get(v.node)?.sid);
+  for (const it of s?.items||[]) for (const p of it.path||[]) touch(nodeIx.get(p.node)?.sid);
+  for (const sid of evidence) touch(sid);
+  const involved = new Set(sources.keys());
+  for (const b of builds) touch(b.source_id);
+  for (const src of sources.values()){
+    for (const c of cand.values()){ const sid = c.source_id ?? nodeIx.get(c.node)?.sid; if (sid===src.sid && !src.nodes.some(n=>n.node===c.node)) src.nodes.push({node:c.node, level:c.level??0, ordinal:9999, kind:"?", c, jev: jev.get(c.node)||null, cv: cvis.get(c.node)||null, orphan:true}); }
+    src.maxLevel = src.nodes.length ? Math.max(...src.nodes.map(n=>n.level??0)) : 0;
+    src.leaves = src.nodes.filter(n=>(n.level??0)===0).length; src.uppers = src.nodes.length - src.leaves;
+    const cs = src.nodes.filter(n=>n.c);
+    let best = null, bs = -1; for (const n of cs){ const st = STATE_ORDER.indexOf(nodeState(n.c, thr, n.cv)); if (st > bs || (st===bs && (n.c.p_use??-1) > (best.c.p_use??-1))){ bs = st; best = n; } }
+    src.best = best; src.state = best ? STATE_ORDER[bs] : "none";
+  }
+  const ordered = [...sources.values()].sort((a,b)=>a.seq-b.seq);
+  const M = {W, run, q, x, w, s, thr, T, events, evMeta, builds, bySid, builds_before, nodeIx, evidence, cand, jev, cvis, sources, involved, ordered, scope: "involved", stage: 5, sel: null, hl: null};
+  window.__M = M; return M;
+}
+function listFor(M){ return M.ordered.filter(src => M.scope==="all" ? true : M.scope==="evidence" ? src.evidence : M.involved.has(src.sid)); }
+function excerpt(M, hash, px){ const t = M.T(hash); if (t==null) return "(no body)"; for (const raw of t.split("\n")){ const ln = raw.replace(/^[\s#>*\-`|\/]+/, "").replace(/[`*_]/g,"").replace(/\s+/g," ").trim(); if ((ln.match(/[\p{L}\p{N}]/gu)||[]).length >= 3) return fit(ln, px); } return fit(t.replace(/\s+/g," ").trim(), px); }
+const chW = ch => /[^\x00-\xff]/.test(ch) ? 9.6 : /[A-Z]/.test(ch) ? 6.2 : /[mw]/.test(ch) ? 7.6 : /[ilj.,:;'!| ]/.test(ch) ? 2.9 : 5.3;
+function fit(t, px){ let w = 0, out = ""; for (const ch of t){ w += chW(ch); if (w > px) return out.replace(/\s+$/,"")+"…"; out += ch; } return out; }
+
+/* ======================= stage bar ======================= */
+function buildStats(M){
+  const before = M.builds.filter((b,i)=>i < M.builds_before);
+  const st = {}; for (const b of before) st[b.state||"?"] = (st[b.state||"?"]||0)+1;
+  const lv = {}, ed = {}, kinds = {}; let accepted = 0, pending = 0, hasPending = false;
+  for (const b of before){ for (const n of b.nodes||[]){ const l = n.level??0; lv[l] = (lv[l]||0)+1; if (n.edge?.kind) ed[n.edge.kind] = (ed[n.edge.kind]||0)+1; }
+    for (const a of b.summaries||[]) if (a.accepted){ accepted++; kinds[a.candidate_kind||"?"] = (kinds[a.candidate_kind||"?"]||0)+1; }
+    if (b.pending && typeof b.pending==="object"){ hasPending = true; for (const g of Object.values(b.pending)) pending += (g||[]).length; } }
+  return {n: before.length, st, lv, ed, kinds, accepted, pending: hasPending ? pending : null};
+}
+function stageBar(M){
+  const {s, x, q} = M, B = buildStats(M), cfg = M.W.build_config || null;
+  const cands = [...M.cand.values()], scored = cands.filter(c=>c.p_use!=null), passed = scored.filter(c=>M.thr!=null && c.p_use >= M.thr), S = s?.items||[], C = s?.context_view?.visible||[];
+  const stages = [
+    ["Event ingestion", `Ingested ${B.n} events (${Object.entries(B.st).map(([k,v])=>`${k} ${v}`).join(", ")||"—"}); question cutoff ${q.cutoff??"—"}; later events excluded`],
+    ["Chunking and self-summaries", `${B.lv[0]||0} leaves (L0) · Accepted summaries ${B.accepted}(${Object.entries(B.kinds).map(([k,v])=>`${KIND_ZH[k]||k} ${v}`).join(", ")||"—"})${cfg?` · Chunk target ${cfg.chunk_target??"—"} tokens(${cfg.chunk_low??"—"}–${cfg.chunk_high??"—"})`:""}`],
+    ["Hierarchy build and publication", `Upper-level coglets ${Object.entries(B.lv).filter(([k])=>k!=="0").sort((a,b)=>a[0]-b[0]).map(([k,v])=>`L${k} ${v}`).join(" · ")||"None"} · Summary-parent edges ${B.ed.SummaryParent||0} · Fallback edges ${B.ed.ContextFallback||0} · Pending aggregation ${B.pending==null?"Not recorded":B.pending}`],
+    ["Retrieval and context", s ? `Recall R ${cands.length}${s.settings?.candidate_cap!=null && cands.length>=s.settings.candidate_cap?"(cap reached)":""} → JEV admission ${passed.length} / ${scored.length}(threshold ${M.thr??"—"}) → Selected S ${S.length} / limit ${s.limit??"—"} → Context C ${C.length} bodies · ${int(s.context_view?.tokens)} tokens` : (M.w?.trace==="corrupt" ? "Search trace damaged by log redaction (F92)" : "No search trace")],
+    ["Answer and scoring", x ? `Reader input A ${x.returned_items??"—"} items · ${int(x.returned_chars)} characters ${x.truncated?"(truncated)":""} → Judge ${x.status==="scored"?`Score ${fmt(x.score,3)}`:x.status}` : "Not scheduled"],
+  ];
+  const sec = el("section",{id:"stages"});
+  const bar = el("div",{class:"stagebar"});
+  const btns = stages.map(([t,sub],i) => { const b = el("button",{type:"button",class:"stage"}, el("span",{class:"n",text:String(i+1).padStart(2,"0")}), el("span",{class:"t",text:t}), el("span",{class:"s",text:sub})); b.addEventListener("click", () => { M.stage = i+1; syncStage(M); }); return b; });
+  bar.append(...btns); M.stageBtns = btns;
+  sec.append(bar, el("p",{class:"note stagebar-note",id:"stage-note"}));
+  return sec;
+}
+function syncStage(M){
+  M.stageBtns.forEach((b,i)=>{ b.classList.toggle("on", i+1===M.stage); b.classList.toggle("future", i+1>M.stage); });
+  const svg = M.svg; if (svg) svg.classList.toggle("build-only", M.stage < 4);
+  for (const st of M.stepEls||[]) st.classList.toggle("future", st.dataset.stage && Number(st.dataset.stage) > M.stage);
+  $("#stage-note").textContent = M.stage < 4 ? `Replay through step ${M.stage} : the forest displays build facts only (levels, actual parent edges, fallback edges). Retrieval, JEV, and packing overlays are hidden. Select step 4 or 5 for the complete view.` : `Replay complete. Cards show retrieval origins, p_use, and packing state. Positions depend only on source order and level, never on probability.`;
+  if (M.stage < 4) clearSelection(M);
+}
+
+/* ======================= main grid: forest + flow ======================= */
+function mainGrid(M){
+  const sec = el("section",{id:"forest-sec"});
+  const scope = el("select",{id:"scope"}, el("option",{value:"involved",text:`Sources involved in this question (candidates / context / evidence,${M.involved.size} events)`}), el("option",{value:"evidence",text:`Evidence events only (${M.evidence.size})`}), el("option",{value:"all",text:`All ingested events (${M.builds.length})`}));
+  scope.addEventListener("change", () => { M.scope = scope.value; drawForest(M); });
+  const ctl = el("div",{class:"ctl"}, el("label",{}, "Source scope ", scope), el("span",{class:"sub",id:"forest-sub"}));
+  const wrap = el("div",{class:"forest-wrap",id:"forest"});
+  const legend = el("div",{class:"cg-legend"},
+    el("span",{}, el("i",{class:"S"}), "Selected S (rank inside)"), el("span",{}, el("i",{class:"pass"}), "Passed JEV but not packed"), el("span",{}, el("i",{}), "Below JEV threshold"), el("span",{}, el("i",{class:"cap"}), "Truncated before JEV"), el("span",{}, el("i",{class:"R"}), "Candidate not scored"), el("span",{}, el("i",{class:"none"}), "Not reached by this search"),
+    el("span",{}, el("i",{class:"ln"}), "SummaryParent child → actual parent"), el("span",{}, el("i",{class:"ln fb"}), "ContextFallback child → background"), el("span",{}, el("i",{class:"ln hl"}), "Full path of selected target"), el("span",{}, el("i",{class:"ev"}), "Green border = evidence event"), el("span",{}, el("i",{class:"hatch"}), "Ingested after this search / not ingested"), el("span",{text:"Card: level·ordinal · p_use | body excerpt | retrieval origin · state (C = in context view)"}));
+  const detail = el("div",{class:"box",id:"detail"}, el("p",{class:"sub",text:"Select a node for its body, self-summary, actual inputs, and retrieval values; select a source heading for its event, build audit, and summary candidates. Select a step to highlight the corresponding set."}));
+  const left = el("div",{}, el("h2",{text:"Coglet forest"}), el("p",{class:"note",text:"A forest grouped by source (one event per Source). L0 leaves are original text chunks; higher rows contain summary coglets. Solid arrows show SummaryParent edges; orange dashed edges borrow prior context (ContextFallback). Layout depends only on source order and level. Search state is an overlay; the query is not a root."}), ctl, wrap, legend, detail);
+  const right = el("div",{}, el("h2",{text:"Current question"}), flowBar(M));
+  sec.append(el("div",{class:"main"}, left, right));
+  return sec;
+}
+function flowBar(M){
+  const {s, x, w, q} = M, cands = [...M.cand.values()];
+  const vh = cands.filter(c=>c.origin==="VectorHit"), anc = cands.filter(c=>c.origin==="AncestorExpansion"), evx = cands.filter(c=>c.origin==="EvidenceExpansion");
+  const scored = cands.filter(c=>c.p_use!=null), passed = scored.filter(c=>M.thr!=null && c.p_use>=M.thr), S = s?.items||[], C = s?.context_view?.visible||[], st = s?.settings||{};
+  const om = {}; for (const c of cands) if (c.outcome && c.outcome!=="selected") om[c.outcome] = (om[c.outcome]||0)+1;
+  const jt = s?.jev_trace||[], failedAttempts = jt.reduce((a,b)=>a+(b.attempts||[]).filter(t=>t.error_code||t.model_failure).length,0);
+  const flow = el("div",{class:"flow"}, el("p",{class:"q",text:q.query}));
+  const steps = [];
+  const step = (n, t, sub, stage, set, extra) => { const b = el("button",{type:"button",class:"step"+(set?"":" static"),"data-stage":String(stage)}, el("span",{class:"n",text:String(n)}), el("span",{class:"t",text:t}), el("span",{class:"s",text:sub}), extra); if (set) b.addEventListener("click", () => toggleHl(M, b, set)); steps.push(b); return b; };
+  if (!s){ flow.append(step(1, "Retrieval", M.w?.trace==="corrupt" ? "Search trace cannot be parsed after log redaction (F92)" : "No search trace: execution failed before retrieval, or the trace is missing", 4, null)); }
+  else {
+    flow.append(step(1, "Vector retrieval", `Direct matches ${vh.length}(leaves ${vh.filter(c=>(c.level??0)===0).length} · Upper levels ${vh.filter(c=>(c.level??0)>0).length})· leaf_k ${st.leaf_k??"—"} · upper_k ${st.upper_k??"—"} · Representation ${st.vector_representation??st.representation??"—"}`, 4, () => new Set(vh.map(c=>c.node))), el("div",{class:"arrow",text:"▼"}),
+      step(2, "Ancestor and evidence expansion", `R = ${cands.length}${st.candidate_cap!=null && cands.length>=st.candidate_cap?`(candidate cap reached: ${st.candidate_cap}; truncated nodes are absent from the trace)`:` / cap ${st.candidate_cap??"—"}`} · Ancestor context ${anc.length} · Evidence descendants ${evx.length}(at most ${st.evidence_max_rounds??"—"} rounds) ${om.candidate_cap||om.evidence_cap?` · Truncated ${(om.candidate_cap||0)+(om.evidence_cap||0)}`:""}`, 4, () => new Set(cands.map(c=>c.node))), el("div",{class:"arrow",text:"▼"}),
+      step(3, "JEV admission", `${passed.length} admitted / ${scored.length} scored · Threshold ${M.thr??"—"}(${st.selection_policy?.kind||"—"})· ${jt.length} batches ${failedAttempts?` · ${failedAttempts} failed attempts`:""}${s.degraded?" · Whole-pool fallback (p_use unavailable)":""} · Submitted ${st.representation||"—"}(${st.jev_input_format||"—"})`, 4, () => new Set(passed.map(c=>c.node))), el("div",{class:"arrow",text:"▼"}),
+      step(4, "Ranking and context packing", `Selected S = ${S.length} / limit ${s.limit??"—"}${om.result_limit?` · Limit exceeded ${om.result_limit}`:""}${om.CONTEXT_BUNDLE_TOO_LARGE?` · Context too large ${om.CONTEXT_BUNDLE_TOO_LARGE}`:""} · Deduplicated full-path C = ${C.length} bodies · ${int(s.context_view?.tokens)} / ${st.memory_tokens??"—"} tokens`, 4, () => new Set([...S.map(i=>i.node), ...C.map(v=>v.node)])), el("div",{class:"arrow",text:"▼"}));
+  }
+  flow.append(step(5, "Reader answer", x ? `The evaluator sends S with ${x.returned_items??"—"} items to the fixed reader (A = ${x.returned_items??"—"}, ${int(x.returned_chars)} characters ${x.truncated?", truncated":""})· ${x.answer!=null?`Answer ${x.answer.length} characters`:"No answer text"}${x.reader_abstain?" · Reader abstained":""}` : "Not scheduled", 5, S.length ? () => new Set(S.map(i=>i.node)) : null), el("div",{class:"arrow",text:"▼"}),
+    step(6, "Judge scoring", x ? (x.status==="scored" ? `Score ${fmt(x.score,3)} · ${(x.items||[]).length} rubric expectations ${(x.items||[]).map(i=>fmt(i.expectation,2)).join(" / ")||"—"}` : `${x.status}: ${x.failure?.class||x.error_type||"—"}`) : "Not scheduled", 5, null));
+  if (w && (w.evidence||[]).length){
+    const evBox = el("span",{}, ...w.evidence.map(e => el("span",{class:"ev"}, el("code",{text:sidShort(e.source_id)}), " ", el("span",{class:"badge b-st"}, el("i",{class:"stg st-"+(e.stage==="selected"?"covered":e.stage)}), e.stage==="selected"?"Selected result":stageLabel(e.stage)), e.best ? el("span",{class:"sub",text:` Best L ${e.best.level??"?"} · ${ORIGIN[e.best.origin]||e.best.origin||"—"} · p ${fmt(e.best.p_use,2)}${e.best.rank!=null?` · #${e.best.rank}`:""}`}) : el("span",{class:"sub",text:` Ingest ${e.written||"Not recorded"} · ${e.nodes} node`}))));
+    flow.append(el("div",{class:"arrow",text:"▼"}), step(7, "Evidence check (post-hoc diagnostic)", `Loss stage: ${stageLabel(w.stage)} · Evidence returned ${w.covered?.[0]??0} / ${w.covered?.[1]??0}`, 5, () => new Set(M.ordered.filter(z=>z.evidence).flatMap(z=>z.nodes.map(n=>n.node))), evBox));
+  } else if (w) flow.append(el("div",{class:"arrow",text:"▼"}), step(7, "Evidence check", `${stageLabel(w.stage)}: no dataset evidence labels; evaluate the answer only`, 5, null));
+  flow.append(el("p",{class:"sub",text:"S = selected SearchResult.items targets; C = deduplicated ContextView.visible bodies; A = items actually sent to the reader, recorded by the evaluator. U (verified usage) is unavailable: the evaluator does not collect UsageClaim."}));
+  M.stepEls = steps;
+  return flow;
+}
+function toggleHl(M, btn, setFn){
+  const on = btn.classList.contains("on"); for (const b of M.stepEls) b.classList.remove("on");
+  if (on){ M.hl = null; applyHl(M); return; }
+  btn.classList.add("on"); M.hl = setFn(); applyHl(M);
+}
+function applyHl(M){
+  const svg = M.svg; if (!svg) return;
+  const set = M.hl; svg.classList.toggle("dim", !!set);
+  for (const [id, g] of M.ndEl){ g.classList.toggle("keep", !!set && set.has(id)); }
+  for (const [id, g] of M.egEl){ const ix = M.nodeIx.get(id); const par = ix?.n.edge?.parent; g.classList.toggle("keep", !!set && set.has(id) && set.has(par)); }
+  for (const [sid, g] of M.srcEl){ const src = M.sources.get(sid); g.classList.toggle("keep", !!set && src.nodes.some(n=>set.has(n.node))); }
+}
+
+/* ======================= forest layout & drawing ======================= */
+const CW = 118, CH = 46, GX = 8, RH = CH + 30, SP = 8, SH = 44, LM = 34, BPAD = 12, BGAP = 18, SGAP = 10;
+function layout(list, BW){
+  for (const src of list){
+    const byL = new Map(); for (const n of src.nodes){ const l = n.level??0; if (!byL.has(l)) byL.set(l, []); byL.get(l).push(n); }
+    const levels = [...byL.keys()].sort((a,b)=>a-b); for (const l of levels) byL.get(l).sort((a,b)=>(a.ordinal??0)-(b.ordinal??0));
+    const widest = Math.max(1, ...levels.map(l=>byL.get(l).length));
+    src.w = Math.max(widest*(CW+GX)-GX, CW) + 2*SP; src.byL = byL;
+    const pos = new Map(); const inner = src.w - 2*SP;
+    for (const l of levels){ const ns = byL.get(l); let xs = null;
+      if (l > 0){ xs = []; for (const n of ns){ const ins = (n.inputs||[]).map(id=>pos.get(id)).filter(Boolean); if (!ins.length){ xs = null; break; } xs.push(ins.reduce((a,p)=>a+p.lx,0)/ins.length); }
+        if (xs){ for (let i=1;i<xs.length;i++) if (xs[i]-xs[i-1] < CW+GX-0.5){ xs = null; break; } }
+        if (xs && !xs.every(v => v >= CW/2-0.5 && v <= inner-CW/2+0.5)) xs = null; }
+      ns.forEach((n,i) => pos.set(n.node, {lx: xs ? xs[i] : i*(CW+GX)+CW/2, n})); }
+    src.pos = pos;
+  }
+  const bands = []; let band = null, x = LM+BPAD;
+  for (const src of list){ if (!band || (x + src.w > BW-BPAD && band.srcs.length)){ band = {srcs:[], maxLevel:0}; bands.push(band); x = LM+BPAD; } src.x0 = x; band.srcs.push(src); band.maxLevel = Math.max(band.maxLevel, src.maxLevel); x += src.w + SGAP; }
+  let y = BPAD, W = LM+BPAD;
+  for (const b of bands){ b.y0 = y; b.yOf = l => b.y0 + SH + (b.maxLevel - l)*RH + CH/2 + 4; b.h = SH + (b.maxLevel+1)*RH + 8; y += b.h + BGAP; W = Math.max(W, ...b.srcs.map(s=>s.x0+s.w)); }
+  return {bands, W: Math.max(W + BPAD, Math.min(BW, 480)), H: y};
+}
+function drawAll(M){ drawForest(M); syncStage(M); }
+function drawForest(M){
+  const wrap = $("#forest"); const list = listFor(M);
+  const BW = Math.max(760, (wrap.clientWidth||1200) - 2);
+  const L = layout(list, BW);
+  const svg = svgEl("svg",{viewBox:`0 0 ${L.W} ${L.H}`, width:L.W, height:L.H, class:"cg", role:"img","aria-label":"Coglet forest"});
+  svg.append(svgEl("defs",{},
+    svgEl("pattern",{id:"hatch", width:6, height:6, patternUnits:"userSpaceOnUse", patternTransform:"rotate(45)"}, svgEl("rect",{width:6, height:6, style:"fill:var(--surface)"}), svgEl("rect",{width:2, height:6, style:"fill:var(--grid)"})),
+    ...[["m-sp","var(--accent-ink)"],["m-fb","var(--warm)"]].map(([id,col]) => svgEl("marker",{id, viewBox:"0 0 8 8", refX:7, refY:4, markerWidth:6, markerHeight:6, orient:"auto"}, svgEl("path",{d:"M0,0 L8,4 L0,8 z", style:`fill:${col}`})))));
+  const bg = svgEl("g",{class:"boxes"}), eg = svgEl("g",{class:"edges"}), ng = svgEl("g",{class:"nodes"}), og = svgEl("g",{class:"overlay"});
+  M.ndEl = new Map(); M.egEl = new Map(); M.srcEl = new Map(); M.posAbs = new Map(); M.og = og; M.svg = svg;
+  for (const band of L.bands){
+    for (let l = 0; l <= band.maxLevel; l++) svg.append(svgEl("text",{class:"lvl", x:LM-6, y:band.yOf(l)+3.5, "text-anchor":"end", text:"L"+l}));
+    if (band !== L.bands[0]) svg.append(svgEl("line",{class:"band-line", x1:LM, y1:band.y0-BGAP/2, x2:L.W-BPAD, y2:band.y0-BGAP/2}));
+    for (const src of band.srcs){
+      const top = band.yOf(src.maxLevel) - CH/2 - SH, bottom = band.yOf(0) + CH/2 + SP;
+      const sg = svgEl("g",{class:`src st-${src.state}${src.evidence?" evidence":""}${src.written==="after_query"?" after":""}${src.written==null?" unwritten":""}`});
+      sg.append(svgEl("rect",{class:"sbox", x:src.x0, y:top, width:src.w, height:bottom-top}));
+      const e = src.ev||{};
+      const hdr = svgEl("g",{class:"hdr", tabindex:0, role:"button"});
+      hdr.append(svgEl("text",{class:"h1", x:src.x0+SP, y:top+13, text:fit(`events ${sidShort(src.sid)} · ${e.role||"?"}`, src.w - 2*SP - (src.evidence?30:0))}));
+      hdr.append(svgEl("text",{class:"h2", x:src.x0+SP, y:top+25, text:fit(`${src.leaves} Leaves · ${src.uppers} Upper levels · ${src.written==="after_query"?"Ingested after search":src.written||"Not ingested"}`, src.w-2*SP)}));
+      const stateTxt = src.state==="none" ? (src.evidence ? "This question: not a candidate" : "") : `This question: ${STATE_ZH[src.state]}${src.best?.c?.rank!=null?` #${src.best.c.rank}`:""}`;
+      if (stateTxt) hdr.append(svgEl("text",{class:"h3 ov", x:src.x0+SP, y:top+37, text:fit(stateTxt, src.w-2*SP)}));
+      if (src.evidence) hdr.append(svgEl("g",{class:"chip", transform:`translate(${src.x0+src.w-SP-26},${top+4})`}, svgEl("rect",{width:26, height:12}), svgEl("text",{x:13, y:9.5, "text-anchor":"middle", text:"Evidence"})));
+      hdr.append(svgEl("title",{text:`events ${src.sid}${e.timestamp?" · "+e.timestamp.slice(0,10):""}${e.turn_group?" · "+e.turn_group:""}${e.chars!=null?" · "+int(e.chars)+" characters":""}`}));
+      const onSrc = () => selectSource(M, src); hdr.addEventListener("click", onSrc); hdr.addEventListener("keydown", ev => { if (ev.key==="Enter" || ev.key===" "){ ev.preventDefault(); onSrc(); } });
+      sg.append(hdr); bg.append(sg); M.srcEl.set(src.sid, sg);
+      for (const p of src.pos.values()){ const ax = src.x0 + SP + p.lx, ay = band.yOf(p.n.level??0); M.posAbs.set(p.n.node, {x:ax, y:ay, n:p.n, src}); }
+    }
+  }
+  for (const [id, p] of M.posAbs){ const n = p.n, par = n.edge?.parent ? M.posAbs.get(n.edge.parent) : null;
+    if (par && par.src===p.src){ const x1 = p.x, y1 = p.y - CH/2, x2 = par.x, y2 = par.y + CH/2 + 1, ym = y1 - (y1 - y2)/2; const d = Math.abs(x1-x2) < 0.5 ? `M${x1.toFixed(1)},${y1.toFixed(1)}L${x2.toFixed(1)},${y2.toFixed(1)}` : `M${x1.toFixed(1)},${y1.toFixed(1)}V${ym.toFixed(1)}H${x2.toFixed(1)}V${y2.toFixed(1)}`;
+      const kind = n.edge.kind||"SummaryParent"; const g = svgEl("g",{class:"eg"}, svgEl("path",{class:"halo", d}), svgEl("path",{class:"edge ek-"+kind, d, "marker-end":`url(#${kind==="ContextFallback"?"m-fb":"m-sp"})`})); eg.append(g); M.egEl.set(id, g); }
+    else if (n.edge?.parent){ const g = svgEl("g",{class:"eg"}, svgEl("path",{class:"edge ek-"+(n.edge.kind||"SummaryParent"), d:`M${p.x.toFixed(1)},${(p.y-CH/2).toFixed(1)}V${(p.y-CH/2-10).toFixed(1)}`}), svgEl("title",{text:`Parent node ${shortId(n.edge.parent)} not among exported nodes for this source`})); eg.append(g); M.egEl.set(id, g); }
+  }
+  for (const [id, p] of M.posAbs){ const n = p.n, st = nodeState(n.c, M.thr, n.cv), lvl = n.level??0;
+    const g = svgEl("g",{class:`nd nd-${st} lv${Math.min(lvl,3)}${n.c?.origin==="VectorHit"?" vh":""}`, transform:`translate(${p.x.toFixed(1)},${p.y.toFixed(1)})`, tabindex:0, role:"button", "data-node":id});
+    g.append(svgEl("rect",{class:"card", x:-CW/2, y:-CH/2, width:CW, height:CH}), svgEl("rect",{class:"lvbar", x:-CW/2, y:-CH/2+6, width:3, height:CH-12, rx:1}));
+    g.append(svgEl("text",{class:"t1", x:-CW/2+8, y:-CH/2+12, text:`L${lvl}·${n.ordinal??"?"}${n.orphan?" ?":""}`}));
+    g.append(svgEl("text",{class:"p ov", x:CW/2-6, y:-CH/2+12, "text-anchor":"end", text: n.c ? (n.c.p_use!=null ? "p "+fmt(n.c.p_use,2) : "p —") : ""}));
+    g.append(svgEl("text",{class:"t2", x:-CW/2+8, y:3, text: excerpt(M, n.text_hash, CW-14)}));
+    const o = n.c ? (ORIGIN_G[n.c.origin]||"") + (n.c.vector_rank!=null ? "#"+n.c.vector_rank : "") : "";
+    const stTxt = st==="S" ? `S#${n.c.rank}` : st==="pass" ? (n.c.outcome==="CONTEXT_BUNDLE_TOO_LARGE" ? "Admitted · too large" : "Admitted · limit") : st==="low" ? `p<${M.thr??"Threshold"}` : st==="cap" ? "Truncated (cap)" : st==="R" ? "Not scored" : "";
+    const line3 = [o, stTxt, n.cv ? (st==="S" ? "C" : "C background") : ""].filter(Boolean).join(" · ");
+    if (line3) g.append(svgEl("text",{class:"t3 ov", x:-CW/2+8, y:CH/2-6, text:fit(line3, CW-14)}));
+    g.append(svgEl("title",{text:`${lvl>0?"L"+lvl+" Summary coglet":"L0 leaf coglet"} ${shortId(n.node)} · Event ${sidShort(p.src.sid)}${n.c?` · ${ORIGIN[n.c.origin]||n.c.origin||"—"} · p_use ${fmt(n.c.p_use,2)} · ${OUTCOME[n.c.outcome]||n.c.outcome||"Candidate"}`:" · Not a candidate for this question"}`}));
+    const on = () => selectNode(M, id); g.addEventListener("click", on); g.addEventListener("keydown", ev => { if (ev.key==="Enter" || ev.key===" "){ ev.preventDefault(); on(); } });
+    ng.append(g); M.ndEl.set(id, g);
+  }
+  svg.append(bg, eg, ng, og);
+  wrap.replaceChildren(svg);
+  const nN = M.posAbs.size, nUp = [...M.posAbs.values()].filter(p=>(p.n.level??0)>0).length, nFb = [...M.posAbs.values()].filter(p=>p.n.edge?.kind==="ContextFallback").length;
+  $("#forest-sub").textContent = `${list.length} events · ${nN} coglets (upper-level ${nUp} · Fallback edges ${nFb})· ${L.bands.length} rows`;
+  if (M.sel) { const keep = M.sel; M.sel = null; if (keep.kind==="node" && M.posAbs.has(keep.id)) selectNode(M, keep.id); else if (keep.kind==="src") selectSource(M, M.sources.get(keep.id)); }
+  if (M.hl) applyHl(M);
+  if (M.stage < 4) svg.classList.add("build-only");
+}
+function clearSelection(M){
+  for (const g of M.ndEl?.values()||[]) { g.classList.remove("sel"); g.classList.remove("on-path"); }
+  for (const g of M.egEl?.values()||[]) g.classList.remove("hl");
+  for (const g of M.srcEl?.values()||[]) g.classList.remove("sel");
+  if (M.og) M.og.replaceChildren(); M.sel = null;
+}
+function chain(M, id){ const out = [id]; let cur = M.nodeIx.get(id)?.n; const seen = new Set(out); while (cur?.edge?.parent && !seen.has(cur.edge.parent)){ out.push(cur.edge.parent); seen.add(cur.edge.parent); cur = M.nodeIx.get(cur.edge.parent)?.n; } return out; }
+function selectNode(M, id){
+  clearSelection(M); M.sel = {kind:"node", id};
+  const g = M.ndEl.get(id); if (g) g.classList.add("sel");
+  const p = M.posAbs.get(id), n = p?.n || M.nodeIx.get(id)?.n, c = n?.c || M.cand.get(id) || null;
+  const parts = c?.item?.path?.length ? c.item.path : null;
+  const ids = parts ? parts.map(z=>z.node) : chain(M, id);
+  for (let i=0;i<ids.length-1;i++){ const eg = M.egEl.get(ids[i]); if (eg) eg.classList.add("hl"); const nd = M.ndEl.get(ids[i+1]); if (nd) nd.classList.add("on-path");
+    if (parts && M.stage >= 4){ const a = M.posAbs.get(ids[i]), b = M.posAbs.get(ids[i+1]); if (a && b){ const cov = parts[i+1].coverage; const lx = (a.x+b.x)/2 + 6, ly = (a.y - CH/2 + b.y + CH/2)/2; const txt = cov ? "Within coverage chain" : "Background only"; M.og.append(svgEl("g",{class:"covlab", transform:`translate(${lx.toFixed(1)},${(ly-7).toFixed(1)})`}, svgEl("rect",{width:44, height:14}), svgEl("text",{x:22, y:10.5, "text-anchor":"middle", text:txt}))); } } }
+  nodeDetail(M, id);
+}
+function selectSource(M, src){ clearSelection(M); M.sel = {kind:"src", id:src.sid}; const g = M.srcEl.get(src.sid); if (g) g.classList.add("sel"); sourceDetail(M, src); }
+function lnk(M, id, label){ const b = el("button",{type:"button",class:"lnk",text:label||shortId(id)}); b.addEventListener("click", () => { if (M.posAbs.has(id)) selectNode(M, id); else { const sid = M.nodeIx.get(id)?.sid; if (sid!=null && !M.involved.has(sid) && M.scope!=="all"){ M.scope = "all"; $("#scope").value = "all"; drawForest(M); } if (M.posAbs.has(id)) selectNode(M, id); else nodeDetail(M, id); } }); return b; }
+function textBlock(M, hash, limit){ const t = M.T(hash); if (t===null) return el("span",{class:"empty",text: hash ? `(text not exported · ${shortId(hash)})` : "(no text)"}); if (limit && t.length > limit) return el("details",{}, el("summary",{text:t.slice(0,limit).replace(/\s+/g," ")+"…"}), el("div",{class:"tx",text:t})); return el("div",{class:"tx",text:t}); }
+function kv(rows){ return rows.filter(r=>r).flatMap(([k,v]) => [el("dt",{text:k}), el("dd",{}, v)]); }
+function nodeDetail(M, id){
+  const box = $("#detail"); const ix = M.nodeIx.get(id); const p = M.posAbs.get(id); const n = p?.n || ix?.n; const src = p?.src || (ix ? M.sources.get(ix.sid) : null);
+  if (!n){ box.replaceChildren(el("p",{class:"empty",text:`node ${shortId(id)} is absent from this episode export.`})); return; }
+  const c = n.c || M.cand.get(id) || null, j = n.jev || M.jev.get(id) || null, cv = n.cv || M.cvis.get(id) || null, lvl = n.level??0, st = nodeState(c, M.thr, cv);
+  const b = src?.build;
+  const sumsByBody = new Map(); for (const a of b?.summaries||[]) { if (!sumsByBody.has(a.body)) sumsByBody.set(a.body, []); sumsByBody.get(a.body).push(a); }
+  const own = n.body!=null ? (sumsByBody.get(n.body)||[]) : [];
+  box.replaceChildren(el("div",{class:"ttl",text:`${lvl>0?`L${lvl} Summary coglet`:"L0 leaf coglet"} · Event ${sidShort(src?.sid)} · Node ${shortId(id)}`}),
+    el("div",{class:"chips"}, el("span",{class:"badge b-cls",text:`${n.kind||"?"} · Ordinal ${n.ordinal??"?"}`}), n.span ? el("span",{class:"badge b-dim",text:`span ${n.span[0]}–${n.span[1]}`}) : null, n.underfill ? el("span",{class:"badge b-dim",text:"underfill"}) : null,
+      src?.evidence ? el("span",{class:"badge b-ev",text:"Evidence event"}) : null, c ? el("span",{class:"badge "+(st==="S"?"b-ok":st==="pass"?"b-cls":"b-dim"),text:STATE_ZH[st]+(c.rank!=null?` #${c.rank}`:"")}) : el("span",{class:"badge b-dim",text:"Not a candidate for this question"}), cv ? el("span",{class:"badge b-cls",text:`Context view: ${cv.role||"Visible"}`}) : null));
+  const two = el("div",{class:"two"});
+  const structure = el("dl",{class:"kv"}, ...kv([
+    ["Node ID", el("code",{text:id})], n.body ? ["body id", el("code",{text:n.body})] : null,
+    ["Upward edge", n.edge ? el("span",{}, n.edge.kind==="ContextFallback" ? "ContextFallback (borrowed background, not summary coverage) → " : "SummaryParent (actual parent) → ", lnk(M, n.edge.parent)) : (lvl>0 || src?.uppers ? "None (root)" : "None (single-leaf source, no upper level)")],
+    ["Actual inputs", (n.inputs||[]).length ? el("span",{}, ...n.inputs.map(cid => lnk(M, cid))) : (lvl>0 ? "Not recorded" : "Leaves have no inputs")],
+    ["Self-summary", n.summary ? el("span",{}, el("span",{class:"badge "+(n.summary.faithful===false?"b-no":"b-ok"),text:n.summary.faithful===false?"Verification failed":"Verification passed"}), ` ${n.summary.model||"?"} · ${n.summary.attempts??"?"} attempts`, n.summary.reason_hash && M.T(n.summary.reason_hash) ? el("div",{class:"sub",text:"Verification reason:"+M.T(n.summary.reason_hash)}) : null) : "Not recorded"],
+  ]));
+  if (own.length) structure.append(...kv([["Summary candidate", el("div",{}, ...own.map(a => el("div",{class:"sub"}, `#${a.ordinal??"?"} ${kindLabel(a.candidate_kind)} · ${a.stage||"?"} · ${a.accepted?"Accepted":"Not accepted"}${a.verdict?` · ${a.verdict.faithful?"Faithful":"Unfaithful"}(${a.verdict.model||"?"})`:""}${a.error_code?` · ${a.error_code}`:""}`, a.output_hash ? textBlock(M, a.output_hash, 160) : null)))]]));
+  const retrieval = el("dl",{class:"kv"}, ...(c ? kv([
+    ["First entered R", `${ORIGIN[c.origin]||c.origin||"—"}${c.vector_rank!=null?`(vector #${c.vector_rank})`:""}`], ["Similarity", fmt(c.similarity,3)], ["p_use", c.p_use!=null ? `${fmt(c.p_use,2)}${M.thr!=null?(c.p_use>=M.thr?" ≥ threshold":" < threshold "+M.thr):""}` : "— (not scored)"],
+    ["Outcome", OUTCOME[c.outcome]||c.outcome||"Candidate"], c.rank!=null ? ["Selected rank", `#${c.rank}${c.rank_utility!=null?` · rank_utility ${fmt(c.rank_utility,3)}`:""}`] : null,
+    j ? ["JEV", `batches ${(j.batch??0)+1} · ${j.model||"?"} · Raw probability ${fmt(j.probability,2)}${(j.attempts||[]).length>1?` · ${j.attempts.length} attempts`:""}${j.error_code?` · ${j.error_code}`:""}`] : ["JEV", "Not submitted (or not recorded)"],
+  ]) : kv([["Search for this question", "This node did not enter R: neither vector retrieval nor expansion reached it"]])));
+  if (j?.target_text_hash || j?.path_text_hash) retrieval.append(...kv([["Body submitted to JEV", el("div",{}, j.target_text_hash ? el("details",{}, el("summary",{text:"Target body"}), textBlock(M, j.target_text_hash)) : null, j.path_text_hash ? el("details",{}, el("summary",{text:"Full-path context"}), textBlock(M, j.path_text_hash)) : null)]]));
+  if (c?.item?.path?.length) retrieval.append(...kv([["Full path (ContentPath)", el("ol",{class:"rub"}, ...c.item.path.map((z,i) => el("li",{}, lnk(M, z.node), ` ${i===0?"target":z.edge||"?"} · ${z.coverage?"Within coverage chain":"Background only"}`)))]]));
+  two.append(el("div",{}, el("h3",{style:"margin-top:0",text:"Structure (published snapshot)"}), structure), el("div",{}, el("h3",{style:"margin-top:0",text:"Question search (query trace)"}), retrieval));
+  box.append(two, el("h3",{text:"Body"}), textBlock(M, n.text_hash));
+  if ((n.inputs||[]).length){
+    const comp = el("div",{}); const segs = (M.T(n.text_hash)||"").split("\n\n");
+    n.inputs.forEach((cid, i) => { const child = M.nodeIx.get(cid)?.n; const isum = n.input_summaries?.[i]; const sumHash = isum?.output_hash || null;
+      comp.append(el("div",{class:"box",style:"margin:6px 0"}, el("div",{class:"hd"}, el("span",{text:`Inputs ${i+1}: `}), lnk(M, cid), child ? el("span",{class:"sub",text:`L${child.level??0}·${child.ordinal??"?"}`}) : null, isum ? el("span",{class:"badge "+(isum.faithful===false?"b-no":"b-ok"),text:`Summarization ${isum.model||"?"}${isum.faithful===false?" Verification failed":""}`}) : null),
+        child ? el("details",{}, el("summary",{text:"Child body"}), textBlock(M, child.text_hash)) : null,
+        sumHash ? el("div",{}, el("div",{class:"sub",text:"Accepted self-summary of this child, included in the parent body:"}), textBlock(M, sumHash, 240)) : (segs.length===n.inputs.length ? el("div",{}, el("div",{class:"sub",text:"Corresponding parent-body segment in input order (input_summaries absent from export):"}), el("div",{class:"tx",text:segs[i]})) : el("p",{class:"sub",text:"input_summaries is absent and segment count differs from input count; no correspondence is inferred."})))); });
+    box.append(el("h3",{text:`Composition: this coglet body concatenates ${n.inputs.length} accepted summaries of actual child inputs, in order`}), comp);
+  }
+}
+function sourceDetail(M, src){
+  const box = $("#detail"), e = src.ev||{}, b = src.build;
+  box.replaceChildren(el("div",{class:"ttl",text:`events ${src.sid} · ${e.role||"?"}${e.timestamp?" · "+e.timestamp.slice(0,19).replace("T"," "):""}`}),
+    el("div",{class:"chips"}, src.evidence ? el("span",{class:"badge b-ev",text:"Evidence event"}) : null, el("span",{class:"badge "+(src.written==="Ready"?"b-ok":src.written?"b-invalid":"b-no"),text:`Ingest ${src.written==="after_query"?"after this question was searched":src.written||"Not recorded"}`}), e.turn_group ? el("span",{class:"badge b-dim",text:e.turn_group}) : null, e.chars!=null ? el("span",{class:"badge b-dim",text:`${int(e.chars)} characters`}) : null, el("span",{class:"badge b-dim",text:`${src.leaves} Leaves · ${src.uppers} Upper level`}), src.state!=="none" ? el("span",{class:"badge b-cls",text:`This question: ${STATE_ZH[src.state]}`}) : null));
+  if (!b){ box.append(el("p",{class:"empty",text:"No build for this event is recorded in this episode (not ingested, or ingestion occurred outside the trace)."})); return; }
+  const calls = b.calls||[], sums = b.summaries||[];
+  box.append(el("dl",{class:"kv"}, ...kv([["Build state", `${b.state||"?"} · Snapshot ${shortId(b.snapshot_id)} · Operation ${shortId(b.operation_id)}`], b.audit_error ? ["Audit read failed", b.audit_error] : null,
+    ["Model calls", calls.length ? calls.map(c=>`${c.role}/${c.model} Dispatched ${c.dispatches}${c.failed?`(failed ${c.failed})`:""}${c.terminal_error?` Terminal state ${c.terminal_error}`:""}`).join("; ") : "None"],
+    ["node", el("span",{}, ...[...src.byL ? [...src.byL.keys()].sort((a,b)=>b-a) : []].flatMap(l => [el("span",{class:"sub",text:` L${l}: `}), ...src.byL.get(l).map(n => lnk(M, n.node, `${shortId(n.node)}`))]))],
+    ["Pending summary items", b.pending==null ? "Not recorded (pending absent from export)" : (Object.entries(b.pending).map(([l,g])=>`L${l} ${g.length} items`).join(" · ") || "0")],
+  ])));
+  if (sums.length){
+    const tbl = el("table",{}, el("thead",{}, el("tr",{}, ...["body","times","Candidate type","Stage","Accepted","Verification","Reason / error","Candidate text"].map(h=>el("th",{text:h})))));
+    const tb = el("tbody"); for (const a of sums){ const v = a.verdict; tb.append(el("tr",{}, el("td",{class:"mono",text:shortId(a.body)}), el("td",{text:String(a.ordinal??"")}), el("td",{text:kindLabel(a.candidate_kind)}), el("td",{text:a.stage||"—"}), el("td",{}, el("span",{class:"badge "+(a.accepted?"b-ok":"b-dim"),text:a.accepted?"✓":"—"})), el("td",{}, v ? el("span",{class:"badge "+(v.faithful?"b-ok":"b-no"),text:(v.faithful?"Faithful":"Unfaithful")+(v.model?" · "+v.model:"")}) : el("span",{class:"empty",text:"Not verified"})), el("td",{}, v?.reason_hash ? (M.T(v.reason_hash) ?? el("span",{class:"empty",text:"Reason not exported"})) : (a.error_code||a.failure ? el("span",{class:"mono",text:a.error_code||a.failure}) : "")), el("td",{}, a.output_hash ? textBlock(M, a.output_hash, 120) : el("span",{class:"empty",text:"—"})))); }
+    tbl.append(tb); box.append(el("details",{}, el("summary",{text:`Summary candidates and verification (${sums.length} attempts)`}), el("div",{class:"tbl"}, tbl)));
+  }
+  if (b.pending && Object.values(b.pending).some(g=>g.length)) box.append(el("details",{}, el("summary",{text:"Pending summary items (accepted but aggregation conditions unmet; not searchable)"}), ...Object.entries(b.pending).flatMap(([l,g]) => g.map(it => el("div",{class:"sub"}, `L${l} · body ${shortId(it.body)} · ${it.model||"?"}`, it.output_hash ? textBlock(M, it.output_hash, 160) : null)))));
+}
+
+/* ======================= explainer ======================= */
+function explainer(M){
+  const cfg = M.W.build_config || null;
+  const sec = el("section",{id:"explain"}, el("h2",{text:"Coglets and hierarchy construction"}));
+  sec.append(el("ul",{class:"pts"},
+    el("li",{html:"<b>A coglet</b>is the smallest searchable unit in CogletNet: a body and its position within a source (level, ordinal, span). Each ingested event is a Source. Its text is split according to the build token target into <b>L0 leaf coglet</b>—original text chunks, not rewrites."+(cfg?`Chunk target for this build ${cfg.chunk_target??"—"} tokens (range ${cfg.chunk_low??"—"}–${cfg.chunk_high??"—"}).`:"")}),
+    el("li",{html:"<b>Self-summary</b>: each coglet produces a SummaryItem, first as a candidate (short text<b>Exact copy</b>, <b>Prefix extraction</b>, or model generated), then checked for length and faithfulness by an independent verifier. Only a passing candidate is<b>Accepted</b>. A summary belongs to a node; it is not a new node. Rejected candidates remain in the build audit and do not enter the tree."}),
+    el("li",{html:"<b>Upper-level coglets</b>: when adjacent accepted summaries within a source meet aggregation conditions (at least two actual inputs and enough concatenated text), they form a new upper-level coglet in order: L1 body = summary₁ + blank line + summary₂ ... .<code>inputs</code> records actual child inputs; their upward edge is <b>SummaryParent</b>(solid arrow). Upper nodes generate summaries for further aggregation, so the hierarchy grows<b>bottom-up</b>. A short event may have only one leaf."}),
+    el("li",{html:"<b>Pending aggregation and fallback</b>: accepted summaries that do not meet aggregation conditions remain Pending. They have not failed and are not searchable. A node without an actual parent may borrow earlier high-level context through <b>ContextFallback</b>(orange dashed edge). This supplies context, not summary coverage or evidence derivation."}),
+    el("li",{html:"<b>Retrieval</b>: vector search retrieves leaves and upper nodes (leaf_k / upper_k). Ancestor context and evidence descendants expand the candidate set R, subject to candidate_cap. JEV independently scores each target with its full path; p_use must meet the threshold. Admitted nodes are ranked by rank_utility and limited to S. Their deduplicated paths form C. The evaluator sends S to a fixed reader (A), then judges the answer against the rubric. Build, retrieval origin, JEV, selection, and context membership are separate card dimensions."}),
+  ));
+  /* real example: an upper node from this episode, preferring evidence / candidate sources */
+  const pick = () => { const pools = [M.ordered.filter(s=>s.evidence), M.ordered.filter(s=>M.involved.has(s.sid)), M.ordered]; for (const pool of pools) for (const src of pool){ const up = src.nodes.filter(n=>(n.level??0)>0 && (n.inputs||[]).length>=2).sort((a,b)=>(a.level??0)-(b.level??0))[0]; if (up) return {src, up}; } return null; };
+  const ex = pick();
+  if (!ex){ sec.append(el("p",{class:"note",text:"Before this search, this episode had no upper-level coglets: events had only leaves, with summaries pending aggregation."})); return sec; }
+  const {src, up} = ex, segs = (M.T(up.text_hash)||"").split("\n\n");
+  sec.append(el("h3",{text:`Recorded example from this episode: event ${sidShort(src.sid)} with ${up.inputs.length} leaves aggregated into L ${up.level} coglets ${shortId(up.node)}`}));
+  const grid = el("div",{class:"ex"});
+  const leaves = el("div",{}); const sums = el("div",{});
+  up.inputs.forEach((cid, i) => { const child = M.nodeIx.get(cid)?.n; const isum = up.input_summaries?.[i]; const sh = isum?.output_hash || null;
+    leaves.append(el("div",{class:"card leaf"}, el("div",{class:"k",text:`Inputs ${i+1} · ${child?`L${child.level??0}·${child.ordinal??"?"}`:"?"} Body (display excerpt)`}), el("div",{class:"tx",text:(M.T(child?.text_hash)||"(no body)").slice(0,260)+((M.T(child?.text_hash)||"").length>260?"…":"")}), el("div",{class:"sub"}, lnk(M, cid, "Select in forest"))));
+    sums.append(el("div",{class:"card sum"}, el("div",{class:"k",text:`Summary item ${i+1}${isum?` · ${isum.model||"?"}${isum.faithful===false?" · Verification failed":" · Accepted"}`:""}`}), el("div",{class:"tx",text: sh ? (M.T(sh)||"(not exported)").slice(0,260) : (segs.length===up.inputs.length ? segs[i].slice(0,260) : "(input_summaries absent from export)")}), el("div",{class:"sub",text: sh ? "Accepted self-summary, included verbatim in the parent body" : (segs.length===up.inputs.length ? "Parent-body segment in input order (input_summaries absent)" : "Cannot align")}))); });
+  grid.append(leaves, el("div",{class:"arr",text:"→ Candidate → Verify → Accept →"}), sums, el("div",{class:"arr",text:"→ Aggregation conditions met →"}), el("div",{class:"card par"}, el("div",{class:"k",text:`L${up.level}·${up.ordinal??"?"} Upper-level coglet body = ${up.inputs.length} concatenated segments · ${up.summary?`Self-summary ${up.summary.faithful===false?"Verification failed":"Accepted"}`:"Self-summary not recorded"}`}), el("div",{class:"tx",text:(M.T(up.text_hash)||"").slice(0,520)+((M.T(up.text_hash)||"").length>520?"…":"")}), el("div",{class:"sub"}, lnk(M, up.node, "Select in forest"), up.c ? ` · This question: ${STATE_ZH[nodeState(up.c, M.thr, up.cv)]}` : " · Not reached by this search")));
+  sec.append(grid, el("p",{class:"sub",text:"These are display excerpts. Node bodies and JEV target/path details show the actual encoded and model-facing content; select a card to inspect it."}));
+  return sec;
+}
+
+/* ======================= table view ======================= */
+function tableView(M){
+  const sec = el("section",{id:"table"});
+  const det = el("details",{}, el("summary",{text:"Table view (same information as the forest, for row-by-row and keyboard review)"}));
+  let built = false;
+  det.addEventListener("toggle", () => { if (built || !det.open) return; built = true;
+    const list = listFor(M); const rows = [];
+    for (const src of list) for (const n of src.nodes){ const c = n.c, st = nodeState(c, M.thr, n.cv); rows.push(el("tr",{class: src.evidence ? "evidence" : null}, el("td",{}, el("code",{text:sidShort(src.sid)})), el("td",{text:`L${n.level??0}·${n.ordinal??"?"}`}), el("td",{class:"mono",text:shortId(n.node)}), el("td",{text:excerpt(M, n.text_hash, 260)}), el("td",{text:n.edge?`${n.edge.kind==="ContextFallback"?"Fallback":"Parent"} ${shortId(n.edge.parent)}`:"—"}), el("td",{text:c?(ORIGIN[c.origin]||c.origin||"—"):"—"}), el("td",{class:"num",text:c?.vector_rank!=null?String(c.vector_rank):"—"}), el("td",{class:"num",text:fmt(c?.similarity,3)}), el("td",{class:"num",text:fmt(c?.p_use,2)}), el("td",{text:c?(OUTCOME[c.outcome]||c.outcome||"Candidate"):"Not a candidate"}), el("td",{class:"num",text:c?.rank!=null?String(c.rank):"—"}), el("td",{text:n.cv?(n.cv.role||"Visible"):"—"}))); }
+    det.append(el("p",{class:"sub",text:`${rows.length} rows · Same source scope as forest (${$("#scope").selectedOptions[0]?.textContent||""})`}), el("div",{class:"tbl"}, el("table",{}, el("thead",{}, el("tr",{}, ...["events","Level·ordinal","node","Excerpt","Upward edge","Retrieval origin","Vector rank","Similarity","p_use","Outcome","Rank","Context"].map(h=>el("th",{text:h})))), el("tbody",{}, ...rows)))); });
+  sec.append(det); return sec;
+}
+
+/*  */
+const CT = window.CogletTree || null;
+function modelLeaf(W, run, q, x){
+  const s = W.searches?.[q.id] || null;
+  const M = CT.model(W, q, x, s);
+  M.run = run; M.w = x?.work || null; M.stage = 5; M.builds = W.builds||[]; M.builds_before = s?.builds_before ?? M.builds.length; M.leaf = true;
+  M.stat = CT.stats(M);
+  window.__M = M; return M;
+}
+function stageBarLeaf(M){
+  const {s, x} = M, st = M.stat, cfg = M.W.build_config || null, set = st.settings||{};
+  const lv = Object.entries(st.levels).sort((a,b)=>a[0]-b[0]);
+  const stages = [
+    ["Scope ingestion", `One scope per episode · Before this question: ${st.snapshots} append calls (≤ 64 events per batch) · ${st.events} events · Model calls ${int(st.calls)} times ${st.wallMin!=null?` · Wall time ${fmt(st.wallMin,1)} min`:""}${st.failedOps?` · Failed operations ${st.failedOps}`:""}`],
+    ["Leaves and hierarchical summaries", `L0 ${st.levels[0]||0} Leaves · ${lv.filter(([k])=>k!=="0").map(([k,v])=>`L${k} ${v}`).join(" · ")||"No upper level"} · ContextFallback ${st.fallback}${cfg?` · Chunk target ${cfg.chunk_target??"—"} tokens`:""} · L0 embedding input ${st.leafTokens.mean!=null?`mean ${int(Math.round(st.leafTokens.mean))} / max ${int(st.leafTokens.max)} tokens`:"Token count not recorded"}`],
+    ["Vector retrieval + three-way JEV", s ? `Retrieved ${st.cands} L0 coglets (leaf_k ${set.leaf_k??"—"} · Representation ${set.representation||"—"}${M.run?.sut?.variant?` · Variant ${M.run.sut.variant}`:""}) → Scored ${st.scored} · useful ≥ ${M.thr??"—"} Admitted ${st.admitted}${st.uncertainMean!=null?` · Mean uncertain ${fmt(st.uncertainMean,2)}`:""} · ${st.batches} batches ${st.failedAttempts?` · ${st.failedAttempts} failed attempts`:""}` : (M.w?.trace==="corrupt" ? "Search trace damaged by log redaction (F92)" : "No search trace")],
+    ["Packing", s ? `memory_tokens budget ${int(set.memory_tokens)} → Packed ${st.packed?.memories??st.S} coglets (${int(st.ctxTokens)} tokens) · Passed JEV but did not fit ${st.om.CONTEXT_BUNDLE_TOO_LARGE||0}${st.om.result_limit?` · Limit exceeded ${st.om.result_limit}`:""} · Visible bodies ${st.packed?.visible_bodies??"—"}(L0 ${st.packed?.visible_level0??"—"} + Ancestors ${st.packed?.visible_ancestors??"—"})` : "—"],
+    ["Answer and scoring", x ? `Reader received ${x.returned_items??"—"} items · ${int(x.returned_chars)} characters ${x.truncated?"(truncated)":""} → Judge ${x.status==="scored"?`Score ${fmt(x.score,3)}`:x.status}` : "Not scheduled"],
+  ];
+  const sec = el("section",{id:"stages"}), bar = el("div",{class:"stagebar"});
+  const btns = stages.map(([t,sub],i) => { const b = el("button",{type:"button",class:"stage"}, el("span",{class:"n",text:String(i+1).padStart(2,"0")}), el("span",{class:"t",text:t}), el("span",{class:"s",text:sub})); b.addEventListener("click", () => { M.stage = i+1; syncStageLeaf(M); }); return b; });
+  bar.append(...btns); M.stageBtns = btns;
+  sec.append(bar, el("p",{class:"note stagebar-note",id:"stage-note"}));
+  return sec;
+}
+function syncStageLeaf(M){
+  M.stageBtns?.forEach((b,i)=>{ b.classList.toggle("on", i+1===M.stage); b.classList.toggle("future", i+1>M.stage); });
+  M.svg?.classList.toggle("build-only", M.stage < 3);
+  for (const st of M.stepEls||[]) st.classList.toggle("future", st.dataset.stage && Number(st.dataset.stage) > M.stage);
+  const note = $("#stage-note"); if (note) note.textContent = M.stage < 3 ? `Replay through step ${M.stage} : the tree shows build facts only (leaves, level coverage, ContextFallback). Retrieval, JEV, and packing overlays are hidden. Select steps 3–5 for the complete view.` : (M.tree ? `Replay complete. Nodes show question-specific candidate state (bottom segments: useful / uncertain / not_useful; selected nodes include rank). Positions depend only on leaf order and level.` : `Replay complete. Leaves show question-specific candidate state (bottom segments: useful / uncertain / not_useful). Positions depend only on leaf order and level.`);
+  if (M.stage < 3 && M.sel){ CT.select(M, null); }
+}
+function mainGridLeaf(M){
+  const sec = el("section",{id:"forest-sec"});
+  const mini = el("div",{id:"mini"}), wrap = el("div",{id:"forest"});
+  const detail = el("div",{class:"box",id:"detail"}, el("p",{class:"sub",text: M.tree
+    ? "Select any node for its own body (the reader input), covered events, record window, and three-way probabilities. Select an event band for ingestion details, or a step to highlight its set."
+    : "Select a leaf for its model-facing level array and probabilities; an upper bar for leaf coverage, inputs, and body; an event band for ingestion details; or a step to highlight its set."}));
+  const left = el("div",{}, el("h2",{text:"Scope coglet tree"}), el("p",{class:"note",text: M.tree
+    ? "One scope contains the conversation. Event bands follow ingestion order; L0 cells are original chunks; each higher bar spans the leaves it covers. Tree retrieval uses one cross-level vector top-k, so candidates and selected nodes may occur at any level. A returned item contains only that node body, without ancestor arrays or subtree expansion. Its declared sources cover all events under it and count toward citation coverage. Under direct-source accounting (F113), only L0 nodes count their own events; upper-level summary closure is excluded."
+    : "One scope contains the conversation. Event bands follow ingestion order; L0 cells are original chunks; higher summary bars span their covered leaves. Containment shows coverage without parent arrows. A coglet comprises one L0 leaf and its covering node at each upper level; select a leaf to inspect this array. Retrieval, JEV, and packing are overlays. Layout depends only on leaf order and level."}), mini, wrap, CT.legend({tree:!!M.tree}), detail);
+  const right = el("div",{}, el("h2",{text:"Current question"}), M.tree ? flowBarTree(M) : flowBarLeaf(M));
+  sec.append(el("div",{class:"main"}, left, right));
+  return sec;
+}
+function drawLeaf(M){
+  const ic = CT.icicle($("#forest"), M, {onSelect:(id)=>detailLeaf(M, id), onEvent:(sid)=>eventDetailLeaf(M, sid)});
+  M.mini = CT.minimap($("#mini"), M, ic);
+  $("#forest-sub")?.remove();
+  syncStageLeaf(M);
+  const first = M.s?.items?.[0]?.node, ev = [...M.evLeaves][0];
+  const to = (first!=null ? M.leafIndex.get(first) : null) ?? (ev!=null ? M.leafIndex.get(ev) : null);
+  if (to!=null) (window.requestAnimationFrame||setTimeout)(() => ic.scrollToLeaf(to, false));
+}
+function flowBarLeaf(M){
+  const {s, x, w, q} = M, st = M.stat, set = st.settings||{};
+  const flow = el("div",{class:"flow"}, el("p",{class:"q",text:q.query}));
+  const steps = [];
+  const step = (n, t, sub, stage, setFn, extra) => { const b = el("button",{type:"button",class:"step"+(setFn?"":" static"),"data-stage":String(stage)}, el("span",{class:"n",text:String(n)}), el("span",{class:"t",text:t}), el("span",{class:"s",text:sub}), extra); if (setFn) b.addEventListener("click", () => toggleHlLeaf(M, b, setFn)); steps.push(b); return b; };
+  const arrow = () => el("div",{class:"arrow",text:"▼"});
+  if (!s){ flow.append(step(1, "Retrieval", M.w?.trace==="corrupt" ? "Search trace cannot be parsed after log redaction (F92)" : "No search trace: execution failed before retrieval, or the trace is missing", 3, null)); }
+  else {
+    const choice = Object.entries(st.choice).map(([k,v])=>`${k} ${v}`).join(" / ");
+    flow.append(step(1, "Vector retrieval", `The query vector retrieves only L0 coglets: R = ${st.cands}(leaf_k ${set.leaf_k??"—"} · upper_k ${set.upper_k??0}, without ancestor or evidence expansion) · Representation ${set.vector_representation||set.representation||"—"}${M.run?.sut?.variant?` · Variant ${M.run.sut.variant}`:""}`, 3, () => st.candSet), arrow(),
+      step(2, "Three-way JEV", `${st.scored} scored · useful ≥ ${M.thr??"—"} Admitted ${st.admitted}(${set.selection_policy?.kind||"—"}, ${set.jev_admission_basis||"Useful"}, ${set.jev_calibration||"Uncalibrated"})${st.uncertainMean!=null?` · Mean uncertain ${fmt(st.uncertainMean,2)}`:""}${choice?` · Provider choice: ${choice}`:""} · ${st.batches} batches (${set.jev_output_format||"—"})${st.failedAttempts?` · ${st.failedAttempts} failed attempts`:""}${s.degraded?" · Whole-pool fallback":""}`, 3, () => st.admittedSet), arrow(),
+      step(3, "Packing", `Whole-coglet token budget: ${int(set.memory_tokens)} → Packed S = ${st.packed?.memories??st.S} items (${int(st.ctxTokens)} tokens${st.selTokens.length?`; embedding input per selected L0: ${st.selTokens.map(v=>int(v)).join(" / ")} tokens`:""}) · Admitted but did not fit ${st.om.CONTEXT_BUNDLE_TOO_LARGE||0}${st.om.result_limit?` · Limit exceeded ${st.om.result_limit}`:""} · Visible bodies ${st.packed?.visible_bodies??"—"}(shared ancestors deduplicated)`, 4, () => st.selectedSet));
+  }
+  flow.append(arrow(), step(4, "Reader answer", x ? `The evaluator sends ${x.returned_items??"—"} coglets (level-array JSON rendered by leaf-memory-context-v1,${int(x.returned_chars)} characters ${x.truncated?", truncated":""}) to the fixed reader · ${x.answer!=null?`Answer ${x.answer.length} characters`:"No answer text"}${x.reader_abstain?" · Reader abstained":""}` : "Not scheduled", 5, st.S ? () => st.selectedSet : null), arrow(),
+    step(5, "Judge scoring", x ? (x.status==="scored" ? `Score ${fmt(x.score,3)} · ${(x.items||[]).length} rubric expectations ${(x.items||[]).map(i=>fmt(i.expectation,2)).join(" / ")||"—"}` : `${x.status}: ${x.failure?.class||x.error_type||"—"}`) : "Not scheduled", 5, null));
+  if (w && (w.evidence||[]).length){
+    const evBox = el("span",{}, ...w.evidence.map(e => el("span",{class:"ev"}, el("code",{text:sidShort(e.source_id)}), " ", el("span",{class:"badge b-st"}, el("i",{class:"stg st-"+(e.stage==="selected"?"covered":e.stage)}), e.stage==="selected"?"Selected result":stageLabel(e.stage)), e.best ? el("span",{class:"sub",text:` Best leaf useful ${fmt(e.best.p_use,2)} · ${OUTCOME[e.best.outcome]||CT.OUTCOME_ZH[e.best.outcome]||e.best.outcome||"Candidate"}${e.best.rank!=null?` · #${e.best.rank}`:""}`}) : el("span",{class:"sub",text:` Ingest ${e.written||"None"} · ${e.nodes} Leaf`}))));
+    flow.append(arrow(), step(6, "Evidence check (post-hoc diagnostic)", `Loss stage: ${stageLabel(w.stage)} · Evidence returned ${w.covered?.[0]??0} / ${w.covered?.[1]??0}`, 5, () => M.evLeaves, evBox));
+  } else if (w) flow.append(arrow(), step(6, "Evidence check", `${stageLabel(w.stage)}: no dataset evidence labels; evaluate the answer only`, 5, null));
+  flow.append(el("p",{class:"sub",text:"R = candidate L0 coglets; S = packed coglets (SearchResult.packed.memories); visible bodies = deduplicated ContextView.visible count. Three-way probabilities come from native JEV choice distributions, marked uncalibrated upstream."}));
+  M.stepEls = steps;
+  return flow;
+}
+function toggleHlLeaf(M, btn, setFn){
+  const on = btn.classList.contains("on"); for (const b of M.stepEls) b.classList.remove("on");
+  if (on){ CT.highlight(M, null); return; }
+  btn.classList.add("on"); CT.highlight(M, setFn());
+}
+function detailLeaf(M, id){
+  const n = M.nodes.get(id);
+  if (n && (n.level??0) > 0) return upperDetailLeaf(M, n);
+  CT.layerPanel($("#detail"), M, id, {onNode:(nid) => { CT.select(M, nid); const nn = M.nodes.get(nid); if (nn && (nn.level??0) > 0) upperDetailLeaf(M, nn); if (nn?.leaf_range) M.ic.scrollToLeaf(nn.leaf_range[0]); }});
+}
+function lnkLeaf(M, id, label){ const b = el("button",{type:"button",class:"lnk",text:label||shortId(id)}); b.addEventListener("click", () => { CT.select(M, id); (M.tree ? detailTree : detailLeaf)(M, id); const n = M.nodes.get(id); if (n?.leaf_range) M.ic.scrollToLeaf(n.leaf_range[0]); }); return b; }
+function upperDetailLeaf(M, n){
+  const box = $("#detail"); const lr = n.leaf_range||[0,0];
+  const evs = M.events.filter(e => Array.isArray(e.leaf_range) && e.leaf_range[0] < lr[1] && e.leaf_range[1] > lr[0]);
+  const children = [...M.nodes.values()].filter(c => c.edge?.parent===n.id);
+  box.replaceChildren(el("div",{class:"ttl",text:`L${n.level} Summary coglet · Node ${shortId(n.id)} · Covered leaves #${lr[0]}–${lr[1]-1}(${lr[1]-lr[0]} leaves across ${evs.length} events)`}),
+    el("div",{class:"chips"}, el("span",{class:"badge b-cls",text:`${n.kind||"Summary"} · Ordinal ${n.ordinal??"?"}`}), n.underfill ? el("span",{class:"badge b-dim",text:"underfill"}) : null, el("span",{class:"badge b-dim",text:n.edge ? (n.edge.kind==="ContextFallback" ? "Upward: ContextFallback (borrowed background)" : `Upward: ${n.edge.kind}`) : "Upward: none (root)"}), evs.some(e=>M.evidence.has(e.source_id)) ? el("span",{class:"badge b-ev",text:"Covers evidence events"}) : null));
+  box.append(el("dl",{class:"kv"}, ...kv([
+    ["Node ID", el("code",{text:n.id})], n.body ? ["body id", el("code",{text:n.body})] : null,
+    ["Upward edge", n.edge?.parent ? el("span",{}, n.edge.kind==="ContextFallback" ? "ContextFallback → " : "SummaryParent → ", lnkLeaf(M, n.edge.parent)) : "None"],
+    ["Actual inputs", (n.inputs||[]).length ? el("span",{}, ...n.inputs.map(cid => lnkLeaf(M, cid))) : "Not recorded"],
+    ["Nodes using this parent", children.length ? el("span",{}, ...children.map(c => lnkLeaf(M, c.id, `${shortId(c.id)}${c.edge?.kind==="ContextFallback"?"(background)":""}`))) : "None"],
+    ["Covered events", evs.length ? evs.map(e=>`#${e.event_sequence} ${CT.ROLE_ZH[e.role]||e.role||"?"}`).join(", ") : "—"],
+    ["Role within the coglet", "This level appears in every covered L0 coglet array. For each leaf subtree, current points to this summary within the parent-level info list."],
+  ])));
+  box.append(el("h3",{text:"Body (= accepted summaries of actual inputs, concatenated in order)"}), textBlockLeaf(M, n.text_hash));
+  compositionBlock(M, n, box);
+}
+function compositionBlock(M, n, box){
+  if (!(n.inputs||[]).length) return;
+  const comp = el("div",{});
+  n.inputs.forEach((cid, i) => { const child = M.nodes.get(cid); const isum = n.input_summaries?.[i]; const sh = isum?.output_hash || null;
+    comp.append(el("div",{class:"box",style:"margin:6px 0"}, el("div",{class:"hd"}, el("span",{text:`info[${i}]: `}), lnkLeaf(M, cid), child ? el("span",{class:"sub",text:`L${child.level??0}·${child.ordinal??"?"}${child.leaf_range?` · Leaf #${child.leaf_range[0]}–${child.leaf_range[1]-1}`:""}`}) : null, isum ? el("span",{class:"badge "+(isum.faithful===false?"b-no":"b-ok"),text:`Summarization ${isum.model||"?"}${isum.faithful===false?" Verification failed":" Accepted"}`}) : null),
+      sh ? textBlockLeaf(M, sh, 240) : el("p",{class:"sub",text:"(summary text for this input absent from export)"})));
+  });
+  box.append(el("h3",{text:`Composition: ${n.inputs.length} accepted summaries of actual child inputs (the info list seen by the lower coglet)`}), comp);
+}
+function eventDetailLeaf(M, sid){
+  const box = $("#detail"), e = M.evBySource.get(sid), b = (M.W.builds||[]).find(z => z.source_id===sid) || null;
+  if (!e){ box.replaceChildren(el("p",{class:"empty",text:"Event absent from the snapshot visible to this question."})); return; }
+  const leaves = M.leaves.filter(n => n.origin?.source_id===sid);
+  box.replaceChildren(el("div",{class:"ttl",text:`Event #${e.event_sequence??"?"} · ${CT.ROLE_ZH[e.role]||e.role||"?"} · source ${shortId(sid)}`}),
+    el("div",{class:"chips"}, M.evidence.has(sid) ? el("span",{class:"badge b-ev",text:"Evidence event (post-hoc diagnostic)"}) : null, b ? el("span",{class:"badge "+(b.state==="Ready"?"b-ok":"b-no"),text:`Ingest ${b.state||"?"}`}) : el("span",{class:"badge b-dim",text:"No build record"}), el("span",{class:"badge b-dim",text:`${leaves.length} leaves (#${e.leaf_range?.[0]??"?"}–${(e.leaf_range?.[1]??0)-1})`})));
+  box.append(el("dl",{class:"kv"}, ...kv([
+    b ? ["Scope operation", `Operation ${shortId(b.operation_id)} · Snapshot ${shortId(b.snapshot_id)} · seq ${b.seq??"?"}`] : null, b?.audit_error ? ["Audit read failed", b.audit_error] : null,
+    ["Leaf", leaves.length ? el("span",{}, ...leaves.map(n => lnkLeaf(M, n.id, `#${n.leaf_range[0]}`))) : "None"],
+    ["Leaf state", leaves.length ? Object.entries(leaves.reduce((a,n)=>{ const st = CT.stateOf(M.cand.get(n.id), M.thr); a[st]=(a[st]||0)+1; return a; },{})).map(([k,v])=>`${CT.STATE_ZH[k]} ${v}`).join(" · ") : "—"],
+  ])));
+  const ev = (M.W.events||[]).find(z => z.source_id===sid); if (ev?.timestamp) box.append(el("p",{class:"sub",text:`Event time ${String(ev.timestamp).slice(0,19).replace("T"," ")}${ev.turn_group?` · turn_group ${ev.turn_group}`:""}`}));
+}
+function textBlockLeaf(M, hash, limit){ const t = M.T(hash); if (t==null) return el("span",{class:"empty",text: hash ? `(text not exported · ${shortId(hash)})` : "(no text)"}); if (limit && t.length > limit) return el("details",{}, el("summary",{text:t.slice(0,limit).replace(/\s+/g," ")+"…"}), el("div",{class:"tx",text:t})); return el("div",{class:"tx",text:t}); }
+function explainerLeaf(M){
+  const set = M.stat.settings||{};
+  const sec = el("section",{id:"explain"}, el("h2",{text:"Coglets and hierarchy construction (LeafMemory)"}));
+  sec.append(el("ul",{class:"pts"},
+    el("li",{html:"<b>Scopes and events</b>: the host appends conversation events to one scope in order (≤ 64 per batch,<code>append_events</code>). The library creates leaves, builds summaries, and atomically publishes a snapshot generation. The hierarchy spans events: an L1 summary may cover leaves from several adjacent events."}),
+    el("li",{html:"<b>L0 leaves and upper levels</b>: event bodies are split into original-text L0 leaves. Each node generates a self-summary and passes a faithfulness check. Adjacent accepted summaries meeting aggregation conditions are concatenated into the next-level body (the<code>info</code> list). Tail nodes without actual parents may borrow earlier context via ContextFallback (orange dashed edges), which does not imply coverage."}),
+    el("li",{html:"<b>One coglet = one level array</b>: each L0 leaf contributes its original body (level 0), followed by the <code>info</code> list containing its covering summary at each upper level. Each level records a <code>current</code> pointer to the corresponding entry from the immediately lower level. Embedding, JEV, and reader input use the same deterministic projection (<code>leaf-memory-context-v1</code>)."}),
+    el("li",{html:`<b>Retrieval</b>: vector search retrieves only L0 coglets (leaf_k ${set.leaf_k??"—"}), without ancestor or evidence expansion. JEV assigns useful / not_useful / uncertain probabilities to the entire coglet (native choice,<b>Uncalibrated</b>), admitting useful ≥ ${M.thr??"—"} . Admitted coglets are ranked by rank_utility and packed using<b>whole-coglet token counts</b> into memory_tokens ${int(set.memory_tokens)} . Whole-coglet size can limit how many fit; oversized bundles are recorded as CONTEXT_BUNDLE_TOO_LARGE.`}),
+    el("li",{html:"<b>Evidence labels</b>are dataset gold.evidence_ids used only for post-hoc diagnostics. The SUT and JEV cannot see them; no question-specific or category-specific constraints are sent upstream."}),
+  ));
+  return sec;
+}
+function tableViewLeaf(M){
+  const sec = el("section",{id:"table"});
+  const det = el("details",{}, el("summary",{text:"Table view (candidate coglets and evidence leaves, for row-by-row and keyboard review)"}));
+  let built = false;
+  det.addEventListener("toggle", () => { if (built || !det.open) return; built = true;
+    const ids = new Set([...M.cand.keys(), ...M.evLeaves]); const rows = [];
+    for (const n of M.leaves){ if (!ids.has(n.id)) continue; const c = M.cand.get(n.id), st = CT.stateOf(c, M.thr), e = n.origin ? M.evBySource.get(n.origin.source_id) : null;
+      rows.push(el("tr",{class: M.evLeaves.has(n.id) ? "evidence" : null}, el("td",{class:"num",text:String(n.leaf_range[0])}), el("td",{text:e?`#${e.event_sequence} ${CT.ROLE_ZH[e.role]||e.role||"?"}`:"?"}), el("td",{}, lnkLeaf(M, n.id)), el("td",{text:CT.STATE_ZH[st]}), el("td",{class:"num",text:fmt(c?.jev?.useful ?? c?.p_use,2)}), el("td",{class:"num",text:fmt(c?.jev?.uncertain,2)}), el("td",{class:"num",text:fmt(c?.jev?.not_useful,2)}), el("td",{class:"num",text:fmt(c?.similarity,3)}), el("td",{class:"num",text:c?.vector_rank??"—"}), el("td",{text:c ? (CT.OUTCOME_ZH[c.outcome]||c.outcome||"Candidate") : "Not a candidate"}), el("td",{class:"num",text:c?.rank??"—"}), el("td",{class:"num",text:int(n.input_tokens)}))); }
+    det.append(el("p",{class:"sub",text:`${rows.length} rows · Candidates ${M.cand.size} + evidence leaves (green background)`}), el("div",{class:"tbl"}, el("table",{}, el("thead",{}, el("tr",{}, ...["Leaf #","events","node","State","useful","uncertain","not_useful","Similarity","Vector #","Outcome","Rank","Coglet tokens"].map(h=>el("th",{text:h})))), el("tbody",{}, ...rows))));
+  });
+  sec.append(det); return sec;
+}
+
+/*  */
+function modelTree(W, run, q, x){ const M = modelLeaf(W, run, q, x); M.tree = true; return M; }
+const recWin = rec => { if (!Array.isArray(rec) || (rec[0]==null && rec[1]==null)) return null; const f = us => typeof us==="number" ? new Date(us/1000).toISOString().slice(0,16).replace("T"," ") : "?"; return `${f(rec[0])} – ${f(rec[1])} UTC`; };
+const byLevel = o => Object.entries(o||{}).sort((a,b)=>a[0]-b[0]).map(([k,v])=>`L${k} ${v}`).join(" · ") || "—";
+function stageBarTree(M){
+  const {s, x} = M, st = M.stat, cfg = M.W.build_config || null, set = st.settings||{};
+  const lv = Object.entries(st.levels).sort((a,b)=>a[0]-b[0]);
+  const stages = [
+    ["Scope ingestion", `One scope per episode · Before this question: ${st.snapshots} append calls (≤ 64 events per batch) · ${st.events} events · Model calls ${int(st.calls)} times ${st.wallMin!=null?` · Wall time ${fmt(st.wallMin,1)} min`:""}${st.failedOps?` · Failed operations ${st.failedOps}`:""}`],
+    ["Chunking, hierarchical summaries, and per-node embeddings", `L0 ${st.levels[0]||0} Leaves · ${lv.filter(([k])=>k!=="0").map(([k,v])=>`L${k} ${v}`).join(" · ")||"No upper level"} · ContextFallback ${st.fallback}${cfg?` · Chunk target ${cfg.chunk_target??"—"} tokens`:""} · Body indexing (each node embeds its own body; upstream VectorPoint does not record embedding-input token counts)`],
+    ["Cross-level vector retrieval + three-way JEV", s ? `One cross-level top-k retrieves ${st.cands} nodes (${byLevel(st.candLevels)}; leaf_k ${set.leaf_k??"—"} · upper_k ${set.upper_k??0} · Representation ${set.vector_representation||set.representation||"—"}${M.run?.sut?.variant?` · Variant ${M.run.sut.variant}`:""}) → Scored ${st.scored} · useful ≥ ${M.thr??"—"} Admitted ${st.admitted}${st.uncertainMean!=null?` · Mean uncertain ${fmt(st.uncertainMean,2)}`:""} · ${st.batches} batches (${set.jev_prompt_profile||"node-reference-v1"})${st.failedAttempts?` · ${st.failedAttempts} failed attempts`:""}` : (M.w?.trace==="corrupt" ? "Search trace damaged by log redaction (F92)" : "No search trace")],
+    ["Returned nodes", s ? `Returned ${st.S} nodes (${byLevel(st.itemLevels)}) · Own body only, without ancestors or subtree expansion · Context ${int(st.ctxTokens)} tokens${set.memory_tokens!=null?` / budget ${int(set.memory_tokens)}`:""} · Direct sources ${int(st.directSources)} events (L0) · Total node coverage ${int(st.coveredSources)} events · With record windows ${st.recordedN} / ${st.S}${st.om.CONTEXT_BUNDLE_TOO_LARGE?` · Passed JEV but did not fit ${st.om.CONTEXT_BUNDLE_TOO_LARGE}`:""}${st.om.result_limit?` · Limit exceeded ${st.om.result_limit}`:""}` : "—"],
+    ["Answer and scoring", x ? `Reader received ${x.returned_items??"—"} items · ${int(x.returned_chars)} characters ${x.truncated?"(truncated)":""} → Judge ${x.status==="scored"?`Score ${fmt(x.score,3)}`:x.status}` : "Not scheduled"],
+  ];
+  const sec = el("section",{id:"stages"}), bar = el("div",{class:"stagebar"});
+  const btns = stages.map(([t,sub],i) => { const b = el("button",{type:"button",class:"stage"}, el("span",{class:"n",text:String(i+1).padStart(2,"0")}), el("span",{class:"t",text:t}), el("span",{class:"s",text:sub})); b.addEventListener("click", () => { M.stage = i+1; syncStageLeaf(M); }); return b; });
+  bar.append(...btns); M.stageBtns = btns;
+  sec.append(bar, el("p",{class:"note stagebar-note",id:"stage-note"}));
+  return sec;
+}
+function drawTree(M){
+  const ic = CT.icicle($("#forest"), M, {onSelect:(id)=>detailTree(M, id), onEvent:(sid)=>eventDetailLeaf(M, sid)});
+  M.mini = CT.minimap($("#mini"), M, ic);
+  syncStageLeaf(M);
+  const first = M.s?.items?.[0]?.node, ev = [...M.evLeaves][0];
+  const to = (first!=null ? M.nodes.get(first)?.leaf_range?.[0] : null) ?? (ev!=null ? M.leafIndex.get(ev) : null);
+  if (to!=null) (window.requestAnimationFrame||setTimeout)(() => ic.scrollToLeaf(to, false));
+}
+function flowBarTree(M){
+  const {s, x, w, q} = M, st = M.stat, set = st.settings||{};
+  const flow = el("div",{class:"flow"}, el("p",{class:"q",text:q.query}));
+  const steps = [];
+  const step = (n, t, sub, stage, setFn, extra) => { const b = el("button",{type:"button",class:"step"+(setFn?"":" static"),"data-stage":String(stage)}, el("span",{class:"n",text:String(n)}), el("span",{class:"t",text:t}), el("span",{class:"s",text:sub}), extra); if (setFn) b.addEventListener("click", () => toggleHlLeaf(M, b, setFn)); steps.push(b); return b; };
+  const arrow = () => el("div",{class:"arrow",text:"▼"});
+  if (!s){ flow.append(step(1, "Retrieval", M.w?.trace==="corrupt" ? "Search trace cannot be parsed after log redaction (F92)" : "No search trace: execution failed before retrieval, or the trace is missing", 3, null)); }
+  else {
+    const choice = Object.entries(st.choice).map(([k,v])=>`${k} ${v}`).join(" / ");
+    flow.append(step(1, "Cross-level vector retrieval", `All levels compete in one vector space, using one top-k: R = ${st.cands}(${byLevel(st.candLevels)}; leaf_k ${set.leaf_k??"—"} · upper_k ${set.upper_k??0}, without ancestor or evidence expansion) · Representation ${set.vector_representation||set.representation||"—"}${M.run?.sut?.variant?` · Variant ${M.run.sut.variant}`:""}`, 3, () => st.candSet), arrow(),
+      step(2, "Three-way JEV (node body only)", `${st.scored} nodes scored · useful ≥ ${M.thr??"—"} Admitted ${st.admitted}(${set.selection_policy?.kind||"—"}, ${set.jev_admission_basis||"Useful"}, ${set.jev_calibration||"Uncalibrated"})${st.uncertainMean!=null?` · Mean uncertain ${fmt(st.uncertainMean,2)}`:""}${choice?` · Provider choice: ${choice}`:""} · ${st.batches} batches (${set.jev_output_format||"—"} · ${set.jev_prompt_profile||"node-reference-v1"})${st.failedAttempts?` · ${st.failedAttempts} failed attempts`:""}${s.degraded?" · Whole-pool fallback":""}`, 3, () => st.admittedSet), arrow(),
+      step(3, "Returned nodes", `Admitted nodes are ranked by rank_utility and packed by own-body token count ${int(set.memory_tokens)} → S = ${st.S}(${byLevel(st.itemLevels)}; ${int(st.ctxTokens)} tokens) · Direct sources ${int(st.directSources)} events (L0) · Total node coverage ${int(st.coveredSources)} events · With record windows ${st.recordedN} / ${st.S} · Admitted but did not fit ${st.om.CONTEXT_BUNDLE_TOO_LARGE||0}${st.om.result_limit?` · Limit exceeded ${st.om.result_limit}`:""}`, 4, () => st.selectedSet));
+  }
+  flow.append(arrow(), step(4, "Reader answer", x ? `The evaluator sends ${x.returned_items??"—"} node bodies (including v4 summary [recorded …] tags;${int(x.returned_chars)} characters ${x.truncated?", truncated":""}) to the fixed reader · ${x.answer!=null?`Answer ${x.answer.length} characters`:"No answer text"}${x.reader_abstain?" · Reader abstained":""}` : "Not scheduled", 5, st.S ? () => st.selectedSet : null), arrow(),
+    step(5, "Judge scoring", x ? (x.status==="scored" ? `Score ${fmt(x.score,3)} · ${(x.items||[]).length} rubric expectations ${(x.items||[]).map(i=>fmt(i.expectation,2)).join(" / ")||"—"}` : `${x.status}: ${x.failure?.class||x.error_type||"—"}`) : "Not scheduled", 5, null));
+  if (w && (w.evidence||[]).length){
+    const evBox = el("span",{}, ...w.evidence.map(e => el("span",{class:"ev"}, el("code",{text:sidShort(e.source_id)}), " ", el("span",{class:"badge b-st"}, el("i",{class:"stg st-"+(e.stage==="selected"?"covered":e.stage)}), e.stage==="selected"?"Selected result":stageLabel(e.stage)), e.best ? el("span",{class:"sub",text:` Best node L ${e.best.level??"?"} useful ${fmt(e.best.p_use,2)} · ${OUTCOME[e.best.outcome]||CT.OUTCOME_ZH[e.best.outcome]||e.best.outcome||"Candidate"}${e.best.rank!=null?` · #${e.best.rank}`:""}`}) : el("span",{class:"sub",text:` Ingest ${e.written||"None"} · ${e.nodes} Leaf`}))));
+    flow.append(arrow(), step(6, "Evidence check (post-hoc diagnostic)", `Loss stage: ${stageLabel(w.stage)} · Evidence returned ${w.covered?.[0]??0} / ${w.covered?.[1]??0}(evidence covered by returned nodes counts as returned here)`, 5, () => M.evNodes, evBox));
+  } else if (w) flow.append(arrow(), step(6, "Evidence check", `${stageLabel(w.stage)}: no dataset evidence labels; evaluate the answer only`, 5, null));
+  flow.append(el("p",{class:"sub",text:"R = candidate nodes at any level; S = returned nodes. Direct sources count only the own events of L0 leaves (F113), excluding upper-level summary closure. Node coverage counts every covered event, matching item source_ids and citation coverage. Record windows are covered-leaf message timestamps [start, end], not dates mentioned in content; missing timestamps remain unknown. Native JEV choice probabilities are marked uncalibrated upstream."}));
+  M.stepEls = steps;
+  return flow;
+}
+function detailTree(M, id){
+  const box = $("#detail"), n = M.nodes.get(id), c = M.cand.get(id), j = M.jevT.get(id), st = CT.stateOf(c, M.thr);
+  if (!n && !c){ box.replaceChildren(el("p",{class:"empty",text:`node ${shortId(id)} is absent from the snapshot visible to this question.`})); return; }
+  const lr = n?.leaf_range||[0,0], lvl = n?.level ?? c?.level ?? 0, it = c?.item || null, cv = M.cvNodes?.get(id) || null;
+  const evs = M.events.filter(e => Array.isArray(e.leaf_range) && e.leaf_range[0] < lr[1] && e.leaf_range[1] > lr[0]);
+  const rec = recWin(it?.recorded ?? cv?.recorded), srcN = Array.isArray(it?.sources) ? it.sources.length : (it?.reader_sources_n ?? cv?.sources_n ?? null);
+  box.replaceChildren(el("div",{class:"ttl",text:`L${lvl} ${lvl?"Summarization":"Leaf"} Node · ${shortId(id)} · Covered leaves #${lr[0]}–${lr[1]-1}(${lr[1]-lr[0]} leaves across ${evs.length} events) ${M.evNodes?.has(id)?" · Covers evidence events":""}`}),
+    el("div",{class:"chips"}, el("span",{class:"badge "+(st==="S"?"b-ok":"b-dim"),text:CT.STATE_ZH[st]+(c?.rank!=null?` #${c.rank}`:"")}),
+      c?.outcome && c.outcome!=="selected" ? el("span",{class:"badge b-dim",text:CT.OUTCOME_ZH[c.outcome]||c.outcome}) : null,
+      c ? el("span",{class:"badge b-dim",text:`Similarity ${fmt(c.similarity,3)}${c.vector_rank!=null?` · Vector #${c.vector_rank}`:""}`}) : null,
+      n?.kind ? el("span",{class:"badge b-cls",text:`${n.kind} · Ordinal ${n.ordinal??"?"}`}) : null, n?.underfill ? el("span",{class:"badge b-dim",text:"underfill"}) : null,
+      el("span",{class:"badge b-dim",text: rec ? `Record window ${rec}` : (it ? "Record time unknown" : "Record window: available only for returned items")}),
+      srcN!=null ? el("span",{class:"badge b-dim",title:"Number of all covered events = item source_ids count (citation coverage). Direct-source accounting counts only an L0 node\'s own leaf event.",text:`Node coverage ${srcN} events`}) : null));
+  if (c?.jev) box.append(el("div",{class:"ct-row"}, CT.threeClassBar(c.jev), j?.provider ? el("span",{class:"ct-sub",text:` Provider choice ${j.provider.choice??"—"} · confidence ${fmt(j.provider.confidence,2)}${j.batch!=null?` · Batch ${j.batch+1}`:""}${j.model?` · ${j.model}`:""}`}) : null));
+  else if (c) box.append(el("p",{class:"ct-sub",text:"JEV probabilities are unavailable for this node (not submitted, batch failed, or whole-pool fallback)."}));
+  box.append(el("dl",{class:"kv"}, ...kv([
+    ["Node ID", el("code",{text:id})], n?.body ? ["body id", el("code",{text:n.body})] : null,
+    n ? ["Upward edge", n.edge?.parent ? el("span",{}, n.edge.kind==="ContextFallback" ? "ContextFallback → " : "SummaryParent → ", lnkLeaf(M, n.edge.parent)) : "None (root)"] : null,
+    lvl ? ["Actual inputs", (n?.inputs||[]).length ? el("span",{}, ...n.inputs.map(cid => lnkLeaf(M, cid))) : "Not recorded"] : null,
+    ["Covered events", evs.length ? el("span",{}, ...evs.map((e,i) => el("span",{}, i?", ":"", el("span",{class: M.evidence.has(e.source_id) ? "badge b-ev" : null, text:`#${e.event_sequence} ${CT.ROLE_ZH[e.role]||e.role||"?"}`})))) : "—"],
+    ["As an item", it ? `#${it.rank}: the reader receives only the body below, without ancestor arrays or subtree expansion; source_ids covers ${srcN??"?"} events` : "This node was not returned for this question"],
+  ])));
+  box.append(el("h3",{text: lvl ? "Own body (= accepted input summaries concatenated in order; v4 includes [recorded …] tags)" : "Own body (original L0 chunk)"}), textBlockLeaf(M, it?.text_hash || n?.text_hash));
+  if (n && lvl) compositionBlock(M, n, box);
+}
+function explainerTree(M){
+  const set = M.stat.settings||{};
+  const sec = el("section",{id:"explain"}, el("h2",{text:"Coglets and hierarchy construction (cross-level Tree retrieval)"}));
+  sec.append(el("ul",{class:"pts"},
+    el("li",{html:"<b>Scopes and events</b>: the host appends conversation events to one scope in order (≤ 64 per batch,<code>append_events</code>). The library creates leaves, builds summaries, and atomically publishes a snapshot generation. Ingestion is identical to LeafMemory."}),
+    el("li",{html:"<b>L0 leaves and upper levels</b>: original event bodies become L0 leaves. Each node generates a self-summary and passes faithfulness verification; adjacent accepted summaries meeting aggregation conditions form the next-level body in order.<code>abstractive-ratio-v4</code> requires time information to be retained, and <code>recorded-v1</code> adds summary <code>[recorded …]</code> tags representing the covered leaves\'<b>message record time</b>window, not dates mentioned in content. Missing timestamps remain unknown."}),
+    el("li",{html:`<b>Indexing and retrieval</b>: <code>INDEX_REPRESENTATIONS=body</code> indexes every node at every level using its own body (Body). All levels share one vector space for<b>one cross-level top-k</b>(leaf_k ${set.leaf_k??"—"}, upper_k 0), without level quotas, ancestor expansion, or evidence descent: collapsed-tree retrieval as in RAPTOR.`}),
+    el("li",{html:`<b>JEV and returned items</b>: JEV(<code>node-reference-v1</code>) assigns useful / not_useful / uncertain probabilities to each candidate body (native choice,<b>Uncalibrated</b>), admitting useful ≥ ${M.thr??"—"} . Admitted nodes are ranked by rank_utility and packed using<b>the node body's token count</b> into memory_tokens ${int(set.memory_tokens)} . A returned item contains only its own body: an upper node contains a summary of its covered range; an L0 node contains original text. No ancestor arrays or subtree expansion are included.`}),
+    el("li",{html:"<b>Source accounting</b>: an item\'s <code>source_ids</code> contains every covered event and contributes to citation coverage. Direct-source accounting (F113) counts only L0 own events, excluding upper summary closure, as with LeafMemory. Evidence recall and precision use direct sources. Upper nodes marked as covering evidence are coverage diagnostics and do not increase recall."}),
+    el("li",{html:"<b>Evidence labels</b>are dataset gold.evidence_ids used only for post-hoc diagnostics. The SUT and JEV cannot see them; no question-specific or category-specific constraints are sent upstream."}),
+  ));
+  return sec;
+}
+function tableViewTree(M){
+  const sec = el("section",{id:"table"});
+  const det = el("details",{}, el("summary",{text:"Table view (candidate nodes at any level and evidence leaves, for keyboard and row-by-row review)"}));
+  let built = false;
+  det.addEventListener("toggle", () => { if (built || !det.open) return; built = true;
+    const ids = new Set([...M.cand.keys(), ...M.evLeaves]); const rows = [];
+    const all = [...M.uppers, ...M.leaves].filter(n => ids.has(n.id)).sort((a,b)=>(b.level??0)-(a.level??0) || a.leaf_range[0]-b.leaf_range[0]);
+    for (const n of all){ const c = M.cand.get(n.id), st = CT.stateOf(c, M.thr), it = c?.item || null, lr = n.leaf_range;
+      rows.push(el("tr",{class: M.evNodes.has(n.id) ? "evidence" : null}, el("td",{class:"num",text:`L${n.level??0}`}), el("td",{class:"num",text:lr[1]-lr[0]===1?String(lr[0]):`${lr[0]}–${lr[1]-1}`}), el("td",{}, lnkLeaf(M, n.id)), el("td",{text:CT.STATE_ZH[st]}), el("td",{class:"num",text:fmt(c?.jev?.useful ?? c?.p_use,2)}), el("td",{class:"num",text:fmt(c?.jev?.uncertain,2)}), el("td",{class:"num",text:fmt(c?.jev?.not_useful,2)}), el("td",{class:"num",text:fmt(c?.similarity,3)}), el("td",{class:"num",text:c?.vector_rank??"—"}), el("td",{text:c ? (CT.OUTCOME_ZH[c.outcome]||c.outcome||"Candidate") : "Not a candidate"}), el("td",{class:"num",text:c?.rank??"—"}), el("td",{class:"num",text: it ? String(Array.isArray(it.sources)?it.sources.length:(it.reader_sources_n??"—")) : "—"}), el("td",{text: recWin(it?.recorded) || (it ? "Unknown" : "—")}))); }
+    det.append(el("p",{class:"sub",text:`${rows.length} rows · Candidates ${M.cand.size} + evidence leaves (green = evidence leaf or a node covering evidence)`}), el("div",{class:"tbl"}, el("table",{}, el("thead",{}, el("tr",{}, ...["Level","Leaf #","node","State","useful","uncertain","not_useful","Similarity","Vector #","Outcome","Rank","Direct sources","Record window"].map(h=>el("th",{text:h})))), el("tbody",{}, ...rows))));
+  });
+  sec.append(det); return sec;
+}
+
+if (window.addEventListener){ let t = null; window.addEventListener("resize", () => { clearTimeout(t); t = setTimeout(() => { const M = window.__M; if (!M) return; if (M.leaf){ M.mini?.redraw(); } else if (M.svg) drawForest(M); }, 200); }); }
+boot();
+</script>
+</body>
+</html>

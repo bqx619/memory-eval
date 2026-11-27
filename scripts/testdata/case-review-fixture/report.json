@@ -1,0 +1,105 @@
+{
+  "cases": [
+    {
+      "case_id": "good",
+      "category": "preference",
+      "cutoff": 1,
+      "episode_id": "episode",
+      "kind": "retrieval",
+      "metrics": {
+        "recall": 1
+      },
+      "namespace": "fixture",
+      "repeat_index": 0,
+      "response": {
+        "items": [
+          {
+            "id": "node-anon-a",
+            "score": 0.72,
+            "source_ids": [
+              "anon-a"
+            ],
+            "text": "Please use concise answers.\nUse concise answers."
+          }
+        ]
+      },
+      "retrieved_source_ids": [
+        "a"
+      ],
+      "sample_id": "good#0",
+      "status": "scored",
+      "timings": {}
+    },
+    {
+      "case_id": "failed",
+      "category": "preference",
+      "cutoff": 2,
+      "episode_id": "episode",
+      "error_detail": "synthetic BATCH_NOT_READY",
+      "error_type": "*jsonrpc.RPCError",
+      "kind": "retrieval",
+      "metrics": {},
+      "namespace": "fixture",
+      "repeat_index": 0,
+      "retrieved_source_ids": [],
+      "sample_id": "failed#0",
+      "status": "ingest_failed",
+      "timings": {}
+    },
+    {
+      "case_id": "search-failed",
+      "category": "preference",
+      "cutoff": 1,
+      "episode_id": "episode",
+      "error_detail": "CogletNet native operation failed: MODEL_UNAVAILABLE (status=503)",
+      "error_type": "*jsonrpc.RPCError",
+      "kind": "retrieval",
+      "metrics": {},
+      "namespace": "fixture-search",
+      "repeat_index": 0,
+      "retrieved_source_ids": [],
+      "sample_id": "search-failed#0",
+      "status": "error",
+      "timings": {
+        "query_ms": 812
+      }
+    }
+  ],
+  "mode": "retrieval",
+  "protocol": {
+    "budget": {
+      "max_context_chars": 1000,
+      "top_k": 2
+    },
+    "reset_policy": "incremental_per_episode",
+    "trace_text": true
+  },
+  "run_id": "fixture",
+  "run_seed": "0000000000000000000000000000000000000000000000000000000000000000",
+  "started_at_utc": "2026-10-25T08:00:00Z",
+  "suite_id": "work-fixture",
+  "suite_sha256": "456e82932bb3d9f21306fdcbb2ff6616f37ae9b296038772f8e4fd41d919e9ef",
+  "summary": {
+    "metrics": {
+      "recall": {
+        "mean": 1,
+        "n": 1
+      }
+    },
+    "status_counts": {
+      "error": 1,
+      "ingest_failed": 1,
+      "scored": 1
+    }
+  },
+  "sut": {
+    "describe": {
+      "config": {
+        "jev_threshold": 0.5,
+        "work_trace": "full"
+      }
+    },
+    "name": "cogletnet",
+    "variant": "synthetic-work-trace"
+  }
+}

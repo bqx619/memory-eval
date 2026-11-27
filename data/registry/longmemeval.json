@@ -1,0 +1,55 @@
+{
+  "id": "longmemeval",
+  "name": "LongMemEval",
+  "repository": "https://github.com/xiaowu0162/LongMemEval",
+  "dataset_url": "https://huggingface.co/datasets/xiaowu0162/longmemeval-cleaned",
+  "data_nature": "",
+  "task_kinds": [
+    "qa"
+  ],
+  "protocol_id": "longmemeval",
+  "variants": [
+    "s",
+    "m",
+    "oracle"
+  ],
+  "reported_scale": {
+    "questions": 500,
+    "variant": "s"
+  },
+  "license": {
+    "id": "MIT",
+    "noncommercial": false,
+    "no_derivatives": false,
+    "share_alike": false,
+    "redistribute_normalized": true,
+    "source": "https://huggingface.co/datasets/xiaowu0162/longmemeval-cleaned"
+  },
+  "pinned_revision": "98d7416c24c778c2fee6e6f3006e7a073259d48f",
+  "implementation_status": "run",
+  "importer": "memeval import longmemeval --variant s",
+  "suites": [
+    {
+      "suite_id": "longmemeval-s-cleaned@98d7416c24c7",
+      "path": "data/normalized/longmemeval-s.json",
+      "protocol_ref": "protocols/longmemeval.json#s"
+    },
+    {
+      "suite_id": "longmemeval-s-cleaned@98d7416c24c7-strat70",
+      "path": "data/normalized/longmemeval-s-strat70.json",
+      "protocol_ref": "protocols/longmemeval.json#s"
+    }
+  ],
+  "overlaps": [
+    "memoryagentbench"
+  ],
+  "notes": [
+    "Facts: existing source.lock.json and normalized provenance; MIT per dataset protocol §9.",
+    "scale: strat70 is a derived 70-question stratified subset of the published 500-question S suite.",
+    "Source pool includes shared filler conversations; declared scale describes S only.",
+    "Data-nature classification not pinned in local source.lock; left empty.",
+    "P3a: MemoryAgentBench longmemeval-overlap contains 300 distinct LongMemEval-S question IDs in five contexts (60 per context, pairwise disjoint; user-approved correction); question identity after removing MAB's upstream Current Date wrapper, and answer identity, checked against the pinned LongMemEval-S input. The overlap bundle is excluded from the independent MAB aggregate."
+  ],
+  "verification_date": "2026-10-17",
+  "lock_path": "data/upstream/longmemeval-s/source.lock.json"
+}

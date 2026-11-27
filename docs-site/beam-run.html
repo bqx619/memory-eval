@@ -1,0 +1,463 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title> memeval BEAM 100K run review </title>
+<style>
+/* Tokens shared with docs-site/index.html, beam.html, beam-coglet.html, cases.html and design/report-ui/report.css */
+:root{
+  --page:#f9f9f7; --surface:#fcfcfb; --surface-2:#f3f3f0;
+  --ink:#0b0b0b; --ink-2:#52514e; --muted:#898781;
+  --grid:#e1e0d9; --axis:#c3c2b7; --ring:rgba(11,11,11,.10);
+  --accent:#2a78d6; --accent-ink:#184f95; --warm:#eb6834;
+  --good:#0ca30c; --good-text:#006300; --good-bg:#e7f6e7;
+  --warn:#fab219; --warn-text:#7a4f00; --warn-bg:#fdf3dc;
+  --critical:#d03b3b; --critical-text:#8c1d1d; --critical-bg:#fbe6e6;
+  --warm-text:#8a3a14; --warm-bg:#fdebe2;
+  --neutral-bg:#ecebe6;
+  --radius:10px;
+  --font:system-ui,-apple-system,"Segoe UI","PingFang SC","Hiragino Sans GB","Microsoft YaHei",sans-serif;
+  --mono:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
+}
+@media (prefers-color-scheme:dark){
+  :root:not([data-theme="light"]){
+    color-scheme:dark;
+    --page:#0d0d0d; --surface:#1a1a19; --surface-2:#232321;
+    --ink:#f0efec; --ink-2:#c3c2b7; --muted:#898781;
+    --grid:#2c2c2a; --axis:#383835; --ring:rgba(255,255,255,.10);
+    --accent:#3987e5; --accent-ink:#86b6ef; --warm:#d95926;
+    --good-text:#5fd45f; --good-bg:#15301a; --warn-text:#f2c35c; --warn-bg:#3a2d0f;
+    --critical-text:#f08a8a; --critical-bg:#3b1717; --warm-text:#f0a37d; --warm-bg:#3a2214; --neutral-bg:#2a2a28;
+  }
+}
+:root[data-theme="dark"]{
+  color-scheme:dark;
+  --page:#0d0d0d; --surface:#1a1a19; --surface-2:#232321;
+  --ink:#f0efec; --ink-2:#c3c2b7; --muted:#898781;
+  --grid:#2c2c2a; --axis:#383835; --ring:rgba(255,255,255,.10);
+  --accent:#3987e5; --accent-ink:#86b6ef; --warm:#d95926;
+  --good-text:#5fd45f; --good-bg:#15301a; --warn-text:#f2c35c; --warn-bg:#3a2d0f;
+  --critical-text:#f08a8a; --critical-bg:#3b1717; --warm-text:#f0a37d; --warm-bg:#3a2214; --neutral-bg:#2a2a28;
+}
+*{box-sizing:border-box}
+html{background:var(--page)}
+body{margin:0;background:var(--page);color:var(--ink);font:14px/1.55 var(--font)}
+.wrap{max-width:1280px;margin:0 auto;padding-block:24px 64px;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+header.top{display:flex;justify-content:space-between;gap:12px 24px;align-items:flex-start;flex-wrap:wrap;margin-bottom:20px}
+header.top > div:first-child{flex:1 1 560px;min-width:0}
+header.top nav{font-size:13px;color:var(--ink-2);padding-top:6px;margin-left:auto;display:flex;flex-wrap:wrap;gap:4px 8px;align-items:center}
+header.top nav select{min-width:200px;padding:4px 6px}
+.eyebrow{margin:0 0 4px;font-size:12px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted)}
+h1{margin:0 0 8px;font-size:24px;line-height:1.25;text-wrap:balance;word-break:break-word}
+h2{font-size:17px;margin:0 0 10px}
+h3{font-size:14px;margin:18px 0 6px;color:var(--ink-2);letter-spacing:.02em}
+.lede{margin:0 0 12px;color:var(--ink-2);max-width:72ch}
+a{color:var(--accent-ink)}
+code,.mono{font-family:var(--mono);font-size:12.5px}
+section{background:var(--surface);border:1px solid var(--grid);border-radius:var(--radius);padding:16px 18px;margin-bottom:16px}
+.bar{display:flex;flex-wrap:wrap;gap:10px 16px;align-items:flex-end}
+.bar label{display:flex;flex-direction:column;gap:4px;font-size:12px;color:var(--ink-2)}
+.bar label.row{flex-direction:row;align-items:center;gap:6px;padding-bottom:6px}
+select,input[type=search]{font:13px var(--font);color:var(--ink);background:var(--surface-2);border:1px solid var(--grid);border-radius:7px;padding:6px 8px;min-width:150px}
+.meta{display:flex;flex-wrap:wrap;gap:6px;margin-top:6px}
+.chip{display:inline-block;font-size:12px;padding:2px 8px;border-radius:999px;background:var(--surface-2);border:1px solid var(--grid);color:var(--ink-2)}
+.tiles{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:10px;margin:0 0 14px}
+.tile{background:var(--surface-2);border-radius:8px;padding:10px 12px;min-width:0}
+.tile .k{font-size:12px;color:var(--ink-2)}
+.tile .v{font-size:22px;font-variant-numeric:tabular-nums;line-height:1.2;margin-top:2px;word-break:break-word}
+.tile .s{font-size:11.5px;color:var(--muted);word-break:break-word}
+.badge{display:inline-flex;align-items:center;gap:4px;font-size:12px;padding:1px 8px;border-radius:999px;white-space:nowrap;border:1px solid transparent}
+.b-scored{background:var(--good-bg);color:var(--good-text)}
+.b-error{background:var(--neutral-bg);color:var(--ink-2);border-color:var(--axis)}
+.b-invalid{background:var(--warm-bg);color:var(--warm-text)}
+.b-lost{background:var(--critical-bg);color:var(--critical-text)}
+.b-dim{background:var(--surface-2);color:var(--muted);border-color:var(--grid)}
+.b-cls{background:var(--surface-2);color:var(--ink-2);border-color:var(--grid)}
+table{width:100%;border-collapse:collapse;font-size:13px}
+th,td{text-align:left;padding:6px 8px;border-bottom:1px solid var(--grid);vertical-align:top}
+th{font-weight:600;color:var(--ink-2);font-size:12px;white-space:nowrap}
+td.num,th.num{text-align:right;font-variant-numeric:tabular-nums}
+.tbl{overflow-x:auto}
+.stack{display:flex;height:14px;border-radius:4px;overflow:hidden;background:var(--surface-2);min-width:120px}
+.stack span{display:block;height:100%;border-right:2px solid var(--surface)}
+.stack span:last-child{border-right:0}
+.stack.dist{min-width:160px;height:16px}
+.stack.big{height:26px;min-width:100%}
+.s-scored{background:var(--good)} .s-error{background:var(--axis)} .s-invalid{background:var(--warm)} .s-unscheduled{background:var(--neutral-bg)}
+.d-one{background:var(--good)} .d-mid{background:var(--warn)} .d-zero{background:var(--critical)} .d-invalid{background:var(--warm)} .d-error{background:var(--axis)} .d-missing{background:var(--neutral-bg)}
+.legend{display:flex;flex-wrap:wrap;gap:6px 14px;font-size:12px;color:var(--ink-2);margin:8px 0 0}
+.legend .sw{display:inline-block;width:11px;height:11px;border-radius:3px;vertical-align:-1px;margin-right:5px}
+.cnt{color:var(--muted);font-size:12.5px;margin:6px 0 10px}
+.kv{display:grid;grid-template-columns:auto 1fr;gap:3px 12px;font-size:12.5px}
+.kv dt{color:var(--muted)} .kv dd{margin:0;word-break:break-word}
+.two{display:grid;grid-template-columns:1fr 1fr;gap:14px 22px}
+.two > *{min-width:0}
+.heat{font-variant-numeric:tabular-nums;text-align:right;background:color-mix(in oklab, var(--accent) calc(var(--p) * 55%), transparent)}
+.heat .n{color:var(--muted);font-size:11px;margin-left:4px}
+.delta-pos{color:var(--good-text)} .delta-neg{color:var(--critical-text)}
+.cell{display:inline-block;min-width:34px;text-align:center;font-variant-numeric:tabular-nums;font-size:12px;padding:1px 6px;border-radius:6px}
+.c-1{background:var(--good-bg);color:var(--good-text)} .c-mid{background:var(--warn-bg);color:var(--warn-text)} .c-0{background:var(--critical-bg);color:var(--critical-text)}
+.c-err{background:var(--neutral-bg);color:var(--ink-2);border:1px dashed var(--axis)} .c-inv{background:var(--warm-bg);color:var(--warm-text)} .c-na{color:var(--muted)}
+tr.row{cursor:pointer}
+tr.row:hover td{background:var(--surface-2)}
+tr.row.open td{background:var(--surface-2)}
+tr.detail td{background:var(--surface);padding:12px 10px 18px;border-bottom:2px solid var(--axis)}
+.box{background:var(--surface-2);border-radius:8px;padding:10px 12px;min-width:0;margin-bottom:10px}
+.box h3{margin:0 0 8px;font-size:13px}
+.q{font-size:15px;margin:0 0 6px}
+ol.rub{margin:0;padding-left:22px} ol.rub li{margin:0 0 6px;word-break:break-word}
+ol.rub .pol{color:var(--muted);font-size:11.5px;margin-left:6px}
+pre{white-space:pre-wrap;word-break:break-word;background:var(--surface);border:1px solid var(--grid);border-radius:6px;padding:8px;font-size:12px;margin:6px 0;max-height:260px;overflow:auto}
+.ans{display:grid;grid-template-columns:repeat(auto-fit,minmax(320px,1fr));gap:10px}
+.ans .box{margin:0}
+.hd{display:flex;flex-wrap:wrap;gap:4px 8px;align-items:center;color:var(--ink-2);font-size:11.5px;margin-bottom:4px}
+.note{font-size:12.5px;color:var(--ink-2)}
+.note.warn{color:var(--warn-text);background:var(--warn-bg);padding:8px 10px;border-radius:6px}
+.sub{font-size:12px;color:var(--muted)}
+.empty{color:var(--muted);font-style:italic}
+.trunc{display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+td.ansx{max-width:360px;color:var(--ink-2);font-size:12.5px}
+.go{display:inline-block;font-size:12px;padding:3px 9px;border:1px solid var(--grid);border-radius:999px;background:var(--surface-2);text-decoration:none;white-space:nowrap;color:var(--accent-ink)} .go:hover{border-color:var(--accent)}
+ul.runs{margin:0;padding-left:20px} ul.runs li{margin:4px 0}
+/* ---- CogletNet work trace ---- */
+.stg{display:inline-block;width:8px;height:8px;border-radius:50%;margin-left:4px;vertical-align:1px;border:1px solid transparent}
+.st-covered{background:var(--good)} .st-partial{background:var(--warn)} .st-not_packed{background:var(--accent)} .st-jev_rejected{background:var(--axis)} .st-capped{background:var(--warm)} .st-not_candidate{background:var(--critical)} .st-not_written{background:var(--surface);border-color:var(--critical)!important} .st-no_evidence{background:var(--surface);border-color:var(--axis)!important} .st-no_search{background:var(--surface);border-color:var(--axis)!important;border-style:dashed}
+.b-st{border:1px solid var(--grid);background:var(--surface);color:var(--ink)}
+.b-st .stg{margin:0 4px 0 0}
+.preset{font:12.5px var(--font);color:var(--accent-ink);background:var(--surface-2);border:1px solid var(--grid);border-radius:999px;padding:4px 10px;cursor:pointer;text-decoration:none}
+.preset:hover{border-color:var(--accent)}
+.improve .box{margin-bottom:12px}
+table.funnel td.n{font-variant-numeric:tabular-nums;text-align:right;cursor:pointer}
+table.funnel td.n:hover{background:var(--surface)}
+table.funnel td.n .m{display:block;font-size:11px;color:var(--muted)}
+table.funnel th.st{min-width:68px}
+.work .box{margin-bottom:10px}
+.evtbl td{vertical-align:middle}
+.b-ok{background:var(--good-bg);color:var(--good-text)} .b-no{background:var(--critical-bg);color:var(--critical-text)}
+.cg-link{font-size:11px;margin-left:4px;text-decoration:none;border:1px solid var(--grid);border-radius:4px;padding:0 4px;color:var(--accent-ink);vertical-align:1px} .cg-link:hover{border-color:var(--accent)}
+@media (max-width:720px){
+  h1{font-size:20px}
+  .two{grid-template-columns:1fr}
+  .col-sec{display:none}
+  select,input[type=search]{min-width:120px}
+}
+
+/* English labels may be longer than the original interface text. */
+h1,h2,h3,button,label,summary,.chip,.badge,.k,.kv dt{overflow-wrap:anywhere}
+button,.chip,.badge{max-width:100%;white-space:normal}
+.original-record{max-width:100%;min-width:0}.original-record pre{white-space:pre-wrap;overflow-wrap:anywhere;max-height:24rem;overflow:auto}
+@media(max-width:600px){.kv{grid-template-columns:1fr}.kv dt{white-space:normal}.kv dd{margin-bottom:.5rem}select{max-width:100%}}
+
+code{overflow-wrap:anywhere} pre code{overflow-wrap:normal}
+@media(max-width:600px){label{max-width:100%;min-width:0;flex-wrap:wrap}select{min-width:0!important;max-width:calc(100vw - 40px)!important}label select{flex-shrink:1}}
+
+.tbl .badge{white-space:nowrap;overflow-wrap:normal;max-width:none}
+</style>
+</head>
+<body>
+<div class="wrap">
+<header class="top">
+  <div>
+    <p class="eyebrow"> memeval · BEAM 100K · Run review </p>
+    <h1 id="h1"> Run review </h1>
+    <p class="lede" id="lede"></p>
+    <div class="meta" id="meta"></div>
+  </div>
+  <nav id="nav"><a href="beam.html"> ← Evaluation overview </a><span>·</span><label> Switch run <select id="pick-run"></select></label><span>·</span><a href="#questions"> 400 questions </a><span>·</span><a href="#glossary"> Metric glossary </a></nav>
+</header>
+<p class="note">Question text, answers, traces, and historical metadata are original recorded content and retain their source language. Interface labels are English; source records are not rewritten.</p>
+
+<div id="loadnote"></div>
+<div id="page">
+<section id="summary">
+  <div class="tiles" id="tiles"></div>
+  <div class="two"><dl class="kv" id="kv1"></dl><dl class="kv" id="kv2"></dl></div>
+</section>
+
+<section id="resume" hidden>
+  <h2> Resume history </h2>
+  <p class="note"> Each <code>memeval run --resume</code> entry shows resumed statuses, explicitly selected question count, and any SUT identity change. Resuming with a new identity reruns and replaces selected scored questions; prior results remain under the report's <code>resume-history/</code>. This page shows replacement results; question panels indicate their source resume-N attempt. </p>
+  <div class="tbl"><table id="resume-tbl"><thead><tr><th>#</th><th> Time </th><th> Resumed statuses </th><th class="num"> Selected questions </th><th> SUT change </th></tr></thead><tbody></tbody></table></div>
+</section>
+
+<section id="bycat">
+  <h2> By category </h2>
+  <div class="bar"><label> Comparison run <select id="ref"><option value=""> No comparison </option></select></label><span class="sub" id="ref-note"></span></div>
+  <p class="note" id="cat-note"></p>
+  <div class="tbl"><table id="cat-tbl"><thead></thead><tbody></tbody></table></div>
+  <h3> By episode (mean over scored questions; parentheses: scored / 20) </h3>
+  <div class="tbl"><table id="ep-tbl"><thead></thead><tbody></tbody></table></div>
+</section>
+
+<section id="dist">
+  <h2> Score distribution </h2>
+  <div id="dist-body"></div>
+</section>
+
+<section id="failures" hidden>
+  <h2> Execution failures and invalid answers </h2>
+  <p class="note"> error indicates execution failure: evaluator, bridge/transport, or native SUT. invalid indicates an unscorable response, such as an empty reader answer. Select a row to filter questions and inspect failure details. </p>
+  <div id="fail-body"></div>
+</section>
+
+<section id="improve" class="improve" hidden>
+  <h2> Adapter extension: evidence-stage diagnostics </h2>
+  <p class="note"> When a run includes CogletNet work traces, this panel follows each question's evidence events (dataset <code>gold.evidence_ids</code> ) through ingestion, candidate retrieval, JEV admission, packing, and reading. Cells show question counts and their mean scores; select a cell to filter. This optional adapter diagnostic does not alter common scoring or coverage. Evidence labels are post-hoc and invisible to the SUT and decision service. Check stage attribution against original errors, returned content, and derivation rules. </p>
+  <div id="improve-body"></div>
+</section>
+
+<section id="questions">
+  <h2> 400 questions </h2>
+  <div class="bar">
+    <label> Category <select id="f-cat"><option value=""> All </option></select></label>
+    <label>episode<select id="f-ep"><option value=""> All </option></select></label>
+    <label> State <select id="f-status"><option value=""> All </option><option value="scored">scored</option><option value="error">error</option><option value="invalid">invalid</option><option value="missing"> Not scheduled </option><option value="lt1"> Score &lt; 1 (not fully correct) </option><option value="lt05"> Score &lt; 0.5</option><option value="eq0"> Score = 0 </option><option value="rlt1" class="opt-recall" hidden> Evidence incomplete (recall &lt; 1)</option><option value="req0" class="opt-recall" hidden> No evidence hits (recall = 0) </option></select></label>
+    <label id="f-stage-label" hidden> Loss stage <select id="f-stage"><option value=""> All </option></select></label>
+    <label id="f-cmp-label" hidden> Comparison <select id="f-cmp"><option value=""> All </option><option value="win"> This run higher </option><option value="loss"> Comparison higher </option><option value="tie"> Tie </option></select></label>
+    <button type="button" class="preset" id="preset-miss"> Only questions with score &lt; 1 </button>
+    <button type="button" class="preset" id="preset-clear"> Clear filters </button>
+    <label> Search questions <input type="search" id="f-q" placeholder="Question text or ID"></label>
+  </div>
+  <p class="cnt" id="q-cnt"></p>
+  <div class="tbl"><table id="q-tbl"><thead></thead><tbody></tbody></table></div>
+  <div class="legend"><span><span class="cell c-1">1</span> Fully satisfies rubric </span><span><span class="cell c-mid">0.5</span> Partial </span><span><span class="cell c-0">0</span> Does not satisfy rubric </span><span><span class="cell c-err"> Error </span> Execution failure (open for attribution) </span><span><span class="cell c-inv"> Invalid </span> Empty reader answer </span><span><span class="cell c-na">—</span> Not scheduled </span></div>
+</section>
+
+<section id="glossary">
+  <h2> Metric glossary </h2>
+  <p class="sub" id="gloss-src"></p>
+  <div class="tbl"><table id="gloss"><thead><tr><th> Metric </th><th> Name </th><th> Definition </th><th class="col-sec"> Scope / aggregation </th></tr></thead><tbody></tbody></table></div>
+  <p class="sub" id="gen"></p>
+</section>
+</div>
+</div>
+
+<script>/*  */
+for (const s of ["beam/beam-100k.js","beam-common.js"]) document.write(`<script src="${s}?v=${Date.now()}"><\/script>`);</script>
+<script>
+const D = window.MEMEVAL_BEAM;
+let RUN = null, REF = null, openRow = null;
+
+/* ======================= boot ======================= */
+function boot(){
+  if (!D){ $("#loadnote").append(el("div",{class:"note warn",text:NO_DATA})); $("#page").hidden = true; return; }
+  const P = params(), runs = [...(D.runs||[])].sort(byJudge);
+  RUN = runs.find(r => r.name===P.run) || null;
+  const pr = $("#pick-run"); pr.replaceChildren(el("option",{value:"",text:"Select a run…"}), ...runs.map(r => el("option",{value:r.name,text:`${shortName(r.name)} · ${fmt(judgeMean(r),4)}`})));
+  pr.addEventListener("change", () => { if (pr.value) location.href = runHref(pr.value); });
+  if (!RUN){ chooser(runs, P.run); return; }
+  pr.value = RUN.name;
+  const refSel = $("#ref"); for (const r of runs) if (r.name!==RUN.name) refSel.append(el("option",{value:r.name,text:shortName(r.name)}));
+  REF = runs.find(r => r.name===P.ref && r.name!==RUN.name) || null; refSel.value = REF ? REF.name : "";
+  refSel.addEventListener("change", () => { REF = runs.find(r => r.name===refSel.value) || null; $("#f-cmp-label").hidden = !REF; if (!REF) $("#f-cmp").value = ""; renderCompare(); renderQuestions(); });
+  header(); summary(); resumeTable(); renderCompare(); renderDist(); renderFailures(); renderImprove(); setupFilters(P); renderQuestions();
+  renderGlossary(D, "#gloss tbody", "#gloss-src");
+  $("#gen").textContent = `Generated at ${dt(D.generated_at)}(latest resume timestamp across runs, not page-build wall time) ${D.memeval_commit?` · memeval ${D.memeval_commit.slice(0,12)}`:""} · Data beam/beam-100k.js · report ${RUN.report_path||""}`;
+  openHash(); if (window.addEventListener) window.addEventListener("hashchange", openHash);
+  if (P.stage || P.status || P.cat || P.ep) $("#questions").scrollIntoView({block:"start"});
+}
+function chooser(runs, asked){
+  $("#h1").textContent = "Select a run"; $("#lede").textContent = asked ? `No run named ${asked} was found.` : "Each run has metrics, category and episode breakdowns, distributions, failure attribution, answers, and judge decisions. Runs with adapter traces also offer optional process diagnostics.";
+  $("#page").replaceChildren(el("section",{}, el("h2",{text:"All runs"}), el("ul",{class:"runs"}, ...runs.map(r => el("li",{}, el("a",{href:runHref(r.name),text:shortName(r.name)}), ` · Judge mean ${fmt(judgeMean(r),4)} · ${r.status_counts?.scored||0} scored · ${dt(r.started_at_utc)}`)))));
+}
+
+/* ======================= header & summary ======================= */
+function header(){
+  const r = RUN, s = r.sut||{};
+  document.title = `memeval BEAM 100K · ${shortName(r.name)}`;
+  $("#h1").textContent = shortName(r.name);
+  $("#lede").textContent = `${s.name||"—"}${s.variant?` / ${s.variant}`:""} A run on the BEAM 100K 400-question suite: metrics, category and episode breakdowns, score distributions, failure attribution ${r.work?", adapter evidence-stage diagnostics":""}, and question-level answers, judge decisions, and failures across the 400-question index ${r.work?"; traced questions also have adapter-specific detail views":""}. All numbers come from ${r.report_path||"report.json"}.`;
+  $("#meta").replaceChildren(
+    el("span",{class:"chip",text:`Run name ${r.name}`}), el("span",{class:"chip",text:`Started ${dt(r.started_at_utc)}`}), el("span",{class:"chip",text:`Network ${s.network||"—"}`}), ("embedding" in s) ? el("span",{class:"chip",title:EMBED_TIP,text:embedLine(r)}) : null,
+    el("span",{class:"chip",text:`memeval ${r.framework_version||"—"}`}), el("span",{class:"chip",title:r.run_id||"",text:`run_id ${(r.run_id||"").slice(0,8)}`}),
+    r.work ? el("span",{class:"chip",text:`Work trace ${r.work.config?.work_trace||"Available"} · JEV threshold ${r.work.config?.jev_threshold??"—"}`}) : null);
+}
+function summary(){
+  const r = RUN, Q = D.questions||[], planned = Q.length||400, sc = r.status_counts||{}, scheduled = Object.values(sc).reduce((a,b)=>a+b,0);
+  const j = r.metrics?.[JUDGE]||{}, eo = r.metrics?.[EO]||{}, rc = r.metrics?.[RECALL], ids = r.metrics?.[IDS], sh = r.metrics?.[SHARE], pr = r.metrics?.[PREC], f1 = r.metrics?.[F1], cov = r.metrics?.[COV], bill = r.billing||{};
+  const dd = distOf(D, r.name, Q), strict = mean(Q.map(q=>scoreOf(D, r.name, q.id)??0));
+  const rank = [...(D.runs||[])].sort(byJudge).findIndex(x=>x.name===r.name)+1;
+  const rrank = (D.runs||[]).filter(x=>recallMean(x)!=null).sort((a,b)=>recallMean(b)-recallMean(a)).findIndex(x=>x.name===r.name)+1;
+  $("#tiles").replaceChildren(...[
+    tile("Judge mean", fmt(j.mean,4), `n=${j.n??"—"} · Rank across runs: ${rank} / ${(D.runs||[]).length}`),
+    hasRecall(D) ? tile("Evidence recall", fmt(rc?.mean,4), rc ? `n=${rc.n??"—"} · All evidence hit ${fullRecall(D, r.name, Q)} questions · Rank across runs: ${rrank||"—"} / ${(D.runs||[]).filter(x=>recallMean(x)!=null).length}${cov?.mean!=null && Math.abs(cov.mean-(rc.mean??0))>0.0005 ? ` · Citation coverage (including summary closure; diagnostic only) ${fmt(cov.mean,4)}` : ""}` : "Metric not derived for this run", {title:RECALL_TIP+(cov?"; "+COV_TIP:"")}) : null,
+    hasFanout(D) ? tile("Direct sources / question", ids?.mean!=null ? fmt(ids.mean,1) : "—", ids?.mean!=null ? `of query-visible events ${pct(sh?.mean,1)} · Evidence precision ${fmt(pr?.mean,4)}${pr?.n!=null?`(n=${pr.n})`:""} · F1 ${fmt(f1?.mean,3)}` : "Metric not derived for this run", {title:IDS_TIP+"; "+PREC_TIP}) : null,
+    tile("Ordering check", fmt(eo.mean,4), `beam.event_ordering.final · n=${eo.n??"—"}`),
+    tile("Perfect-score rate", pct(dd.one/planned,1), `${dd.one} questions scored 1 · Full-set mean (unscored = 0) ${fmt(strict,4)}`),
+    tile("Scored", `${sc.scored||0} / ${planned}`, el("span",{}, stack(sc, planned), `${sc.error?`${sc.error} error · `:""}${sc.invalid?`${sc.invalid} invalid · `:""}${planned-scheduled>0?`${planned-scheduled} Not scheduled`:"None unscheduled"}`)),
+    tile("Wall time", dur(r.wall_seconds), r.resume_count ? `Includes ${r.resume_count} resumes` : "Single attempt"),
+    tile("SUT usage", bill.native ? int(bill.native.calls) : bill.sut ? int(bill.sut.calls) : "None", bill.native ? `Native calls · Input ${int(bill.native.input_tokens)} · Output ${int(bill.native.output_tokens)} tokens` : bill.sut ? `Gateway calls · prompt ${int(bill.sut.prompt_tokens)} tokens` : "No model calls or local models"),
+    tile("Evaluator usage", int(bill.evaluator?.calls), `Reader + judge · prompt ${int(bill.evaluator?.prompt_tokens)} tokens`)].filter(Boolean));
+  const cells = Object.values(D.results?.[r.name]||{});
+  const med = k => median(cells.map(x=>x.timings?.[k]).filter(v=>typeof v==="number"));
+  const att = {}; for (const x of cells) if (x.attempt) att[x.attempt]=(att[x.attempt]||0)+1;
+  $("#kv1").replaceChildren(...kv([
+    ["System under test", `${r.sut?.name||"—"}${r.sut?.variant?` / ${r.sut.variant}`:""} · Network ${r.sut?.network||"—"}`],
+    ["report", el("span",{}, el("code",{text:r.report_path||"—"}), " · sha256 ", el("code",{text:(r.report_sha256||"").slice(0,16)}))],
+    ["run_id / seed", el("span",{}, el("code",{text:r.run_id||"—"}), " · ", el("code",{text:(r.run_seed||"").slice(0,16)}))],
+    ["Isolation", el("span",{}, el("span",{class:"badge "+(r.isolation?.run_clean?"b-scored":"b-lost"),text:r.isolation?.run_clean?"No residue after run":"Residue present"}), ` ${r.isolation?.backend||""} · Network mode ${r.isolation?.network_mode||"—"} · Remaining containers ${r.isolation?.containers_remaining??"—"}`)],
+    r.interruption?.reason ? ["Interrupted", `${r.interruption.reason}(${r.interruption.unscheduled??"?"} questions unscheduled)`] : null,
+  ]));
+  $("#kv2").replaceChildren(...kv([
+    ["Per-question time (median)", `Retrieval ${med("query_ms")!=null?fmt(med("query_ms")/1000,1)+" s":"—"} · Answer ${med("answer_ms")!=null?fmt(med("answer_ms")/1000,1)+" s":"—"} · Episode ingestion ${med("ingest_ms")!=null?dur(med("ingest_ms")/1000):"—"}`],
+    ["Resume", r.resume_count ? el("span",{}, `${r.resume_count} times`, sutChanges(r).length ? el("span",{class:"badge b-invalid",style:"margin-left:6px",title:SUT_CHANGE_TIP,text:`SUT changes ×${sutChanges(r).length}`}) : null, Object.keys(att).length>1 ? ` · Score origin: ${Object.entries(att).sort((a,b)=>b[1]-a[1]).map(([k,v])=>`${k} ${v} questions`).join(", ")}` : "") : "None"],
+    ["Failure classification", Object.keys(r.failures_by_class||{}).length ? Object.entries(r.failures_by_class).sort((a,b)=>b[1]-a[1]).map(([k,v])=>`${k} ${v}`).join(", ") : "No execution failures"],
+    ["Question detail views", r.work ? el("span",{}, "Each question has a coglet view (retrieval, evidence funnel, and tree), available through Tree links or question panels. Work files in ", el("code",{text:`beam/work/${r.name}/`}), " load lazily by episode") : "No work traces in this run; question panels show answers, judge decisions, and failure stages"],
+  ]));
+}
+function resumeTable(){
+  const h = RUN.resume_history||[]; $("#resume").hidden = !h.length; if (!h.length) return;
+  const tb = $("#resume-tbl tbody"); tb.replaceChildren();
+  h.forEach((x,i) => tb.append(el("tr",{}, el("td",{text:String(i+1)}), el("td",{text:dt(x.at)}), el("td",{text:(x.statuses||[]).join(", ")||"—"}), el("td",{class:"num",text:x.cases!=null?String(x.cases):"—"}),
+    el("td",{}, x.sut_change ? el("span",{}, el("span",{class:"badge b-invalid",title:SUT_CHANGE_TIP,text:"SUT change"}), el("div",{class:"sub mono",text:`manifest ${(x.sut_change.previous?.manifest_sha256||"").slice(0,8)} → ${(x.sut_change.current?.manifest_sha256||"").slice(0,8)} · env lock ${(x.sut_change.previous?.env_lock_sha256||"").slice(0,8)} → ${(x.sut_change.current?.env_lock_sha256||"").slice(0,8)} · Source snapshot ${(x.sut_change.previous?.source_snapshot_sha256||"").slice(0,8)} → ${(x.sut_change.current?.source_snapshot_sha256||"").slice(0,8)}`})) : el("span",{class:"c-na",text:"None"})))));
+}
+
+/* ======================= by category / episode ======================= */
+function renderCompare(){
+  const Q = D.questions||[], cats = (D.dataset?.categories||[]).map(c=>c.id), r = RUN;
+  const paired = REF ? Q.filter(q => scoreOf(D, r.name, q.id)!=null && scoreOf(D, REF.name, q.id)!=null) : null;
+  $("#ref-note").textContent = REF ? `Paired subset: both runs scored ${paired.length} / ${Q.length} questions; Δ = this run − comparison` : "Choose a comparison to display paired deltas by category / episode and side-by-side question scores";
+  const RC = hasRecall(D), FO = hasFanout(D);
+  $("#cat-note").textContent = (REF ? "Judge mean uses this run\'s scored questions, matching its result card. Comparison scores and deltas use only the paired subset." : "Judge mean uses this run\'s scored questions, matching its result card. Distribution covers the category\'s 40 questions.") + (RC ? " Evidence recall includes only scored questions with gold evidence. Abstention questions, four summarization questions, and one preference_following question have no evidence labels. See the glossary for source accounting." : "") + (FO ? " Direct sources / question counts events directly represented by returned items. LeafMemory counts only L0 events, excluding summary dependencies. Parentheses show the share of visible events. Precision is the gold fraction among direct sources; zero-source questions have undefined precision and are excluded." : "");
+  const th = $("#cat-tbl thead"); th.replaceChildren(el("tr",{}, el("th",{text:"Category"}), el("th",{class:"num",text:"Judge mean"}), RC? el("th",{class:"num",title:RECALL_TIP,text:"Evidence recall"}):null, FO? el("th",{class:"num",title:IDS_TIP,text:"Direct sources / question"}):null, FO? el("th",{class:"num",title:PREC_TIP,text:"Precision"}):null, el("th",{class:"num",text:"Ordering check"}), el("th",{text:"Distribution"}), el("th",{class:"num",text:"Score 1"}), el("th",{class:"num",text:"Partial"}), el("th",{class:"num",text:"Score 0"}), el("th",{class:"num",text:"Unscored"}),
+    ...(REF ? [el("th",{class:"num",text:`${shortName(REF.name)}(paired)`}), el("th",{class:"num",text:"This run (paired)"}), el("th",{class:"num",text:"Δ"}), el("th",{class:"num",text:"Higher / lower / tied"})] : [])));
+  const tb = $("#cat-tbl tbody"); tb.replaceChildren();
+  const rows = [["All", Q, null], ...cats.map(c=>[c, Q.filter(q=>q.category===c), c])];
+  for (const [label, qs, cat] of rows){
+    const sc = qs.map(q=>scoreOf(D, r.name, q.id)).filter(v=>v!=null), m = mean(sc), dd = distOf(D, r.name, qs);
+    const eoV = qs.map(q=>D.results?.[r.name]?.[q.id]?.event_ordering).filter(v=>typeof v==="number");
+    const rcV = qs.map(q=>recallOf(D, r.name, q.id)).filter(v=>v!=null), rm = mean(rcV);
+    const prV = qs.map(q=>precisionOf(D, r.name, q.id)).filter(v=>v!=null), pm = mean(prV);
+    const tr = el("tr",{style:cat?"":"font-weight:600"}, el("td",{}, cat ? el("span",{}, catLabel(cat), el("div",{class:"sub mono",text:cat})) : label),
+      el("td",{class:"num heat",style:`--p:${m??0}`}, fmt(m,3), el("span",{class:"n",text:`(${sc.length})`})),
+      RC? el("td",{class:"num heat"+(rcV.length?"":" c-na"),style:`--p:${rm??0}`}, rcV.length? fmt(rm,3) : "—", el("span",{class:"n",text:`(${rcV.length})`})):null,
+      FO? el("td",{class:"num",text:fanoutText(D, r.name, qs)}):null,
+      FO? el("td",{class:"num heat"+(prV.length?"":" c-na"),style:`--p:${pm??0}`}, prV.length? fmt(pm,3) : "—", el("span",{class:"n",text:`(${prV.length})`})):null,
+      el("td",{class:"num",text:eoV.length?fmt(mean(eoV),3):"—"}),
+      el("td",{}, distBar(dd, qs.length)),
+      el("td",{class:"num",text:String(dd.one)}), el("td",{class:"num",text:String(dd.mid)}), el("td",{class:"num",text:String(dd.zero)}), el("td",{class:"num"+(dd.invalid+dd.error+dd.missing?"":" c-na"),text:dd.invalid+dd.error+dd.missing?String(dd.invalid+dd.error+dd.missing):"·"}));
+    if (REF){ const pq = paired.filter(q => !cat || q.category===cat); const a = pq.map(q=>scoreOf(D, r.name, q.id)), b = pq.map(q=>scoreOf(D, REF.name, q.id)); const ma = mean(a), mb = mean(b), dlt = ma!=null&&mb!=null ? ma-mb : null;
+      let w=0,l=0,t=0; for (let i=0;i<pq.length;i++){ if (a[i]>b[i]+1e-9) w++; else if (a[i]<b[i]-1e-9) l++; else t++; }
+      tr.append(el("td",{class:"num heat",style:`--p:${mb??0}`}, fmt(mb,3), el("span",{class:"n",text:`(${pq.length})`})), el("td",{class:"num heat",style:`--p:${ma??0}`}, fmt(ma,3)), el("td",{class:"num "+(dlt>0.0005?"delta-pos":dlt<-0.0005?"delta-neg":""),text:sgn(dlt,3)}), el("td",{class:"num",text:pq.length?`${w} / ${l} / ${t}`:"—"})); }
+    tb.append(tr);
+  }
+  /* episodes */
+  const eps = D.dataset?.episodes||[];
+  const eh = $("#ep-tbl thead"); eh.replaceChildren(el("tr",{}, el("th",{text:"episode"}), el("th",{class:"num",text:"Judge mean"}), RC? el("th",{class:"num",title:RECALL_TIP,text:"Evidence recall"}):null, FO? el("th",{class:"num",title:IDS_TIP,text:"Direct sources / question"}):null, FO? el("th",{class:"num",title:PREC_TIP,text:"Precision"}):null, el("th",{text:"Distribution (20 questions)"}), el("th",{class:"num",text:"error"}), el("th",{class:"num",text:"invalid"}), el("th",{class:"num",text:"Not scheduled"}), ...(REF ? [el("th",{class:"num",text:`${shortName(REF.name)}(paired)`}), el("th",{class:"num",text:"Δ"})] : []), el("th",{text:""})));
+  const etb = $("#ep-tbl tbody"); etb.replaceChildren();
+  for (const e of eps){
+    const qs = Q.filter(q=>String(q.episode_id)===String(e.id)); const sc = qs.map(q=>scoreOf(D, r.name, q.id)).filter(v=>v!=null); const m = mean(sc); const dd = distOf(D, r.name, qs);
+    const rcV = qs.map(q=>recallOf(D, r.name, q.id)).filter(v=>v!=null), rm = mean(rcV);
+    const prV = qs.map(q=>precisionOf(D, r.name, q.id)).filter(v=>v!=null), pm = mean(prV);
+    const tr = el("tr",{}, el("td",{text:e.id}), el("td",{class:"num heat",style:`--p:${m??0}`}, sc.length ? fmt(m,3) : (dd.missing===qs.length ? el("span",{class:"c-na",text:"Not scheduled"}) : el("span",{class:"badge b-lost",text:"Entire episode missing"})), el("span",{class:"n",text:`(${sc.length}/${qs.length})`})),
+      RC? el("td",{class:"num heat"+(rcV.length?"":" c-na"),style:`--p:${rm??0}`}, rcV.length? fmt(rm,3) : "—", el("span",{class:"n",text:`(${rcV.length})`})):null,
+      FO? el("td",{class:"num",text:fanoutText(D, r.name, qs)}):null,
+      FO? el("td",{class:"num heat"+(prV.length?"":" c-na"),style:`--p:${pm??0}`}, prV.length? fmt(pm,3) : "—", el("span",{class:"n",text:`(${prV.length})`})):null,
+      el("td",{}, distBar(dd, qs.length)), el("td",{class:"num"+(dd.error?"":" c-na"),text:dd.error?String(dd.error):"·"}), el("td",{class:"num"+(dd.invalid?"":" c-na"),text:dd.invalid?String(dd.invalid):"·"}), el("td",{class:"num"+(dd.missing?"":" c-na"),text:dd.missing?String(dd.missing):"·"}));
+    if (REF){ const pq = paired.filter(q=>String(q.episode_id)===String(e.id)); const ma = mean(pq.map(q=>scoreOf(D, r.name, q.id))), mb = mean(pq.map(q=>scoreOf(D, REF.name, q.id))); const dlt = ma!=null&&mb!=null?ma-mb:null;
+      tr.append(el("td",{class:"num heat",style:`--p:${mb??0}`}, fmt(mb,3), el("span",{class:"n",text:`(${pq.length})`})), el("td",{class:"num "+(dlt>0.0005?"delta-pos":dlt<-0.0005?"delta-neg":""),text:sgn(dlt,3)})); }
+    const go = el("a",{class:"go",href:"#questions",text:"View episode questions"}); go.addEventListener("click", ev => { ev.preventDefault(); clearFilters(); $("#f-ep").value = String(e.id); renderQuestions(); $("#questions").scrollIntoView({behavior:"smooth",block:"start"}); });
+    tr.append(el("td",{}, go)); etb.append(tr);
+  }
+}
+
+/* ======================= distribution / failures ======================= */
+function renderDist(){
+  const Q = D.questions||[], planned = Q.length||400, dd = distOf(D, RUN.name, Q);
+  const host = $("#dist-body"); host.replaceChildren(
+    el("div",{class:"stack dist big"}, ...DIST_PARTS.map(([k,cls,label]) => dd[k] ? el("span",{class:cls,style:`width:${100*dd[k]/planned}%`,title:`${label} ${dd[k]}(${pct(dd[k]/planned,1)})`}) : null)),
+    el("div",{class:"tiles",style:"margin-top:12px"}, ...DIST_PARTS.map(([k,cls,label]) => { const t = tile(label, String(dd[k]), pct(dd[k]/planned,1)); const sw = el("span",{class:"sw "+cls,style:"display:inline-block;width:11px;height:11px;border-radius:3px;margin-right:6px;vertical-align:-1px"}); t.firstChild.prepend(sw); t.style.cursor = "pointer"; t.title = "Select to filter these questions";
+      t.addEventListener("click", () => { clearFilters(); $("#f-status").value = k==="one"?"scored":k==="mid"?"lt1":k==="zero"?"eq0":k; FILTER_DIST = k; renderQuestions(); $("#questions").scrollIntoView({behavior:"smooth",block:"start"}); }); return t; })),
+    el("p",{class:"note",text:"Each score is the mean of judge rubric-item values 0 / 0.5 / 1. Partial means strictly between 0 and 1. Select a cell to filter."}));
+}
+let FILTER_DIST = "";
+function renderFailures(){
+  const cells = Object.entries(D.results?.[RUN.name]||{}), bad = cells.filter(([,x]) => x.status!=="scored");
+  const Q = D.questions||[], planned = Q.length||400, missing = planned - cells.length;
+  $("#failures").hidden = !(bad.length || missing>0); if ($("#failures").hidden) return;
+  const groups = {}; for (const [qid,x] of bad){ const k = `${x.status}|${x.failure?.class||"—"}|${x.error_type||"(not recorded)"}`; (groups[k] ||= {status:x.status, cls:x.failure?.class||"—", type:x.error_type||"(not recorded)", qids:[], natives:new Set()}).qids.push(qid); for (const n of (x.failure?.native_kinds||[])) groups[k].natives.add(n); }
+  const tbl = el("table",{}, el("thead",{}, el("tr",{}, el("th",{text:"State"}), el("th",{text:"Failure stage"}), el("th",{text:"Error type"}), el("th",{text:"Native details"}), el("th",{class:"num",text:"Question count"}), el("th",{text:"Affected episodes"}))));
+  const tb = el("tbody");
+  for (const g of Object.values(groups).sort((a,b)=>b.qids.length-a.qids.length)){
+    const eps = [...new Set(g.qids.map(id => (Q.find(q=>q.id===id)||{}).episode_id))].filter(v=>v!=null).sort((a,b)=>a-b);
+    const tr = el("tr",{class:"row",title:"Select to filter these questions"}, el("td",{}, el("span",{class:"badge b-"+(g.status==="invalid"?"invalid":"error"),text:g.status})), el("td",{text:g.cls}), el("td",{}, el("code",{text:g.type})), el("td",{text:[...g.natives].join(", ")||"—"}), el("td",{class:"num",text:String(g.qids.length)}), el("td",{class:"sub",text:eps.join(", ")}));
+    tr.addEventListener("click", () => { clearFilters(); $("#f-status").value = g.status; FILTER_TYPE = g.type; renderQuestions(); $("#questions").scrollIntoView({behavior:"smooth",block:"start"}); });
+    tb.append(tr);
+  }
+  if (missing>0) tb.append(el("tr",{}, el("td",{}, el("span",{class:"badge b-dim",text:"Not scheduled"})), el("td",{text:"—"}), el("td",{text:RUN.interruption?.reason?`Interrupted: ${RUN.interruption.reason}`:"—"}), el("td",{text:"—"}), el("td",{class:"num",text:String(missing)}), el("td",{class:"sub",text:"Questions not reached before budget interruption"})));
+  tbl.append(tb); $("#fail-body").replaceChildren(el("div",{class:"tbl"}, tbl));
+}
+let FILTER_TYPE = "";
+
+/* ======================= CogletNet funnel ======================= */
+function renderImprove(){
+  const r = RUN, host = $("#improve-body"); host.replaceChildren(); $("#improve").hidden = !(r.work && r.work.episodes); if ($("#improve").hidden) return;
+  const {table, withWork} = funnelTable(D, r, (cat, stage) => { clearFilters(); $("#f-cat").value = cat; $("#f-stage").value = stage; renderQuestions(); $("#questions").scrollIntoView({behavior:"smooth",block:"start"}); });
+  const box = el("div",{class:"box"}, el("h3",{}, "Where evidence was lost ", el("span",{class:"sub",text:`${withWork.length} questions have work traces · JEV threshold ${r.work.config?.jev_threshold??"—"}`})), el("div",{class:"tbl"}, table), workSummary(D, r, withWork));
+  host.append(box);
+}
+
+/* ======================= questions ======================= */
+function setupFilters(P){
+  const ds = D.dataset||{};
+  for (const c of (ds.categories||[])) $("#f-cat").append(el("option",{value:c.id,text:catLabel(c.id)}));
+  for (const e of (ds.episodes||[])) $("#f-ep").append(el("option",{value:e.id,text:"episode "+e.id}));
+  for (const st of STAGE_ORDER) $("#f-stage").append(el("option",{value:st,text:stageLabel(st)}));
+  $("#f-stage-label").hidden = !RUN.work; $("#f-cmp-label").hidden = !REF;
+  for (const o of $("#f-status").querySelectorAll(".opt-recall")) o.hidden = !hasRecall(D);
+  for (const id of ["#f-cat","#f-ep","#f-status","#f-stage","#f-cmp"]) $(id).addEventListener("change", () => { FILTER_DIST = ""; FILTER_TYPE = ""; renderQuestions(); });
+  $("#f-q").addEventListener("input", renderQuestions);
+  $("#preset-miss").addEventListener("click", () => { clearFilters(); $("#f-status").value = "lt1"; renderQuestions(); $("#questions").scrollIntoView({behavior:"smooth",block:"start"}); });
+  $("#preset-clear").addEventListener("click", () => { clearFilters(); renderQuestions(); });
+  if (P.cat) $("#f-cat").value = P.cat; if (P.ep) $("#f-ep").value = P.ep; if (P.status) $("#f-status").value = P.status; if (P.stage && RUN.work) $("#f-stage").value = P.stage; if (P.q) $("#f-q").value = P.q;
+}
+function clearFilters(){ for (const id of ["#f-cat","#f-ep","#f-status","#f-stage","#f-cmp"]) $(id).value = ""; $("#f-q").value = ""; FILTER_DIST = ""; FILTER_TYPE = ""; }
+function renderQuestions(){
+  const r = RUN, cells = D.results?.[r.name]||{};
+  const fc=$("#f-cat").value, fe=$("#f-ep").value, fs=$("#f-status").value, fq=$("#f-q").value.trim().toLowerCase(), fst = r.work ? $("#f-stage").value : "", fcmp = REF ? $("#f-cmp").value : "";
+  const exact = !!fq && (D.questions||[]).some(z => z.id.toLowerCase()===fq);
+  let Q = (D.questions||[]).filter(q => (!fc||q.category===fc) && (!fe||String(q.episode_id)===fe) && (!fq || (exact ? q.id.toLowerCase()===fq : (q.query.toLowerCase().includes(fq)||q.id.toLowerCase().includes(fq)))));
+  if (fs) Q = Q.filter(q => { const st = statusOf(D, r.name, q.id), sc = scoreOf(D, r.name, q.id), rc = recallOf(D, r.name, q.id); if (fs==="lt1") return sc!=null && sc<1; if (fs==="lt05") return sc!=null && sc<0.5; if (fs==="eq0") return sc===0; if (fs==="rlt1") return rc!=null && rc<0.999; if (fs==="req0") return rc!=null && rc<=0.001; return st===fs; });
+  if (FILTER_DIST==="one") Q = Q.filter(q => (scoreOf(D, r.name, q.id)??-1)>=0.999); if (FILTER_DIST==="mid") Q = Q.filter(q => { const s = scoreOf(D, r.name, q.id); return s!=null && s>0.001 && s<0.999; });
+  if (FILTER_TYPE) Q = Q.filter(q => (cells[q.id]?.error_type||"(not recorded)")===FILTER_TYPE);
+  if (fst) Q = Q.filter(q => workOf(D, r.name, q.id)?.stage===fst);
+  if (fcmp) Q = Q.filter(q => { const a = scoreOf(D, r.name, q.id), b = scoreOf(D, REF.name, q.id); if (a==null||b==null) return false; return fcmp==="win" ? a>b+1e-9 : fcmp==="loss" ? a<b-1e-9 : Math.abs(a-b)<=1e-9; });
+  const sel = []; if (fs) sel.push("State "+$("#f-status").selectedOptions[0].textContent); if (FILTER_DIST==="mid") sel.push("Partial score"); if (FILTER_TYPE) sel.push("Error type "+FILTER_TYPE); if (fst) sel.push("Loss stage "+stageLabel(fst)); if (fcmp) sel.push("Compared with:"+$("#f-cmp").selectedOptions[0].textContent); if (fc) sel.push(catLabel(fc)); if (fe) sel.push("episode "+fe);
+  $("#q-cnt").textContent = `${Q.length} questions ${sel.length?`(${sel.join(" · ")})`:""}. Select a row for full question text, rubric, this run's answer and judge decisions ${REF?`, alongside comparison run ${shortName(REF.name)} answers`:""}${r.work?"; traced questions also include an evidence funnel and Tree link to the coglet view":""}.`;
+  const hasEO = Object.values(cells).some(x => x.event_ordering!=null), RC = hasRecall(D), FO = hasFanout(D);
+  const th = $("#q-tbl thead"); th.replaceChildren(el("tr",{}, el("th",{text:"Question ID"}), el("th",{text:"Category"}), el("th",{text:"Question"}), el("th",{class:"num",text:"Score"}), RC? el("th",{class:"num",title:RECALL_TIP,text:"Evidence recall"}):null, FO? el("th",{class:"num",title:PREC_TIP,text:"Precision (hits / direct sources)"}):null, hasEO? el("th",{class:"num",text:"Ordering check"}):null, REF? el("th",{class:"num",title:REF.name,text:shortName(REF.name)}):null, REF? el("th",{class:"num",text:"Δ"}):null, el("th",{text:"Answer excerpt"}), el("th",{class:"num col-sec",text:"Retrieve / answer"}), r.work? el("th",{class:"col-sec",text:"Loss stage"}):null));
+  const tb = $("#q-tbl tbody"); tb.replaceChildren(); openRow = null;
+  for (const q of Q){
+    const x = cells[q.id]; const a = scoreOf(D, r.name, q.id), b = REF ? scoreOf(D, REF.name, q.id) : null; const dlt = a!=null&&b!=null ? a-b : null;
+    const tr = el("tr",{class:"row"}, el("td",{}, el("code",{text:q.id})), el("td",{}, el("div",{text:catLabel(q.category)}), el("div",{class:"sub",text:`ep ${q.episode_id}`})), el("td",{}, el("div",{class:"trunc",text:q.query})),
+      el("td",{class:"num"}, cell(D, r.name, q.id, {noStage:true})),
+      RC? el("td",{class:"num"}, (q.evidence_ids||[]).length ? (x?.evidence_recall!=null ? el("span",{class:"cell "+scoreClass(x.evidence_recall),title:`Retrieved ${fmt(x.evidence_recall,2)}`,text:`${x.evidence_hits}/${q.evidence_ids.length}`}) : el("span",{class:"cell c-na",text:"—"})) : el("span",{class:"c-na",title:"No gold evidence for this question",text:"·"})):null,
+      FO? el("td",{class:"num"}, (q.evidence_ids||[]).length ? (x?.evidence_recall!=null && x.retrieved_ids!=null ? (x.evidence_precision!=null ? el("span",{class:"cell "+scoreClass(x.evidence_precision),title:`Precision ${fmt(x.evidence_precision,2)} · F1 ${fmt(x.evidence_f1,2)}`,text:`${x.evidence_hits}/${x.retrieved_ids}`}) : el("span",{class:"cell c-na",title:"Zero direct sources; precision undefined",text:"0 sources"})) : el("span",{class:"cell c-na",text:"—"})) : el("span",{class:"c-na",title:"No gold evidence for this question",text:"·"})):null,
+      hasEO? el("td",{class:"num",text:x?.event_ordering!=null?fmt(x.event_ordering,3):"—"}):null,
+      REF? el("td",{class:"num"}, cell(D, REF.name, q.id, {noStage:true})):null, REF? el("td",{class:"num "+(dlt>1e-9?"delta-pos":dlt<-1e-9?"delta-neg":""),text:dlt==null?"—":sgn(dlt,2)}):null,
+      el("td",{class:"ansx"}, x?.answer ? el("div",{class:"trunc",text:x.answer}) : x ? el("span",{class:"empty",text:x.status==="scored"?"(answer not retained)":x.status==="invalid"?"(empty answer)":`(${x.failure?.class||x.error_type||"Execution failure"})`}) : el("span",{class:"empty",text:"(not scheduled)"})),
+      el("td",{class:"num col-sec sub",text:x?.timings?`${fmt((x.timings.query_ms||0)/1000,1)} / ${fmt((x.timings.answer_ms||0)/1000,1)} s`:"—"}),
+      r.work? el("td",{class:"col-sec"}, x?.work ? stageBadge(x.work.stage) : el("span",{class:"c-na",text:"—"})):null);
+    tr.addEventListener("click", () => toggle(tr, q));
+    tb.append(tr);
+  }
+}
+function toggle(tr, q){
+  const runs = REF ? [RUN, REF] : [RUN];
+  if (openRow && openRow.tr===tr){ openRow.det.remove(); tr.classList.remove("open"); openRow=null; return; }
+  if (openRow){ openRow.det.remove(); openRow.tr.classList.remove("open"); }
+  const det = el("tr",{class:"detail"}, el("td",{colspan:"15"}, detail(D, q, runs)));
+  tr.after(det); tr.classList.add("open"); openRow={tr,det};
+}
+function openHash(){
+  const h = typeof location==="undefined" ? "" : decodeURIComponent((location.hash||"").replace(/^#/,"")); if (!h.startsWith("q=")) return;
+  const id = h.slice(2); if (!(D.questions||[]).some(z=>z.id===id)) return;
+  clearFilters(); $("#f-q").value = id; renderQuestions();
+  const tb = $("#q-tbl tbody"), tr = tb.querySelector ? tb.querySelector("tr.row") : null; if (tr && !tr.classList.contains("open")){ tr.click(); tr.scrollIntoView({block:"start"}); }
+}
+
+boot();
+</script>
+</body>
+</html>

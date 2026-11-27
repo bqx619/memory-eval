@@ -1,0 +1,41 @@
+{
+  "id": "longmemeval-v2",
+  "name": "LongMemEval-V2",
+  "repository": "",
+  "dataset_url": "https://huggingface.co/datasets/xiaowu0162/longmemeval-v2",
+  "data_nature": "agent-trajectory",
+  "task_kinds": [
+    "qa",
+    "mcq",
+    "agentic"
+  ],
+  "protocol_id": "longmemeval-v2",
+  "variants": [
+    "small",
+    "medium"
+  ],
+  "reported_scale": {
+    "questions": 451,
+    "trajectories": 1870
+  },
+  "license": {
+    "id": "Apache-2.0",
+    "noncommercial": false,
+    "no_derivatives": false,
+    "share_alike": false,
+    "redistribute_normalized": true,
+    "source": "https://huggingface.co/datasets/xiaowu0162/longmemeval-v2"
+  },
+  "pinned_revision": "",
+  "implementation_status": "registered",
+  "importer": "",
+  "suites": [],
+  "overlaps": [],
+  "notes": [
+    "Facts: design/upstream/dataset-schemas-2026-10.md and design/dataset-protocol.md §9.",
+    "No importer or protocol implementation is claimed. Full immutable revision not available locally; pinned_revision left empty.",
+    "Repository URL not established in local facts; left empty.",
+    "Only upstream revision prefix f152293e is locally documented; not promoted to a full revision."
+  ],
+  "verification_date": "2026-10-17"
+}
